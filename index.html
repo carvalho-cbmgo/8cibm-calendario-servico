@@ -115,6 +115,17 @@ h1{font-size:clamp(24px,2.7vw,39px);font-weight:850;letter-spacing:-.047em;line-
 .month-controls select:focus-visible,.day-notes-button:focus-visible,.empty-state button:focus-visible,.dialog-close:focus-visible{outline:3px solid #94baff;outline-offset:2px}
 .badges{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;justify-self:end;gap:3px;max-width:138px;min-width:0}
 .badges .chip{flex:0 1 auto}
+.ac4-service{display:flex;flex-direction:column;align-items:flex-end;gap:2px}
+.ac4-period{color:#526882;font-size:10px;font-weight:750;line-height:1.2;white-space:nowrap}
+.ac4-planned{color:#975914;font-size:9px;font-weight:750;line-height:1.2;white-space:nowrap}
+button.chip{font-family:inherit}
+.copy-sei{cursor:pointer;transition:filter .15s,box-shadow .15s}
+.copy-sei:hover{filter:brightness(1.1);box-shadow:0 2px 10px #8523de80}
+.copy-sei:focus-visible{outline:3px solid #94baff;outline-offset:2px}
+.copy-status{position:fixed;z-index:5;left:50%;bottom:max(14px,env(safe-area-inset-bottom));transform:translateX(-50%);max-width:calc(100% - 28px);width:max-content;padding:10px 15px;border:1px solid #86b6a0;border-radius:10px;background:#e9fbf1;color:#175335;box-shadow:0 5px 25px #10283f30;font-size:12px;font-weight:750;text-align:center}
+.dialog-copy-status{position:sticky;top:62px;z-index:2;padding:8px 12px;background:#e9fbf1;color:#175335;font-size:12px;font-weight:750;text-align:center}
+.copy-status:empty,.dialog-copy-status:empty{display:none}
+.clipboard-helper{position:fixed;top:0;left:0;width:1px;height:1px;opacity:0;pointer-events:none}
 .day-notes-button{border:0;border-top:1px solid var(--line);background:#f4f8fd;color:#28537e;font:inherit;font-size:10px;font-weight:750;line-height:1.3;padding:6px 5px;cursor:pointer;text-align:center}
 .day-notes-button:hover{background:#e9f1fb}
 .day-notes-button.pending{color:#975914;background:#fff8ed}
@@ -150,6 +161,8 @@ body:has(dialog[open]){overflow:hidden}
  .badges{gap:2px;max-width:135px}
  .day-notes-button{font-size:9px;padding:4px 3px}
  .entry .chip.ac4{padding:2px 4px;letter-spacing:0}
+ .ac4-period{font-size:9px}
+ .ac4-planned{font-size:8px}
  .dialog-heading{padding:10px}
  .dialog-heading h2{font-size:14px}
  .dialog-body{padding:9px 12px}
@@ -168,19 +181,20 @@ body:has(dialog[open]){overflow:hidden}
 @media print{
  .month-controls{color:#223e57;font-size:20px}
  .month-controls select{color:#223e57;border:0;appearance:none;color-scheme:light}
- .day-notes-button,dialog{display:none!important}
+ .day-notes-button,dialog,.copy-status{display:none!important}
  .print-notes{display:block;grid-column:1/-1;font-size:7px;line-height:1.35;color:#53627a}
 }
 </style></head><body><main>
 <header class="header"><div class="header-main"><h1><span class="header-title">Previsão Escalas de Serviço</span></h1><div class="header-month month-controls" role="group" aria-label="Selecionar mês e ano"><select id="selecionar-mes" aria-label="Mês da previsão"></select><span aria-hidden="true">/</span><select id="selecionar-ano" aria-label="Ano da previsão"></select></div><p class="header-org">8ª Companhia Independente Bombeiro Militar - Cristalina</p><p class="header-period">Previsão de 01 a 30/11/2026</p></div><div class="header-copy"><span>© 2026 ASP OF CARVALHO.</span><span>Todos os direitos reservados.</span></div></header>
 
-<div class="filterbar"><div aria-label="Filtrar alas" class="filters" role="group"><button aria-pressed="true" data-filter="TODAS" type="button">Todas as alas</button><button aria-pressed="false" data-filter="ALPHA" type="button">Alpha</button><button aria-pressed="false" data-filter="BRAVO" type="button">Bravo</button><button aria-pressed="false" data-filter="CHARLIE" type="button">Charlie</button><button aria-pressed="false" data-filter="DELTA" type="button">Delta</button></div><small>Previsão de serviço · AC4 com OS e AC4 previsto identificados separadamente.</small></div>
+<div class="filterbar"><div aria-label="Filtrar alas" class="filters" role="group"><button aria-pressed="true" data-filter="TODAS" type="button">Todas as alas</button><button aria-pressed="false" data-filter="ALPHA" type="button">Alpha</button><button aria-pressed="false" data-filter="BRAVO" type="button">Bravo</button><button aria-pressed="false" data-filter="CHARLIE" type="button">Charlie</button><button aria-pressed="false" data-filter="DELTA" type="button">Delta</button></div><small>Serviço operacional · Clique no AC4 com OS definida para copiar o SEI.</small></div>
 <nav aria-label="Navegação entre os dias" class="mobile-nav"><button aria-label="Dia anterior" id="dia-anterior" type="button">‹</button><div class="mobile-nav-center"><select aria-label="Selecionar dia de serviço" id="selecionar-dia"></select><span aria-live="polite" class="mobile-nav-count" id="indicador-dias"></span></div><button aria-label="Próximo dia" id="dia-seguinte" type="button">›</button></nav><div aria-label="Calendário de novembro de 2026" class="calendar"></div>
 <section class="empty-state" id="sem-previsao" role="status" hidden><h2>Sem previsão cadastrada</h2><p>Não há dados de serviço cadastrados para <strong id="competencia-vazia"></strong>.</p><button type="button" id="voltar-competencia">Voltar a Novembro/2026</button></section>
 <noscript>Ative o JavaScript para selecionar o período e visualizar a previsão de serviço.</noscript>
 <div class="info"><strong>Regras e ressalvas:</strong> as informações apresentadas aqui são previsões do planejamento da escala, o que não substitui a Escala de Serviço e Ordem de Serviço homologadas.</div>
 </main>
-<dialog id="detalhes-servico" aria-labelledby="detalhes-titulo"><div class="dialog-heading"><h2 id="detalhes-titulo"></h2><button type="button" class="dialog-close" id="fechar-detalhes">Fechar</button></div><div class="dialog-body" id="detalhes-conteudo"></div></dialog>
+<dialog id="detalhes-servico" aria-labelledby="detalhes-titulo"><div class="dialog-heading"><h2 id="detalhes-titulo"></h2><button type="button" class="dialog-close" id="fechar-detalhes">Fechar</button></div><div class="dialog-copy-status" id="dialog-copy-status" role="status" aria-live="polite" aria-atomic="true"></div><div class="dialog-body" id="detalhes-conteudo"></div></dialog>
+<div class="copy-status" id="copy-status" role="status" aria-live="polite" aria-atomic="true"></div>
 <script type="application/json" id="calendar-data">
 {
   "2026-11": {
@@ -256,12 +270,7 @@ body:has(dialog[open]){overflow:hidden}
           },
           {
             "name": "SD CAVALCANTE",
-            "badges": [
-              {
-                "kind": "ac4",
-                "text": "AC4 · OS"
-              }
-            ],
+            "badges": [],
             "notes": [],
             "events": [
               {
@@ -330,12 +339,7 @@ body:has(dialog[open]){overflow:hidden}
           },
           {
             "name": "ST TAVARES",
-            "badges": [
-              {
-                "kind": "ac4",
-                "text": "AC4 · OS"
-              }
-            ],
+            "badges": [],
             "notes": [],
             "events": [
               {
@@ -391,12 +395,7 @@ body:has(dialog[open]){overflow:hidden}
           },
           {
             "name": "SD SANTOS",
-            "badges": [
-              {
-                "kind": "ac4",
-                "text": "AC4 · OS"
-              }
-            ],
+            "badges": [],
             "notes": [],
             "events": [
               {
@@ -491,12 +490,7 @@ body:has(dialog[open]){overflow:hidden}
           },
           {
             "name": "2º SGT GEYDSON",
-            "badges": [
-              {
-                "kind": "ac4",
-                "text": "AC4 · OS"
-              }
-            ],
+            "badges": [],
             "notes": [],
             "events": [
               {
@@ -513,12 +507,7 @@ body:has(dialog[open]){overflow:hidden}
           },
           {
             "name": "2º SGT LUIZ ANTONIO",
-            "badges": [
-              {
-                "kind": "ac4",
-                "text": "AC4 · OS"
-              }
-            ],
+            "badges": [],
             "notes": [],
             "events": [
               {
@@ -530,28 +519,6 @@ body:has(dialog[open]){overflow:hidden}
                 "observation": "REFORÇO OPERACIONAL",
                 "document": "OS nº 346/2026; SEI 97833074",
                 "status": "documented-sop"
-              }
-            ]
-          },
-          {
-            "name": "2º SGT WANDERSON",
-            "badges": [
-              {
-                "kind": "ac4",
-                "text": "AC4 · OS"
-              }
-            ],
-            "notes": [],
-            "events": [
-              {
-                "mode": "INSPEÇÃO E ANÁLISE/SAT",
-                "start": "14h00",
-                "end": "18h00",
-                "nextDay": false,
-                "hours": 4,
-                "observation": "INSPEÇÃO E ANÁLISE",
-                "document": "OS nº 343/2026; SEI 97776333; Processo 202500011045608",
-                "status": "documented-sat"
               }
             ]
           },
@@ -569,35 +536,8 @@ body:has(dialog[open]){overflow:hidden}
             "events": []
           },
           {
-            "name": "3º SGT ROBERTO",
-            "badges": [
-              {
-                "kind": "ac4",
-                "text": "AC4 · OS"
-              }
-            ],
-            "notes": [],
-            "events": [
-              {
-                "mode": "INSPEÇÃO E ANÁLISE/SAT",
-                "start": "08h00",
-                "end": "12h00",
-                "nextDay": false,
-                "hours": 4,
-                "observation": "INSPEÇÃO E ANÁLISE",
-                "document": "OS nº 343/2026; SEI 97776333; Processo 202500011045608",
-                "status": "documented-sat"
-              }
-            ]
-          },
-          {
             "name": "3º SGT HENRIQUE",
-            "badges": [
-              {
-                "kind": "ac4",
-                "text": "AC4 · OS"
-              }
-            ],
+            "badges": [],
             "notes": [],
             "events": [
               {
@@ -666,12 +606,7 @@ body:has(dialog[open]){overflow:hidden}
           },
           {
             "name": "ST DA SILVA",
-            "badges": [
-              {
-                "kind": "ac4",
-                "text": "AC4 · OS"
-              }
-            ],
+            "badges": [],
             "notes": [],
             "events": [
               {
@@ -712,72 +647,6 @@ body:has(dialog[open]){overflow:hidden}
               "Ordinário"
             ],
             "events": []
-          },
-          {
-            "name": "2º SGT WANDERSON",
-            "badges": [
-              {
-                "kind": "ac4",
-                "text": "AC4 · OS"
-              }
-            ],
-            "notes": [],
-            "events": [
-              {
-                "mode": "INSPEÇÃO E ANÁLISE/SAT",
-                "start": "08h00",
-                "end": "18h00",
-                "nextDay": false,
-                "hours": 10,
-                "observation": "INSPEÇÃO E ANÁLISE",
-                "document": "OS nº 343/2026; SEI 97776333; Processo 202500011045608",
-                "status": "documented-sat"
-              }
-            ]
-          },
-          {
-            "name": "3º SGT BERTONCELLO",
-            "badges": [
-              {
-                "kind": "ac4",
-                "text": "AC4 · OS"
-              }
-            ],
-            "notes": [],
-            "events": [
-              {
-                "mode": "INSPEÇÃO E ANÁLISE/SAT",
-                "start": "13h00",
-                "end": "18h00",
-                "nextDay": false,
-                "hours": 5,
-                "observation": "INSPEÇÃO E ANÁLISE",
-                "document": "OS nº 343/2026; SEI 97776333; Processo 202500011045608",
-                "status": "documented-sat"
-              }
-            ]
-          },
-          {
-            "name": "3º SGT ROBERTO",
-            "badges": [
-              {
-                "kind": "ac4",
-                "text": "AC4 · OS"
-              }
-            ],
-            "notes": [],
-            "events": [
-              {
-                "mode": "INSPEÇÃO E ANÁLISE/SAT",
-                "start": "08h00",
-                "end": "12h00",
-                "nextDay": false,
-                "hours": 4,
-                "observation": "INSPEÇÃO E ANÁLISE",
-                "document": "OS nº 343/2026; SEI 97776333; Processo 202500011045608",
-                "status": "documented-sat"
-              }
-            ]
           },
           {
             "name": "3º SGT HENRIQUE",
@@ -858,28 +727,6 @@ body:has(dialog[open]){overflow:hidden}
             "events": []
           },
           {
-            "name": "1º SGT HELLYSSON",
-            "badges": [
-              {
-                "kind": "ac4",
-                "text": "AC4 PREVISTO"
-              }
-            ],
-            "notes": [],
-            "events": [
-              {
-                "mode": "PROEBOM 2026",
-                "start": "08h00",
-                "end": "12h00",
-                "nextDay": false,
-                "hours": 4,
-                "observation": "PROEBOM 2026",
-                "document": "OS a definir (não informada)",
-                "status": "planned"
-              }
-            ]
-          },
-          {
             "name": "2º SGT DIEGO",
             "badges": [
               {
@@ -907,16 +754,11 @@ body:has(dialog[open]){overflow:hidden}
           },
           {
             "name": "2º SGT LUIZ ANTONIO",
-            "badges": [
-              {
-                "kind": "ac4",
-                "text": "AC4 PREVISTO"
-              }
-            ],
+            "badges": [],
             "notes": [],
             "events": [
               {
-                "mode": "AC4 NOTURNO - modalidade a confirmar",
+                "mode": "OPERACIONAL/SOP",
                 "start": "20h00",
                 "end": "08h00",
                 "nextDay": true,
@@ -941,50 +783,6 @@ body:has(dialog[open]){overflow:hidden}
             "events": []
           },
           {
-            "name": "3º SGT ROBERTO",
-            "badges": [
-              {
-                "kind": "ac4",
-                "text": "AC4 · OS"
-              }
-            ],
-            "notes": [],
-            "events": [
-              {
-                "mode": "INSPEÇÃO E ANÁLISE/SAT",
-                "start": "08h00",
-                "end": "12h00",
-                "nextDay": false,
-                "hours": 4,
-                "observation": "INSPEÇÃO E ANÁLISE",
-                "document": "OS nº 343/2026; SEI 97776333; Processo 202500011045608",
-                "status": "documented-sat"
-              }
-            ]
-          },
-          {
-            "name": "3º SGT HENRIQUE",
-            "badges": [
-              {
-                "kind": "ac4",
-                "text": "AC4 PREVISTO"
-              }
-            ],
-            "notes": [],
-            "events": [
-              {
-                "mode": "PROEBOM 2026",
-                "start": "08h00",
-                "end": "12h00",
-                "nextDay": false,
-                "hours": 4,
-                "observation": "PROEBOM 2026",
-                "document": "OS a definir (não informada)",
-                "status": "planned"
-              }
-            ]
-          },
-          {
             "name": "SD PICCINI",
             "badges": [
               {
@@ -996,38 +794,6 @@ body:has(dialog[open]){overflow:hidden}
               "TS nº 155 (SEI 97542993). Substitui SD SANTOS."
             ],
             "events": []
-          },
-          {
-            "name": "SD MARTINS",
-            "badges": [
-              {
-                "kind": "ac4",
-                "text": "AC4 · OS"
-              }
-            ],
-            "notes": [],
-            "events": [
-              {
-                "mode": "INSPEÇÃO E ANÁLISE/SAT",
-                "start": "08h00",
-                "end": "12h00",
-                "nextDay": false,
-                "hours": 4,
-                "observation": "INSPEÇÃO E ANÁLISE",
-                "document": "OS nº 343/2026; SEI 97776333; Processo 202500011045608",
-                "status": "documented-sat"
-              },
-              {
-                "mode": "INSPEÇÃO E ANÁLISE/SAT",
-                "start": "14h00",
-                "end": "18h00",
-                "nextDay": false,
-                "hours": 4,
-                "observation": "INSPEÇÃO E ANÁLISE",
-                "document": "OS nº 343/2026; SEI 97776333; Processo 202500011045608",
-                "status": "documented-sat"
-              }
-            ]
           }
         ],
         "coverage": [
@@ -1106,50 +872,6 @@ body:has(dialog[open]){overflow:hidden}
             "events": []
           },
           {
-            "name": "3º SGT BERTONCELLO",
-            "badges": [
-              {
-                "kind": "ac4",
-                "text": "AC4 · OS"
-              }
-            ],
-            "notes": [],
-            "events": [
-              {
-                "mode": "INSPEÇÃO E ANÁLISE/SAT",
-                "start": "13h00",
-                "end": "18h00",
-                "nextDay": false,
-                "hours": 5,
-                "observation": "INSPEÇÃO E ANÁLISE",
-                "document": "OS nº 343/2026; SEI 97776333; Processo 202500011045608",
-                "status": "documented-sat"
-              }
-            ]
-          },
-          {
-            "name": "3º SGT ROBERTO",
-            "badges": [
-              {
-                "kind": "ac4",
-                "text": "AC4 · OS"
-              }
-            ],
-            "notes": [],
-            "events": [
-              {
-                "mode": "INSPEÇÃO E ANÁLISE/SAT",
-                "start": "08h00",
-                "end": "12h00",
-                "nextDay": false,
-                "hours": 4,
-                "observation": "INSPEÇÃO E ANÁLISE",
-                "document": "OS nº 343/2026; SEI 97776333; Processo 202500011045608",
-                "status": "documented-sat"
-              }
-            ]
-          },
-          {
             "name": "CB RABELO",
             "badges": [
               {
@@ -1192,27 +914,12 @@ body:has(dialog[open]){overflow:hidden}
               {
                 "kind": "officer",
                 "text": "OFICIAL DE DIA"
-              },
-              {
-                "kind": "ac4",
-                "text": "AC4 PREVISTO"
               }
             ],
             "notes": [
               "Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"
             ],
-            "events": [
-              {
-                "mode": "PROEBOM 2026",
-                "start": "08h00",
-                "end": "20h00",
-                "nextDay": false,
-                "hours": 12,
-                "observation": "PROEBOM 2026 - TORRE DE ALTURA 5º BBM (Luziânia) - OS a definir - SEI 202600011035274",
-                "document": "OS a definir; Processo SEI 202600011035274",
-                "status": "planned"
-              }
-            ]
+            "events": []
           },
           {
             "name": "ST TAVARES",
@@ -1233,27 +940,12 @@ body:has(dialog[open]){overflow:hidden}
               {
                 "kind": "ord",
                 "text": "ORDINÁRIO"
-              },
-              {
-                "kind": "ac4",
-                "text": "AC4 PREVISTO"
               }
             ],
             "notes": [
               "Ordinário"
             ],
-            "events": [
-              {
-                "mode": "PROEBOM 2026",
-                "start": "08h00",
-                "end": "20h00",
-                "nextDay": false,
-                "hours": 12,
-                "observation": "PROEBOM 2026 - TORRE DE ALTURA 5º BBM (Luziânia) - OS a definir - SEI 202600011035274",
-                "document": "OS a definir; Processo SEI 202600011035274",
-                "status": "planned"
-              }
-            ]
+            "events": []
           },
           {
             "name": "2º SGT SCHUSSLER",
@@ -1269,50 +961,6 @@ body:has(dialog[open]){overflow:hidden}
             "events": []
           },
           {
-            "name": "2º SGT GEYDSON",
-            "badges": [
-              {
-                "kind": "ac4",
-                "text": "AC4 PREVISTO"
-              }
-            ],
-            "notes": [],
-            "events": [
-              {
-                "mode": "PROEBOM 2026",
-                "start": "08h00",
-                "end": "20h00",
-                "nextDay": false,
-                "hours": 12,
-                "observation": "PROEBOM 2026 - TORRE DE ALTURA 5º BBM (Luziânia) - OS a definir - SEI 202600011035274",
-                "document": "OS a definir; Processo SEI 202600011035274",
-                "status": "planned"
-              }
-            ]
-          },
-          {
-            "name": "2º SGT LUIZ ANTONIO",
-            "badges": [
-              {
-                "kind": "ac4",
-                "text": "AC4 PREVISTO"
-              }
-            ],
-            "notes": [],
-            "events": [
-              {
-                "mode": "PROEBOM 2026",
-                "start": "08h00",
-                "end": "20h00",
-                "nextDay": false,
-                "hours": 12,
-                "observation": "PROEBOM 2026 - TORRE DE ALTURA 5º BBM (Luziânia) - OS a definir - SEI 202600011035274",
-                "document": "OS a definir; Processo SEI 202600011035274",
-                "status": "planned"
-              }
-            ]
-          },
-          {
             "name": "3º SGT JORGE",
             "badges": [
               {
@@ -1326,28 +974,6 @@ body:has(dialog[open]){overflow:hidden}
             "events": []
           },
           {
-            "name": "3º SGT HENRIQUE",
-            "badges": [
-              {
-                "kind": "ac4",
-                "text": "AC4 PREVISTO"
-              }
-            ],
-            "notes": [],
-            "events": [
-              {
-                "mode": "PROEBOM 2026",
-                "start": "08h00",
-                "end": "20h00",
-                "nextDay": false,
-                "hours": 12,
-                "observation": "PROEBOM 2026 - TORRE DE ALTURA 5º BBM (Luziânia) - OS a definir - SEI 202600011035274",
-                "document": "OS a definir; Processo SEI 202600011035274",
-                "status": "planned"
-              }
-            ]
-          },
-          {
             "name": "SD CAVALCANTE",
             "badges": [
               {
@@ -1359,28 +985,6 @@ body:has(dialog[open]){overflow:hidden}
               "Ordinário"
             ],
             "events": []
-          },
-          {
-            "name": "1º SGT FERREIRA",
-            "badges": [
-              {
-                "kind": "ac4",
-                "text": "AC4 PREVISTO"
-              }
-            ],
-            "notes": [],
-            "events": [
-              {
-                "mode": "PROEBOM 2026",
-                "start": "08h00",
-                "end": "20h00",
-                "nextDay": false,
-                "hours": 12,
-                "observation": "PROEBOM 2026 - TORRE DE ALTURA 5º BBM (Luziânia) - OS a definir - SEI 202600011035274",
-                "document": "OS a definir; Processo SEI 202600011035274",
-                "status": "planned"
-              }
-            ]
           }
         ],
         "coverage": [
@@ -1388,8 +992,8 @@ body:has(dialog[open]){overflow:hidden}
           "Faltam 1 recurso"
         ],
         "alerts": [
-          "1º SGT HELLYSSON: AC4 de 08h–20h coincide com serviço ordinário de 24h na Ala Bravo.",
-          "ASP OF CARVALHO: Oficial de Dia e AC4 externo em Luziânia (08h–20h); verificar compatibilidade/redistribuição."
+          "1º SGT HELLYSSON: compatibilidade do serviço ordinário a conferir.",
+          "ASP OF CARVALHO: compatibilidade da designação de Oficial de Dia a conferir."
         ]
       },
       {
@@ -1601,28 +1205,6 @@ body:has(dialog[open]){overflow:hidden}
             "events": []
           },
           {
-            "name": "1º SGT HELLYSSON",
-            "badges": [
-              {
-                "kind": "ac4",
-                "text": "AC4 PREVISTO"
-              }
-            ],
-            "notes": [],
-            "events": [
-              {
-                "mode": "PROEBOM 2026",
-                "start": "08h00",
-                "end": "12h00",
-                "nextDay": false,
-                "hours": 4,
-                "observation": "PROEBOM 2026",
-                "document": "OS a definir (não informada)",
-                "status": "planned"
-              }
-            ]
-          },
-          {
             "name": "2º SGT DIEGO",
             "badges": [
               {
@@ -1634,28 +1216,6 @@ body:has(dialog[open]){overflow:hidden}
               "Ordinário"
             ],
             "events": []
-          },
-          {
-            "name": "3º SGT HENRIQUE",
-            "badges": [
-              {
-                "kind": "ac4",
-                "text": "AC4 PREVISTO"
-              }
-            ],
-            "notes": [],
-            "events": [
-              {
-                "mode": "PROEBOM 2026",
-                "start": "08h00",
-                "end": "12h00",
-                "nextDay": false,
-                "hours": 4,
-                "observation": "PROEBOM 2026",
-                "document": "OS a definir (não informada)",
-                "status": "planned"
-              }
-            ]
           },
           {
             "name": "CB RABELO",
@@ -3308,17 +2868,43 @@ body:has(dialog[open]){overflow:hidden}
   }
   function periodDays() { return schedules[period]?.days || []; }
   function filteredDays() { return periodDays().filter(day => filter === 'TODAS' || day.ala === filter); }
+  function shortHour(value) {
+    const match = value.match(/^(\d{1,2})h(\d{2})?$/);
+    if (!match) return value;
+    return `${Number(match[1])}h${match[2] && match[2] !== '00' ? match[2] : ''}`;
+  }
+  function ac4Period(event) { return `${shortHour(event.start)} às ${shortHour(event.end)}`; }
+  function seiForEvent(event) {
+    if (event.status === 'planned' || !/\bOS\s*(?:n[º°o.]?\s*)?\d+/i.test(event.document)) return '';
+    // Copy the OS document number, never a process number or an undefined OS.
+    return event.document.match(/(?:^|[;,]\s*)SEI\s*(?:n[º°o.]?\s*)?(\d{6,12})\b/i)?.[1] || '';
+  }
+  function ac4Badge(event, memberName) {
+    const service = element('span', 'ac4-service');
+    const sei = seiForEvent(event);
+    const chip = element(sei ? 'button' : 'span', `chip ac4${sei ? ' copy-sei' : ''}`, `AC4 de ${event.hours}h`);
+    if (sei) {
+      chip.type = 'button';
+      chip.dataset.copySei = sei;
+      chip.title = `Copiar SEI ${sei} da OS · ${statusText(event)}`;
+      chip.setAttribute('aria-label', `Copiar SEI ${sei} da OS do AC4 de ${event.hours}h de ${memberName}`);
+    } else chip.title = statusText(event);
+    service.append(chip, element('span', 'ac4-period', ac4Period(event)));
+    if (event.status === 'planned') service.append(element('span', 'ac4-planned', 'Previsto · OS a definir'));
+    return service;
+  }
   function badgeNodes(member) {
     const badges = element('span', 'badges');
     for (const badge of member.badges) {
+      if (badge.kind === 'ac4') continue;
       const chip = element('span', `chip ${badge.kind}`, badge.text);
-      if (badge.kind === 'ac4') chip.title = badge.text === 'AC4 PREVISTO' ? 'Previsto — OS a definir' : 'OS documentada; execução não confirmada por este calendário';
       badges.append(chip);
     }
+    for (const event of member.events) badges.append(ac4Badge(event, member.name));
     return badges;
   }
   function memberClasses(member) {
-    return member.badges.map(b => b.kind).join(' ');
+    return [...member.badges.map(b => b.kind), ...(member.events.length ? ['ac4'] : [])].join(' ');
   }
   function eventTime(event) {
     let until = '';
@@ -3457,9 +3043,40 @@ body:has(dialog[open]){overflow:hidden}
       }
       dialogBody.append(section);
     }
-    dialogBody.append(element('p', 'coverage-note', 'SAT/PROEBOM e jornadas parciais não completam automaticamente recursos operacionais de 24h. Este calendário não comprova execução ou pagamento.'));
+    dialogBody.append(element('p', 'coverage-note', 'Exibição restrita ao serviço operacional. Jornadas parciais não completam automaticamente recursos de 24h. Este calendário não comprova execução ou pagamento.'));
     dialog.showModal();
     dialog.scrollTop = 0;
+  }
+  let copyStatusTimer;
+  function reportCopy(message) {
+    clearTimeout(copyStatusTimer);
+    const status = document.getElementById(dialog.open ? 'dialog-copy-status' : 'copy-status');
+    document.getElementById('copy-status').textContent = '';
+    document.getElementById('dialog-copy-status').textContent = '';
+    status.textContent = message;
+    copyStatusTimer = setTimeout(() => { status.textContent = ''; }, 4500);
+  }
+  async function copySei(sei) {
+    let copied = false;
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(sei);
+        copied = true;
+      }
+    } catch { /* Try the browser's legacy clipboard support below. */ }
+    if (!copied) {
+      const active = document.activeElement;
+      const helper = element('textarea', 'clipboard-helper');
+      helper.value = sei;
+      helper.readOnly = true;
+      (dialog.open ? dialog : document.body).append(helper);
+      try {
+        helper.select();
+        copied = document.execCommand('copy');
+      } catch { copied = false; }
+      finally { helper.remove(); active?.focus({preventScroll: true}); }
+    }
+    reportCopy(copied ? `SEI ${sei} copiado.` : `Não foi possível copiar automaticamente. SEI: ${sei}`);
   }
   monthNames.forEach((name, index) => { const option = element('option', '', name); option.value = String(index + 1); monthPicker.append(option); });
   const years = periods.map(key => Number(key.split('-')[0]));
@@ -3475,6 +3092,10 @@ body:has(dialog[open]){overflow:hidden}
   document.getElementById('voltar-competencia').textContent = `Voltar a ${monthNames[Number(initialPeriod.split('-')[1]) - 1]}/${initialPeriod.split('-')[0]}`;
   document.getElementById('voltar-competencia').addEventListener('click', () => { period = initialPeriod; renderPeriod(); });
   calendar.addEventListener('click', event => { const button = event.target.closest('[data-details]'); if (button) openDetails(Number(button.dataset.details)); });
+  document.addEventListener('click', event => {
+    const button = event.target.closest('button[data-copy-sei]');
+    if (button) copySei(button.dataset.copySei);
+  });
   document.getElementById('fechar-detalhes').addEventListener('click', () => dialog.close());
   dialog.addEventListener('click', event => { if (event.target === dialog) { const r = dialog.getBoundingClientRect(); if (event.clientX < r.left || event.clientX > r.right || event.clientY < r.top || event.clientY > r.bottom) dialog.close(); } });
   let startX = 0, startY = 0;
