@@ -200,6 +200,86 @@ body:has(dialog[open]){overflow:hidden}
  .day-notes-button,dialog,.copy-status{display:none!important}
  .print-notes{display:block;grid-column:1/-1;font-size:7px;line-height:1.35;color:#53627a}
 }
+.day-actions{display:flex;border-top:1px solid var(--line);background:#f4f8fd}
+.day-actions .day-notes-button{flex:1;min-width:0;border-top:0}
+.day-documents-button{flex:0 0 auto;border:0;border-left:1px solid var(--line);padding:6px;color:#173b62;background:#edf4ff;font:inherit;font-size:10px;font-weight:800;cursor:pointer}
+.day-documents-button:hover{background:#dfeaff}
+.day-documents-button:focus-visible,.sei-tools button:focus-visible,.sei-register button:focus-visible{outline:3px solid #94baff;outline-offset:-3px}
+dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-height:94dvh}
+.sei-body{padding:16px 20px 24px}
+.sei-intro{margin:0 0 12px;color:#526882;font-size:12px;line-height:1.5}
+.sei-register{display:flex;align-items:center;gap:8px 14px;flex-wrap:wrap;border:1px solid #dae4ef;background:#f5f8fc;padding:12px;border-radius:10px;font-size:12px}
+.sei-register label{font-weight:750}
+.sei-register input{max-width:100%;font:inherit}
+.sei-register p{flex-basis:100%;margin:0;color:#586b82;line-height:1.5}
+.sei-register button,.sei-tools button{border:1px solid #173b62;background:#173b62;color:#fff;border-radius:7px;padding:9px 12px;font-weight:750;cursor:pointer}
+.sei-register button,.sei-tools .sei-secondary{background:white;color:#173b62;border-color:#bfcfe2}
+.sei-tools button:disabled{opacity:.45;cursor:default}
+.sei-feedback{position:sticky;top:62px;z-index:2;background:#e9f5ff;color:#154d7d;border-radius:7px;padding:10px 12px;margin-top:10px;font-size:13px;font-weight:700}
+.sei-feedback:empty{display:none}
+.sei-validation{padding:10px 13px;background:#fff8e8;border:1px solid #efdcaf;border-radius:9px;margin-top:12px;color:#80551c;font-size:12px;line-height:1.5}
+.sei-validation summary{font-weight:750;cursor:pointer}
+.sei-validation ul{margin:7px 0 0;padding-left:20px;max-height:150px;overflow:auto}
+.sei-section{margin-top:22px}
+.sei-section h3{font-size:16px;margin:0 0 10px}
+.sei-tools{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.sei-table-scroll{overflow-x:auto;border-radius:2px;padding:1px}
+.sei-scope-label{display:block;font-size:12px;font-weight:750;margin-bottom:6px}
+#sei-order-scope{max-width:100%;width:100%;padding:9px;border:1px solid #c7d6e8;border-radius:7px;font:inherit;font-size:12px;background:#fff;color:#243b55}
+.sei-empty{font-size:13px;color:#617086}
+@media print{.day-actions{display:none!important}}
+
+@media screen and (max-width:760px){
+ body{font-size:15px}
+ main{display:block;min-height:100dvh;padding:10px 10px max(24px,env(safe-area-inset-bottom))}
+ .header{gap:10px;padding:15px 14px;border-radius:14px}
+ .header-main h1{font-size:clamp(20px,5.2vw,27px);margin-bottom:9px}
+ .header-title{white-space:normal}
+ .month-controls{font-size:20px;margin-bottom:9px}
+ .header-org{white-space:normal;font-size:12px;line-height:1.4;letter-spacing:0;margin-bottom:5px}
+ .header-period{font-size:12px;line-height:1.4}
+ .header-copy{font-size:11px;line-height:1.35}
+ .filterbar{margin:13px 0}
+ .filters{gap:6px}
+ .filters button{font-size:12px;min-height:44px;padding:7px 2px;line-height:1.25}
+ .mobile-nav{margin:0 0 13px;padding:6px;grid-template-columns:42px minmax(0,1fr) 42px}
+ .mobile-nav button{height:42px;font-size:25px}
+ .mobile-nav select{font-size:15px;padding:4px}
+ .mobile-nav-count{font-size:11px;line-height:1.4}
+ .day-head{padding:14px}
+ .day-num{font-size:32px}
+ .weekday-label{font-size:12px}
+ .ala-badge{font-size:12px;padding:6px 12px}
+ .entry-list{padding:5px 13px}
+ .entry{font-size:clamp(14px,3.85vw,16px);line-height:1.4;padding:10px 0;gap:4px 8px}
+ .badges{max-width:150px;gap:4px}
+ .chip{font-size:12px;line-height:1.35;white-space:normal;padding:4px 6px}
+ .chip.ac4,.entry .chip.ac4{padding:4px 6px}
+ .has-odd-ac4>.chip.officer{padding:4px 6px}
+ .ac4-service{gap:4px}
+ .ac4-meta{gap:5px}
+ .ac4-period{font-size:12px}
+ .ac4-planned{font-size:11px}
+ .day-actions .day-notes-button,.day-documents-button{font-size:12px;line-height:1.35;padding:10px 7px;min-height:44px}
+ .day-foot{font-size:12px;line-height:1.4;padding:10px 13px}
+ .info{font-size:12.5px;line-height:1.5;margin-top:14px;padding:11px 13px}
+ .dialog-heading{padding:12px}
+ .dialog-heading h2{font-size:16px}
+ .dialog-close{font-size:14px;min-height:40px}
+ .dialog-body{padding:12px 14px}
+ .member-heading h3{font-size:15px;line-height:1.4}
+ .detail-note{font-size:13px;line-height:1.5}
+ .event-detail p,.day-alerts{font-size:14px;line-height:1.5}
+ .observation-label{font-size:11px}
+ .coverage-note{font-size:12px}
+ .sei-body{padding:12px 10px 20px}
+ .sei-register,.sei-register input,.sei-intro,.sei-validation,.sei-scope-label,#sei-order-scope{font-size:14px}
+ .sei-section h3{font-size:17px}
+ .sei-tools button,.sei-register button{font-size:14px;min-height:44px}
+ .sei-table{min-width:1000px}
+ .sei-table th,.sei-table td{font-size:11pt!important}
+}
+
 </style></head><body><main>
 <header class="header"><div class="header-main"><h1><span class="header-title">Previsão Escalas de Serviço</span></h1><div class="header-month month-controls" role="group" aria-label="Selecionar mês e ano"><select id="selecionar-mes" aria-label="Mês da previsão"></select><span aria-hidden="true">/</span><select id="selecionar-ano" aria-label="Ano da previsão"></select></div><p class="header-org">8ª Companhia Independente Bombeiro Militar - Cristalina</p><p class="header-period">Previsão de 01 a 30/11/2026</p></div><div class="header-copy"><span>© 2026 ASP OF CARVALHO.</span><span>Todos os direitos reservados.</span></div></header>
 
@@ -211,6 +291,35 @@ body:has(dialog[open]){overflow:hidden}
 </main>
 <dialog id="detalhes-servico" aria-labelledby="detalhes-titulo"><div class="dialog-heading"><h2 id="detalhes-titulo"></h2><button type="button" class="dialog-close" id="fechar-detalhes">Fechar</button></div><div class="dialog-copy-status" id="dialog-copy-status" role="status" aria-live="polite" aria-atomic="true"></div><div class="dialog-body" id="detalhes-conteudo"></div></dialog>
 <div class="copy-status" id="copy-status" role="status" aria-live="polite" aria-atomic="true"></div>
+<dialog id="sei-generator" class="sei-generator" aria-labelledby="sei-date-title">
+ <div class="dialog-heading"><h2 id="sei-date-title">Documentos de serviço</h2><button type="button" class="dialog-close" id="sei-close">Fechar</button></div>
+ <div class="sei-body">
+  <p class="sei-intro">Minutas para conferência. A geração não altera a previsão nem homologa os serviços.</p>
+  <div class="sei-register">
+   <label for="sei-local-file">Cadastro local da unidade (.json)</label>
+   <input type="file" id="sei-local-file" accept="application/json,.json"/>
+   <button type="button" id="sei-clear-register">Limpar cadastro</button>
+   <p>Importe o registro interno para preencher identificações e CPFs. O arquivo é lido somente neste navegador, sem envio ou salvamento pelo site.</p>
+   <p id="sei-register-status">Nenhum cadastro importado.</p>
+  </div>
+  <div id="sei-feedback" class="sei-feedback" role="status" aria-live="polite" aria-atomic="true"></div>
+  <details id="sei-validation" class="sei-validation" open></details>
+  <section class="sei-section" aria-labelledby="sei-es-title">
+   <h3 id="sei-es-title">ESCALA DE SERVIÇO</h3>
+   <div class="sei-tools"><button type="button" id="sei-copy-scale" disabled>Copiar Escala de Serviço para o SEI</button><button type="button" class="sei-secondary" id="sei-select-scale" disabled>Selecionar tabela</button></div>
+   <div id="sei-scale-container" class="sei-table-scroll" role="region" aria-label="Tabela da Escala de Serviço" tabindex="0"></div>
+  </section>
+  <section class="sei-section" aria-labelledby="sei-os-title">
+   <h3 id="sei-os-title">ORDEM DE SERVIÇO (AC4)</h3>
+   <label class="sei-scope-label" for="sei-order-scope">Modalidade / ordem de serviço</label>
+   <select id="sei-order-scope"></select>
+   <p id="sei-os-empty" class="sei-empty" hidden>Não há AC4 previsto para esta data.</p>
+   <div class="sei-tools"><button type="button" id="sei-copy-order" disabled>Copiar Ordem de Serviço para o SEI</button><button type="button" class="sei-secondary" id="sei-select-order" disabled>Selecionar tabela</button></div>
+   <div id="sei-order-container" class="sei-table-scroll" role="region" aria-label="Tabela da Ordem de Serviço" tabindex="0"></div>
+  </section>
+ </div>
+</dialog>
+
 <script type="application/json" id="calendar-data">
 {
   "2026-11": {
@@ -1007,18 +1116,7 @@ body:has(dialog[open]){overflow:hidden}
             "notes": [
               "Ordinário"
             ],
-            "events": [
-              {
-                "mode": "PROEBOM 2026",
-                "start": "08h00",
-                "end": "20h00",
-                "nextDay": false,
-                "hours": 12,
-                "observation": "PROEBOM 2026 - TORRE DE ALTURA 5º BBM (Luziânia) - OS a definir - SEI 202600011035274",
-                "document": "OS a definir; Processo SEI 202600011035274",
-                "status": "planned"
-              }
-            ]
+            "events": []
           },
           {
             "name": "2º SGT SCHUSSLER",
@@ -1133,7 +1231,6 @@ body:has(dialog[open]){overflow:hidden}
           "Faltam 1 recurso"
         ],
         "alerts": [
-          "1º SGT HELLYSSON: AC4 de 08h–20h coincide com serviço ordinário de 24h na Ala Bravo.",
           "ASP OF CARVALHO: Oficial de Dia e AC4 externo em Luziânia (08h–20h); verificar compatibilidade/redistribuição."
         ]
       },
@@ -3141,14 +3238,21 @@ body:has(dialog[open]){overflow:hidden}
       list.append(row);
     }
     const ac4Count = day.members.reduce((sum, member) => sum + member.events.length, 0);
-    const notes = element('button', `day-notes-button${day.alerts.length ? ' pending' : ''}`, `Horários e observações${ac4Count ? ` · ${ac4Count} AC4` : ''}${day.alerts.length ? ' · A conferir' : ''}`);
+    const notes = element('button', `day-notes-button${day.alerts.length ? ' pending' : ''}`, `Detalhes do dia${ac4Count ? ` · ${ac4Count} AC4` : ''}${day.alerts.length ? ' · A conferir' : ''}`);
     notes.type = 'button';
     notes.dataset.details = String(day.day);
     notes.setAttribute('aria-haspopup', 'dialog');
     notes.setAttribute('aria-label', `Horários e observações do dia ${day.day} de ${periodLabel()}`);
     const foot = element('div', 'day-foot');
     foot.append(element('span', '', day.coverage[0]), element('span', day.coverage[1].startsWith('Faltam') ? 'pending' : '', day.coverage[1]));
-    card.append(head, list, notes);
+    const actions = element('div', 'day-actions');
+    const documents = element('button', 'day-documents-button', 'Gerar ES / OS');
+    documents.type = 'button';
+    documents.dataset.seiDay = String(day.day);
+    documents.setAttribute('aria-haspopup', 'dialog');
+    documents.setAttribute('aria-label', `Gerar Escala e Ordem de Serviço do dia ${day.day} de ${periodLabel()}`);
+    actions.append(notes, documents);
+    card.append(head, list, actions);
     if (day.alerts.length) card.append(element('div', 'print-notes day-print-alerts', day.alerts.join(' ')));
     card.append(foot);
     return card;
@@ -3305,4 +3409,268 @@ body:has(dialog[open]){overflow:hidden}
   renderPeriod();
 })();
 
-</script></body></html>
+</script><script>
+(() => {
+  'use strict';
+  const byId = id => document.getElementById(id);
+  const ui = {
+    dialog: byId('sei-generator'), title: byId('sei-date-title'), file: byId('sei-local-file'),
+    registerStatus: byId('sei-register-status'), validation: byId('sei-validation'),
+    scale: byId('sei-scale-container'), order: byId('sei-order-container'),
+    scope: byId('sei-order-scope'), empty: byId('sei-os-empty'), feedback: byId('sei-feedback'),
+    scaleCopy: byId('sei-copy-scale'), orderCopy: byId('sei-copy-order'),
+    scaleSelect: byId('sei-select-scale'), orderSelect: byId('sei-select-order')
+  };
+  const schedules = JSON.parse(byId('calendar-data').textContent);
+  const normalize = value => String(value ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase().replace(/\s+/g, ' ').trim();
+  const pad = value => String(value).padStart(2, '0');
+  const esHeaders = ['ORDEM','FUNÇÃO','MILITAR DE SERVIÇO','CPF','ALTERAÇÕES / OBSERVAÇÕES','AC-4','FONTE DO RECURSO'];
+  const osHeaders = ['INÍCIO — DATA','HORÁRIO','TÉRMINO — DATA','HORÁRIO','MILITAR DE AC4','CPF','AC4'];
+  const cellStyle = 'border:1px solid #333;padding:5px 6px;vertical-align:middle;font-family:Arial,sans-serif;font-size:10pt;font-weight:normal;line-height:1.25;overflow-wrap:anywhere;';
+  let directory = new Map(), references = {ts:[], cia:[], events:[]};
+  let current = null, groups = [], scaleTable, orderTable;
+
+  function node(tag, className, text) {
+    const e = document.createElement(tag);
+    if (className) e.className = className;
+    if (text !== undefined) e.textContent = text;
+    return e;
+  }
+  function maskCpf(value) {
+    const text = String(value ?? '').trim();
+    if (!text) return '';
+    if (/^\*{3}\.\d{3}\.\d{3}-\*{2}$/.test(text)) return text;
+    const digits = text.replace(/[.\-\s]/g, '');
+    if (!/^\d{11}$/.test(digits) || /^(\d)\1+$/.test(digits)) return null;
+    for (let length = 9; length <= 10; length++) {
+      let total = 0;
+      for (let i = 0; i < length; i++) total += Number(digits[i]) * (length + 1 - i);
+      let check = (total * 10) % 11;
+      if (check === 10) check = 0;
+      if (check !== Number(digits[length])) return null;
+    }
+    return `***.${digits.slice(3,6)}.${digits.slice(6,9)}-**`;
+  }
+  function prepareDirectory(input) {
+    if (!input || typeof input !== 'object') throw new Error('Estrutura de cadastro inválida.');
+    const people = Array.isArray(input) ? input : input.pessoal_referencia;
+    if (!Array.isArray(people) || !people.length) throw new Error('O JSON deve conter uma lista pessoal_referencia.');
+    const result = new Map(), ranks = new Set();
+    for (const raw of people) {
+      const siteName = String(raw.identificacao_site ?? '').trim();
+      if (!siteName || result.has(normalize(siteName))) throw new Error('O cadastro contém identificação de site ausente ou duplicada.');
+      const full = String(raw.nome_completo ?? '').normalize('NFC').replace(/\s+/g, ' ').trim();
+      const war = String(raw.nome_guerra ?? '').normalize('NFC').replace(/\s+/g, ' ').trim();
+      const rg = String(raw.rg ?? '').trim();
+      let grade = String(raw.graduacao ?? '').trim();
+      const corps = String(raw.quadro ?? '').trim();
+      if (corps && !normalize(grade).includes(normalize(corps))) grade += ` ${corps}`;
+      const cpf = maskCpf(raw.cpf_mascarado ?? raw.cpf_ocultado ?? raw.cpf);
+      const ord = raw.ord === null || raw.ord === undefined || raw.ord === '' ? null : Number(raw.ord);
+      if (ord !== null && (!Number.isInteger(ord) || ord <= 0 || ranks.has(ord))) throw new Error('Há um valor ORD inválido ou duplicado no cadastro.');
+      if (ord !== null) ranks.add(ord);
+      // Keep only the masked CPF in memory; never retain a supplied full CPF.
+      result.set(normalize(siteName), {siteName, full, war, rg, grade, cpf, ord});
+    }
+    return result;
+  }
+  function person(name) { return directory.get(normalize(name)); }
+  function personErrors(name) {
+    const p = person(name), issues = [];
+    if (!p) return ['cadastro não importado para este militar'];
+    if (!p.full || !p.war || !p.grade || !p.rg) issues.push('identificação incompleta');
+    if (!/^[\p{L}\s.'’\-]+$/u.test(p.full)) issues.push('nome completo inválido');
+    if (!/\b(?:QP\/|QOC\b|QOA\b|QOE\b|QOS\b)/i.test(p.grade)) issues.push('quadro não informado');
+    if (!/^[\d.]+$/.test(p.rg) || !/\d/.test(p.rg)) issues.push('RG inválido');
+    if (p.war && !normalize(p.full).includes(normalize(p.war))) issues.push('nome de guerra não localizado no nome completo');
+    return [...new Set(issues)];
+  }
+  function appendIdentification(cell, member) {
+    const p = person(member.name);
+    if (!p || personErrors(member.name).length) {
+      cell.append(document.createTextNode(member.name));
+      return;
+    }
+    cell.append(document.createTextNode(`${p.grade} RG ${p.rg} `));
+    // Portuguese names are normalized to NFC before locating the war name.
+    const start = normalize(p.full).indexOf(normalize(p.war));
+    cell.append(document.createTextNode(p.full.slice(0, start)), node('strong', '', p.full.slice(start, start + p.war.length)), document.createTextNode(p.full.slice(start + p.war.length)));
+  }
+  function appendRichLine(cell, text) {
+    const line = node('div');
+    text.split('PROEBOM 2026').forEach((part, index) => {
+      if (index) line.append(node('strong', '', 'PROEBOM 2026'));
+      line.append(document.createTextNode(part));
+    });
+    cell.append(line);
+  }
+  function dateInfo() {
+    const [year, month] = current.period.split('-').map(Number);
+    const start = new Date(Date.UTC(year, month - 1, current.day.day));
+    const valid = start.getUTCFullYear() === year && start.getUTCMonth() === month - 1 && start.getUTCDate() === current.day.day;
+    return {start, valid};
+  }
+  const formatDate = date => `${pad(date.getUTCDate())}/${pad(date.getUTCMonth()+1)}/${date.getUTCFullYear()}`;
+  const isoDate = () => `${current.period}-${pad(current.day.day)}`;
+  function interval(event) {
+    const parse = value => {
+      const m = String(value).match(/^(\d{1,2})h(\d{2})$/);
+      return m && Number(m[1]) < 24 && Number(m[2]) < 60 ? Number(m[1])*60 + Number(m[2]) : null;
+    };
+    const start = parse(event.start), finish = parse(event.end), base = dateInfo();
+    const endDate = new Date(base.start);
+    if (event.nextDay) endDate.setUTCDate(endDate.getUTCDate()+1);
+    const hours = start === null || finish === null ? NaN : (finish + (event.nextDay ? 1440 : 0) - start)/60;
+    return {valid:base.valid && hours > 0 && hours === Number(event.hours), startDate:formatDate(base.start), endDate:formatDate(endDate), start:start === null ? String(event.start ?? '') : `${pad(Math.floor(start/60))}h${pad(start%60)}`, end:finish === null ? String(event.end ?? '') : `${pad(Math.floor(finish/60))}h${pad(finish%60)}`};
+  }
+  function orderedMembers() {
+    const merged = new Map();
+    for (const source of current.day.members) {
+      const key = normalize(source.name);
+      if (!merged.has(key)) merged.set(key, {name:source.name,funcao:typeof source.funcao==='string'?source.funcao:typeof source.function==='string'?source.function:'',badges:[],notes:[],events:[]});
+      const m = merged.get(key);
+      for (const field of ['badges','notes','events']) for (const item of source[field]) if (!m[field].some(x=>JSON.stringify(x)===JSON.stringify(item))) m[field].push(item);
+    }
+    return [...merged.values()].sort((a,b)=>{
+      const ao=a.badges.some(x=>x.kind==='officer'),bo=b.badges.some(x=>x.kind==='officer');
+      if (ao!==bo) return ao?-1:1;
+      return (person(a.name)?.ord ?? Infinity)-(person(b.name)?.ord ?? Infinity);
+    });
+  }
+  const isAbsent = m => m.badges.some(b=>b.kind==='disp');
+  function eventLines(event) {
+    return [event.observation, `${event.observation?.includes(event.mode)?'':`${event.mode}: `}${event.hours}h — ${event.start} às ${event.end}${event.nextDay?' do dia seguinte':''}.`, event.document, event.status==='planned'?'PREVISTO — OS a definir.':'Serviço documentado; execução sujeita a conferência.'].filter(Boolean);
+  }
+  function observations(member) {
+    const lines=[], notes=member.notes || [], day=isoDate();
+    const change=member.badges.find(b=>['ts','review'].includes(b.kind));
+    const cia=member.badges.find(b=>['pay','disp'].includes(b.kind)&&b.text.startsWith('TS CIA'));
+    if (change) {
+      const ref=references.ts.find(t=>t.data===day&&normalize(t.substituto)===normalize(member.name));
+      const text=notes.join(' '),match=text.match(/TS\s*n[º°o.]?\s*([\d/\s]+)\s*\(SEI\s*([^)]+)\)/i);
+      const number=match?.[1]?.trim() || ref?.ts || (change.kind==='review'?current.day.alerts.join(' ').match(/TS\s*n[º°o.]?\s*(\d+)/i)?.[1]:'');
+      const sei=match?.[2] || text.match(/\bSEI\s+(\d{8})\b/)?.[1] || ref?.sei;
+      if (number || sei) lines.push(`TS nº ${number || 'não informado'} (SEI ${sei || 'não informado'})`);
+      const sourceTarget=notes.join(' ').match(/Substitui\s+([^.;]+)[.;]?/i)?.[1];
+      const target=ref?.substituido || sourceTarget || change.text.replace(/^TS\s*·\s*/,'').replace(/\s*\(A CONFERIR\)/,'');
+      if (target) lines.push(`Militar substituído: ${target}`);
+      for (const note of notes) {
+        if (!note.startsWith('TS nº') || /duplicad|inconsisten|conferir/i.test(note)) lines.push(note);
+      }
+    } else if (cia) {
+      const sei=notes.join(' ').match(/\bSEI\s+(\d{8})\b/)?.[1];
+      const direction=cia.kind==='pay'?'pagamento':'dispensa';
+      const ref=references.cia.find(t=>t[direction]===day&&normalize(t.militar)===normalize(member.name)&&(!sei||String(t.sei)===sei));
+      const hours=ref?.[cia.kind==='pay'?'horas_pagamento':'horas_dispensa'] ?? cia.hours;
+      lines.push(`TS Cia Operacional (SEI ${sei || ref?.sei || 'não informado'})${hours?` - ${hours}h`:''}`,cia.kind==='pay'?'Pagando Serviço.':'Dispensado.');
+      for (const note of notes) if (!/^TS CIA — (?:Dispensado|Pagando serviço)\. SEI \d+$/i.test(note)) lines.push(note);
+    } else if (member.badges.some(b=>b.text==='DISP. RECOMPENSA')) {
+      const exact=notes.find(note=>/^(?:ALTERAÇÕES \/ OBSERVAÇÕES:\s*)?Dispensa Recompensa SEI/i.test(note));
+      if(exact)lines.push(exact.replace(/^ALTERAÇÕES \/ OBSERVAÇÕES:\s*/,''));
+      else lines.push(...notes);
+    } else {
+      for (const note of notes) if (!/^Ordinário\.?$/i.test(note) && !note.startsWith('Oficial de Dia —')) lines.push(note.replace(/^ALTERAÇÕES \/ OBSERVAÇÕES:\s*/,''));
+    }
+    if (member.badges.some(b=>b.kind==='officer')&&!member.events.length) lines.push('Alcançável.');
+    for (const event of member.events) lines.push(...eventLines(event));
+    return [...new Set(lines)];
+  }
+  function resourceFor(member,event) {
+    if (event.fonte_recurso || event.fonte_do_recurso) return String(event.fonte_recurso || event.fonte_do_recurso);
+    const p=person(member.name);
+    const matches=references.events.filter(e=>String(e.rg).replace(/\D/g,'').replace(/^0+/,'')===p?.rg.replace(/\D/g,'').replace(/^0+/,'')&&e.data===isoDate()&&e.inicio===event.start&&e.fim===event.end&&Number(e.horas)===Number(event.hours)&&e.documento===event.document);
+    return matches.length===1?String(matches[0].fonte_recurso || matches[0].fonte_do_recurso || ''):'';
+  }
+  function makeTable(headers,widths,id) {
+    const table=node('table','sei-table');table.id=id;table.setAttribute('aria-label',id==='sei-scale-table'?'Escala de Serviço':'Ordem de Serviço');
+    table.style.cssText='border-collapse:collapse;border:1px solid #333;width:100%;table-layout:fixed;font-family:Arial,sans-serif;font-size:10pt;color:#000;background:#fff;';
+    const cols=node('colgroup');for(const width of widths){const col=node('col');col.style.width=width+'%';cols.append(col)}
+    const head=node('thead'),row=node('tr');for(const [index,h] of headers.entries()){const th=node('th','',h);th.scope='col';th.style.cssText=cellStyle+`font-weight:bold;text-align:center;background:#eee;width:${widths[index]}%;`;row.append(th)}head.append(row);
+    table.append(cols,head,node('tbody'));return table;
+  }
+  function cell(text,align='left') {const td=node('td');td.style.cssText=cellStyle+`text-align:${align};`;if(text!==undefined)td.textContent=text;return td;}
+  function validationFor(members) {
+    const hard=[],warnings=[];
+    for(const m of members){const errors=personErrors(m.name);if(errors.length)hard.push(`${m.name}: ${errors.join(', ')}.`);const p=person(m.name);if(p){if(!p.cpf)warnings.push(`${m.name}: CPF ${p.cpf===null?'inválido':'não informado'}; campo em branco.`);if(p.ord===null)warnings.push(`${m.name}: ORD não informado; mantido após a antiguidade conhecida.`);}for(const e of m.events)if(!interval(e).valid)hard.push(`${m.name}: conferir data, horários e duração do AC4.`);}
+    return {hard,warnings};
+  }
+  function showValidation(messages) {
+    ui.validation.replaceChildren();
+    const unique=[...new Set(messages)];
+    if(!unique.length){ui.validation.hidden=true;return;}
+    ui.validation.hidden=false;ui.validation.append(node('summary','','Pendências para conferência'));
+    const list=node('ul');for(const message of unique)list.append(node('li','',message));ui.validation.append(list);
+  }
+  function renderOrder() {
+    const group=groups[Number(ui.scope.value)],rows=group?.rows || [],validation=validationFor(rows.map(r=>r.member));
+    orderTable=makeTable(osHeaders,[12,8,12,8,40,14,6],'sei-order-table');const body=orderTable.tBodies[0];
+    for(const {member,event} of rows){const time=interval(event),tr=node('tr');tr.append(cell(time.startDate,'center'),cell(time.start,'center'),cell(time.endDate,'center'),cell(time.end,'center'));const name=cell();appendIdentification(name,member);tr.append(name,cell(person(member.name)?.cpf || '','center'),cell(`${event.hours}h`,'center'));body.append(tr);}
+    ui.order.replaceChildren(orderTable);ui.empty.hidden=!!rows.length;
+    ui.orderCopy.disabled=!rows.length||!!validation.hard.length;ui.orderSelect.disabled=ui.orderCopy.disabled;
+    return validation;
+  }
+  function render() {
+    if(!current)return;
+    const members=orderedMembers(),validation=validationFor(members);
+    ui.title.textContent=`Documentos de ${formatDate(dateInfo().start)} · Ala ${current.day.ala}`;
+    scaleTable=makeTable(esHeaders,[7,10,28,13,30,5,7],'sei-scale-table');const body=scaleTable.tBodies[0];
+    const hasOfficer=members.some(m=>m.badges.some(b=>b.kind==='officer'));
+    let order=1;
+    if(!hasOfficer){const row=node('tr');row.append(cell(pad(order++),'center'),cell('OFICIAL DE DIA'),cell(),cell('','center'),cell(),cell('','center'),cell());body.append(row);validation.warnings.push('Oficial de Dia não informado: primeira linha reservada, sem inventar designação.');}
+    for(const member of members){const row=node('tr'),absent=isAbsent(member);row.append(cell(pad(order++),'center'),cell(member.badges.some(b=>b.kind==='officer')?'OFICIAL DE DIA':member.funcao));const name=cell();appendIdentification(name,member);if(absent)name.style.color='#c00000';const cpf=cell(person(member.name)?.cpf || '','center'),obs=cell();for(const line of observations(member))appendRichLine(obs,line);if(absent)obs.style.color='#c00000';const funds=[...new Set(member.events.map(e=>resourceFor(member,e)).filter(Boolean))];const fund=cell();for(const source of funds)appendRichLine(fund,source);row.append(name,cpf,obs,cell(member.events.map(e=>`${e.hours}h`).join(' + '),'center'),fund);body.append(row);}
+    ui.scale.replaceChildren(scaleTable);ui.scaleCopy.disabled=!members.length||!!validation.hard.length;ui.scaleSelect.disabled=ui.scaleCopy.disabled;
+    const previous=groups[Number(ui.scope.value)]?.key;
+    const grouped=new Map();
+    for(const member of members)for(const event of member.events){const key=`${event.mode}\u0000${event.document}`;if(!grouped.has(key))grouped.set(key,{key,mode:event.mode,document:event.document,rows:[]});grouped.get(key).rows.push({member,event});}
+    groups=[...grouped.values()];ui.scope.replaceChildren();
+    groups.forEach((group,index)=>{const option=node('option','',`${group.mode} · ${group.document}`);option.value=String(index);ui.scope.append(option)});
+    const old=groups.findIndex(g=>g.key===previous);ui.scope.value=String(old<0?0:old);ui.scope.disabled=!groups.length;
+    const osValidation=renderOrder();
+    const pending=[...current.day.alerts,...validation.hard,...validation.warnings,...osValidation.hard];
+    if(!directory.size)pending.unshift('Importe o cadastro local para preencher e validar as identificações completas e habilitar a cópia.');
+    if(members.some(m=>m.events.some(e=>!resourceFor(m,e))))pending.push('Fonte do recurso não informada para um ou mais AC4; coluna mantida em branco.');
+    if(groups.some(g=>g.rows.some(r=>r.event.status==='planned')))pending.push('Há AC4 previstos com OS a definir. O SEI de processo não é tratado como número do documento da OS.');
+    showValidation(pending);
+  }
+  function tablePlainText(table) {return [...table.rows].map(row=>[...row.cells].map(c=>c.innerText).join('\t')).join('\n');}
+  function selectTable(table) {
+    const range=document.createRange();range.selectNode(table);const selection=window.getSelection();selection.removeAllRanges();selection.addRange(range);
+  }
+  async function copyTable(table,label) {
+    ui.feedback.textContent='Copiando tabela…';
+    const clean=table.cloneNode(true);clean.removeAttribute('id');clean.removeAttribute('class');clean.removeAttribute('aria-label');
+    const html=clean.outerHTML,plain=tablePlainText(table);let copied=false;
+    try {if(window.isSecureContext&&navigator.clipboard?.write&&window.ClipboardItem){await navigator.clipboard.write([new ClipboardItem({'text/html':new Blob([html],{type:'text/html'}),'text/plain':new Blob([plain],{type:'text/plain'})})]);copied=true;}}catch{/* Browser denied rich clipboard; attempt a table-only legacy copy. */}
+    if(!copied){const onCopy=event=>{if(event.clipboardData){event.clipboardData.setData('text/html',html);event.clipboardData.setData('text/plain',plain);event.preventDefault();}};document.addEventListener('copy',onCopy);try{selectTable(table);copied=document.execCommand('copy');}catch{copied=false;}finally{document.removeEventListener('copy',onCopy);}}
+    if(copied)ui.feedback.textContent=`${label} copiada em HTML para o SEI.`;
+    else{selectTable(table);ui.feedback.textContent='Cópia automática bloqueada. A tabela foi selecionada; pressione Ctrl+C e depois Ctrl+V no SEI.';}
+  }
+  document.addEventListener('click',event=>{
+    const button=event.target.closest('[data-sei-day]');if(!button)return;
+    const period=`${byId('selecionar-ano').value}-${pad(byId('selecionar-mes').value)}`;
+    const day=schedules[period]?.days.find(d=>d.day===Number(button.dataset.seiDay));if(!day)return;
+    current={period,day};ui.feedback.textContent='';render();ui.dialog.showModal();ui.dialog.scrollTop=0;
+  });
+  byId('sei-close').addEventListener('click',()=>ui.dialog.close());
+  ui.file.addEventListener('change',async()=>{
+    const file=ui.file.files[0];if(!file)return;
+    try{
+      if(file.size>5*1024*1024)throw new Error('O cadastro deve ter até 5 MB.');
+      const input=JSON.parse(await file.text()),people=prepareDirectory(input);
+      for (const key of ['trocas_entre_militares','trocas_anteriores_relevantes','trocas_futuras_relevantes','trocas_companhia','ac4_eventos']) if (input[key] !== undefined && !Array.isArray(input[key])) throw new Error('As referências de trocas e AC4 devem ser listas.');
+      const nextReferences={ts:[...(input.trocas_entre_militares||[]),...(input.trocas_anteriores_relevantes||[]),...(input.trocas_futuras_relevantes||[])],cia:input.trocas_companhia||[],events:input.ac4_eventos||[]};
+      directory=people;references=nextReferences;
+      ui.registerStatus.textContent=`${directory.size} militares carregados apenas nesta sessão. CPFs não informados permanecerão em branco.`;ui.feedback.textContent='Cadastro local carregado.';render();
+    }catch(error){ui.feedback.textContent=`Não foi possível importar: ${error instanceof SyntaxError?'JSON inválido.':error.message}`;}
+    finally{ui.file.value='';}
+  });
+  byId('sei-clear-register').addEventListener('click',()=>{directory.clear();references={ts:[],cia:[],events:[]};ui.registerStatus.textContent='Nenhum cadastro importado.';ui.feedback.textContent='Cadastro removido da sessão.';render();});
+  ui.scope.addEventListener('change',()=>{renderOrder();ui.feedback.textContent='';});
+  ui.scaleCopy.addEventListener('click',()=>copyTable(scaleTable,'Escala de Serviço'));
+  ui.orderCopy.addEventListener('click',()=>copyTable(orderTable,'Ordem de Serviço'));
+  ui.scaleSelect.addEventListener('click',()=>{selectTable(scaleTable);ui.feedback.textContent='Escala selecionada. Use Ctrl+C para copiar somente a tabela.';});
+  ui.orderSelect.addEventListener('click',()=>{selectTable(orderTable);ui.feedback.textContent='Ordem selecionada. Use Ctrl+C para copiar somente a tabela.';});
+})();
+
+</script>
+</body></html>
