@@ -226,9 +226,13 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 .sei-section{margin-top:22px}
 .sei-section h3{font-size:16px;margin:0 0 10px}
 .sei-tools{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.sei-table{table-layout:fixed;font-family:Arial,sans-serif;font-size:10pt;font-weight:normal;line-height:1.25;color:#000;background:#fff}
+.sei-table th,.sei-table td{overflow-wrap:anywhere}
+.sei-table th{font-weight:bold}
 .sei-table-scroll{overflow-x:auto;border-radius:2px;padding:1px}
 .sei-scope-label{display:block;font-size:12px;font-weight:750;margin-bottom:6px}
 #sei-order-scope{max-width:100%;width:100%;padding:9px;border:1px solid #c7d6e8;border-radius:7px;font:inherit;font-size:12px;background:#fff;color:#243b55}
+.sei-scope-status{font-size:12px;color:#526882;line-height:1.5;margin:7px 0}
 .sei-empty{font-size:13px;color:#617086}
 @media print{.day-actions{display:none!important}}
 
@@ -276,7 +280,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
  .observation-label{font-size:11px}
  .coverage-note{font-size:12px}
  .sei-body{padding:12px 10px 20px}
- .sei-register,.sei-register input,.sei-intro,.sei-validation,.sei-scope-label,#sei-order-scope{font-size:14px}
+ .sei-register,.sei-register input,.sei-intro,.sei-validation,.sei-scope-label,.sei-scope-status,#sei-order-scope{font-size:14px}
  .sei-section h3{font-size:17px}
  .sei-tools button,.sei-register button{font-size:14px;min-height:44px}
  .sei-table{min-width:1000px}
@@ -307,7 +311,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 <dialog id="sei-generator" class="sei-generator" aria-labelledby="sei-date-title">
  <div class="dialog-heading"><h2 id="sei-date-title">Documentos de serviço</h2><button type="button" class="dialog-close" id="sei-close">Fechar</button></div>
  <div class="sei-body">
-  <p class="sei-intro">Minutas para conferência. A geração não altera a previsão nem homologa os serviços.</p>
+  <p class="sei-intro">Minutas para conferência. A geração não altera a previsão nem homologa os serviços. A cópia inclui somente as linhas de dados, sem cabeçalhos, com fonte editável no SEI.</p>
   <div class="sei-register">
    <label for="sei-local-file">Plano de Chamada (.xlsx) ou cadastro local (.json)</label>
    <input type="file" id="sei-local-file" accept=".xlsx,.json,application/json,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"/>
@@ -324,8 +328,9 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
   </section>
   <section class="sei-section" aria-labelledby="sei-os-title">
    <h3 id="sei-os-title">ORDEM DE SERVIÇO (AC4)</h3>
-   <label class="sei-scope-label" for="sei-order-scope">Modalidade / ordem de serviço</label>
-   <select id="sei-order-scope"></select>
+   <label class="sei-scope-label" for="sei-order-scope">AC4 incluídos na Ordem de Serviço</label>
+   <select id="sei-order-scope" aria-describedby="sei-order-count"></select>
+   <p id="sei-order-count" class="sei-scope-status" role="status" aria-live="polite"></p>
    <p id="sei-os-empty" class="sei-empty" hidden>Não há AC4 previsto para esta data.</p>
    <div class="sei-tools"><button type="button" id="sei-copy-order">Copiar Ordem de Serviço para o SEI</button><button type="button" class="sei-secondary" id="sei-select-order" disabled>Selecionar tabela</button></div>
    <div id="sei-order-container" class="sei-table-scroll" role="region" aria-label="Tabela da Ordem de Serviço" tabindex="0"></div>
@@ -9038,7 +9043,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     dialog: byId('sei-generator'), title: byId('sei-date-title'), file: byId('sei-local-file'),
     registerStatus: byId('sei-register-status'), validation: byId('sei-validation'),
     scale: byId('sei-scale-container'), order: byId('sei-order-container'),
-    scope: byId('sei-order-scope'), empty: byId('sei-os-empty'), feedback: byId('sei-feedback'),
+    scope: byId('sei-order-scope'), scopeStatus: byId('sei-order-count'), empty: byId('sei-os-empty'), feedback: byId('sei-feedback'),
     scaleCopy: byId('sei-copy-scale'), orderCopy: byId('sei-copy-order'),
     scaleSelect: byId('sei-select-scale'), orderSelect: byId('sei-select-order')
   };
@@ -9047,9 +9052,10 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
   const pad = value => String(value).padStart(2, '0');
   const esHeaders = ['ORDEM','FUNÇÃO','MILITAR DE SERVIÇO','CPF','ALTERAÇÕES / OBSERVAÇÕES','AC-4','FONTE DO RECURSO'];
   const osHeaders = ['INÍCIO — DATA','HORÁRIO','TÉRMINO — DATA','HORÁRIO','MILITAR DE AC4','CPF','AC4'];
-  const cellStyle = 'border:1px solid #333;padding:5px 6px;vertical-align:middle;font-family:Arial,sans-serif;font-size:10pt;font-weight:normal;line-height:1.25;overflow-wrap:anywhere;';
+  const cellStyle = 'border:1px solid #333;padding:5px 6px;vertical-align:middle;';
   let directory = new Map(), references = {ts:[], cia:[], events:[]};
   let current = null, groups = [], scaleTable, orderTable;
+  let allOrderRows = [], selectedTable = null;
   let scaleValid=false, orderValid=false;
 
   function node(tag, className, text) {
@@ -9188,9 +9194,10 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     cell.append(document.createTextNode(p.full.slice(0, start)), node('strong', '', p.full.slice(start, start + p.war.length)), document.createTextNode(p.full.slice(start + p.war.length)));
   }
   function appendRichLine(cell, text) {
-    const line = node('div');
+    if (cell.hasChildNodes()) cell.append(node('br'));
+    const line = document.createDocumentFragment();
     if(typeof text==='object'){
-      if(text.kind==='identity'){line.append(document.createTextNode(text.prefix));appendIdentification(line,{name:text.name});}
+      if(text.kind==='identity'){line.append(node('strong','',text.prefix.trim()),document.createTextNode(' '));appendIdentification(line,{name:text.name});}
       else if(text.kind==='strong')line.append(node('strong','',text.text));
       cell.append(line);return;
     }
@@ -9239,9 +9246,9 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     const lines=[{kind:'strong',text:proebom?'PROEBOM 2026':'REFORÇO OPERACIONAL'},`${time.start} às ${time.end}`];
     const number=event.document?.match(/\bOS\s*(?:n[º°o.]?\s*)?(\d+(?:\/\d+)?)/i)?.[1];
     const sei=event.document?.match(/(?:^|[;,]\s*)SEI\s*(?:n[º°o.]?\s*)?(\d{6,12})\b/i)?.[1];
-    lines.push(event.status!=='planned'&&number?`OS nº ${number} (${sei || 'SEI não informado'})`:'OS a definir — PREVISTO');
-    if(event.observation&&!['REFORÇO OPERACIONAL','PROEBOM 2026'].includes(event.observation))lines.push(event.observation);
-    if(event.nextDay)lines.push('Término no dia seguinte.');
+    lines.push(number?`OS nº ${number} (SEI ${sei || 'não informado'})`:'OS a definir — PREVISTO');
+    const redundant=/^AC4\s+\d+h\s+(?:noturno|diurno)\s*[—-]\s*OS a definir\.?$/i.test(event.observation||'');
+    if(event.observation&&!['REFORÇO OPERACIONAL','PROEBOM 2026'].includes(event.observation)&&!redundant)lines.push(event.observation);
     if(/Processo SEI/i.test(event.document))lines.push(event.document.replace(/^OS a definir;\s*/,''));
     return lines;
   }
@@ -9276,15 +9283,16 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
       for (const note of notes) if (!/^Ordinário\.?$/i.test(note) && !note.startsWith('Oficial de Dia —')) lines.push(note.replace(/^ALTERAÇÕES \/ OBSERVAÇÕES:\s*/,''));
     }
     if (member.badges.some(b=>b.kind==='officer')&&!member.events.length) lines.push('Alcançável.');
-    for (const event of member.events) lines.push(...eventLines(event));
-    return lines.filter((line,i)=>lines.findIndex(other=>JSON.stringify(other)===JSON.stringify(line))===i);
+    const ac4Lines=member.events.flatMap(eventLines);
+    const ordered=change?[...lines,...ac4Lines]:[...ac4Lines,...lines];
+    return ordered.filter((line,i)=>ordered.findIndex(other=>JSON.stringify(other)===JSON.stringify(line))===i);
   }
   function resourceFor() { return '8ª CIBM - CRISTALINA'; }
   function makeTable(headers,widths,id) {
     const table=node('table','sei-table');table.id=id;table.setAttribute('aria-label',id==='sei-scale-table'?'Escala de Serviço':'Ordem de Serviço');
-    table.style.cssText='border-collapse:collapse;border:1px solid #333;width:100%;table-layout:fixed;font-family:Arial,sans-serif;font-size:10pt;color:#000;background:#fff;';
+    table.style.cssText='border-collapse:collapse;border:1px solid #333;width:100%;';
     const cols=node('colgroup');for(const width of widths){const col=node('col');col.style.width=width+'%';cols.append(col)}
-    const head=node('thead'),row=node('tr');for(const [index,h] of headers.entries()){const th=node('th','',h);th.scope='col';th.style.cssText=cellStyle+`font-weight:bold;text-align:center;background:#eee;width:${widths[index]}%;`;row.append(th)}head.append(row);
+    const head=node('thead'),row=node('tr');for(const [index,h] of headers.entries()){const th=node('th','',h);th.scope='col';th.style.cssText=cellStyle+`text-align:center;background:#eee;width:${widths[index]}%;`;row.append(th)}head.append(row);
     table.append(cols,head,node('tbody'));return table;
   }
   function cell(text,align='left') {const td=node('td');td.style.cssText=cellStyle+`text-align:${align};`;if(text!==undefined)td.textContent=text;return td;}
@@ -9301,10 +9309,12 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     const list=node('ul');for(const message of unique)list.append(node('li','',message));ui.validation.append(list);
   }
   function renderOrder() {
-    const group=groups[Number(ui.scope.value)],rows=group?.rows || [],validation=validationFor(rows.map(r=>r.member),false);
+    const rows=ui.scope.value==='all'?allOrderRows:groups[Number(ui.scope.value)]?.rows || [];
+    const validation=validationFor(rows.map(r=>r.member),false);
     orderTable=makeTable(osHeaders,[12,8,12,8,40,14,6],'sei-order-table');const body=orderTable.tBodies[0];
     for(const {member,event} of rows){const time=interval(event),tr=node('tr');tr.append(cell(time.startDate,'center'),cell(time.start,'center'),cell(time.endDate,'center'),cell(time.end,'center'));const name=cell();appendIdentification(name,member);tr.append(name,cell(person(member.name)?.cpf || '','center'),cell(`${event.hours}h`,'center'));body.append(tr);}
     ui.order.replaceChildren(orderTable);ui.empty.hidden=!!rows.length;
+    ui.scopeStatus.textContent=`${rows.length} de ${allOrderRows.length} serviços de AC4 exibidos.${ui.scope.value!=='all'&&allOrderRows.length?' Filtro ativo; selecione Todos os AC4 do dia para incluir todos.':''}`;
     orderValid=!!rows.length&&!validation.hard.length;ui.orderCopy.disabled=false;ui.orderSelect.disabled=!orderValid;
     return validation;
   }
@@ -9318,32 +9328,56 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     const hasOfficer=members.some(m=>m.badges.some(b=>b.kind==='officer'));
     let order=1;
     if(!hasOfficer){const row=node('tr');row.append(cell(pad(order++),'center'),cell('OFICIAL DE DIA'),cell(),cell('','center'),cell(),cell('','center'),cell());body.append(row);validation.warnings.push('Oficial de Dia não informado: primeira linha reservada, sem inventar designação.');}
-    for(const member of members){const row=node('tr'),absent=isAbsent(member);row.append(cell(pad(order++),'center'),cell(member.badges.some(b=>b.kind==='officer')?'OFICIAL DE DIA':chief.assignments.some(a=>a.name===member.name)?'Chefe de Ala / COB':/CHEFE DE ALA|\bCOB\b/i.test(member.funcao)?'':member.funcao));const name=cell();appendIdentification(name,member);if(absent)name.style.color='#c00000';const cpf=cell(person(member.name)?.cpf || '','center'),obs=cell();for(const line of observations(member))appendRichLine(obs,line);for(const assigned of chief.assignments.filter(a=>a.name===member.name))if(assigned.start!==0||assigned.end!==1440)appendRichLine(obs,`Chefia: ${window.ServiceChief.period(current.day,assigned)}`);if(absent)obs.style.color='#c00000';const funds=[...new Set(member.events.map(e=>resourceFor(member,e)).filter(Boolean))];const fund=cell();for(const source of funds)appendRichLine(fund,source);row.append(name,cpf,obs,cell(member.events.map(e=>`${e.hours}h`).join(' + '),'center'),fund);body.append(row);}
+    for(const member of members){const row=node('tr'),absent=isAbsent(member);row.append(cell(pad(order++),'center'),cell(member.badges.some(b=>b.kind==='officer')?'OFICIAL DE DIA':chief.assignments.some(a=>a.name===member.name)?'Chefe de Ala':/CHEFE DE ALA|\bCOB\b/i.test(member.funcao)?'':member.funcao));const name=cell();appendIdentification(name,member);if(absent)name.style.color='#c00000';const cpf=cell(person(member.name)?.cpf || '','center'),obs=cell();for(const line of observations(member))appendRichLine(obs,line);for(const assigned of chief.assignments.filter(a=>a.name===member.name))if(assigned.start!==0||assigned.end!==1440)appendRichLine(obs,`Chefia: ${window.ServiceChief.period(current.day,assigned)}`);if(absent)obs.style.color='#c00000';const funds=[...new Set(member.events.map(e=>resourceFor(member,e)).filter(Boolean))];const fund=cell();for(const source of funds)appendRichLine(fund,source);row.append(name,cpf,obs,cell(member.events.map(e=>`${e.hours}h`).join(' + '),'center'),fund);body.append(row);}
     ui.scale.replaceChildren(scaleTable);scaleValid=!!members.length&&!validation.hard.length;ui.scaleCopy.disabled=false;ui.scaleSelect.disabled=!scaleValid;
-    const previous=groups[Number(ui.scope.value)]?.key;
+    allOrderRows=members.flatMap(member=>member.events.map(event=>({member,event})));
     const grouped=new Map();
-    for(const member of members)for(const event of member.events){const key=`${event.mode}\u0000${event.document}`;if(!grouped.has(key))grouped.set(key,{key,mode:event.mode,document:event.document,rows:[]});grouped.get(key).rows.push({member,event});}
+    for(const row of allOrderRows){const {event}=row,key=`${event.mode}\u0000${event.document}`;if(!grouped.has(key))grouped.set(key,{key,mode:event.mode,document:event.document,rows:[]});grouped.get(key).rows.push(row);}
     groups=[...grouped.values()];ui.scope.replaceChildren();
+    const all=node('option','',`Todos os AC4 do dia (${allOrderRows.length})`);all.value='all';ui.scope.append(all);
     groups.forEach((group,index)=>{const option=node('option','',`${group.mode} · ${group.document}`);option.value=String(index);ui.scope.append(option)});
-    const old=groups.findIndex(g=>g.key===previous);ui.scope.value=String(old<0?0:old);ui.scope.disabled=!groups.length;
+    ui.scope.value='all';ui.scope.disabled=groups.length<2;
     const osValidation=renderOrder();
     const pending=[...current.day.alerts,...validation.hard,...validation.warnings,...osValidation.hard];
     if(!directory.size)pending.unshift('Importe o Plano de Chamada (.xlsx) ou o cadastro local (.json) para preencher as identificações completas antes de copiar.');
     if(groups.some(g=>g.rows.some(r=>r.event.status==='planned')))pending.push('Há AC4 previstos com OS a definir. O SEI de processo não é tratado como número do documento da OS.');
     showValidation(pending);
   }
-  function tablePlainText(table) {return [...table.rows].map(row=>[...row.cells].map(c=>c.innerText).join('\t')).join('\n');}
-  function selectTable(table) {
-    const range=document.createRange();range.selectNode(table);const selection=window.getSelection();selection.removeAllRanges();selection.addRange(range);
+  const dataRows = table => [...table.tBodies].flatMap(body=>[...body.rows]);
+  function tablePlainText(table) {return dataRows(table).map(row=>[...row.cells].map(c=>c.innerText).join('\t')).join('\n');}
+  function clipboardPayload(table) {
+    // Copy data rows with semantic emphasis; let the destination editor choose the font.
+    const clean=node('table');clean.style.cssText='border-collapse:collapse;border:1px solid #333;width:100%;';
+    const body=clean.createTBody();for(const row of dataRows(table))body.append(row.cloneNode(true));
+    const allowed=new Set(['border','padding','vertical-align','text-align','color']);
+    for(const element of clean.querySelectorAll('*')){
+      for(const attr of [...element.attributes])if(!['style','colspan','rowspan'].includes(attr.name))element.removeAttribute(attr.name);
+      for(const property of [...element.style])if(!allowed.has(property)&&!/^(?:border|padding)-/.test(property))element.style.removeProperty(property);
+      if(!element.style.length)element.removeAttribute('style');
+    }
+    return {html:clean.outerHTML,plain:tablePlainText(table)};
   }
+  function selectTable(table) {
+    selectedTable=table;
+    const range=document.createRange();range.selectNodeContents(table.tBodies[0]);const selection=window.getSelection();selection.removeAllRanges();selection.addRange(range);
+  }
+  function writeCopyEvent(event,payload){
+    if(!event.clipboardData)return;
+    event.clipboardData.setData('text/html',payload.html);event.clipboardData.setData('text/plain',payload.plain);event.preventDefault();
+  }
+  document.addEventListener('copy',event=>{
+    const selection=window.getSelection(),body=selectedTable?.isConnected?selectedTable.tBodies[0]:null;
+    if(!body||selection.rangeCount!==1)return;
+    const range=selection.getRangeAt(0);
+    if(range.startContainer===body&&range.startOffset===0&&range.endContainer===body&&range.endOffset===body.childNodes.length)writeCopyEvent(event,clipboardPayload(selectedTable));
+  });
   async function copyTable(table,label) {
     ui.feedback.textContent='Copiando tabela…';
-    const clean=table.cloneNode(true);clean.removeAttribute('id');clean.removeAttribute('class');clean.removeAttribute('aria-label');
-    const html=clean.outerHTML,plain=tablePlainText(table);let copied=false;
+    const payload=clipboardPayload(table),{html,plain}=payload;let copied=false;
     try {if(window.isSecureContext&&navigator.clipboard?.write&&window.ClipboardItem){await navigator.clipboard.write([new ClipboardItem({'text/html':new Blob([html],{type:'text/html'}),'text/plain':new Blob([plain],{type:'text/plain'})})]);copied=true;}}catch{/* Browser denied rich clipboard; attempt a table-only legacy copy. */}
-    if(!copied){const onCopy=event=>{if(event.clipboardData){event.clipboardData.setData('text/html',html);event.clipboardData.setData('text/plain',plain);event.preventDefault();}};document.addEventListener('copy',onCopy);try{selectTable(table);copied=document.execCommand('copy');}catch{copied=false;}finally{document.removeEventListener('copy',onCopy);}}
-    if(copied)ui.feedback.textContent=`${label} copiada em HTML para o SEI.`;
-    else{selectTable(table);ui.feedback.textContent='Cópia automática bloqueada. A tabela foi selecionada; pressione Ctrl+C e depois Ctrl+V no SEI.';}
+    if(!copied){const onCopy=event=>writeCopyEvent(event,payload);document.addEventListener('copy',onCopy);try{selectTable(table);copied=document.execCommand('copy');}catch{copied=false;}finally{document.removeEventListener('copy',onCopy);}}
+    if(copied)ui.feedback.textContent=`${label} copiada para o SEI: somente as linhas de dados, sem cabeçalho.`;
+    else{selectTable(table);ui.feedback.textContent='Cópia automática bloqueada. As linhas de dados foram selecionadas, sem cabeçalho; pressione Ctrl+C e depois Ctrl+V no SEI.';}
   }
   document.addEventListener('click',event=>{
     const button=event.target.closest('[data-sei-day]');if(!button)return;
@@ -9379,8 +9413,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
   }
   ui.scaleCopy.addEventListener('click',()=>requestCopy('scale'));
   ui.orderCopy.addEventListener('click',()=>requestCopy('order'));
-  ui.scaleSelect.addEventListener('click',()=>{selectTable(scaleTable);ui.feedback.textContent='Escala selecionada. Use Ctrl+C para copiar somente a tabela.';});
-  ui.orderSelect.addEventListener('click',()=>{selectTable(orderTable);ui.feedback.textContent='Ordem selecionada. Use Ctrl+C para copiar somente a tabela.';});
+  ui.scaleSelect.addEventListener('click',()=>{selectTable(scaleTable);ui.feedback.textContent='Linhas de dados da Escala selecionadas, sem cabeçalho. Use Ctrl+C para copiar.';});
+  ui.orderSelect.addEventListener('click',()=>{selectTable(orderTable);ui.feedback.textContent='Linhas de dados da Ordem selecionadas, sem cabeçalho. Use Ctrl+C para copiar.';});
 })();
 
 
