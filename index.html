@@ -283,6 +283,16 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
  .sei-table th,.sei-table td{font-size:11pt!important}
 }
 
+
+/* Keep the duty number quiet and the adjunto beside the name, before service badges. */
+.member-label{display:flex;align-items:center;gap:6px;min-width:0;flex:1}
+.member-label .name{flex:1;min-width:0}
+.member-count{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;min-width:16px;height:16px;padding:0 2px;border:1px solid #e6ebf1;border-radius:5px;background:#f6f8fa;color:#8591a1;font-size:9px;font-weight:550;font-variant-numeric:tabular-nums;line-height:1;letter-spacing:0}
+.badges.has-adjunto{flex-wrap:nowrap;max-width:164px;gap:4px;align-items:center}
+.has-adjunto>.chief{flex:0 0 auto;white-space:nowrap;padding-left:4px;padding-right:4px}
+.service-badges{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:3px;min-width:0;max-width:90px}
+@media screen and (max-width:760px){.member-count{min-width:18px;height:18px;font-size:10px}.member-label{gap:5px}}
+@media print{.member-count{min-width:12px;height:12px;font-size:7px}.member-label{gap:3px}}
 </style></head><body><main>
 <header class="header"><div class="header-main"><h1><span class="header-title">Previsão Escalas de Serviço</span></h1><div class="header-month month-controls" role="group" aria-label="Selecionar mês e ano"><select id="selecionar-mes" aria-label="Mês da previsão"></select><span aria-hidden="true">/</span><select id="selecionar-ano" aria-label="Ano da previsão"></select></div><p class="header-org">8ª Companhia Independente Bombeiro Militar - Cristalina</p><p class="header-period">Previsão de 01 a 30/11/2026</p></div><div class="header-copy"><span>© 2026 ASP OF CARVALHO.</span><span>Todos os direitos reservados.</span></div></header>
 
@@ -1887,6 +1897,24 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
             "ord": 17
           },
           {
+            "name": "SD PICCINI",
+            "badges": [],
+            "notes": [],
+            "events": [
+              {
+                "mode": "OPERACIONAL/SOP",
+                "start": "08h00",
+                "end": "08h00",
+                "nextDay": true,
+                "hours": 24,
+                "observation": "REFORÇO OPERACIONAL",
+                "document": "OS a definir (não informada)",
+                "status": "planned"
+              }
+            ],
+            "ord": 27
+          },
+          {
             "name": "SD SANTOS",
             "badges": [
               {
@@ -1903,8 +1931,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
           }
         ],
         "coverage": [
-          "3 recursos de 24h",
-          "Faltam 3 recursos"
+          "4 recursos de 24h",
+          "Faltam 2 recursos"
         ],
         "alerts": []
       },
@@ -8710,6 +8738,21 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
   }
   function periodDays() { return schedules[period]?.days || []; }
   function filteredDays() { return periodDays().filter(day => filter === 'TODAS' || day.ala === filter); }
+  function orderedDayMembers(day) {
+    const isOfficer = member => member.badges.some(badge => badge.kind === 'officer');
+    const seniority = member => {
+      const ord = ordOverrides.has(member.name) ? ordOverrides.get(member.name) : member.ord;
+      return Number.isInteger(ord) && ord > 0 ? ord : Infinity;
+    };
+    return [...day.members].sort((a, b) => Number(isOfficer(b)) - Number(isOfficer(a)) || seniority(a) - seniority(b));
+  }
+  function memberLabel(member, index, total, tag = 'span') {
+    const label = element(tag === 'h3' ? 'div' : 'span', 'member-label');
+    const count = element('span', 'member-count', String(index + 1));
+    count.setAttribute('aria-label', `Militar ${index + 1} de ${total}`);
+    label.append(count, element(tag, 'name', member.name));
+    return label;
+  }
   function shortHour(value) {
     const match = value.match(/^(\d{1,2})h(\d{2})?$/);
     if (!match) return value;
@@ -8743,18 +8786,23 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
   }
   function badgeNodes(member,chief,day) {
     const oddWithAc4 = member.badges.some(badge => badge.kind === 'officer') && member.events.length > 0;
-    const badges = element('span', `badges${oddWithAc4 ? ' has-odd-ac4' : ''}`);
+    const assignments = chief.assignments.filter(a => a.name === member.name);
+    const badges = element('span', `badges${oddWithAc4 ? ' has-odd-ac4' : ''}${assignments.length ? ' has-adjunto' : ''}`);
+    const services = assignments.length ? element('span', 'service-badges') : badges;
+    if (assignments.length) {
+      const chip = element('span', 'chip chief', 'ADJUNTO');
+      chip.title = 'Chefe de Ala / COB · Previsão por antiguidade (ORD do Plano de Chamada)';
+      badges.append(chip, services);
+    }
     for (const badge of member.badges) {
       if (badge.kind === 'ac4') continue;
       const label = badge.kind === 'officer' ? (oddWithAc4 ? 'ODD' : 'ODD - Alcançável') : badge.kind === 'ord' && badge.hours && badge.hours !== 24 ? `ORDINÁRIO - ${badge.hours}h` : badge.text;
       const chip = element('span', `chip ${badge.kind}`, label);
-      badges.append(chip);
+      services.append(chip);
     }
-    for (const event of member.events) badges.append(ac4Badge(event, member.name));
-    for(const assigned of chief.assignments.filter(a=>a.name===member.name)){
-      const chip=element('span','chip chief','Chefe de Ala / COB');
-      chip.title='Previsão por antiguidade (ORD do Plano de Chamada)';badges.append(chip);
-      if(assigned.start!==0||assigned.end!==1440)badges.append(element('span','chief-period',window.ServiceChief.period(day,assigned)));
+    for (const event of member.events) services.append(ac4Badge(event, member.name));
+    for(const assigned of assignments){
+      if(assigned.start!==0||assigned.end!==1440)services.append(element('span','chief-period',window.ServiceChief.period(day,assigned)));
     }
     return badges;
   }
@@ -8788,9 +8836,10 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     const [year, month] = period.split('-').map(Number);
     head.append(date, element('span', 'weekday-label', weekdays[new Date(Date.UTC(year, month - 1, day.day)).getUTCDay()]));
     const list = element('ul', 'entry-list');
-    for (const member of day.members) {
+    const members = orderedDayMembers(day);
+    for (const [index, member] of members.entries()) {
       const row = element('li', `entry ${memberClasses(member)}`);
-      row.append(element('span', 'name', member.name), badgeNodes(member,chief,day));
+      row.append(memberLabel(member, index, members.length), badgeNodes(member,chief,day));
       row.title = [...member.notes, ...member.events.map(event => `${statusText(event)} · ${eventTime({...event, day: day.day})}`)].join('\n');
       // Full observations remain available in the dialog and on printed calendars.
       if (member.events.length || member.badges.some(b => b.kind === 'disp' || b.kind === 'review')) {
@@ -8902,10 +8951,11 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
       dialogBody.append(alerts);
     }
     if (!day.members.some(member => member.badges.some(b => b.kind === 'officer'))) dialogBody.append(element('p', 'detail-note', 'Oficial de Dia: designação não informada para este dia.'));
-    for (const member of day.members) {
+    const members = orderedDayMembers(day);
+    for (const [index, member] of members.entries()) {
       const section = element('section', `member-details ${memberClasses(member)}`);
       const heading = element('div', 'member-heading');
-      heading.append(element('h3', 'name', member.name), badgeNodes(member,chief,day));
+      heading.append(memberLabel(member, index, members.length, 'h3'), badgeNodes(member,chief,day));
       section.append(heading);
       for (const note of member.notes) section.append(element('p', 'detail-note', note));
       for (const event of member.events) {
