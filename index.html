@@ -115,6 +115,12 @@ h1{font-size:clamp(24px,2.7vw,39px);font-weight:850;letter-spacing:-.047em;line-
 .month-controls select:focus-visible,.day-notes-button:focus-visible,.empty-state button:focus-visible,.dialog-close:focus-visible{outline:3px solid #94baff;outline-offset:2px}
 .badges{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;justify-self:end;gap:3px;max-width:138px;min-width:0}
 .badges .chip{flex:0 1 auto}
+.badges.has-odd-ac4{display:grid;grid-template-columns:auto auto;align-items:start;gap:2px 4px}
+.has-odd-ac4>.chip.officer{grid-column:1;grid-row:1;padding:4px 7px}
+.has-odd-ac4 .ac4-service{grid-column:2;display:grid;grid-template-columns:auto auto;justify-items:end;gap:2px 4px}
+.has-odd-ac4 .ac4-service>.chip{grid-column:1/-1}
+.has-odd-ac4 .ac4-period{grid-column:1}
+.has-odd-ac4 .ac4-planned{grid-column:2}
 .ac4-service{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:2px 4px;max-width:100%}
 .ac4-period{color:#526882;font-size:10px;font-weight:750;line-height:1.2;white-space:nowrap}
 .ac4-planned{color:#975914;font-size:9px;font-weight:750;line-height:1.2;white-space:nowrap}
@@ -163,6 +169,7 @@ body:has(dialog[open]){overflow:hidden}
  .badges{gap:2px;max-width:150px}
  .day-notes-button{font-size:9px;padding:4px 3px}
  .entry .chip.ac4{padding:2px 4px;letter-spacing:0}
+ .has-odd-ac4>.chip.officer{padding:2px 5px}
  .ac4-period{font-size:9px}
  .ac4-planned{font-size:8px}
  .dialog-heading{padding:10px}
@@ -381,7 +388,7 @@ body:has(dialog[open]){overflow:hidden}
               }
             ],
             "notes": [
-              "TS CIA — Dispensado. SEI 97586670"
+              "TS CIA — Dispensado em 02/11; pagamento em 05/11. SEI 97586670"
             ],
             "events": []
           },
@@ -758,7 +765,7 @@ body:has(dialog[open]){overflow:hidden}
               }
             ],
             "notes": [
-              "TS CIA — Pagando serviço. SEI 97586670"
+              "TS CIA — Pagando serviço em 05/11, referente à dispensa de 02/11. SEI 97586670"
             ],
             "events": []
           },
@@ -1471,6 +1478,19 @@ body:has(dialog[open]){overflow:hidden}
             "events": []
           },
           {
+            "name": "2º SGT DIEGO",
+            "badges": [
+              {
+                "kind": "pay",
+                "text": "TS CIA · Pagando"
+              }
+            ],
+            "notes": [
+              "TS CIA — Pagando serviço em 11/11, referente à dispensa de 18/11. SEI 97587098"
+            ],
+            "events": []
+          },
+          {
             "name": "2º SGT SCHUSSLER",
             "badges": [
               {
@@ -1511,8 +1531,8 @@ body:has(dialog[open]){overflow:hidden}
           }
         ],
         "coverage": [
-          "5 recursos de 24h",
-          "Faltam 1 recurso"
+          "6 recursos de 24h",
+          "Meta de 6 recursos"
         ],
         "alerts": []
       },
@@ -1734,7 +1754,7 @@ body:has(dialog[open]){overflow:hidden}
               }
             ],
             "notes": [
-              "TS CIA — Dispensado. SEI 97587098"
+              "TS CIA — Dispensado em 14/11; pagamento em 27/11. SEI 97587323"
             ],
             "events": []
           },
@@ -2048,12 +2068,12 @@ body:has(dialog[open]){overflow:hidden}
             "name": "2º SGT DIEGO",
             "badges": [
               {
-                "kind": "ord",
-                "text": "ORDINÁRIO"
+                "kind": "disp",
+                "text": "TS CIA · Dispensado"
               }
             ],
             "notes": [
-              "Ordinário"
+              "TS CIA — Dispensado em 18/11; pagamento em 11/11. SEI 97587098"
             ],
             "events": []
           },
@@ -2085,8 +2105,8 @@ body:has(dialog[open]){overflow:hidden}
           }
         ],
         "coverage": [
-          "5 recursos de 24h",
-          "Faltam 1 recurso"
+          "4 recursos de 24h",
+          "Faltam 2 recursos"
         ],
         "alerts": []
       },
@@ -2117,20 +2137,6 @@ body:has(dialog[open]){overflow:hidden}
             ],
             "notes": [
               "Ordinário"
-            ],
-            "events": []
-          },
-          {
-            "name": "2º SGT DIEGO",
-            "badges": [
-              {
-                "kind": "pay",
-                "text": "TS CIA · Pagando"
-              }
-            ],
-            "notes": [
-              "TS CIA — Pagando serviço. SEI 97587098",
-              "Pagamento em 19/11 na ala Bravo, conforme confirmação do usuário."
             ],
             "events": []
           },
@@ -2175,8 +2181,8 @@ body:has(dialog[open]){overflow:hidden}
           }
         ],
         "coverage": [
-          "6 recursos de 24h",
-          "Meta de 6 recursos"
+          "5 recursos de 24h",
+          "Faltam 1 recurso"
         ],
         "alerts": []
       },
@@ -2358,7 +2364,7 @@ body:has(dialog[open]){overflow:hidden}
               }
             ],
             "notes": [
-              "TS CIA — Dispensado. SEI 97587323"
+              "TS CIA — Dispensado em 22/11; pagamento em 29/11. SEI 97922344"
             ],
             "events": []
           },
@@ -2725,7 +2731,7 @@ body:has(dialog[open]){overflow:hidden}
               }
             ],
             "notes": [
-              "TS CIA — Pagando serviço. SEI 97587323"
+              "TS CIA — Pagando serviço em 27/11, referente à dispensa de 14/11. SEI 97587323"
             ],
             "events": []
           },
@@ -2869,6 +2875,19 @@ body:has(dialog[open]){overflow:hidden}
             "events": []
           },
           {
+            "name": "2º SGT DIEGO",
+            "badges": [
+              {
+                "kind": "pay",
+                "text": "TS CIA · Pagando"
+              }
+            ],
+            "notes": [
+              "TS CIA — Pagando serviço em 29/11, referente à dispensa de 22/11. SEI 97922344"
+            ],
+            "events": []
+          },
+          {
             "name": "2º SGT GEYDSON",
             "badges": [
               {
@@ -2909,8 +2928,8 @@ body:has(dialog[open]){overflow:hidden}
           }
         ],
         "coverage": [
-          "4 recursos de 24h",
-          "Faltam 2 recursos"
+          "5 recursos de 24h",
+          "Faltam 1 recurso"
         ],
         "alerts": []
       },
@@ -3063,10 +3082,11 @@ body:has(dialog[open]){overflow:hidden}
     return service;
   }
   function badgeNodes(member) {
-    const badges = element('span', 'badges');
+    const oddWithAc4 = member.badges.some(badge => badge.kind === 'officer') && member.events.length > 0;
+    const badges = element('span', `badges${oddWithAc4 ? ' has-odd-ac4' : ''}`);
     for (const badge of member.badges) {
       if (badge.kind === 'ac4') continue;
-      const label = badge.kind === 'ord' && badge.hours && badge.hours !== 24 ? `ORDINÁRIO - ${badge.hours}h` : badge.text;
+      const label = badge.kind === 'officer' ? (oddWithAc4 ? 'ODD' : 'ODD - Alcançável') : badge.kind === 'ord' && badge.hours && badge.hours !== 24 ? `ORDINÁRIO - ${badge.hours}h` : badge.text;
       const chip = element('span', `chip ${badge.kind}`, label);
       badges.append(chip);
     }
