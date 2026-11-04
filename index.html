@@ -106,350 +106,3381 @@ h1{font-size:clamp(24px,2.7vw,39px);font-weight:850;letter-spacing:-.047em;line-
 @media print{
  body{background:#fff}main{max-width:none;padding:8px}.header{color:#142c49;background:#fff;box-shadow:none;border:1px solid #aaa;padding:12px}.header-copy,.header-period{color:#223e57}.filterbar,.mobile-nav{display:none!important}.calendar{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}.day{display:flex!important;min-height:0;break-inside:avoid;box-shadow:none;border:1px solid #aaa}.day.is-hidden{display:flex}.info{font-size:9px}.entry{font-size:9px}.chip{font-size:8px}.ala-badge{box-shadow:none}.header::after{display:none}
 }
-</style></head><body><main>
-<header class="header"><div class="header-main"><h1><span class="header-title">Previsão Escalas de Serviço</span><span class="header-month">Novembro/2026</span></h1><p class="header-org">8ª Companhia Independente Bombeiro Militar - Cristalina</p><p class="header-period">Previsão de 01 a 30/11/2026</p></div><div class="header-copy"><span>© 2026 ASP OF CARVALHO.</span><span>Todos os direitos reservados.</span></div></header>
 
-<div class="filterbar"><div aria-label="Filtrar alas" class="filters" role="group"><button aria-pressed="true" data-filter="TODAS" type="button">Todas as alas</button><button aria-pressed="false" data-filter="ALPHA" type="button">Alpha</button><button aria-pressed="false" data-filter="BRAVO" type="button">Bravo</button><button aria-pressed="false" data-filter="CHARLIE" type="button">Charlie</button><button aria-pressed="false" data-filter="DELTA" type="button">Delta</button></div><small>Exibe militares confirmados nas fontes disponíveis e destaca pendências.</small></div>
-<nav aria-label="Navegação entre os dias" class="mobile-nav"><button aria-label="Dia anterior" id="dia-anterior" type="button">‹</button><div class="mobile-nav-center"><select aria-label="Selecionar dia de serviço" id="selecionar-dia"></select><span aria-live="polite" class="mobile-nav-count" id="indicador-dias"></span></div><button aria-label="Próximo dia" id="dia-seguinte" type="button">›</button></nav><div aria-label="Calendário de novembro de 2026" class="calendar"><section aria-label="01 de novembro, ala Delta" class="day" data-ala="DELTA" id="dia-01">
-<div class="day-head delta"><div class="day-date"><span class="day-num">01</span><span class="ala-badge delta">DELTA</span></div><span class="weekday-label">DOM</span></div>
-<ul class="entry-list"><li class="entry officer" title="Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"><span class="name">ASP OF BESSA</span><span class="chip officer">OFICIAL DE DIA</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">ST PASSOS</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário — serviço de 01/11; férias somente a partir de 05/11"><span class="name">1º SGT HAMILTON</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">2º SGT GEYDSON</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">2º SGT WANDERSON</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ac4" title="AC4 Operacional: 24h · 08h–08h. OS nº 344, SEI 97830860."><span class="name">SD CAVALCANTE</span><span class="chip ac4">AC4</span><span class="detail">24h · 08h–08h</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD SANTOS</span><span class="chip ord">ORDINÁRIO</span></li></ul>
-<div class="day-foot"><span>6 recursos de 24h</span><span>Meta de 6 recursos</span></div>
-</section>
-<section aria-label="02 de novembro, ala Alpha" class="day" data-ala="ALPHA" id="dia-02">
-<div class="day-head alpha"><div class="day-date"><span class="day-num">02</span><span class="ala-badge alpha">ALPHA</span></div><span class="weekday-label">SEG</span></div>
-<ul class="entry-list"><li class="entry officer" title="Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"><span class="name">ASP OF CARVALHO</span><span class="chip officer">OFICIAL DE DIA</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">ST DA SILVA</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ac4" title="AC4 Operacional: 24h · 08h–08h. OS nº 345, SEI 97833006."><span class="name">ST TAVARES</span><span class="chip ac4">AC4</span><span class="detail">24h · 08h–08h</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">ST AISLAN</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry disp" title="TS CIA — Dispensado. SEI 97586670"><span class="name">2º SGT DIEGO</span><span class="chip disp">TS CIA · Dispensado</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">CB RABELO</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ac4" title="AC4 Operacional: 24h · 08h–08h. OS nº 345, SEI 97833006."><span class="name">SD SANTOS</span><span class="chip ac4">AC4</span><span class="detail">24h · 08h–08h</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD MARTINS</span><span class="chip ord">ORDINÁRIO</span></li></ul>
-<div class="day-foot"><span>6 recursos de 24h</span><span>Meta de 6 recursos</span></div>
-</section>
-<section aria-label="03 de novembro, ala Bravo" class="day" data-ala="BRAVO" id="dia-03">
-<div class="day-head bravo"><div class="day-date"><span class="day-num">03</span><span class="ala-badge bravo">BRAVO</span></div><span class="weekday-label">TER</span></div>
-<ul class="entry-list"><li class="entry officer" title="Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"><span class="name">ASP OF CARVALHO</span><span class="chip officer">OFICIAL DE DIA</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">ST TAVARES</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ts" title="TS nº 166 (SEI 97832330). Substitui 2º SGT SCHUSSLER. "><span class="name">ST AISLAN</span><span class="chip ts">TS · SCHUSSLER</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">1º SGT HELLYSSON</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ac4" title="AC4 Operacional: 24h · 08h–08h. OS nº 346, SEI 97833074."><span class="name">2º SGT GEYDSON</span><span class="chip ac4">AC4</span><span class="detail">24h · 08h–08h</span></li>
-<li class="entry ac4" title="AC4 Operacional: 12h · 20h–08h. OS nº 346, SEI 97833074."><span class="name">2º SGT LUIZ ANTONIO</span><span class="chip ac4">AC4</span><span class="detail">12h · 20h–08h</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">3º SGT JORGE</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ac4" title="AC4 Operacional: 12h · 08h–20h. OS nº 346, SEI 97833074."><span class="name">3º SGT HENRIQUE</span><span class="chip ac4">AC4</span><span class="detail">12h · 08h–20h</span></li>
-<li class="entry disp" title="TS CIA — Dispensado. SEI 97766395"><span class="name">SD CAVALCANTE</span><span class="chip disp">TS CIA · Dispensado</span></li></ul>
-<div class="day-foot"><span>6 recursos de 24h</span><span>Meta de 6 recursos</span></div>
-</section>
-<section aria-label="04 de novembro, ala Charlie" class="day" data-ala="CHARLIE" id="dia-04">
-<div class="day-head charlie"><div class="day-date"><span class="day-num">04</span><span class="ala-badge charlie">CHARLIE</span></div><span class="weekday-label">QUA</span></div>
-<ul class="entry-list"><li class="entry officer" title="Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"><span class="name">ASP OF CARVALHO</span><span class="chip officer">OFICIAL DE DIA</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">ST OSVALDIR</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ac4" title="AC4 Operacional: 24h · 08h–08h. OS nº 347, SEI 97833404."><span class="name">ST DA SILVA</span><span class="chip ac4">AC4</span><span class="detail">24h · 08h–08h</span></li>
-<li class="entry ord" title="Serviço ordinário de 08h às 14h, 6h"><span class="name">ST AISLAN</span><span class="chip ord">ORDINÁRIO</span><span class="detail">6h · 08h–14h</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">1º SGT NIKHOLAS</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">3º SGT HENRIQUE</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD PICCINI</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD HUGO</span><span class="chip ord">ORDINÁRIO</span></li></ul>
-<div class="day-foot"><span>6 recursos de 24h</span><span>Meta de 6 recursos</span></div>
-</section>
-<section aria-label="05 de novembro, ala Delta" class="day" data-ala="DELTA" id="dia-05">
-<div class="day-head delta"><div class="day-date"><span class="day-num">05</span><span class="ala-badge delta">DELTA</span></div><span class="weekday-label">QUI</span></div>
-<ul class="entry-list"><li class="entry officer" title="Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"><span class="name">ASP OF CARVALHO</span><span class="chip officer">OFICIAL DE DIA</span></li>
-<li class="entry ts" title="TS nº 161 (SEI 97703197). Substitui ST PASSOS. "><span class="name">ST OSVALDIR</span><span class="chip ts">TS · PASSOS</span></li>
-<li class="entry pay" title="TS CIA — Pagando serviço. SEI 97586670"><span class="name">2º SGT DIEGO</span><span class="chip pay">TS CIA · Pagando</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">2º SGT GEYDSON</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">2º SGT WANDERSON</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ts" title="TS nº 155 (SEI 97542993). Substitui SD SANTOS. "><span class="name">SD PICCINI</span><span class="chip ts">TS · SANTOS</span></li></ul>
-<div class="day-foot"><span>5 recursos de 24h</span><span class="pending">Faltam 1 recurso</span></div>
-</section>
-<section aria-label="06 de novembro, ala Alpha" class="day" data-ala="ALPHA" id="dia-06">
-<div class="day-head alpha"><div class="day-date"><span class="day-num">06</span><span class="ala-badge alpha">ALPHA</span></div><span class="weekday-label">SEX</span></div>
-<ul class="entry-list"><li class="entry officer" title="Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"><span class="name">ASP OF CARVALHO</span><span class="chip officer">OFICIAL DE DIA</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">ST DA SILVA</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ts" title="TS nº 160 (SEI 97660634). Substitui ST AISLAN. "><span class="name">ST TAVARES</span><span class="chip ts">TS · AISLAN</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">2º SGT DIEGO</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry pay" title="TS CIA — Pagando serviço. SEI 97654793"><span class="name">3º SGT JORGE</span><span class="chip pay">TS CIA · Pagando</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">CB RABELO</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ts" title="TS nº 153/154 (SEI 97515824 / 97518560). Substitui SD MARTINS. Movimentação duplicada documentalmente, contabilizada uma única vez"><span class="name">SD HUGO</span><span class="chip ts">TS · MARTINS</span></li></ul>
-<div class="day-foot"><span>6 recursos de 24h</span><span>Meta de 6 recursos</span></div>
-</section>
-<section aria-label="07 de novembro, ala Bravo" class="day" data-ala="BRAVO" id="dia-07">
-<div class="day-head bravo"><div class="day-date"><span class="day-num">07</span><span class="ala-badge bravo">BRAVO</span></div><span class="weekday-label">SÁB</span></div>
-<ul class="entry-list"><li class="entry officer" title="Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"><span class="name">ASP OF CARVALHO</span><span class="chip officer">OFICIAL DE DIA</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">ST TAVARES</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">1º SGT HELLYSSON</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">2º SGT SCHUSSLER</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">3º SGT JORGE</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD CAVALCANTE</span><span class="chip ord">ORDINÁRIO</span></li></ul>
-<div class="day-foot"><span>5 recursos de 24h</span><span class="pending">Faltam 1 recurso</span></div>
-</section>
-<section aria-label="08 de novembro, ala Charlie" class="day" data-ala="CHARLIE" id="dia-08">
-<div class="day-head charlie"><div class="day-date"><span class="day-num">08</span><span class="ala-badge charlie">CHARLIE</span></div><span class="weekday-label">DOM</span></div>
-<ul class="entry-list"><li class="entry officer" title="Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"><span class="name">ASP OF CARVALHO</span><span class="chip officer">OFICIAL DE DIA</span></li>
-<li class="entry ts" title="TS nº 161 (SEI 97703197). Substitui ST OSVALDIR. "><span class="name">ST PASSOS</span><span class="chip ts">TS · OSVALDIR</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">1º SGT NIKHOLAS</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">3º SGT HENRIQUE</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ts" title="TS nº 156 (SEI 97543668). Substitui SD PICCINI. "><span class="name">SD SANTOS</span><span class="chip ts">TS · PICCINI</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD HUGO</span><span class="chip ord">ORDINÁRIO</span></li></ul>
-<div class="day-foot"><span>5 recursos de 24h</span><span class="pending">Faltam 1 recurso</span></div>
-</section>
-<section aria-label="09 de novembro, ala Delta" class="day" data-ala="DELTA" id="dia-09">
-<div class="day-head delta"><div class="day-date"><span class="day-num">09</span><span class="ala-badge delta">DELTA</span></div><span class="weekday-label">SEG</span></div>
-<ul class="entry-list"><li class="entry officer" title="Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"><span class="name">ASP OF BESSA</span><span class="chip officer">OFICIAL DE DIA</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">ST PASSOS</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">2º SGT GEYDSON</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">2º SGT WANDERSON</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD SANTOS</span><span class="chip ord">ORDINÁRIO</span></li></ul>
-<div class="day-foot"><span>4 recursos de 24h</span><span class="pending">Faltam 2 recursos</span></div>
-</section>
-<section aria-label="10 de novembro, ala Alpha" class="day" data-ala="ALPHA" id="dia-10">
-<div class="day-head alpha"><div class="day-date"><span class="day-num">10</span><span class="ala-badge alpha">ALPHA</span></div><span class="weekday-label">TER</span></div>
-<ul class="entry-list"><li class="entry officer" title="Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"><span class="name">ASP OF BESSA</span><span class="chip officer">OFICIAL DE DIA</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">ST DA SILVA</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">ST AISLAN</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">2º SGT DIEGO</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">CB RABELO</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry pay" title="TS CIA — Pagando serviço. SEI 97766395"><span class="name">SD CAVALCANTE</span><span class="chip pay">TS CIA · Pagando</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD MARTINS</span><span class="chip ord">ORDINÁRIO</span></li></ul>
-<div class="day-foot"><span>6 recursos de 24h</span><span>Meta de 6 recursos</span></div>
-</section>
-<section aria-label="11 de novembro, ala Bravo" class="day" data-ala="BRAVO" id="dia-11">
-<div class="day-head bravo"><div class="day-date"><span class="day-num">11</span><span class="ala-badge bravo">BRAVO</span></div><span class="weekday-label">QUA</span></div>
-<ul class="entry-list"><li class="entry officer" title="Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"><span class="name">ASP OF BESSA</span><span class="chip officer">OFICIAL DE DIA</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">ST TAVARES</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">1º SGT HELLYSSON</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">2º SGT SCHUSSLER</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">3º SGT JORGE</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD CAVALCANTE</span><span class="chip ord">ORDINÁRIO</span></li></ul>
-<div class="day-foot"><span>5 recursos de 24h</span><span class="pending">Faltam 1 recurso</span></div>
-</section>
-<section aria-label="12 de novembro, ala Charlie" class="day" data-ala="CHARLIE" id="dia-12">
-<div class="day-head charlie"><div class="day-date"><span class="day-num">12</span><span class="ala-badge charlie">CHARLIE</span></div><span class="weekday-label">QUI</span></div>
-<ul class="entry-list"><li class="entry officer" title="Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"><span class="name">ASP OF BESSA</span><span class="chip officer">OFICIAL DE DIA</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">ST OSVALDIR</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">1º SGT NIKHOLAS</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">3º SGT HENRIQUE</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD PICCINI</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD HUGO</span><span class="chip ord">ORDINÁRIO</span></li></ul>
-<div class="day-foot"><span>5 recursos de 24h</span><span class="pending">Faltam 1 recurso</span></div>
-</section>
-<section aria-label="13 de novembro, ala Delta" class="day" data-ala="DELTA" id="dia-13">
-<div class="day-head delta"><div class="day-date"><span class="day-num">13</span><span class="ala-badge delta">DELTA</span></div><span class="weekday-label">SEX</span></div>
-<ul class="entry-list"><li class="entry officer" title="Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"><span class="name">ASP OF BESSA</span><span class="chip officer">OFICIAL DE DIA</span></li>
-<li class="entry ts" title="TS nº 162 (SEI 97704006). Substitui ST PASSOS. "><span class="name">ST OSVALDIR</span><span class="chip ts">TS · PASSOS</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">2º SGT GEYDSON</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">2º SGT WANDERSON</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD SANTOS</span><span class="chip ord">ORDINÁRIO</span></li></ul>
-<div class="day-foot"><span>4 recursos de 24h</span><span class="pending">Faltam 2 recursos</span></div>
-</section>
-<section aria-label="14 de novembro, ala Alpha" class="day" data-ala="ALPHA" id="dia-14">
-<div class="day-head alpha"><div class="day-date"><span class="day-num">14</span><span class="ala-badge alpha">ALPHA</span></div><span class="weekday-label">SÁB</span></div>
-<ul class="entry-list"><li class="entry officer" title="Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"><span class="name">ASP OF BESSA</span><span class="chip officer">OFICIAL DE DIA</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">ST DA SILVA</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">ST AISLAN</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry disp" title="TS CIA — Dispensado. SEI 97587098"><span class="name">2º SGT DIEGO</span><span class="chip disp">TS CIA · Dispensado</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">CB RABELO</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD MARTINS</span><span class="chip ord">ORDINÁRIO</span></li></ul>
-<div class="day-foot"><span>4 recursos de 24h</span><span class="pending">Faltam 2 recursos</span></div>
-</section>
-<section aria-label="15 de novembro, ala Bravo" class="day" data-ala="BRAVO" id="dia-15">
-<div class="day-head bravo"><div class="day-date"><span class="day-num">15</span><span class="ala-badge bravo">BRAVO</span></div><span class="weekday-label">DOM</span></div>
-<ul class="entry-list"><li class="entry officer" title="Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"><span class="name">ASP OF BESSA</span><span class="chip officer">OFICIAL DE DIA</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">ST TAVARES</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">1º SGT HELLYSSON</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">2º SGT SCHUSSLER</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">3º SGT JORGE</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD CAVALCANTE</span><span class="chip ord">ORDINÁRIO</span></li></ul>
-<div class="day-foot"><span>5 recursos de 24h</span><span class="pending">Faltam 1 recurso</span></div>
-</section>
-<section aria-label="16 de novembro, ala Charlie" class="day" data-ala="CHARLIE" id="dia-16">
-<div class="day-head charlie"><div class="day-date"><span class="day-num">16</span><span class="ala-badge charlie">CHARLIE</span></div><span class="weekday-label">SEG</span></div>
-<ul class="entry-list"><li class="entry ts" title="TS nº 162 (SEI 97704006). Substitui ST OSVALDIR. "><span class="name">ST PASSOS</span><span class="chip ts">TS · OSVALDIR</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">1º SGT NIKHOLAS</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">3º SGT HENRIQUE</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD PICCINI</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD HUGO</span><span class="chip ord">ORDINÁRIO</span></li></ul>
-<div class="day-foot"><span>5 recursos de 24h</span><span class="pending">Faltam 1 recurso</span></div>
-</section>
-<section aria-label="17 de novembro, ala Delta" class="day" data-ala="DELTA" id="dia-17">
-<div class="day-head delta"><div class="day-date"><span class="day-num">17</span><span class="ala-badge delta">DELTA</span></div><span class="weekday-label">TER</span></div>
-<ul class="entry-list"><li class="entry ord" title="Ordinário"><span class="name">ST PASSOS</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">2º SGT GEYDSON</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">2º SGT WANDERSON</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry review" title="DOCUMENTO INCONSISTENTE: o militar substituído não pertence à Ala Delta em 17/11; confirmar antes da escala definitiva · SEI 97553091"><span class="name">3º SGT HENRIQUE</span><span class="chip review">TS · AISLAN (A CONFERIR)</span></li>
-<li class="entry ts" title="TS nº 156 (SEI 97543668). Substitui SD SANTOS. "><span class="name">SD PICCINI</span><span class="chip ts">TS · SANTOS</span></li></ul>
-<div class="day-foot"><span>4 recursos de 24h</span><span class="pending">Faltam 2 recursos</span></div>
-</section>
-<section aria-label="18 de novembro, ala Alpha" class="day" data-ala="ALPHA" id="dia-18">
-<div class="day-head alpha"><div class="day-date"><span class="day-num">18</span><span class="ala-badge alpha">ALPHA</span></div><span class="weekday-label">QUA</span></div>
-<ul class="entry-list"><li class="entry ord" title="Ordinário"><span class="name">ST DA SILVA</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">ST AISLAN</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">2º SGT DIEGO</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">CB RABELO</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD MARTINS</span><span class="chip ord">ORDINÁRIO</span></li></ul>
-<div class="day-foot"><span>5 recursos de 24h</span><span class="pending">Faltam 1 recurso</span></div>
-</section>
-<section aria-label="19 de novembro, ala Bravo" class="day" data-ala="BRAVO" id="dia-19">
-<div class="day-head bravo"><div class="day-date"><span class="day-num">19</span><span class="ala-badge bravo">BRAVO</span></div><span class="weekday-label">QUI</span></div>
-<ul class="entry-list"><li class="entry ord" title="Ordinário"><span class="name">ST TAVARES</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">1º SGT HELLYSSON</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry pay" title="TS CIA — Pagando serviço. SEI 97587098"><span class="name">2º SGT DIEGO</span><span class="chip pay">TS CIA · Pagando</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">2º SGT SCHUSSLER</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">3º SGT JORGE</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD CAVALCANTE</span><span class="chip ord">ORDINÁRIO</span></li></ul>
-<div class="day-foot"><span>6 recursos de 24h</span><span>Meta de 6 recursos</span></div>
-</section>
-<section aria-label="20 de novembro, ala Charlie" class="day" data-ala="CHARLIE" id="dia-20">
-<div class="day-head charlie"><div class="day-date"><span class="day-num">20</span><span class="ala-badge charlie">CHARLIE</span></div><span class="weekday-label">SEX</span></div>
-<ul class="entry-list"><li class="entry ord" title="Ordinário"><span class="name">ST OSVALDIR</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">1º SGT NIKHOLAS</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">3º SGT HENRIQUE</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ts" title="TS nº 157 (SEI 97544001). Substitui SD PICCINI. "><span class="name">SD SANTOS</span><span class="chip ts">TS · PICCINI</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD HUGO</span><span class="chip ord">ORDINÁRIO</span></li></ul>
-<div class="day-foot"><span>5 recursos de 24h</span><span class="pending">Faltam 1 recurso</span></div>
-</section>
-<section aria-label="21 de novembro, ala Delta" class="day" data-ala="DELTA" id="dia-21">
-<div class="day-head delta"><div class="day-date"><span class="day-num">21</span><span class="ala-badge delta">DELTA</span></div><span class="weekday-label">SÁB</span></div>
-<ul class="entry-list"><li class="entry ts" title="TS nº 163 (SEI 97704646). Substitui ST PASSOS. "><span class="name">ST OSVALDIR</span><span class="chip ts">TS · PASSOS</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">2º SGT GEYDSON</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">2º SGT WANDERSON</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD SANTOS</span><span class="chip ord">ORDINÁRIO</span></li></ul>
-<div class="day-foot"><span>4 recursos de 24h</span><span class="pending">Faltam 2 recursos</span></div>
-</section>
-<section aria-label="22 de novembro, ala Alpha" class="day" data-ala="ALPHA" id="dia-22">
-<div class="day-head alpha"><div class="day-date"><span class="day-num">22</span><span class="ala-badge alpha">ALPHA</span></div><span class="weekday-label">DOM</span></div>
-<ul class="entry-list"><li class="entry ord" title="Ordinário"><span class="name">ST DA SILVA</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">ST AISLAN</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry disp" title="TS CIA — Dispensado. SEI 97587323"><span class="name">2º SGT DIEGO</span><span class="chip disp">TS CIA · Dispensado</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">CB RABELO</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD MARTINS</span><span class="chip ord">ORDINÁRIO</span></li></ul>
-<div class="day-foot"><span>4 recursos de 24h</span><span class="pending">Faltam 2 recursos</span></div>
-</section>
-<section aria-label="23 de novembro, ala Bravo" class="day" data-ala="BRAVO" id="dia-23">
-<div class="day-head bravo"><div class="day-date"><span class="day-num">23</span><span class="ala-badge bravo">BRAVO</span></div><span class="weekday-label">SEG</span></div>
-<ul class="entry-list"><li class="entry ord" title="Ordinário"><span class="name">ST TAVARES</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">1º SGT HELLYSSON</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">2º SGT SCHUSSLER</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">3º SGT JORGE</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD CAVALCANTE</span><span class="chip ord">ORDINÁRIO</span></li></ul>
-<div class="day-foot"><span>5 recursos de 24h</span><span class="pending">Faltam 1 recurso</span></div>
-</section>
-<section aria-label="24 de novembro, ala Charlie" class="day" data-ala="CHARLIE" id="dia-24">
-<div class="day-head charlie"><div class="day-date"><span class="day-num">24</span><span class="ala-badge charlie">CHARLIE</span></div><span class="weekday-label">TER</span></div>
-<ul class="entry-list"><li class="entry ts" title="TS nº 163 (SEI 97704646). Substitui ST OSVALDIR. "><span class="name">ST PASSOS</span><span class="chip ts">TS · OSVALDIR</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">1º SGT NIKHOLAS</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">3º SGT HENRIQUE</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD PICCINI</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD HUGO</span><span class="chip ord">ORDINÁRIO</span></li></ul>
-<div class="day-foot"><span>5 recursos de 24h</span><span class="pending">Faltam 1 recurso</span></div>
-</section>
-<section aria-label="25 de novembro, ala Delta" class="day" data-ala="DELTA" id="dia-25">
-<div class="day-head delta"><div class="day-date"><span class="day-num">25</span><span class="ala-badge delta">DELTA</span></div><span class="weekday-label">QUA</span></div>
-<ul class="entry-list"><li class="entry ord" title="Ordinário"><span class="name">ST PASSOS</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">2º SGT GEYDSON</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">2º SGT WANDERSON</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ts" title="TS nº 157 (SEI 97544001). Substitui SD SANTOS. "><span class="name">SD PICCINI</span><span class="chip ts">TS · SANTOS</span></li></ul>
-<div class="day-foot"><span>4 recursos de 24h</span><span class="pending">Faltam 2 recursos</span></div>
-</section>
-<section aria-label="26 de novembro, ala Alpha" class="day" data-ala="ALPHA" id="dia-26">
-<div class="day-head alpha"><div class="day-date"><span class="day-num">26</span><span class="ala-badge alpha">ALPHA</span></div><span class="weekday-label">QUI</span></div>
-<ul class="entry-list"><li class="entry ord" title="Ordinário"><span class="name">ST DA SILVA</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">2º SGT DIEGO</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ts" title="TS nº 166 (SEI 97832330). Substitui ST AISLAN. "><span class="name">2º SGT SCHUSSLER</span><span class="chip ts">TS · AISLAN</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">CB RABELO</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD MARTINS</span><span class="chip ord">ORDINÁRIO</span></li></ul>
-<div class="day-foot"><span>5 recursos de 24h</span><span class="pending">Faltam 1 recurso</span></div>
-</section>
-<section aria-label="27 de novembro, ala Bravo" class="day" data-ala="BRAVO" id="dia-27">
-<div class="day-head bravo"><div class="day-date"><span class="day-num">27</span><span class="ala-badge bravo">BRAVO</span></div><span class="weekday-label">SEX</span></div>
-<ul class="entry-list"><li class="entry ord" title="Ordinário"><span class="name">ST TAVARES</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">1º SGT HELLYSSON</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry pay" title="TS CIA — Pagando serviço. SEI 97587323"><span class="name">2º SGT DIEGO</span><span class="chip pay">TS CIA · Pagando</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">2º SGT SCHUSSLER</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">3º SGT JORGE</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD CAVALCANTE</span><span class="chip ord">ORDINÁRIO</span></li></ul>
-<div class="day-foot"><span>6 recursos de 24h</span><span>Meta de 6 recursos</span></div>
-</section>
-<section aria-label="28 de novembro, ala Charlie" class="day" data-ala="CHARLIE" id="dia-28">
-<div class="day-head charlie"><div class="day-date"><span class="day-num">28</span><span class="ala-badge charlie">CHARLIE</span></div><span class="weekday-label">SÁB</span></div>
-<ul class="entry-list"><li class="entry ord" title="Ordinário"><span class="name">ST OSVALDIR</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">1º SGT NIKHOLAS</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">3º SGT HENRIQUE</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ts" title="TS nº 158 (SEI 97544104). Substitui SD PICCINI. "><span class="name">SD SANTOS</span><span class="chip ts">TS · PICCINI</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD HUGO</span><span class="chip ord">ORDINÁRIO</span></li></ul>
-<div class="day-foot"><span>5 recursos de 24h</span><span class="pending">Faltam 1 recurso</span></div>
-</section>
-<section aria-label="29 de novembro, ala Delta" class="day" data-ala="DELTA" id="dia-29">
-<div class="day-head delta"><div class="day-date"><span class="day-num">29</span><span class="ala-badge delta">DELTA</span></div><span class="weekday-label">DOM</span></div>
-<ul class="entry-list"><li class="entry ts" title="TS nº 164 (SEI 97705098). Substitui ST PASSOS. "><span class="name">ST OSVALDIR</span><span class="chip ts">TS · PASSOS</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">2º SGT GEYDSON</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">2º SGT WANDERSON</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD SANTOS</span><span class="chip ord">ORDINÁRIO</span></li></ul>
-<div class="day-foot"><span>4 recursos de 24h</span><span class="pending">Faltam 2 recursos</span></div>
-</section>
-<section aria-label="30 de novembro, ala Alpha" class="day" data-ala="ALPHA" id="dia-30">
-<div class="day-head alpha"><div class="day-date"><span class="day-num">30</span><span class="ala-badge alpha">ALPHA</span></div><span class="weekday-label">SEG</span></div>
-<ul class="entry-list"><li class="entry ord" title="Ordinário"><span class="name">ST DA SILVA</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">ST AISLAN</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">2º SGT DIEGO</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">CB RABELO</span><span class="chip ord">ORDINÁRIO</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD MARTINS</span><span class="chip ord">ORDINÁRIO</span></li></ul>
-<div class="day-foot"><span>5 recursos de 24h</span><span class="pending">Faltam 1 recurso</span></div>
-</section></div>
+[hidden]{display:none!important}
+.header-main h1{margin-bottom:5px}
+.month-controls{display:flex;align-items:center;gap:6px;margin:0 0 12px;color:#c8e3ff;font-size:clamp(19px,2.16vw,31px);font-weight:800;letter-spacing:-.025em}
+.month-controls select{max-width:100%;border:0;border-bottom:1px solid #ffffff65;border-radius:3px;background:transparent;color:inherit;font:inherit;letter-spacing:inherit;padding:1px 2px;cursor:pointer;color-scheme:dark}
+.month-controls option{color:var(--ink);background:#fff}
+.month-controls select:focus-visible,.day-notes-button:focus-visible,.empty-state button:focus-visible,.dialog-close:focus-visible{outline:3px solid #94baff;outline-offset:2px}
+.badges{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;justify-self:end;gap:3px;max-width:138px;min-width:0}
+.badges .chip{flex:0 1 auto}
+.day-notes-button{border:0;border-top:1px solid var(--line);background:#f4f8fd;color:#28537e;font:inherit;font-size:10px;font-weight:750;line-height:1.3;padding:6px 5px;cursor:pointer;text-align:center}
+.day-notes-button:hover{background:#e9f1fb}
+.day-notes-button.pending{color:#975914;background:#fff8ed}
+.print-notes{display:none}
+.empty-state{padding:clamp(24px,5vw,60px) 18px;text-align:center;background:#fff;border:1px solid var(--line);border-radius:13px}
+.empty-state h2{font-size:20px;margin:0 0 9px}
+.empty-state p{font-size:13px;line-height:1.5;color:#58687e}
+.empty-state button{margin-top:8px;background:#173b62;border:0;border-radius:8px;padding:10px 15px;color:white;font-weight:750;cursor:pointer}
+dialog{width:min(700px,calc(100% - 24px));max-height:88vh;max-height:88dvh;margin:auto;padding:0;border:1px solid #d2dfed;border-radius:15px;box-shadow:0 18px 70px #10283f55;color:var(--ink);background:#fff}
+dialog::backdrop{background:#0b203c99}
+body:has(dialog[open]){overflow:hidden}
+.dialog-heading{position:sticky;top:0;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:15px;background:#f4f8fd;border-bottom:1px solid var(--line);z-index:1}
+.dialog-heading h2{font-size:17px;margin:0}
+.dialog-close{border:1px solid #ccd9e8;background:white;color:#173b62;border-radius:7px;padding:8px 10px;font-weight:750;cursor:pointer}
+.dialog-body{padding:14px 17px}
+.day-alerts{background:#fff6e5;border:1px solid #efd5a8;border-radius:9px;padding:10px 12px;font-size:12px;color:#87520e;line-height:1.5}
+.day-alerts p{margin:5px 0}
+.member-details{padding:13px 0;border-bottom:1px solid var(--line)}
+.member-heading{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.member-heading h3{font-size:13px;margin:0}
+.member-details.disp .name{color:#c02b39}
+.member-details.review .name{color:#a1620a}
+.detail-note{font-size:11.5px;line-height:1.45;color:#617086;margin:6px 0;overflow-wrap:anywhere}
+.event-detail{background:#f8f5fe;border-left:3px solid var(--ac4);padding:8px 10px;margin-top:9px;border-radius:0 7px 7px 0}
+.event-detail p{margin:4px 0;font-size:12px;line-height:1.45;overflow-wrap:anywhere}
+.event-status{font-weight:800;color:#51328a}
+.event-detail[data-status="planned"] .event-status{color:#975914}
+.event-time{font-weight:650}
+.coverage-note{font-size:11px;line-height:1.5;color:#617086;margin:15px 0 0}
+@media screen and (max-width:760px){
+ .month-controls{font-size:clamp(13.6px,3.76vw,20px);gap:4px;margin:0 0 4px}
+ .month-controls select{padding:0 1px}
+ .badges{gap:2px;max-width:135px}
+ .day-notes-button{font-size:9px;padding:4px 3px}
+ .entry .chip.ac4{padding:2px 4px;letter-spacing:0}
+ .dialog-heading{padding:10px}
+ .dialog-heading h2{font-size:14px}
+ .dialog-body{padding:9px 12px}
+}
+@media screen and (max-width:760px) and (max-height:640px){
+ .header{gap:2px;padding:5px 10px}
+ .month-controls{margin-bottom:3px}
+ .entry{padding:1px 0;font-size:11.5px}
+ .day-notes-button{padding:3px;font-size:8.5px}
+ .day-head{padding:5px 10px}
+ .day-foot{padding:4px 10px}
+}
+@media screen and (max-width:760px) and (min-height:641px) and (max-height:720px){
+ .entry{padding:2px 0}
+}
+@media print{
+ .month-controls{color:#223e57;font-size:20px}
+ .month-controls select{color:#223e57;border:0;appearance:none;color-scheme:light}
+ .day-notes-button,dialog{display:none!important}
+ .print-notes{display:block;grid-column:1/-1;font-size:7px;line-height:1.35;color:#53627a}
+}
+</style></head><body><main>
+<header class="header"><div class="header-main"><h1><span class="header-title">Previsão Escalas de Serviço</span></h1><div class="header-month month-controls" role="group" aria-label="Selecionar mês e ano"><select id="selecionar-mes" aria-label="Mês da previsão"></select><span aria-hidden="true">/</span><select id="selecionar-ano" aria-label="Ano da previsão"></select></div><p class="header-org">8ª Companhia Independente Bombeiro Militar - Cristalina</p><p class="header-period">Previsão de 01 a 30/11/2026</p></div><div class="header-copy"><span>© 2026 ASP OF CARVALHO.</span><span>Todos os direitos reservados.</span></div></header>
+
+<div class="filterbar"><div aria-label="Filtrar alas" class="filters" role="group"><button aria-pressed="true" data-filter="TODAS" type="button">Todas as alas</button><button aria-pressed="false" data-filter="ALPHA" type="button">Alpha</button><button aria-pressed="false" data-filter="BRAVO" type="button">Bravo</button><button aria-pressed="false" data-filter="CHARLIE" type="button">Charlie</button><button aria-pressed="false" data-filter="DELTA" type="button">Delta</button></div><small>Previsão de serviço · AC4 com OS e AC4 previsto identificados separadamente.</small></div>
+<nav aria-label="Navegação entre os dias" class="mobile-nav"><button aria-label="Dia anterior" id="dia-anterior" type="button">‹</button><div class="mobile-nav-center"><select aria-label="Selecionar dia de serviço" id="selecionar-dia"></select><span aria-live="polite" class="mobile-nav-count" id="indicador-dias"></span></div><button aria-label="Próximo dia" id="dia-seguinte" type="button">›</button></nav><div aria-label="Calendário de novembro de 2026" class="calendar"></div>
+<section class="empty-state" id="sem-previsao" role="status" hidden><h2>Sem previsão cadastrada</h2><p>Não há dados de serviço cadastrados para <strong id="competencia-vazia"></strong>.</p><button type="button" id="voltar-competencia">Voltar a Novembro/2026</button></section>
+<noscript>Ative o JavaScript para selecionar o período e visualizar a previsão de serviço.</noscript>
 <div class="info"><strong>Regras e ressalvas:</strong> as informações apresentadas aqui são previsões do planejamento da escala, o que não substitui a Escala de Serviço e Ordem de Serviço homologadas.</div>
-</main><script>
+</main>
+<dialog id="detalhes-servico" aria-labelledby="detalhes-titulo"><div class="dialog-heading"><h2 id="detalhes-titulo"></h2><button type="button" class="dialog-close" id="fechar-detalhes">Fechar</button></div><div class="dialog-body" id="detalhes-conteudo"></div></dialog>
+<script type="application/json" id="calendar-data">
+{
+  "2026-11": {
+    "days": [
+      {
+        "day": 1,
+        "ala": "DELTA",
+        "members": [
+          {
+            "name": "ASP OF BESSA",
+            "badges": [
+              {
+                "kind": "officer",
+                "text": "OFICIAL DE DIA"
+              }
+            ],
+            "notes": [
+              "Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"
+            ],
+            "events": []
+          },
+          {
+            "name": "ST PASSOS",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "1º SGT HAMILTON",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário — serviço de 01/11; férias somente a partir de 05/11"
+            ],
+            "events": []
+          },
+          {
+            "name": "2º SGT GEYDSON",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "2º SGT WANDERSON",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "SD CAVALCANTE",
+            "badges": [
+              {
+                "kind": "ac4",
+                "text": "AC4 · OS"
+              }
+            ],
+            "notes": [],
+            "events": [
+              {
+                "mode": "OPERACIONAL/SOP",
+                "start": "08h00",
+                "end": "08h00",
+                "nextDay": true,
+                "hours": 24,
+                "observation": "REFORÇO OPERACIONAL",
+                "document": "OS nº 344/2026; SEI 97830860",
+                "status": "documented-sop"
+              }
+            ]
+          },
+          {
+            "name": "SD SANTOS",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          }
+        ],
+        "coverage": [
+          "6 recursos de 24h",
+          "Meta de 6 recursos"
+        ],
+        "alerts": [
+          "Oficial de Dia: designação anterior mantida, ainda a conferir nesta atualização."
+        ]
+      },
+      {
+        "day": 2,
+        "ala": "ALPHA",
+        "members": [
+          {
+            "name": "ASP OF CARVALHO",
+            "badges": [
+              {
+                "kind": "officer",
+                "text": "OFICIAL DE DIA"
+              }
+            ],
+            "notes": [
+              "Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"
+            ],
+            "events": []
+          },
+          {
+            "name": "ST DA SILVA",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "ST TAVARES",
+            "badges": [
+              {
+                "kind": "ac4",
+                "text": "AC4 · OS"
+              }
+            ],
+            "notes": [],
+            "events": [
+              {
+                "mode": "OPERACIONAL/SOP",
+                "start": "08h00",
+                "end": "08h00",
+                "nextDay": true,
+                "hours": 24,
+                "observation": "REFORÇO OPERACIONAL",
+                "document": "OS nº 345/2026; SEI 97833006",
+                "status": "documented-sop"
+              }
+            ]
+          },
+          {
+            "name": "ST AISLAN",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "2º SGT DIEGO",
+            "badges": [
+              {
+                "kind": "disp",
+                "text": "TS CIA · Dispensado"
+              }
+            ],
+            "notes": [
+              "TS CIA — Dispensado. SEI 97586670"
+            ],
+            "events": []
+          },
+          {
+            "name": "CB RABELO",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "SD SANTOS",
+            "badges": [
+              {
+                "kind": "ac4",
+                "text": "AC4 · OS"
+              }
+            ],
+            "notes": [],
+            "events": [
+              {
+                "mode": "OPERACIONAL/SOP",
+                "start": "08h00",
+                "end": "08h00",
+                "nextDay": true,
+                "hours": 24,
+                "observation": "REFORÇO OPERACIONAL",
+                "document": "OS nº 345/2026; SEI 97833006",
+                "status": "documented-sop"
+              }
+            ]
+          },
+          {
+            "name": "SD MARTINS",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          }
+        ],
+        "coverage": [
+          "6 recursos de 24h",
+          "Meta de 6 recursos"
+        ],
+        "alerts": [
+          "Oficial de Dia: designação anterior mantida, ainda a conferir nesta atualização."
+        ]
+      },
+      {
+        "day": 3,
+        "ala": "BRAVO",
+        "members": [
+          {
+            "name": "ASP OF CARVALHO",
+            "badges": [
+              {
+                "kind": "officer",
+                "text": "OFICIAL DE DIA"
+              }
+            ],
+            "notes": [
+              "Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"
+            ],
+            "events": []
+          },
+          {
+            "name": "ST TAVARES",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "ST AISLAN",
+            "badges": [
+              {
+                "kind": "ts",
+                "text": "TS · SCHUSSLER"
+              }
+            ],
+            "notes": [
+              "TS nº 166 (SEI 97832330). Substitui 2º SGT SCHUSSLER."
+            ],
+            "events": []
+          },
+          {
+            "name": "1º SGT HELLYSSON",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "2º SGT GEYDSON",
+            "badges": [
+              {
+                "kind": "ac4",
+                "text": "AC4 · OS"
+              }
+            ],
+            "notes": [],
+            "events": [
+              {
+                "mode": "OPERACIONAL/SOP",
+                "start": "08h00",
+                "end": "08h00",
+                "nextDay": true,
+                "hours": 24,
+                "observation": "REFORÇO OPERACIONAL",
+                "document": "OS nº 346/2026; SEI 97833074",
+                "status": "documented-sop"
+              }
+            ]
+          },
+          {
+            "name": "2º SGT LUIZ ANTONIO",
+            "badges": [
+              {
+                "kind": "ac4",
+                "text": "AC4 · OS"
+              }
+            ],
+            "notes": [],
+            "events": [
+              {
+                "mode": "OPERACIONAL/SOP",
+                "start": "20h00",
+                "end": "08h00",
+                "nextDay": true,
+                "hours": 12,
+                "observation": "REFORÇO OPERACIONAL",
+                "document": "OS nº 346/2026; SEI 97833074",
+                "status": "documented-sop"
+              }
+            ]
+          },
+          {
+            "name": "2º SGT WANDERSON",
+            "badges": [
+              {
+                "kind": "ac4",
+                "text": "AC4 · OS"
+              }
+            ],
+            "notes": [],
+            "events": [
+              {
+                "mode": "INSPEÇÃO E ANÁLISE/SAT",
+                "start": "14h00",
+                "end": "18h00",
+                "nextDay": false,
+                "hours": 4,
+                "observation": "INSPEÇÃO E ANÁLISE",
+                "document": "OS nº 343/2026; SEI 97776333; Processo 202500011045608",
+                "status": "documented-sat"
+              }
+            ]
+          },
+          {
+            "name": "3º SGT JORGE",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "3º SGT ROBERTO",
+            "badges": [
+              {
+                "kind": "ac4",
+                "text": "AC4 · OS"
+              }
+            ],
+            "notes": [],
+            "events": [
+              {
+                "mode": "INSPEÇÃO E ANÁLISE/SAT",
+                "start": "08h00",
+                "end": "12h00",
+                "nextDay": false,
+                "hours": 4,
+                "observation": "INSPEÇÃO E ANÁLISE",
+                "document": "OS nº 343/2026; SEI 97776333; Processo 202500011045608",
+                "status": "documented-sat"
+              }
+            ]
+          },
+          {
+            "name": "3º SGT HENRIQUE",
+            "badges": [
+              {
+                "kind": "ac4",
+                "text": "AC4 · OS"
+              }
+            ],
+            "notes": [],
+            "events": [
+              {
+                "mode": "OPERACIONAL/SOP",
+                "start": "08h00",
+                "end": "20h00",
+                "nextDay": false,
+                "hours": 12,
+                "observation": "REFORÇO OPERACIONAL",
+                "document": "OS nº 346/2026; SEI 97833074",
+                "status": "documented-sop"
+              }
+            ]
+          },
+          {
+            "name": "SD CAVALCANTE",
+            "badges": [
+              {
+                "kind": "disp",
+                "text": "TS CIA · Dispensado"
+              }
+            ],
+            "notes": [
+              "TS CIA — Dispensado. SEI 97766395"
+            ],
+            "events": []
+          }
+        ],
+        "coverage": [
+          "6 recursos de 24h",
+          "Meta de 6 recursos"
+        ],
+        "alerts": [
+          "Oficial de Dia: designação anterior mantida, ainda a conferir nesta atualização."
+        ]
+      },
+      {
+        "day": 4,
+        "ala": "CHARLIE",
+        "members": [
+          {
+            "name": "ASP OF CARVALHO",
+            "badges": [
+              {
+                "kind": "officer",
+                "text": "OFICIAL DE DIA"
+              }
+            ],
+            "notes": [
+              "Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"
+            ],
+            "events": []
+          },
+          {
+            "name": "ST OSVALDIR",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "ST DA SILVA",
+            "badges": [
+              {
+                "kind": "ac4",
+                "text": "AC4 · OS"
+              }
+            ],
+            "notes": [],
+            "events": [
+              {
+                "mode": "OPERACIONAL/SOP",
+                "start": "08h00",
+                "end": "08h00",
+                "nextDay": true,
+                "hours": 24,
+                "observation": "REFORÇO OPERACIONAL",
+                "document": "OS nº 347/2026; SEI 97833404",
+                "status": "documented-sop"
+              }
+            ]
+          },
+          {
+            "name": "ST AISLAN",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Serviço ordinário de 08h às 14h, 6h",
+              "6h · 08h–14h"
+            ],
+            "events": []
+          },
+          {
+            "name": "1º SGT NIKHOLAS",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "2º SGT WANDERSON",
+            "badges": [
+              {
+                "kind": "ac4",
+                "text": "AC4 · OS"
+              }
+            ],
+            "notes": [],
+            "events": [
+              {
+                "mode": "INSPEÇÃO E ANÁLISE/SAT",
+                "start": "08h00",
+                "end": "18h00",
+                "nextDay": false,
+                "hours": 10,
+                "observation": "INSPEÇÃO E ANÁLISE",
+                "document": "OS nº 343/2026; SEI 97776333; Processo 202500011045608",
+                "status": "documented-sat"
+              }
+            ]
+          },
+          {
+            "name": "3º SGT BERTONCELLO",
+            "badges": [
+              {
+                "kind": "ac4",
+                "text": "AC4 · OS"
+              }
+            ],
+            "notes": [],
+            "events": [
+              {
+                "mode": "INSPEÇÃO E ANÁLISE/SAT",
+                "start": "13h00",
+                "end": "18h00",
+                "nextDay": false,
+                "hours": 5,
+                "observation": "INSPEÇÃO E ANÁLISE",
+                "document": "OS nº 343/2026; SEI 97776333; Processo 202500011045608",
+                "status": "documented-sat"
+              }
+            ]
+          },
+          {
+            "name": "3º SGT ROBERTO",
+            "badges": [
+              {
+                "kind": "ac4",
+                "text": "AC4 · OS"
+              }
+            ],
+            "notes": [],
+            "events": [
+              {
+                "mode": "INSPEÇÃO E ANÁLISE/SAT",
+                "start": "08h00",
+                "end": "12h00",
+                "nextDay": false,
+                "hours": 4,
+                "observation": "INSPEÇÃO E ANÁLISE",
+                "document": "OS nº 343/2026; SEI 97776333; Processo 202500011045608",
+                "status": "documented-sat"
+              }
+            ]
+          },
+          {
+            "name": "3º SGT HENRIQUE",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "SD PICCINI",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "SD HUGO",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          }
+        ],
+        "coverage": [
+          "6 recursos de 24h",
+          "Meta de 6 recursos"
+        ],
+        "alerts": [
+          "Oficial de Dia: designação anterior mantida, ainda a conferir nesta atualização."
+        ]
+      },
+      {
+        "day": 5,
+        "ala": "DELTA",
+        "members": [
+          {
+            "name": "ASP OF CARVALHO",
+            "badges": [
+              {
+                "kind": "officer",
+                "text": "OFICIAL DE DIA"
+              }
+            ],
+            "notes": [
+              "Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"
+            ],
+            "events": []
+          },
+          {
+            "name": "ST OSVALDIR",
+            "badges": [
+              {
+                "kind": "ts",
+                "text": "TS · PASSOS"
+              }
+            ],
+            "notes": [
+              "TS nº 161 (SEI 97703197). Substitui ST PASSOS."
+            ],
+            "events": []
+          },
+          {
+            "name": "1º SGT HELLYSSON",
+            "badges": [
+              {
+                "kind": "ac4",
+                "text": "AC4 PREVISTO"
+              }
+            ],
+            "notes": [],
+            "events": [
+              {
+                "mode": "PROEBOM 2026",
+                "start": "08h00",
+                "end": "12h00",
+                "nextDay": false,
+                "hours": 4,
+                "observation": "PROEBOM 2026",
+                "document": "OS a definir (não informada)",
+                "status": "planned"
+              }
+            ]
+          },
+          {
+            "name": "2º SGT DIEGO",
+            "badges": [
+              {
+                "kind": "pay",
+                "text": "TS CIA · Pagando"
+              }
+            ],
+            "notes": [
+              "TS CIA — Pagando serviço. SEI 97586670"
+            ],
+            "events": []
+          },
+          {
+            "name": "2º SGT GEYDSON",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "2º SGT LUIZ ANTONIO",
+            "badges": [
+              {
+                "kind": "ac4",
+                "text": "AC4 PREVISTO"
+              }
+            ],
+            "notes": [],
+            "events": [
+              {
+                "mode": "AC4 NOTURNO - modalidade a confirmar",
+                "start": "20h00",
+                "end": "08h00",
+                "nextDay": true,
+                "hours": 12,
+                "observation": "AC4 12h noturno — OS a definir",
+                "document": "OS a definir (não informada)",
+                "status": "planned"
+              }
+            ]
+          },
+          {
+            "name": "2º SGT WANDERSON",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "3º SGT ROBERTO",
+            "badges": [
+              {
+                "kind": "ac4",
+                "text": "AC4 · OS"
+              }
+            ],
+            "notes": [],
+            "events": [
+              {
+                "mode": "INSPEÇÃO E ANÁLISE/SAT",
+                "start": "08h00",
+                "end": "12h00",
+                "nextDay": false,
+                "hours": 4,
+                "observation": "INSPEÇÃO E ANÁLISE",
+                "document": "OS nº 343/2026; SEI 97776333; Processo 202500011045608",
+                "status": "documented-sat"
+              }
+            ]
+          },
+          {
+            "name": "3º SGT HENRIQUE",
+            "badges": [
+              {
+                "kind": "ac4",
+                "text": "AC4 PREVISTO"
+              }
+            ],
+            "notes": [],
+            "events": [
+              {
+                "mode": "PROEBOM 2026",
+                "start": "08h00",
+                "end": "12h00",
+                "nextDay": false,
+                "hours": 4,
+                "observation": "PROEBOM 2026",
+                "document": "OS a definir (não informada)",
+                "status": "planned"
+              }
+            ]
+          },
+          {
+            "name": "SD PICCINI",
+            "badges": [
+              {
+                "kind": "ts",
+                "text": "TS · SANTOS"
+              }
+            ],
+            "notes": [
+              "TS nº 155 (SEI 97542993). Substitui SD SANTOS."
+            ],
+            "events": []
+          },
+          {
+            "name": "SD MARTINS",
+            "badges": [
+              {
+                "kind": "ac4",
+                "text": "AC4 · OS"
+              }
+            ],
+            "notes": [],
+            "events": [
+              {
+                "mode": "INSPEÇÃO E ANÁLISE/SAT",
+                "start": "08h00",
+                "end": "12h00",
+                "nextDay": false,
+                "hours": 4,
+                "observation": "INSPEÇÃO E ANÁLISE",
+                "document": "OS nº 343/2026; SEI 97776333; Processo 202500011045608",
+                "status": "documented-sat"
+              },
+              {
+                "mode": "INSPEÇÃO E ANÁLISE/SAT",
+                "start": "14h00",
+                "end": "18h00",
+                "nextDay": false,
+                "hours": 4,
+                "observation": "INSPEÇÃO E ANÁLISE",
+                "document": "OS nº 343/2026; SEI 97776333; Processo 202500011045608",
+                "status": "documented-sat"
+              }
+            ]
+          }
+        ],
+        "coverage": [
+          "5 recursos de 24h",
+          "Faltam 1 recurso"
+        ],
+        "alerts": []
+      },
+      {
+        "day": 6,
+        "ala": "ALPHA",
+        "members": [
+          {
+            "name": "ASP OF CARVALHO",
+            "badges": [
+              {
+                "kind": "officer",
+                "text": "OFICIAL DE DIA"
+              }
+            ],
+            "notes": [
+              "Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"
+            ],
+            "events": []
+          },
+          {
+            "name": "ST DA SILVA",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "ST TAVARES",
+            "badges": [
+              {
+                "kind": "ts",
+                "text": "TS · AISLAN"
+              }
+            ],
+            "notes": [
+              "TS nº 160 (SEI 97660634). Substitui ST AISLAN."
+            ],
+            "events": []
+          },
+          {
+            "name": "2º SGT DIEGO",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "3º SGT JORGE",
+            "badges": [
+              {
+                "kind": "pay",
+                "text": "TS CIA · Pagando"
+              }
+            ],
+            "notes": [
+              "TS CIA — Pagando serviço. SEI 97654793"
+            ],
+            "events": []
+          },
+          {
+            "name": "3º SGT BERTONCELLO",
+            "badges": [
+              {
+                "kind": "ac4",
+                "text": "AC4 · OS"
+              }
+            ],
+            "notes": [],
+            "events": [
+              {
+                "mode": "INSPEÇÃO E ANÁLISE/SAT",
+                "start": "13h00",
+                "end": "18h00",
+                "nextDay": false,
+                "hours": 5,
+                "observation": "INSPEÇÃO E ANÁLISE",
+                "document": "OS nº 343/2026; SEI 97776333; Processo 202500011045608",
+                "status": "documented-sat"
+              }
+            ]
+          },
+          {
+            "name": "3º SGT ROBERTO",
+            "badges": [
+              {
+                "kind": "ac4",
+                "text": "AC4 · OS"
+              }
+            ],
+            "notes": [],
+            "events": [
+              {
+                "mode": "INSPEÇÃO E ANÁLISE/SAT",
+                "start": "08h00",
+                "end": "12h00",
+                "nextDay": false,
+                "hours": 4,
+                "observation": "INSPEÇÃO E ANÁLISE",
+                "document": "OS nº 343/2026; SEI 97776333; Processo 202500011045608",
+                "status": "documented-sat"
+              }
+            ]
+          },
+          {
+            "name": "CB RABELO",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "SD HUGO",
+            "badges": [
+              {
+                "kind": "ts",
+                "text": "TS · MARTINS"
+              }
+            ],
+            "notes": [
+              "TS nº 153/154 (SEI 97515824 / 97518560). Substitui SD MARTINS. Movimentação duplicada documentalmente, contabilizada uma única vez"
+            ],
+            "events": []
+          }
+        ],
+        "coverage": [
+          "6 recursos de 24h",
+          "Meta de 6 recursos"
+        ],
+        "alerts": []
+      },
+      {
+        "day": 7,
+        "ala": "BRAVO",
+        "members": [
+          {
+            "name": "ASP OF CARVALHO",
+            "badges": [
+              {
+                "kind": "officer",
+                "text": "OFICIAL DE DIA"
+              },
+              {
+                "kind": "ac4",
+                "text": "AC4 PREVISTO"
+              }
+            ],
+            "notes": [
+              "Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"
+            ],
+            "events": [
+              {
+                "mode": "PROEBOM 2026",
+                "start": "08h00",
+                "end": "20h00",
+                "nextDay": false,
+                "hours": 12,
+                "observation": "PROEBOM 2026 - TORRE DE ALTURA 5º BBM (Luziânia) - OS a definir - SEI 202600011035274",
+                "document": "OS a definir; Processo SEI 202600011035274",
+                "status": "planned"
+              }
+            ]
+          },
+          {
+            "name": "ST TAVARES",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "1º SGT HELLYSSON",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              },
+              {
+                "kind": "ac4",
+                "text": "AC4 PREVISTO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": [
+              {
+                "mode": "PROEBOM 2026",
+                "start": "08h00",
+                "end": "20h00",
+                "nextDay": false,
+                "hours": 12,
+                "observation": "PROEBOM 2026 - TORRE DE ALTURA 5º BBM (Luziânia) - OS a definir - SEI 202600011035274",
+                "document": "OS a definir; Processo SEI 202600011035274",
+                "status": "planned"
+              }
+            ]
+          },
+          {
+            "name": "2º SGT SCHUSSLER",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "2º SGT GEYDSON",
+            "badges": [
+              {
+                "kind": "ac4",
+                "text": "AC4 PREVISTO"
+              }
+            ],
+            "notes": [],
+            "events": [
+              {
+                "mode": "PROEBOM 2026",
+                "start": "08h00",
+                "end": "20h00",
+                "nextDay": false,
+                "hours": 12,
+                "observation": "PROEBOM 2026 - TORRE DE ALTURA 5º BBM (Luziânia) - OS a definir - SEI 202600011035274",
+                "document": "OS a definir; Processo SEI 202600011035274",
+                "status": "planned"
+              }
+            ]
+          },
+          {
+            "name": "2º SGT LUIZ ANTONIO",
+            "badges": [
+              {
+                "kind": "ac4",
+                "text": "AC4 PREVISTO"
+              }
+            ],
+            "notes": [],
+            "events": [
+              {
+                "mode": "PROEBOM 2026",
+                "start": "08h00",
+                "end": "20h00",
+                "nextDay": false,
+                "hours": 12,
+                "observation": "PROEBOM 2026 - TORRE DE ALTURA 5º BBM (Luziânia) - OS a definir - SEI 202600011035274",
+                "document": "OS a definir; Processo SEI 202600011035274",
+                "status": "planned"
+              }
+            ]
+          },
+          {
+            "name": "3º SGT JORGE",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "3º SGT HENRIQUE",
+            "badges": [
+              {
+                "kind": "ac4",
+                "text": "AC4 PREVISTO"
+              }
+            ],
+            "notes": [],
+            "events": [
+              {
+                "mode": "PROEBOM 2026",
+                "start": "08h00",
+                "end": "20h00",
+                "nextDay": false,
+                "hours": 12,
+                "observation": "PROEBOM 2026 - TORRE DE ALTURA 5º BBM (Luziânia) - OS a definir - SEI 202600011035274",
+                "document": "OS a definir; Processo SEI 202600011035274",
+                "status": "planned"
+              }
+            ]
+          },
+          {
+            "name": "SD CAVALCANTE",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "1º SGT FERREIRA",
+            "badges": [
+              {
+                "kind": "ac4",
+                "text": "AC4 PREVISTO"
+              }
+            ],
+            "notes": [],
+            "events": [
+              {
+                "mode": "PROEBOM 2026",
+                "start": "08h00",
+                "end": "20h00",
+                "nextDay": false,
+                "hours": 12,
+                "observation": "PROEBOM 2026 - TORRE DE ALTURA 5º BBM (Luziânia) - OS a definir - SEI 202600011035274",
+                "document": "OS a definir; Processo SEI 202600011035274",
+                "status": "planned"
+              }
+            ]
+          }
+        ],
+        "coverage": [
+          "5 recursos de 24h",
+          "Faltam 1 recurso"
+        ],
+        "alerts": [
+          "1º SGT HELLYSSON: AC4 de 08h–20h coincide com serviço ordinário de 24h na Ala Bravo.",
+          "ASP OF CARVALHO: Oficial de Dia e AC4 externo em Luziânia (08h–20h); verificar compatibilidade/redistribuição."
+        ]
+      },
+      {
+        "day": 8,
+        "ala": "CHARLIE",
+        "members": [
+          {
+            "name": "ASP OF CARVALHO",
+            "badges": [
+              {
+                "kind": "officer",
+                "text": "OFICIAL DE DIA"
+              }
+            ],
+            "notes": [
+              "Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"
+            ],
+            "events": []
+          },
+          {
+            "name": "ST PASSOS",
+            "badges": [
+              {
+                "kind": "ts",
+                "text": "TS · OSVALDIR"
+              }
+            ],
+            "notes": [
+              "TS nº 161 (SEI 97703197). Substitui ST OSVALDIR."
+            ],
+            "events": []
+          },
+          {
+            "name": "1º SGT NIKHOLAS",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "3º SGT HENRIQUE",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "SD SANTOS",
+            "badges": [
+              {
+                "kind": "ts",
+                "text": "TS · PICCINI"
+              }
+            ],
+            "notes": [
+              "TS nº 156 (SEI 97543668). Substitui SD PICCINI."
+            ],
+            "events": []
+          },
+          {
+            "name": "SD HUGO",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          }
+        ],
+        "coverage": [
+          "5 recursos de 24h",
+          "Faltam 1 recurso"
+        ],
+        "alerts": []
+      },
+      {
+        "day": 9,
+        "ala": "DELTA",
+        "members": [
+          {
+            "name": "ASP OF BESSA",
+            "badges": [
+              {
+                "kind": "officer",
+                "text": "OFICIAL DE DIA"
+              }
+            ],
+            "notes": [
+              "Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"
+            ],
+            "events": []
+          },
+          {
+            "name": "ST PASSOS",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "2º SGT GEYDSON",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "2º SGT WANDERSON",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "SD SANTOS",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          }
+        ],
+        "coverage": [
+          "4 recursos de 24h",
+          "Faltam 2 recursos"
+        ],
+        "alerts": []
+      },
+      {
+        "day": 10,
+        "ala": "ALPHA",
+        "members": [
+          {
+            "name": "ASP OF BESSA",
+            "badges": [
+              {
+                "kind": "officer",
+                "text": "OFICIAL DE DIA"
+              }
+            ],
+            "notes": [
+              "Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"
+            ],
+            "events": []
+          },
+          {
+            "name": "ST DA SILVA",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "ST AISLAN",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "1º SGT HELLYSSON",
+            "badges": [
+              {
+                "kind": "ac4",
+                "text": "AC4 PREVISTO"
+              }
+            ],
+            "notes": [],
+            "events": [
+              {
+                "mode": "PROEBOM 2026",
+                "start": "08h00",
+                "end": "12h00",
+                "nextDay": false,
+                "hours": 4,
+                "observation": "PROEBOM 2026",
+                "document": "OS a definir (não informada)",
+                "status": "planned"
+              }
+            ]
+          },
+          {
+            "name": "2º SGT DIEGO",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "3º SGT HENRIQUE",
+            "badges": [
+              {
+                "kind": "ac4",
+                "text": "AC4 PREVISTO"
+              }
+            ],
+            "notes": [],
+            "events": [
+              {
+                "mode": "PROEBOM 2026",
+                "start": "08h00",
+                "end": "12h00",
+                "nextDay": false,
+                "hours": 4,
+                "observation": "PROEBOM 2026",
+                "document": "OS a definir (não informada)",
+                "status": "planned"
+              }
+            ]
+          },
+          {
+            "name": "CB RABELO",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "SD CAVALCANTE",
+            "badges": [
+              {
+                "kind": "pay",
+                "text": "TS CIA · Pagando"
+              }
+            ],
+            "notes": [
+              "TS CIA — Pagando serviço. SEI 97766395"
+            ],
+            "events": []
+          },
+          {
+            "name": "SD MARTINS",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          }
+        ],
+        "coverage": [
+          "6 recursos de 24h",
+          "Meta de 6 recursos"
+        ],
+        "alerts": []
+      },
+      {
+        "day": 11,
+        "ala": "BRAVO",
+        "members": [
+          {
+            "name": "ASP OF BESSA",
+            "badges": [
+              {
+                "kind": "officer",
+                "text": "OFICIAL DE DIA"
+              }
+            ],
+            "notes": [
+              "Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"
+            ],
+            "events": []
+          },
+          {
+            "name": "ST TAVARES",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "1º SGT HELLYSSON",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "2º SGT SCHUSSLER",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "3º SGT JORGE",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "SD CAVALCANTE",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          }
+        ],
+        "coverage": [
+          "5 recursos de 24h",
+          "Faltam 1 recurso"
+        ],
+        "alerts": []
+      },
+      {
+        "day": 12,
+        "ala": "CHARLIE",
+        "members": [
+          {
+            "name": "ASP OF BESSA",
+            "badges": [
+              {
+                "kind": "officer",
+                "text": "OFICIAL DE DIA"
+              }
+            ],
+            "notes": [
+              "Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"
+            ],
+            "events": []
+          },
+          {
+            "name": "ST OSVALDIR",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "1º SGT NIKHOLAS",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "3º SGT HENRIQUE",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "SD PICCINI",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "SD HUGO",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          }
+        ],
+        "coverage": [
+          "5 recursos de 24h",
+          "Faltam 1 recurso"
+        ],
+        "alerts": []
+      },
+      {
+        "day": 13,
+        "ala": "DELTA",
+        "members": [
+          {
+            "name": "ASP OF BESSA",
+            "badges": [
+              {
+                "kind": "officer",
+                "text": "OFICIAL DE DIA"
+              }
+            ],
+            "notes": [
+              "Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"
+            ],
+            "events": []
+          },
+          {
+            "name": "ST OSVALDIR",
+            "badges": [
+              {
+                "kind": "ts",
+                "text": "TS · PASSOS"
+              }
+            ],
+            "notes": [
+              "TS nº 162 (SEI 97704006). Substitui ST PASSOS."
+            ],
+            "events": []
+          },
+          {
+            "name": "2º SGT GEYDSON",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "2º SGT WANDERSON",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "SD SANTOS",
+            "badges": [
+              {
+                "kind": "disp",
+                "text": "DISP. RECOMPENSA"
+              }
+            ],
+            "notes": [
+              "Dispensado do serviço por Dispensa como Recompensa. SEI 97796207.",
+              "ALTERAÇÕES / OBSERVAÇÕES: Dispensa Recompensa SEI 97796207"
+            ],
+            "events": []
+          }
+        ],
+        "coverage": [
+          "3 recursos de 24h",
+          "Faltam 3 recursos"
+        ],
+        "alerts": []
+      },
+      {
+        "day": 14,
+        "ala": "ALPHA",
+        "members": [
+          {
+            "name": "ASP OF BESSA",
+            "badges": [
+              {
+                "kind": "officer",
+                "text": "OFICIAL DE DIA"
+              }
+            ],
+            "notes": [
+              "Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"
+            ],
+            "events": []
+          },
+          {
+            "name": "ST DA SILVA",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "ST AISLAN",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "2º SGT DIEGO",
+            "badges": [
+              {
+                "kind": "disp",
+                "text": "TS CIA · Dispensado"
+              }
+            ],
+            "notes": [
+              "TS CIA — Dispensado. SEI 97587098"
+            ],
+            "events": []
+          },
+          {
+            "name": "CB RABELO",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "SD MARTINS",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          }
+        ],
+        "coverage": [
+          "4 recursos de 24h",
+          "Faltam 2 recursos"
+        ],
+        "alerts": []
+      },
+      {
+        "day": 15,
+        "ala": "BRAVO",
+        "members": [
+          {
+            "name": "ASP OF BESSA",
+            "badges": [
+              {
+                "kind": "officer",
+                "text": "OFICIAL DE DIA"
+              }
+            ],
+            "notes": [
+              "Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"
+            ],
+            "events": []
+          },
+          {
+            "name": "ST TAVARES",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "1º SGT HELLYSSON",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "2º SGT SCHUSSLER",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "3º SGT JORGE",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "SD CAVALCANTE",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          }
+        ],
+        "coverage": [
+          "5 recursos de 24h",
+          "Faltam 1 recurso"
+        ],
+        "alerts": []
+      },
+      {
+        "day": 16,
+        "ala": "CHARLIE",
+        "members": [
+          {
+            "name": "ST PASSOS",
+            "badges": [
+              {
+                "kind": "ts",
+                "text": "TS · OSVALDIR"
+              }
+            ],
+            "notes": [
+              "TS nº 162 (SEI 97704006). Substitui ST OSVALDIR."
+            ],
+            "events": []
+          },
+          {
+            "name": "1º SGT NIKHOLAS",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "3º SGT HENRIQUE",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "SD PICCINI",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "SD HUGO",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          }
+        ],
+        "coverage": [
+          "5 recursos de 24h",
+          "Faltam 1 recurso"
+        ],
+        "alerts": []
+      },
+      {
+        "day": 17,
+        "ala": "DELTA",
+        "members": [
+          {
+            "name": "ST PASSOS",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "2º SGT GEYDSON",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "2º SGT WANDERSON",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "3º SGT HENRIQUE",
+            "badges": [
+              {
+                "kind": "review",
+                "text": "TS · AISLAN (A CONFERIR)"
+              }
+            ],
+            "notes": [
+              "DOCUMENTO INCONSISTENTE: o militar substituído não pertence à Ala Delta em 17/11; confirmar antes da escala definitiva · SEI 97553091"
+            ],
+            "events": []
+          },
+          {
+            "name": "SD PICCINI",
+            "badges": [
+              {
+                "kind": "ts",
+                "text": "TS · SANTOS"
+              }
+            ],
+            "notes": [
+              "TS nº 156 (SEI 97543668). Substitui SD SANTOS."
+            ],
+            "events": []
+          }
+        ],
+        "coverage": [
+          "4 recursos de 24h",
+          "Faltam 2 recursos"
+        ],
+        "alerts": [
+          "TS nº 159: substituição a conferir. O registro pendente não integra o efetivo disponível."
+        ]
+      },
+      {
+        "day": 18,
+        "ala": "ALPHA",
+        "members": [
+          {
+            "name": "ST DA SILVA",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "ST AISLAN",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "2º SGT DIEGO",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "CB RABELO",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "SD MARTINS",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          }
+        ],
+        "coverage": [
+          "5 recursos de 24h",
+          "Faltam 1 recurso"
+        ],
+        "alerts": []
+      },
+      {
+        "day": 19,
+        "ala": "BRAVO",
+        "members": [
+          {
+            "name": "ST TAVARES",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "1º SGT HELLYSSON",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "2º SGT DIEGO",
+            "badges": [
+              {
+                "kind": "pay",
+                "text": "TS CIA · Pagando"
+              }
+            ],
+            "notes": [
+              "TS CIA — Pagando serviço. SEI 97587098"
+            ],
+            "events": []
+          },
+          {
+            "name": "2º SGT SCHUSSLER",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "3º SGT JORGE",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "SD CAVALCANTE",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          }
+        ],
+        "coverage": [
+          "6 recursos de 24h",
+          "Meta de 6 recursos"
+        ],
+        "alerts": []
+      },
+      {
+        "day": 20,
+        "ala": "CHARLIE",
+        "members": [
+          {
+            "name": "ST OSVALDIR",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "1º SGT NIKHOLAS",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "3º SGT HENRIQUE",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "SD SANTOS",
+            "badges": [
+              {
+                "kind": "ts",
+                "text": "TS · PICCINI"
+              }
+            ],
+            "notes": [
+              "TS nº 157 (SEI 97544001). Substitui SD PICCINI."
+            ],
+            "events": []
+          },
+          {
+            "name": "SD HUGO",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          }
+        ],
+        "coverage": [
+          "5 recursos de 24h",
+          "Faltam 1 recurso"
+        ],
+        "alerts": []
+      },
+      {
+        "day": 21,
+        "ala": "DELTA",
+        "members": [
+          {
+            "name": "ST OSVALDIR",
+            "badges": [
+              {
+                "kind": "ts",
+                "text": "TS · PASSOS"
+              }
+            ],
+            "notes": [
+              "TS nº 163 (SEI 97704646). Substitui ST PASSOS."
+            ],
+            "events": []
+          },
+          {
+            "name": "2º SGT GEYDSON",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "2º SGT WANDERSON",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "SD SANTOS",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          }
+        ],
+        "coverage": [
+          "4 recursos de 24h",
+          "Faltam 2 recursos"
+        ],
+        "alerts": []
+      },
+      {
+        "day": 22,
+        "ala": "ALPHA",
+        "members": [
+          {
+            "name": "ST DA SILVA",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "ST AISLAN",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "2º SGT DIEGO",
+            "badges": [
+              {
+                "kind": "disp",
+                "text": "TS CIA · Dispensado"
+              }
+            ],
+            "notes": [
+              "TS CIA — Dispensado. SEI 97587323"
+            ],
+            "events": []
+          },
+          {
+            "name": "CB RABELO",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "SD MARTINS",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          }
+        ],
+        "coverage": [
+          "4 recursos de 24h",
+          "Faltam 2 recursos"
+        ],
+        "alerts": []
+      },
+      {
+        "day": 23,
+        "ala": "BRAVO",
+        "members": [
+          {
+            "name": "ST TAVARES",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "1º SGT HELLYSSON",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "2º SGT SCHUSSLER",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "3º SGT JORGE",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "SD CAVALCANTE",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          }
+        ],
+        "coverage": [
+          "5 recursos de 24h",
+          "Faltam 1 recurso"
+        ],
+        "alerts": []
+      },
+      {
+        "day": 24,
+        "ala": "CHARLIE",
+        "members": [
+          {
+            "name": "ST PASSOS",
+            "badges": [
+              {
+                "kind": "ts",
+                "text": "TS · OSVALDIR"
+              }
+            ],
+            "notes": [
+              "TS nº 163 (SEI 97704646). Substitui ST OSVALDIR."
+            ],
+            "events": []
+          },
+          {
+            "name": "1º SGT NIKHOLAS",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "3º SGT HENRIQUE",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "SD PICCINI",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "SD HUGO",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          }
+        ],
+        "coverage": [
+          "5 recursos de 24h",
+          "Faltam 1 recurso"
+        ],
+        "alerts": []
+      },
+      {
+        "day": 25,
+        "ala": "DELTA",
+        "members": [
+          {
+            "name": "ST PASSOS",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "2º SGT GEYDSON",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "2º SGT WANDERSON",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "SD PICCINI",
+            "badges": [
+              {
+                "kind": "ts",
+                "text": "TS · SANTOS"
+              }
+            ],
+            "notes": [
+              "TS nº 157 (SEI 97544001). Substitui SD SANTOS."
+            ],
+            "events": []
+          }
+        ],
+        "coverage": [
+          "4 recursos de 24h",
+          "Faltam 2 recursos"
+        ],
+        "alerts": []
+      },
+      {
+        "day": 26,
+        "ala": "ALPHA",
+        "members": [
+          {
+            "name": "ST DA SILVA",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "2º SGT DIEGO",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "2º SGT SCHUSSLER",
+            "badges": [
+              {
+                "kind": "ts",
+                "text": "TS · AISLAN"
+              }
+            ],
+            "notes": [
+              "TS nº 166 (SEI 97832330). Substitui ST AISLAN."
+            ],
+            "events": []
+          },
+          {
+            "name": "CB RABELO",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "SD MARTINS",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          }
+        ],
+        "coverage": [
+          "5 recursos de 24h",
+          "Faltam 1 recurso"
+        ],
+        "alerts": []
+      },
+      {
+        "day": 27,
+        "ala": "BRAVO",
+        "members": [
+          {
+            "name": "ST TAVARES",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "1º SGT HELLYSSON",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "2º SGT DIEGO",
+            "badges": [
+              {
+                "kind": "pay",
+                "text": "TS CIA · Pagando"
+              }
+            ],
+            "notes": [
+              "TS CIA — Pagando serviço. SEI 97587323"
+            ],
+            "events": []
+          },
+          {
+            "name": "2º SGT SCHUSSLER",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "3º SGT JORGE",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "SD CAVALCANTE",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          }
+        ],
+        "coverage": [
+          "6 recursos de 24h",
+          "Meta de 6 recursos"
+        ],
+        "alerts": []
+      },
+      {
+        "day": 28,
+        "ala": "CHARLIE",
+        "members": [
+          {
+            "name": "ST OSVALDIR",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "1º SGT NIKHOLAS",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "3º SGT HENRIQUE",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "SD SANTOS",
+            "badges": [
+              {
+                "kind": "ts",
+                "text": "TS · PICCINI"
+              }
+            ],
+            "notes": [
+              "TS nº 158 (SEI 97544104). Substitui SD PICCINI."
+            ],
+            "events": []
+          },
+          {
+            "name": "SD HUGO",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          }
+        ],
+        "coverage": [
+          "5 recursos de 24h",
+          "Faltam 1 recurso"
+        ],
+        "alerts": []
+      },
+      {
+        "day": 29,
+        "ala": "DELTA",
+        "members": [
+          {
+            "name": "ST OSVALDIR",
+            "badges": [
+              {
+                "kind": "ts",
+                "text": "TS · PASSOS"
+              }
+            ],
+            "notes": [
+              "TS nº 164 (SEI 97705098). Substitui ST PASSOS."
+            ],
+            "events": []
+          },
+          {
+            "name": "2º SGT GEYDSON",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "2º SGT WANDERSON",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "SD SANTOS",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          }
+        ],
+        "coverage": [
+          "4 recursos de 24h",
+          "Faltam 2 recursos"
+        ],
+        "alerts": []
+      },
+      {
+        "day": 30,
+        "ala": "ALPHA",
+        "members": [
+          {
+            "name": "ST DA SILVA",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "ST AISLAN",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "2º SGT DIEGO",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "CB RABELO",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          },
+          {
+            "name": "SD MARTINS",
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO"
+              }
+            ],
+            "notes": [
+              "Ordinário"
+            ],
+            "events": []
+          }
+        ],
+        "coverage": [
+          "5 recursos de 24h",
+          "Faltam 1 recurso"
+        ],
+        "alerts": []
+      }
+    ]
+  }
+}
+</script>
+<script>
 (() => {
   'use strict';
-  const days=[...document.querySelectorAll('.calendar .day')];
-  const filterButtons=[...document.querySelectorAll('[data-filter]')];
-  const picker=document.getElementById('selecionar-dia');
-  const counter=document.getElementById('indicador-dias');
-  const previous=document.getElementById('dia-anterior');
-  const next=document.getElementById('dia-seguinte');
-  const mobile=window.matchMedia('(max-width: 760px)');
-  let filter='TODAS';
-  const now=new Date();
-  let selected=now.getFullYear()===2026 && now.getMonth()===10 ? now.getDate()-1 : 0;
-  function visibleDays(){return days.filter(d=>filter==='TODAS'||d.dataset.ala===filter)}
-  function draw(){
-    const available=visibleDays();
-    if (!available.some(d=>days.indexOf(d)===selected)) selected=days.indexOf(available[0]);
-    days.forEach((d,i)=>{d.classList.toggle('is-hidden',!available.includes(d));d.classList.toggle('is-active',i===selected)});
-    filterButtons.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.filter===filter)));
-    picker.replaceChildren();
-    for (const d of available){
-      const option=document.createElement('option');
-      option.value=String(days.indexOf(d));
-      option.textContent=d.querySelector('.day-num').textContent+'/11 · '+d.dataset.ala;
-      picker.append(option);
+  // Public calendar data only. Add a new YYYY-MM period after its scale is supplied.
+  const schedules = JSON.parse(document.getElementById('calendar-data').textContent);
+  const periods = Object.keys(schedules).sort();
+  const initialPeriod = periods.at(-1);
+  const monthNames = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  const weekdays = ['DOM','SEG','TER','QUA','QUI','SEX','SÁB'];
+  const calendar = document.querySelector('.calendar');
+  const filterButtons = [...document.querySelectorAll('[data-filter]')];
+  const monthPicker = document.getElementById('selecionar-mes');
+  const yearPicker = document.getElementById('selecionar-ano');
+  const dayPicker = document.getElementById('selecionar-dia');
+  const previous = document.getElementById('dia-anterior');
+  const next = document.getElementById('dia-seguinte');
+  const counter = document.getElementById('indicador-dias');
+  const empty = document.getElementById('sem-previsao');
+  const dialog = document.getElementById('detalhes-servico');
+  const dialogBody = document.getElementById('detalhes-conteudo');
+  const mobile = window.matchMedia('(max-width: 760px)');
+  const selections = new Map();
+  let period = initialPeriod;
+  let filter = 'TODAS';
+  let selected;
+  let cards = [];
+
+  function element(tag, className, text) {
+    const node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text !== undefined) node.textContent = text;
+    return node;
+  }
+  function periodLabel() {
+    const [year, month] = period.split('-').map(Number);
+    return `${monthNames[month - 1]}/${year}`;
+  }
+  function periodDays() { return schedules[period]?.days || []; }
+  function filteredDays() { return periodDays().filter(day => filter === 'TODAS' || day.ala === filter); }
+  function badgeNodes(member) {
+    const badges = element('span', 'badges');
+    for (const badge of member.badges) {
+      const chip = element('span', `chip ${badge.kind}`, badge.text);
+      if (badge.kind === 'ac4') chip.title = badge.text === 'AC4 PREVISTO' ? 'Previsto — OS a definir' : 'OS documentada; execução não confirmada por este calendário';
+      badges.append(chip);
     }
-    picker.value=String(selected);
-    const index=available.indexOf(days[selected]);
-    counter.textContent=`Dia ${index+1} de ${available.length} · Novembro/2026`;
-    previous.disabled=index===0;
-    next.disabled=index===available.length-1;
+    return badges;
   }
-  function move(direction){
-    const available=visibleDays();
-    const index=available.indexOf(days[selected]);
-    const target=available[index+direction];
-    if (target){selected=days.indexOf(target);draw()}
+  function memberClasses(member) {
+    return member.badges.map(b => b.kind).join(' ');
   }
-  filterButtons.forEach(b=>b.addEventListener('click',()=>{filter=b.dataset.filter;draw()}));
-  picker.addEventListener('change',()=>{selected=Number(picker.value);draw()});
-  previous.addEventListener('click',()=>move(-1));
-  next.addEventListener('click',()=>move(1));
-  // Deslize horizontal para o dia anterior / seguinte sem prejudicar a rolagem vertical.
-  const calendar=document.querySelector('.calendar');
-  let startX=0,startY=0;
-  calendar.addEventListener('touchstart',e=>{if(!mobile.matches)return;startX=e.changedTouches[0].screenX;startY=e.changedTouches[0].screenY},{passive:true});
-  calendar.addEventListener('touchend',e=>{if(!mobile.matches)return;const dx=e.changedTouches[0].screenX-startX,dy=e.changedTouches[0].screenY-startY;if(Math.abs(dx)>65&&Math.abs(dx)>Math.abs(dy)*1.4)move(dx<0?1:-1)},{passive:true});
-  draw();
+  function eventTime(event) {
+    let until = '';
+    if (event.nextDay) {
+      const [year, month] = period.split('-').map(Number);
+      const following = new Date(Date.UTC(year, month - 1, event.day + 1));
+      until = ` de ${String(following.getUTCDate()).padStart(2, '0')}/${String(following.getUTCMonth() + 1).padStart(2, '0')}`;
+    }
+    return `${event.hours}h · ${event.start}–${event.end}${until}`;
+  }
+  function statusText(event) {
+    if (event.status === 'planned') return 'PREVISTO — OS a definir';
+    if (event.status === 'documented-sat') return 'OS documentada — execução ainda não comprovada por parte diária';
+    return 'OS/ES documentadas — previsão sujeita à conferência da execução';
+  }
+  function makeCard(day) {
+    const card = element('section', 'day');
+    card.id = `dia-${String(day.day).padStart(2, '0')}`;
+    card.dataset.ala = day.ala;
+    card.dataset.day = String(day.day);
+    card.setAttribute('aria-label', `${day.day} de ${periodLabel()}, ala ${day.ala}`);
+    const head = element('div', 'day-head');
+    const date = element('div', 'day-date');
+    date.append(element('span', 'day-num', String(day.day).padStart(2, '0')), element('span', `ala-badge ${day.ala.toLowerCase()}`, day.ala));
+    const [year, month] = period.split('-').map(Number);
+    head.append(date, element('span', 'weekday-label', weekdays[new Date(Date.UTC(year, month - 1, day.day)).getUTCDay()]));
+    const list = element('ul', 'entry-list');
+    for (const member of day.members) {
+      const row = element('li', `entry ${memberClasses(member)}`);
+      row.append(element('span', 'name', member.name), badgeNodes(member));
+      row.title = [...member.notes, ...member.events.map(event => `${statusText(event)} · ${eventTime({...event, day: day.day})}`)].join('\n');
+      // Full observations remain available in the dialog and on printed calendars.
+      if (member.events.length || member.badges.some(b => b.kind === 'disp' || b.kind === 'review')) {
+        const printNotes = element('span', 'print-notes');
+        printNotes.textContent = [...member.notes, ...member.events.map(event => `${eventTime({...event, day: day.day})} · ${statusText(event)} · ${event.observation}`)].join(' | ');
+        row.append(printNotes);
+      }
+      list.append(row);
+    }
+    const ac4Count = day.members.reduce((sum, member) => sum + member.events.length, 0);
+    const notes = element('button', `day-notes-button${day.alerts.length ? ' pending' : ''}`, `Horários e observações${ac4Count ? ` · ${ac4Count} AC4` : ''}${day.alerts.length ? ' · A conferir' : ''}`);
+    notes.type = 'button';
+    notes.dataset.details = String(day.day);
+    notes.setAttribute('aria-haspopup', 'dialog');
+    notes.setAttribute('aria-label', `Horários e observações do dia ${day.day} de ${periodLabel()}`);
+    const foot = element('div', 'day-foot');
+    foot.append(element('span', '', day.coverage[0]), element('span', day.coverage[1].startsWith('Faltam') ? 'pending' : '', day.coverage[1]));
+    card.append(head, list, notes, foot);
+    return card;
+  }
+  function draw() {
+    const available = filteredDays();
+    if (!available.some(day => day.day === selected)) selected = available[0]?.day;
+    for (const card of cards) {
+      card.classList.toggle('is-hidden', !available.some(day => day.day === Number(card.dataset.day)));
+      card.classList.toggle('is-active', Number(card.dataset.day) === selected);
+    }
+    filterButtons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.filter === filter)));
+    dayPicker.replaceChildren();
+    for (const day of available) {
+      const option = element('option', '', `${String(day.day).padStart(2, '0')}/${period.split('-')[1]} · ${day.ala}`);
+      option.value = String(day.day);
+      dayPicker.append(option);
+    }
+    dayPicker.value = selected === undefined ? '' : String(selected);
+    dayPicker.disabled = !available.length;
+    const index = available.findIndex(day => day.day === selected);
+    previous.disabled = index <= 0;
+    next.disabled = index < 0 || index === available.length - 1;
+    counter.textContent = available.length ? `Dia ${index + 1} de ${available.length} · ${periodLabel()}` : 'Sem dias cadastrados';
+    if (selected !== undefined) selections.set(period, selected);
+  }
+  function renderPeriod() {
+    const [year, month] = period.split('-').map(Number);
+    monthPicker.value = String(month);
+    yearPicker.value = String(year);
+    const days = periodDays();
+    const hasData = days.length > 0;
+    const today = new Date();
+    selected = selections.get(period) ?? (year === today.getFullYear() && month === today.getMonth() + 1 ? today.getDate() : days[0]?.day);
+    cards = days.map(makeCard);
+    calendar.replaceChildren(...cards);
+    calendar.hidden = !hasData;
+    calendar.setAttribute('aria-label', `Calendário de ${periodLabel()}`);
+    empty.hidden = hasData;
+    document.getElementById('competencia-vazia').textContent = periodLabel();
+    document.querySelector('.mobile-nav').hidden = !hasData;
+    document.querySelector('.filterbar').hidden = !hasData;
+    document.querySelector('.header-period').textContent = hasData ? `Previsão de 01 a ${new Date(Date.UTC(year, month, 0)).getUTCDate()}/${String(month).padStart(2, '0')}/${year}` : 'Sem previsão cadastrada para este período';
+    document.title = `Previsão Escalas de Serviço · ${periodLabel()} | 8ª CIBM`;
+    document.querySelector('meta[name="description"]').content = `Previsão de serviço da 8ª CIBM — ${periodLabel()}.`;
+    draw();
+  }
+  function changePeriod() {
+    period = `${yearPicker.value}-${monthPicker.value.padStart(2, '0')}`;
+    renderPeriod();
+  }
+  function move(direction) {
+    const available = filteredDays();
+    const index = available.findIndex(day => day.day === selected);
+    const target = available[index + direction];
+    if (index >= 0 && target) { selected = target.day; draw(); }
+  }
+  function observation(text) {
+    const p = element('p', 'event-observation');
+    const parts = text.split('PROEBOM 2026');
+    parts.forEach((part, index) => {
+      if (index) p.append(element('strong', '', 'PROEBOM 2026'));
+      p.append(document.createTextNode(part));
+    });
+    return p;
+  }
+  function openDetails(dayNumber) {
+    const day = periodDays().find(item => item.day === dayNumber);
+    if (!day) return;
+    document.getElementById('detalhes-titulo').textContent = `${String(day.day).padStart(2, '0')}/${period.split('-')[1]}/${period.split('-')[0]} · Ala ${day.ala}`;
+    dialogBody.replaceChildren();
+    if (day.alerts.length) {
+      const alerts = element('div', 'day-alerts');
+      alerts.append(element('strong', '', 'A conferir'));
+      for (const alert of day.alerts) alerts.append(element('p', '', alert));
+      dialogBody.append(alerts);
+    }
+    if (!day.members.some(member => member.badges.some(b => b.kind === 'officer'))) dialogBody.append(element('p', 'detail-note', 'Oficial de Dia: designação não informada para este dia.'));
+    for (const member of day.members) {
+      const section = element('section', `member-details ${memberClasses(member)}`);
+      const heading = element('div', 'member-heading');
+      heading.append(element('h3', 'name', member.name), badgeNodes(member));
+      section.append(heading);
+      for (const note of member.notes) section.append(element('p', 'detail-note', note));
+      for (const event of member.events) {
+        const detail = element('div', 'event-detail');
+        detail.dataset.status = event.status;
+        detail.append(element('p', 'event-status', statusText(event)), element('p', 'event-time', `${event.mode} · ${eventTime({...event, day: day.day})}`), observation(event.observation), element('p', 'detail-note', event.document));
+        section.append(detail);
+      }
+      dialogBody.append(section);
+    }
+    dialogBody.append(element('p', 'coverage-note', 'SAT/PROEBOM e jornadas parciais não completam automaticamente recursos operacionais de 24h. Este calendário não comprova execução ou pagamento.'));
+    dialog.showModal();
+    dialog.scrollTop = 0;
+  }
+  monthNames.forEach((name, index) => { const option = element('option', '', name); option.value = String(index + 1); monthPicker.append(option); });
+  const years = periods.map(key => Number(key.split('-')[0]));
+  for (let year = Math.min(...years) - 1; year <= Math.max(...years) + 5; year++) {
+    const option = element('option', '', String(year)); option.value = String(year); yearPicker.append(option);
+  }
+  monthPicker.addEventListener('change', changePeriod);
+  yearPicker.addEventListener('change', changePeriod);
+  filterButtons.forEach(button => button.addEventListener('click', () => { filter = button.dataset.filter; draw(); }));
+  dayPicker.addEventListener('change', () => { selected = Number(dayPicker.value); draw(); });
+  previous.addEventListener('click', () => move(-1));
+  next.addEventListener('click', () => move(1));
+  document.getElementById('voltar-competencia').textContent = `Voltar a ${monthNames[Number(initialPeriod.split('-')[1]) - 1]}/${initialPeriod.split('-')[0]}`;
+  document.getElementById('voltar-competencia').addEventListener('click', () => { period = initialPeriod; renderPeriod(); });
+  calendar.addEventListener('click', event => { const button = event.target.closest('[data-details]'); if (button) openDetails(Number(button.dataset.details)); });
+  document.getElementById('fechar-detalhes').addEventListener('click', () => dialog.close());
+  dialog.addEventListener('click', event => { if (event.target === dialog) { const r = dialog.getBoundingClientRect(); if (event.clientX < r.left || event.clientX > r.right || event.clientY < r.top || event.clientY > r.bottom) dialog.close(); } });
+  let startX = 0, startY = 0;
+  calendar.addEventListener('touchstart', event => { if (!mobile.matches) return; startX = event.changedTouches[0].screenX; startY = event.changedTouches[0].screenY; }, {passive: true});
+  calendar.addEventListener('touchend', event => { if (!mobile.matches) return; const dx = event.changedTouches[0].screenX - startX, dy = event.changedTouches[0].screenY - startY; if (Math.abs(dx) > 65 && Math.abs(dx) > Math.abs(dy) * 1.4) move(dx < 0 ? 1 : -1); }, {passive: true});
+  renderPeriod();
 })();
+
 </script></body></html>
