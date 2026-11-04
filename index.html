@@ -117,11 +117,9 @@ h1{font-size:clamp(24px,2.7vw,39px);font-weight:850;letter-spacing:-.047em;line-
 .badges .chip{flex:0 1 auto}
 .badges.has-odd-ac4{display:grid;grid-template-columns:auto auto;align-items:start;gap:2px 4px}
 .has-odd-ac4>.chip.officer{grid-column:1;grid-row:1;padding:4px 7px}
-.has-odd-ac4 .ac4-service{grid-column:2;display:grid;grid-template-columns:auto auto;justify-items:end;gap:2px 4px}
-.has-odd-ac4 .ac4-service>.chip{grid-column:1/-1}
-.has-odd-ac4 .ac4-period{grid-column:1}
-.has-odd-ac4 .ac4-planned{grid-column:2}
-.ac4-service{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:2px 4px;max-width:100%}
+.has-odd-ac4 .ac4-service{grid-column:2}
+.ac4-service{display:flex;flex-direction:column;align-items:flex-end;gap:2px;max-width:100%}
+.ac4-meta{display:inline-flex;align-items:baseline;justify-content:flex-end;gap:4px;white-space:nowrap}
 .ac4-period{color:#526882;font-size:10px;font-weight:750;line-height:1.2;white-space:nowrap}
 .ac4-planned{color:#975914;font-size:9px;font-weight:750;line-height:1.2;white-space:nowrap}
 button.chip{font-family:inherit}
@@ -177,6 +175,7 @@ body:has(dialog[open]){overflow:hidden}
  .dialog-body{padding:9px 12px}
 }
 @media screen and (max-width:760px) and (max-height:640px){
+ main{gap:4px}
  .header{gap:2px;padding:5px 10px}
  .month-controls{margin-bottom:3px}
  .entry{padding:1px 0;font-size:11.5px}
@@ -185,10 +184,15 @@ body:has(dialog[open]){overflow:hidden}
  .day-foot{padding:4px 10px}
 }
 @media screen and (max-width:760px) and (min-height:641px) and (max-height:720px){
- .entry{padding:2px 0}
+ main{gap:3px}
+ .entry{padding:1px 0}
 }
 @media screen and (max-width:760px) and (max-height:600px){
+ main{gap:2px}
+ .header{padding:4px 10px}
  .entry{padding:0}
+ .chip,.chip.ac4,.entry .chip.ac4,.has-odd-ac4>.chip.officer{padding-top:1px;padding-bottom:1px}
+ .ac4-service{gap:1px}
 }
 @media print{
  .month-controls{color:#223e57;font-size:20px}
@@ -3073,12 +3077,14 @@ body:has(dialog[open]){overflow:hidden}
       chip.title = `Copiar SEI ${sei} da OS · ${statusText(event)}`;
       chip.setAttribute('aria-label', `Copiar SEI ${sei} da OS do AC4 de ${event.hours}h de ${memberName}`);
     } else chip.title = statusText(event);
-    service.append(chip, element('span', 'ac4-period', ac4Period(event)));
+    const meta = element('span', 'ac4-meta');
+    meta.append(element('span', 'ac4-period', ac4Period(event)));
     if (event.status === 'planned') {
       const planned = element('span', 'ac4-planned', 'Previsto');
       planned.title = `${event.mode} · OS a definir`;
-      service.append(planned);
+      meta.append(planned);
     }
+    service.append(chip, meta);
     return service;
   }
   function badgeNodes(member) {
