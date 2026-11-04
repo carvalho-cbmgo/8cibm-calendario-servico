@@ -14,7 +14,7 @@ h1{font-size:clamp(24px,2.7vw,39px);font-weight:850;letter-spacing:-.047em;line-
 .header-month{margin-top:7px;color:#c8e3ff;font-size:.8em;letter-spacing:-.025em}
 .header-org{margin:0 0 5px;font-size:clamp(10px,1.35vw,15px);font-weight:680;letter-spacing:-.015em;white-space:nowrap}
 .header-period{margin:0;color:#c8e3ff;font-size:clamp(12px,1.3vw,15px);font-weight:600}
-.header-copy{position:relative;z-index:1;display:flex;flex-direction:column;align-items:flex-end;justify-self:end;gap:2px;padding:8px 12px;border-radius:8px;background:#ffffff13;border:1px solid #ffffff2a;color:#d7e9ff;font-size:clamp(10px,1.1vw,12px);line-height:1.4;font-weight:700;letter-spacing:.01em;text-align:right;white-space:nowrap}
+.header-copy{position:relative;z-index:1;display:flex;flex-direction:column;align-items:flex-end;justify-self:end;gap:2px;margin:0;padding:0;color:#d7e9ff;font-size:clamp(10px,1.1vw,12px);line-height:1.4;font-weight:700;letter-spacing:.01em;text-align:right;white-space:nowrap}
 .filterbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:18px 0}
 .filters{display:flex;flex-wrap:wrap;gap:7px}
 .filters button{border:1px solid #d7e0ec;border-radius:11px;padding:9px 14px;background:white;color:#344a62;cursor:pointer;font-size:12px;font-weight:750;transition:transform .15s,box-shadow .15s,border-color .15s}
@@ -37,13 +37,13 @@ h1{font-size:clamp(24px,2.7vw,39px);font-weight:850;letter-spacing:-.047em;line-
 .ala-badge.charlie,.filters button[data-filter="CHARLIE"]{background:linear-gradient(135deg,#12a580,var(--charlie))}
 .ala-badge.delta,.filters button[data-filter="DELTA"]{background:linear-gradient(135deg,#e4458d,var(--delta))}
 .entry-list{list-style:none;padding:8px 10px 6px;margin:0;display:grid;gap:2px;align-content:start;flex:1}
-.entry{display:flex;gap:5px;flex-wrap:wrap;align-items:baseline;font-size:11.5px;line-height:1.42;padding:5px 1px;border-bottom:1px dashed #e9eef5;min-width:0}
+.entry{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 6px;align-items:center;font-size:11.5px;line-height:1.42;padding:5px 1px;border-bottom:1px dashed #e9eef5;min-width:0}
 .entry:last-child{border:0}
-.name{font-weight:760;letter-spacing:-.012em}
+.name{min-width:0;font-weight:760;letter-spacing:-.012em;overflow-wrap:anywhere}
 .entry.disp .name,.entry.disp{color:#c02b39}
 .entry.review .name{color:#a1620a}
-.detail{display:block;width:100%;font-size:10.5px;color:#6c7890;padding-left:0}
-.chip{display:inline-flex;align-items:center;justify-content:center;max-width:100%;border-radius:7px;border:1px solid transparent;padding:3px 7px;white-space:normal;font-size:10px;font-weight:830;letter-spacing:.005em;line-height:1.4;vertical-align:middle}
+.detail{display:block;grid-column:1/-1;width:100%;font-size:10.5px;color:#6c7890;padding-left:0}
+.chip{display:inline-flex;align-items:center;justify-content:center;justify-self:end;max-width:100%;border-radius:7px;border:1px solid transparent;padding:3px 7px;white-space:normal;font-size:10px;font-weight:830;letter-spacing:.005em;line-height:1.4;text-align:center;vertical-align:middle}
 .chip.ord{background:#eef2f7;color:#53627a;border-color:#dfe6ee}
 .chip.ts{background:#e6f0ff;color:#165aac;border-color:#c9dcff}
 .chip.pay{background:#fff1d9;color:#8c5705;border-color:#f2d69d}
@@ -60,343 +60,349 @@ h1{font-size:clamp(24px,2.7vw,39px);font-weight:850;letter-spacing:-.047em;line-
 @media(max-width:1590px){.calendar{grid-template-columns:repeat(5,minmax(0,1fr))}}
 @media(max-width:1200px){.calendar{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media(max-width:950px){.calendar{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media(max-width:760px){
+@media screen and (max-width:760px){
  body{background:#edf3fa}
- main{padding:9px 10px 28px;max-width:640px}
- .header{grid-template-columns:minmax(0,1fr);gap:13px;padding:15px 15px 17px;border-radius:15px}
+ main{display:grid;grid-template-rows:auto auto auto 1fr auto;gap:6px;min-height:100vh;min-height:100dvh;padding:6px 8px max(6px,env(safe-area-inset-bottom));max-width:640px}
+ .header{grid-template-columns:minmax(0,1fr);gap:5px;padding:8px 10px;border-radius:12px}
  .header-main{grid-row:2}
- h1{font-size:clamp(18px,4.8vw,28px);margin:0 0 14px;letter-spacing:-.035em}
- .header-org{font-size:clamp(8.7px,2.65vw,12px);letter-spacing:-.045em;line-height:1.3}
- .header-period{font-size:12px}
- .header-copy{grid-row:1;font-size:10px;padding:6px 8px}
- .filterbar{margin:12px 0 11px;display:block}
+ h1{font-size:clamp(17px,4.7vw,25px);margin:0 0 5px;letter-spacing:-.035em}
+ .header-month{margin-top:3px}
+ .header-org{margin-bottom:3px;font-size:clamp(8.7px,2.5vw,11px);letter-spacing:-.045em;line-height:1.25}
+ .header-period{font-size:10px;line-height:1.25}
+ .header-copy{grid-row:1;gap:0;font-size:9px;line-height:1.25}
+ .filterbar{margin:0;display:block}
  .filters{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}
- .filters button{font-size:10.5px;line-height:1.15;padding:9px 2px;border-radius:8px}
+ .filters button{min-height:30px;font-size:10.5px;line-height:1.15;padding:4px 1px;border-radius:8px}
  .filterbar small{display:none}
- .mobile-nav{display:grid;grid-template-columns:44px minmax(0,1fr) 44px;gap:8px;align-items:center;margin-bottom:12px;padding:9px;background:#fff;border:1px solid #dbe5f2;border-radius:14px;box-shadow:0 4px 18px #17283b0b}
- .mobile-nav button{height:43px;border-radius:10px;border:1px solid #d7e3f0;background:#f2f6fc;font-size:23px;font-weight:800;color:#1c466e;cursor:pointer}
+ .mobile-nav{display:grid;grid-template-columns:32px minmax(0,1fr) 32px;gap:6px;align-items:center;margin:0;padding:4px;background:#fff;border:1px solid #dbe5f2;border-radius:10px;box-shadow:0 4px 18px #17283b0b}
+ .mobile-nav button{height:32px;border-radius:7px;border:1px solid #d7e3f0;background:#f2f6fc;font-size:21px;font-weight:800;color:#1c466e;cursor:pointer}
  .mobile-nav button:disabled{opacity:.32;cursor:default}
  .mobile-nav-center{min-width:0;text-align:center}
- .mobile-nav select{appearance:none;text-align:center;text-align-last:center;display:block;width:100%;border:0;background:transparent;color:#1e354e;font-size:15px;font-weight:850;padding:4px 8px;cursor:pointer}
- .mobile-nav-count{display:block;color:#748298;font-size:10.5px;margin-top:1px;font-weight:650}
- .calendar{display:block}
+ .mobile-nav select{appearance:none;text-align:center;text-align-last:center;display:block;width:100%;border:0;background:transparent;color:#1e354e;font-size:12px;font-weight:850;padding:2px 6px;cursor:pointer}
+ .mobile-nav-count{display:block;color:#748298;font-size:9px;margin-top:1px;font-weight:650}
+ .calendar{display:flex;flex-direction:column}
  .day{display:none!important}
- .day.is-active:not(.is-hidden){display:flex!important;min-height:0;border-radius:15px;border-color:#d3dfed;box-shadow:0 9px 29px #172e4e16}
- .day-head{padding:19px 18px 16px}
- .day-num{font-size:36px}
- .day-date{gap:12px}
- .weekday-label{font-size:11px}
- .ala-badge{font-size:12px;padding:8px 17px;border-radius:9px}
- .entry-list{padding:10px 17px 12px;gap:2px}
- .entry{font-size:clamp(14px,3.6vw,16px);gap:8px;padding:11px 1px;line-height:1.38;align-items:center}
- .name{flex-shrink:0}
- .chip{font-size:10.7px;padding:4px 8px;border-radius:7px}
- .chip.ac4{padding:5px 12px}
- .detail{font-size:12px;padding:0 0 2px}
- .day-foot{padding:13px 17px;font-size:12px}
- .info{font-size:11px;margin-top:13px;padding:13px;line-height:1.6}
+ .day.is-active:not(.is-hidden){display:flex!important;flex:1;min-height:0;border-radius:12px;border-color:#d3dfed;box-shadow:0 9px 29px #172e4e16}
+ .day-head{padding:8px 10px}
+ .day-num{font-size:26px}
+ .day-date{gap:9px}
+ .weekday-label{font-size:10px}
+ .ala-badge{font-size:10px;padding:4px 10px;border-radius:7px}
+ .entry-list{padding:4px 10px;gap:0}
+ .entry{font-size:12px;font-size:clamp(11.5px,1.9dvh,14px);padding:2px 0;padding:clamp(2px,calc(1dvh - 4px),5px) 0;line-height:1.2}
+ .chip{font-size:9px;font-size:clamp(8px,1.4dvh,10px);line-height:1.3;padding:2px 5px;border-radius:5px;white-space:nowrap}
+ .chip.ac4{padding:2px 7px}
+ .detail{font-size:10px;font-size:clamp(9px,1.5dvh,11px);line-height:1.2;padding:0}
+ .day-foot{padding:6px 10px;font-size:10px;line-height:1.25}
+ .info{font-size:10px;margin:0;padding:6px 9px;line-height:1.3;border-radius:9px}
 }
-@media(max-width:350px){.filters button{font-size:9px}.header-org{font-size:8.5px}.entry{font-size:13px}.header-copy{font-size:9px}}
+@media screen and (max-width:350px){.filters button{font-size:9px}.header-org{font-size:8.5px}}
+@media screen and (max-width:760px) and (max-height:600px){
+ main{gap:4px}
+ .header{gap:3px;padding:6px 10px}
+ .day-head{padding:6px 10px}
+ .day-foot{padding:5px 10px}
+}
 @media print{
  body{background:#fff}main{max-width:none;padding:8px}.header{color:#142c49;background:#fff;box-shadow:none;border:1px solid #aaa;padding:12px}.header-copy,.header-period{color:#223e57}.filterbar,.mobile-nav{display:none!important}.calendar{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}.day{display:flex!important;min-height:0;break-inside:avoid;box-shadow:none;border:1px solid #aaa}.day.is-hidden{display:flex}.info{font-size:9px}.entry{font-size:9px}.chip{font-size:8px}.ala-badge{box-shadow:none}.header::after{display:none}
 }
 </style></head><body><main>
-<header class="header"><div class="header-main"><h1><span class="header-title">Previsão Escalas de Serviço</span><span class="header-month">Novembro/2026</span></h1><p class="header-org">8ª Companhia Independente Bombeiro Militar - Cristalina</p><p class="header-period">Previsão de 01 a 30/11/2026</p></div><div class="header-copy"><span>© 2026 Asp of CARVALHO.</span><span>Todos os direitos reservados.</span></div></header>
+<header class="header"><div class="header-main"><h1><span class="header-title">Previsão Escalas de Serviço</span><span class="header-month">Novembro/2026</span></h1><p class="header-org">8ª Companhia Independente Bombeiro Militar - Cristalina</p><p class="header-period">Previsão de 01 a 30/11/2026</p></div><div class="header-copy"><span>© 2026 ASP OF CARVALHO.</span><span>Todos os direitos reservados.</span></div></header>
 
 <div class="filterbar"><div aria-label="Filtrar alas" class="filters" role="group"><button aria-pressed="true" data-filter="TODAS" type="button">Todas as alas</button><button aria-pressed="false" data-filter="ALPHA" type="button">Alpha</button><button aria-pressed="false" data-filter="BRAVO" type="button">Bravo</button><button aria-pressed="false" data-filter="CHARLIE" type="button">Charlie</button><button aria-pressed="false" data-filter="DELTA" type="button">Delta</button></div><small>Exibe militares confirmados nas fontes disponíveis e destaca pendências.</small></div>
 <nav aria-label="Navegação entre os dias" class="mobile-nav"><button aria-label="Dia anterior" id="dia-anterior" type="button">‹</button><div class="mobile-nav-center"><select aria-label="Selecionar dia de serviço" id="selecionar-dia"></select><span aria-live="polite" class="mobile-nav-count" id="indicador-dias"></span></div><button aria-label="Próximo dia" id="dia-seguinte" type="button">›</button></nav><div aria-label="Calendário de novembro de 2026" class="calendar"><section aria-label="01 de novembro, ala Delta" class="day" data-ala="DELTA" id="dia-01">
 <div class="day-head delta"><div class="day-date"><span class="day-num">01</span><span class="ala-badge delta">DELTA</span></div><span class="weekday-label">DOM</span></div>
-<ul class="entry-list"><li class="entry officer" title="Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"><span class="name">ASP OF BESSA</span><span class="chip officer">OF. DIA</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">ST PASSOS</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário — serviço de 01/11; férias somente a partir de 05/11"><span class="name">1º SGT HAMILTON</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">2º SGT GEYDSON</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">2º SGT WANDERSON</span><span class="chip ord">ORD</span></li>
+<ul class="entry-list"><li class="entry officer" title="Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"><span class="name">ASP OF BESSA</span><span class="chip officer">OFICIAL DE DIA</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">ST PASSOS</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário — serviço de 01/11; férias somente a partir de 05/11"><span class="name">1º SGT HAMILTON</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">2º SGT GEYDSON</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">2º SGT WANDERSON</span><span class="chip ord">ORDINÁRIO</span></li>
 <li class="entry ac4" title="AC4 Operacional: 24h · 08h–08h. OS nº 344, SEI 97830860."><span class="name">SD CAVALCANTE</span><span class="chip ac4">AC4</span><span class="detail">24h · 08h–08h</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD SANTOS</span><span class="chip ord">ORD</span></li></ul>
+<li class="entry ord" title="Ordinário"><span class="name">SD SANTOS</span><span class="chip ord">ORDINÁRIO</span></li></ul>
 <div class="day-foot"><span>6 recursos de 24h</span><span>Meta de 6 recursos</span></div>
 </section>
 <section aria-label="02 de novembro, ala Alpha" class="day" data-ala="ALPHA" id="dia-02">
 <div class="day-head alpha"><div class="day-date"><span class="day-num">02</span><span class="ala-badge alpha">ALPHA</span></div><span class="weekday-label">SEG</span></div>
-<ul class="entry-list"><li class="entry officer" title="Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"><span class="name">ASP OF CARVALHO</span><span class="chip officer">OF. DIA</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">ST DA SILVA</span><span class="chip ord">ORD</span></li>
+<ul class="entry-list"><li class="entry officer" title="Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"><span class="name">ASP OF CARVALHO</span><span class="chip officer">OFICIAL DE DIA</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">ST DA SILVA</span><span class="chip ord">ORDINÁRIO</span></li>
 <li class="entry ac4" title="AC4 Operacional: 24h · 08h–08h. OS nº 345, SEI 97833006."><span class="name">ST TAVARES</span><span class="chip ac4">AC4</span><span class="detail">24h · 08h–08h</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">ST AISLAN</span><span class="chip ord">ORD</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">ST AISLAN</span><span class="chip ord">ORDINÁRIO</span></li>
 <li class="entry disp" title="TS CIA — Dispensado. SEI 97586670"><span class="name">2º SGT DIEGO</span><span class="chip disp">TS CIA · Dispensado</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">CB RABELO</span><span class="chip ord">ORD</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">CB RABELO</span><span class="chip ord">ORDINÁRIO</span></li>
 <li class="entry ac4" title="AC4 Operacional: 24h · 08h–08h. OS nº 345, SEI 97833006."><span class="name">SD SANTOS</span><span class="chip ac4">AC4</span><span class="detail">24h · 08h–08h</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD MARTINS</span><span class="chip ord">ORD</span></li></ul>
+<li class="entry ord" title="Ordinário"><span class="name">SD MARTINS</span><span class="chip ord">ORDINÁRIO</span></li></ul>
 <div class="day-foot"><span>6 recursos de 24h</span><span>Meta de 6 recursos</span></div>
 </section>
 <section aria-label="03 de novembro, ala Bravo" class="day" data-ala="BRAVO" id="dia-03">
 <div class="day-head bravo"><div class="day-date"><span class="day-num">03</span><span class="ala-badge bravo">BRAVO</span></div><span class="weekday-label">TER</span></div>
-<ul class="entry-list"><li class="entry officer" title="Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"><span class="name">ASP OF CARVALHO</span><span class="chip officer">OF. DIA</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">ST TAVARES</span><span class="chip ord">ORD</span></li>
+<ul class="entry-list"><li class="entry officer" title="Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"><span class="name">ASP OF CARVALHO</span><span class="chip officer">OFICIAL DE DIA</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">ST TAVARES</span><span class="chip ord">ORDINÁRIO</span></li>
 <li class="entry ts" title="TS nº 166 (SEI 97832330). Substitui 2º SGT SCHUSSLER. "><span class="name">ST AISLAN</span><span class="chip ts">TS · SCHUSSLER</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">1º SGT HELLYSSON</span><span class="chip ord">ORD</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">1º SGT HELLYSSON</span><span class="chip ord">ORDINÁRIO</span></li>
 <li class="entry ac4" title="AC4 Operacional: 24h · 08h–08h. OS nº 346, SEI 97833074."><span class="name">2º SGT GEYDSON</span><span class="chip ac4">AC4</span><span class="detail">24h · 08h–08h</span></li>
 <li class="entry ac4" title="AC4 Operacional: 12h · 20h–08h. OS nº 346, SEI 97833074."><span class="name">2º SGT LUIZ ANTONIO</span><span class="chip ac4">AC4</span><span class="detail">12h · 20h–08h</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">3º SGT JORGE</span><span class="chip ord">ORD</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">3º SGT JORGE</span><span class="chip ord">ORDINÁRIO</span></li>
 <li class="entry ac4" title="AC4 Operacional: 12h · 08h–20h. OS nº 346, SEI 97833074."><span class="name">3º SGT HENRIQUE</span><span class="chip ac4">AC4</span><span class="detail">12h · 08h–20h</span></li>
 <li class="entry disp" title="TS CIA — Dispensado. SEI 97766395"><span class="name">SD CAVALCANTE</span><span class="chip disp">TS CIA · Dispensado</span></li></ul>
 <div class="day-foot"><span>6 recursos de 24h</span><span>Meta de 6 recursos</span></div>
 </section>
 <section aria-label="04 de novembro, ala Charlie" class="day" data-ala="CHARLIE" id="dia-04">
 <div class="day-head charlie"><div class="day-date"><span class="day-num">04</span><span class="ala-badge charlie">CHARLIE</span></div><span class="weekday-label">QUA</span></div>
-<ul class="entry-list"><li class="entry officer" title="Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"><span class="name">ASP OF CARVALHO</span><span class="chip officer">OF. DIA</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">ST OSVALDIR</span><span class="chip ord">ORD</span></li>
+<ul class="entry-list"><li class="entry officer" title="Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"><span class="name">ASP OF CARVALHO</span><span class="chip officer">OFICIAL DE DIA</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">ST OSVALDIR</span><span class="chip ord">ORDINÁRIO</span></li>
 <li class="entry ac4" title="AC4 Operacional: 24h · 08h–08h. OS nº 347, SEI 97833404."><span class="name">ST DA SILVA</span><span class="chip ac4">AC4</span><span class="detail">24h · 08h–08h</span></li>
-<li class="entry ord" title="Serviço ordinário de 08h às 14h, 6h"><span class="name">ST AISLAN</span><span class="chip ord">ORD</span><span class="detail">6h · 08h–14h</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">1º SGT NIKHOLAS</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">3º SGT HENRIQUE</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD PICCINI</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD HUGO</span><span class="chip ord">ORD</span></li></ul>
+<li class="entry ord" title="Serviço ordinário de 08h às 14h, 6h"><span class="name">ST AISLAN</span><span class="chip ord">ORDINÁRIO</span><span class="detail">6h · 08h–14h</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">1º SGT NIKHOLAS</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">3º SGT HENRIQUE</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">SD PICCINI</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">SD HUGO</span><span class="chip ord">ORDINÁRIO</span></li></ul>
 <div class="day-foot"><span>6 recursos de 24h</span><span>Meta de 6 recursos</span></div>
 </section>
 <section aria-label="05 de novembro, ala Delta" class="day" data-ala="DELTA" id="dia-05">
 <div class="day-head delta"><div class="day-date"><span class="day-num">05</span><span class="ala-badge delta">DELTA</span></div><span class="weekday-label">QUI</span></div>
-<ul class="entry-list"><li class="entry officer" title="Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"><span class="name">ASP OF CARVALHO</span><span class="chip officer">OF. DIA</span></li>
+<ul class="entry-list"><li class="entry officer" title="Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"><span class="name">ASP OF CARVALHO</span><span class="chip officer">OFICIAL DE DIA</span></li>
 <li class="entry ts" title="TS nº 161 (SEI 97703197). Substitui ST PASSOS. "><span class="name">ST OSVALDIR</span><span class="chip ts">TS · PASSOS</span></li>
 <li class="entry pay" title="TS CIA — Pagando serviço. SEI 97586670"><span class="name">2º SGT DIEGO</span><span class="chip pay">TS CIA · Pagando</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">2º SGT GEYDSON</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">2º SGT WANDERSON</span><span class="chip ord">ORD</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">2º SGT GEYDSON</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">2º SGT WANDERSON</span><span class="chip ord">ORDINÁRIO</span></li>
 <li class="entry ts" title="TS nº 155 (SEI 97542993). Substitui SD SANTOS. "><span class="name">SD PICCINI</span><span class="chip ts">TS · SANTOS</span></li></ul>
 <div class="day-foot"><span>5 recursos de 24h</span><span class="pending">Faltam 1 recurso</span></div>
 </section>
 <section aria-label="06 de novembro, ala Alpha" class="day" data-ala="ALPHA" id="dia-06">
 <div class="day-head alpha"><div class="day-date"><span class="day-num">06</span><span class="ala-badge alpha">ALPHA</span></div><span class="weekday-label">SEX</span></div>
-<ul class="entry-list"><li class="entry officer" title="Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"><span class="name">ASP OF CARVALHO</span><span class="chip officer">OF. DIA</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">ST DA SILVA</span><span class="chip ord">ORD</span></li>
+<ul class="entry-list"><li class="entry officer" title="Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"><span class="name">ASP OF CARVALHO</span><span class="chip officer">OFICIAL DE DIA</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">ST DA SILVA</span><span class="chip ord">ORDINÁRIO</span></li>
 <li class="entry ts" title="TS nº 160 (SEI 97660634). Substitui ST AISLAN. "><span class="name">ST TAVARES</span><span class="chip ts">TS · AISLAN</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">2º SGT DIEGO</span><span class="chip ord">ORD</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">2º SGT DIEGO</span><span class="chip ord">ORDINÁRIO</span></li>
 <li class="entry pay" title="TS CIA — Pagando serviço. SEI 97654793"><span class="name">3º SGT JORGE</span><span class="chip pay">TS CIA · Pagando</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">CB RABELO</span><span class="chip ord">ORD</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">CB RABELO</span><span class="chip ord">ORDINÁRIO</span></li>
 <li class="entry ts" title="TS nº 153/154 (SEI 97515824 / 97518560). Substitui SD MARTINS. Movimentação duplicada documentalmente, contabilizada uma única vez"><span class="name">SD HUGO</span><span class="chip ts">TS · MARTINS</span></li></ul>
 <div class="day-foot"><span>6 recursos de 24h</span><span>Meta de 6 recursos</span></div>
 </section>
 <section aria-label="07 de novembro, ala Bravo" class="day" data-ala="BRAVO" id="dia-07">
 <div class="day-head bravo"><div class="day-date"><span class="day-num">07</span><span class="ala-badge bravo">BRAVO</span></div><span class="weekday-label">SÁB</span></div>
-<ul class="entry-list"><li class="entry officer" title="Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"><span class="name">ASP OF CARVALHO</span><span class="chip officer">OF. DIA</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">ST TAVARES</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">1º SGT HELLYSSON</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">2º SGT SCHUSSLER</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">3º SGT JORGE</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD CAVALCANTE</span><span class="chip ord">ORD</span></li></ul>
+<ul class="entry-list"><li class="entry officer" title="Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"><span class="name">ASP OF CARVALHO</span><span class="chip officer">OFICIAL DE DIA</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">ST TAVARES</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">1º SGT HELLYSSON</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">2º SGT SCHUSSLER</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">3º SGT JORGE</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">SD CAVALCANTE</span><span class="chip ord">ORDINÁRIO</span></li></ul>
 <div class="day-foot"><span>5 recursos de 24h</span><span class="pending">Faltam 1 recurso</span></div>
 </section>
 <section aria-label="08 de novembro, ala Charlie" class="day" data-ala="CHARLIE" id="dia-08">
 <div class="day-head charlie"><div class="day-date"><span class="day-num">08</span><span class="ala-badge charlie">CHARLIE</span></div><span class="weekday-label">DOM</span></div>
-<ul class="entry-list"><li class="entry officer" title="Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"><span class="name">ASP OF CARVALHO</span><span class="chip officer">OF. DIA</span></li>
+<ul class="entry-list"><li class="entry officer" title="Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"><span class="name">ASP OF CARVALHO</span><span class="chip officer">OFICIAL DE DIA</span></li>
 <li class="entry ts" title="TS nº 161 (SEI 97703197). Substitui ST OSVALDIR. "><span class="name">ST PASSOS</span><span class="chip ts">TS · OSVALDIR</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">1º SGT NIKHOLAS</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">3º SGT HENRIQUE</span><span class="chip ord">ORD</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">1º SGT NIKHOLAS</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">3º SGT HENRIQUE</span><span class="chip ord">ORDINÁRIO</span></li>
 <li class="entry ts" title="TS nº 156 (SEI 97543668). Substitui SD PICCINI. "><span class="name">SD SANTOS</span><span class="chip ts">TS · PICCINI</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD HUGO</span><span class="chip ord">ORD</span></li></ul>
+<li class="entry ord" title="Ordinário"><span class="name">SD HUGO</span><span class="chip ord">ORDINÁRIO</span></li></ul>
 <div class="day-foot"><span>5 recursos de 24h</span><span class="pending">Faltam 1 recurso</span></div>
 </section>
 <section aria-label="09 de novembro, ala Delta" class="day" data-ala="DELTA" id="dia-09">
 <div class="day-head delta"><div class="day-date"><span class="day-num">09</span><span class="ala-badge delta">DELTA</span></div><span class="weekday-label">SEG</span></div>
-<ul class="entry-list"><li class="entry officer" title="Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"><span class="name">ASP OF BESSA</span><span class="chip officer">OF. DIA</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">ST PASSOS</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">2º SGT GEYDSON</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">2º SGT WANDERSON</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD SANTOS</span><span class="chip ord">ORD</span></li></ul>
+<ul class="entry-list"><li class="entry officer" title="Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"><span class="name">ASP OF BESSA</span><span class="chip officer">OFICIAL DE DIA</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">ST PASSOS</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">2º SGT GEYDSON</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">2º SGT WANDERSON</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">SD SANTOS</span><span class="chip ord">ORDINÁRIO</span></li></ul>
 <div class="day-foot"><span>4 recursos de 24h</span><span class="pending">Faltam 2 recursos</span></div>
 </section>
 <section aria-label="10 de novembro, ala Alpha" class="day" data-ala="ALPHA" id="dia-10">
 <div class="day-head alpha"><div class="day-date"><span class="day-num">10</span><span class="ala-badge alpha">ALPHA</span></div><span class="weekday-label">TER</span></div>
-<ul class="entry-list"><li class="entry officer" title="Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"><span class="name">ASP OF BESSA</span><span class="chip officer">OF. DIA</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">ST DA SILVA</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">ST AISLAN</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">2º SGT DIEGO</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">CB RABELO</span><span class="chip ord">ORD</span></li>
+<ul class="entry-list"><li class="entry officer" title="Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"><span class="name">ASP OF BESSA</span><span class="chip officer">OFICIAL DE DIA</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">ST DA SILVA</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">ST AISLAN</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">2º SGT DIEGO</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">CB RABELO</span><span class="chip ord">ORDINÁRIO</span></li>
 <li class="entry pay" title="TS CIA — Pagando serviço. SEI 97766395"><span class="name">SD CAVALCANTE</span><span class="chip pay">TS CIA · Pagando</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD MARTINS</span><span class="chip ord">ORD</span></li></ul>
+<li class="entry ord" title="Ordinário"><span class="name">SD MARTINS</span><span class="chip ord">ORDINÁRIO</span></li></ul>
 <div class="day-foot"><span>6 recursos de 24h</span><span>Meta de 6 recursos</span></div>
 </section>
 <section aria-label="11 de novembro, ala Bravo" class="day" data-ala="BRAVO" id="dia-11">
 <div class="day-head bravo"><div class="day-date"><span class="day-num">11</span><span class="ala-badge bravo">BRAVO</span></div><span class="weekday-label">QUA</span></div>
-<ul class="entry-list"><li class="entry officer" title="Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"><span class="name">ASP OF BESSA</span><span class="chip officer">OF. DIA</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">ST TAVARES</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">1º SGT HELLYSSON</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">2º SGT SCHUSSLER</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">3º SGT JORGE</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD CAVALCANTE</span><span class="chip ord">ORD</span></li></ul>
+<ul class="entry-list"><li class="entry officer" title="Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"><span class="name">ASP OF BESSA</span><span class="chip officer">OFICIAL DE DIA</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">ST TAVARES</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">1º SGT HELLYSSON</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">2º SGT SCHUSSLER</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">3º SGT JORGE</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">SD CAVALCANTE</span><span class="chip ord">ORDINÁRIO</span></li></ul>
 <div class="day-foot"><span>5 recursos de 24h</span><span class="pending">Faltam 1 recurso</span></div>
 </section>
 <section aria-label="12 de novembro, ala Charlie" class="day" data-ala="CHARLIE" id="dia-12">
 <div class="day-head charlie"><div class="day-date"><span class="day-num">12</span><span class="ala-badge charlie">CHARLIE</span></div><span class="weekday-label">QUI</span></div>
-<ul class="entry-list"><li class="entry officer" title="Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"><span class="name">ASP OF BESSA</span><span class="chip officer">OF. DIA</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">ST OSVALDIR</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">1º SGT NIKHOLAS</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">3º SGT HENRIQUE</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD PICCINI</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD HUGO</span><span class="chip ord">ORD</span></li></ul>
+<ul class="entry-list"><li class="entry officer" title="Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"><span class="name">ASP OF BESSA</span><span class="chip officer">OFICIAL DE DIA</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">ST OSVALDIR</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">1º SGT NIKHOLAS</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">3º SGT HENRIQUE</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">SD PICCINI</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">SD HUGO</span><span class="chip ord">ORDINÁRIO</span></li></ul>
 <div class="day-foot"><span>5 recursos de 24h</span><span class="pending">Faltam 1 recurso</span></div>
 </section>
 <section aria-label="13 de novembro, ala Delta" class="day" data-ala="DELTA" id="dia-13">
 <div class="day-head delta"><div class="day-date"><span class="day-num">13</span><span class="ala-badge delta">DELTA</span></div><span class="weekday-label">SEX</span></div>
-<ul class="entry-list"><li class="entry officer" title="Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"><span class="name">ASP OF BESSA</span><span class="chip officer">OF. DIA</span></li>
+<ul class="entry-list"><li class="entry officer" title="Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"><span class="name">ASP OF BESSA</span><span class="chip officer">OFICIAL DE DIA</span></li>
 <li class="entry ts" title="TS nº 162 (SEI 97704006). Substitui ST PASSOS. "><span class="name">ST OSVALDIR</span><span class="chip ts">TS · PASSOS</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">2º SGT GEYDSON</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">2º SGT WANDERSON</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD SANTOS</span><span class="chip ord">ORD</span></li></ul>
+<li class="entry ord" title="Ordinário"><span class="name">2º SGT GEYDSON</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">2º SGT WANDERSON</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">SD SANTOS</span><span class="chip ord">ORDINÁRIO</span></li></ul>
 <div class="day-foot"><span>4 recursos de 24h</span><span class="pending">Faltam 2 recursos</span></div>
 </section>
 <section aria-label="14 de novembro, ala Alpha" class="day" data-ala="ALPHA" id="dia-14">
 <div class="day-head alpha"><div class="day-date"><span class="day-num">14</span><span class="ala-badge alpha">ALPHA</span></div><span class="weekday-label">SÁB</span></div>
-<ul class="entry-list"><li class="entry officer" title="Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"><span class="name">ASP OF BESSA</span><span class="chip officer">OF. DIA</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">ST DA SILVA</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">ST AISLAN</span><span class="chip ord">ORD</span></li>
+<ul class="entry-list"><li class="entry officer" title="Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"><span class="name">ASP OF BESSA</span><span class="chip officer">OFICIAL DE DIA</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">ST DA SILVA</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">ST AISLAN</span><span class="chip ord">ORDINÁRIO</span></li>
 <li class="entry disp" title="TS CIA — Dispensado. SEI 97587098"><span class="name">2º SGT DIEGO</span><span class="chip disp">TS CIA · Dispensado</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">CB RABELO</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD MARTINS</span><span class="chip ord">ORD</span></li></ul>
+<li class="entry ord" title="Ordinário"><span class="name">CB RABELO</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">SD MARTINS</span><span class="chip ord">ORDINÁRIO</span></li></ul>
 <div class="day-foot"><span>4 recursos de 24h</span><span class="pending">Faltam 2 recursos</span></div>
 </section>
 <section aria-label="15 de novembro, ala Bravo" class="day" data-ala="BRAVO" id="dia-15">
 <div class="day-head bravo"><div class="day-date"><span class="day-num">15</span><span class="ala-badge bravo">BRAVO</span></div><span class="weekday-label">DOM</span></div>
-<ul class="entry-list"><li class="entry officer" title="Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"><span class="name">ASP OF BESSA</span><span class="chip officer">OF. DIA</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">ST TAVARES</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">1º SGT HELLYSSON</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">2º SGT SCHUSSLER</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">3º SGT JORGE</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD CAVALCANTE</span><span class="chip ord">ORD</span></li></ul>
+<ul class="entry-list"><li class="entry officer" title="Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala"><span class="name">ASP OF BESSA</span><span class="chip officer">OFICIAL DE DIA</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">ST TAVARES</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">1º SGT HELLYSSON</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">2º SGT SCHUSSLER</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">3º SGT JORGE</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">SD CAVALCANTE</span><span class="chip ord">ORDINÁRIO</span></li></ul>
 <div class="day-foot"><span>5 recursos de 24h</span><span class="pending">Faltam 1 recurso</span></div>
 </section>
 <section aria-label="16 de novembro, ala Charlie" class="day" data-ala="CHARLIE" id="dia-16">
 <div class="day-head charlie"><div class="day-date"><span class="day-num">16</span><span class="ala-badge charlie">CHARLIE</span></div><span class="weekday-label">SEG</span></div>
 <ul class="entry-list"><li class="entry ts" title="TS nº 162 (SEI 97704006). Substitui ST OSVALDIR. "><span class="name">ST PASSOS</span><span class="chip ts">TS · OSVALDIR</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">1º SGT NIKHOLAS</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">3º SGT HENRIQUE</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD PICCINI</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD HUGO</span><span class="chip ord">ORD</span></li></ul>
+<li class="entry ord" title="Ordinário"><span class="name">1º SGT NIKHOLAS</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">3º SGT HENRIQUE</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">SD PICCINI</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">SD HUGO</span><span class="chip ord">ORDINÁRIO</span></li></ul>
 <div class="day-foot"><span>5 recursos de 24h</span><span class="pending">Faltam 1 recurso</span></div>
 </section>
 <section aria-label="17 de novembro, ala Delta" class="day" data-ala="DELTA" id="dia-17">
 <div class="day-head delta"><div class="day-date"><span class="day-num">17</span><span class="ala-badge delta">DELTA</span></div><span class="weekday-label">TER</span></div>
-<ul class="entry-list"><li class="entry ord" title="Ordinário"><span class="name">ST PASSOS</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">2º SGT GEYDSON</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">2º SGT WANDERSON</span><span class="chip ord">ORD</span></li>
+<ul class="entry-list"><li class="entry ord" title="Ordinário"><span class="name">ST PASSOS</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">2º SGT GEYDSON</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">2º SGT WANDERSON</span><span class="chip ord">ORDINÁRIO</span></li>
 <li class="entry review" title="DOCUMENTO INCONSISTENTE: o militar substituído não pertence à Ala Delta em 17/11; confirmar antes da escala definitiva · SEI 97553091"><span class="name">3º SGT HENRIQUE</span><span class="chip review">TS · AISLAN (A CONFERIR)</span></li>
 <li class="entry ts" title="TS nº 156 (SEI 97543668). Substitui SD SANTOS. "><span class="name">SD PICCINI</span><span class="chip ts">TS · SANTOS</span></li></ul>
 <div class="day-foot"><span>4 recursos de 24h</span><span class="pending">Faltam 2 recursos</span></div>
 </section>
 <section aria-label="18 de novembro, ala Alpha" class="day" data-ala="ALPHA" id="dia-18">
 <div class="day-head alpha"><div class="day-date"><span class="day-num">18</span><span class="ala-badge alpha">ALPHA</span></div><span class="weekday-label">QUA</span></div>
-<ul class="entry-list"><li class="entry ord" title="Ordinário"><span class="name">ST DA SILVA</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">ST AISLAN</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">2º SGT DIEGO</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">CB RABELO</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD MARTINS</span><span class="chip ord">ORD</span></li></ul>
+<ul class="entry-list"><li class="entry ord" title="Ordinário"><span class="name">ST DA SILVA</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">ST AISLAN</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">2º SGT DIEGO</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">CB RABELO</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">SD MARTINS</span><span class="chip ord">ORDINÁRIO</span></li></ul>
 <div class="day-foot"><span>5 recursos de 24h</span><span class="pending">Faltam 1 recurso</span></div>
 </section>
 <section aria-label="19 de novembro, ala Bravo" class="day" data-ala="BRAVO" id="dia-19">
 <div class="day-head bravo"><div class="day-date"><span class="day-num">19</span><span class="ala-badge bravo">BRAVO</span></div><span class="weekday-label">QUI</span></div>
-<ul class="entry-list"><li class="entry ord" title="Ordinário"><span class="name">ST TAVARES</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">1º SGT HELLYSSON</span><span class="chip ord">ORD</span></li>
+<ul class="entry-list"><li class="entry ord" title="Ordinário"><span class="name">ST TAVARES</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">1º SGT HELLYSSON</span><span class="chip ord">ORDINÁRIO</span></li>
 <li class="entry pay" title="TS CIA — Pagando serviço. SEI 97587098"><span class="name">2º SGT DIEGO</span><span class="chip pay">TS CIA · Pagando</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">2º SGT SCHUSSLER</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">3º SGT JORGE</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD CAVALCANTE</span><span class="chip ord">ORD</span></li></ul>
+<li class="entry ord" title="Ordinário"><span class="name">2º SGT SCHUSSLER</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">3º SGT JORGE</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">SD CAVALCANTE</span><span class="chip ord">ORDINÁRIO</span></li></ul>
 <div class="day-foot"><span>6 recursos de 24h</span><span>Meta de 6 recursos</span></div>
 </section>
 <section aria-label="20 de novembro, ala Charlie" class="day" data-ala="CHARLIE" id="dia-20">
 <div class="day-head charlie"><div class="day-date"><span class="day-num">20</span><span class="ala-badge charlie">CHARLIE</span></div><span class="weekday-label">SEX</span></div>
-<ul class="entry-list"><li class="entry ord" title="Ordinário"><span class="name">ST OSVALDIR</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">1º SGT NIKHOLAS</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">3º SGT HENRIQUE</span><span class="chip ord">ORD</span></li>
+<ul class="entry-list"><li class="entry ord" title="Ordinário"><span class="name">ST OSVALDIR</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">1º SGT NIKHOLAS</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">3º SGT HENRIQUE</span><span class="chip ord">ORDINÁRIO</span></li>
 <li class="entry ts" title="TS nº 157 (SEI 97544001). Substitui SD PICCINI. "><span class="name">SD SANTOS</span><span class="chip ts">TS · PICCINI</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD HUGO</span><span class="chip ord">ORD</span></li></ul>
+<li class="entry ord" title="Ordinário"><span class="name">SD HUGO</span><span class="chip ord">ORDINÁRIO</span></li></ul>
 <div class="day-foot"><span>5 recursos de 24h</span><span class="pending">Faltam 1 recurso</span></div>
 </section>
 <section aria-label="21 de novembro, ala Delta" class="day" data-ala="DELTA" id="dia-21">
 <div class="day-head delta"><div class="day-date"><span class="day-num">21</span><span class="ala-badge delta">DELTA</span></div><span class="weekday-label">SÁB</span></div>
 <ul class="entry-list"><li class="entry ts" title="TS nº 163 (SEI 97704646). Substitui ST PASSOS. "><span class="name">ST OSVALDIR</span><span class="chip ts">TS · PASSOS</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">2º SGT GEYDSON</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">2º SGT WANDERSON</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD SANTOS</span><span class="chip ord">ORD</span></li></ul>
+<li class="entry ord" title="Ordinário"><span class="name">2º SGT GEYDSON</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">2º SGT WANDERSON</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">SD SANTOS</span><span class="chip ord">ORDINÁRIO</span></li></ul>
 <div class="day-foot"><span>4 recursos de 24h</span><span class="pending">Faltam 2 recursos</span></div>
 </section>
 <section aria-label="22 de novembro, ala Alpha" class="day" data-ala="ALPHA" id="dia-22">
 <div class="day-head alpha"><div class="day-date"><span class="day-num">22</span><span class="ala-badge alpha">ALPHA</span></div><span class="weekday-label">DOM</span></div>
-<ul class="entry-list"><li class="entry ord" title="Ordinário"><span class="name">ST DA SILVA</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">ST AISLAN</span><span class="chip ord">ORD</span></li>
+<ul class="entry-list"><li class="entry ord" title="Ordinário"><span class="name">ST DA SILVA</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">ST AISLAN</span><span class="chip ord">ORDINÁRIO</span></li>
 <li class="entry disp" title="TS CIA — Dispensado. SEI 97587323"><span class="name">2º SGT DIEGO</span><span class="chip disp">TS CIA · Dispensado</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">CB RABELO</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD MARTINS</span><span class="chip ord">ORD</span></li></ul>
+<li class="entry ord" title="Ordinário"><span class="name">CB RABELO</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">SD MARTINS</span><span class="chip ord">ORDINÁRIO</span></li></ul>
 <div class="day-foot"><span>4 recursos de 24h</span><span class="pending">Faltam 2 recursos</span></div>
 </section>
 <section aria-label="23 de novembro, ala Bravo" class="day" data-ala="BRAVO" id="dia-23">
 <div class="day-head bravo"><div class="day-date"><span class="day-num">23</span><span class="ala-badge bravo">BRAVO</span></div><span class="weekday-label">SEG</span></div>
-<ul class="entry-list"><li class="entry ord" title="Ordinário"><span class="name">ST TAVARES</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">1º SGT HELLYSSON</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">2º SGT SCHUSSLER</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">3º SGT JORGE</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD CAVALCANTE</span><span class="chip ord">ORD</span></li></ul>
+<ul class="entry-list"><li class="entry ord" title="Ordinário"><span class="name">ST TAVARES</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">1º SGT HELLYSSON</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">2º SGT SCHUSSLER</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">3º SGT JORGE</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">SD CAVALCANTE</span><span class="chip ord">ORDINÁRIO</span></li></ul>
 <div class="day-foot"><span>5 recursos de 24h</span><span class="pending">Faltam 1 recurso</span></div>
 </section>
 <section aria-label="24 de novembro, ala Charlie" class="day" data-ala="CHARLIE" id="dia-24">
 <div class="day-head charlie"><div class="day-date"><span class="day-num">24</span><span class="ala-badge charlie">CHARLIE</span></div><span class="weekday-label">TER</span></div>
 <ul class="entry-list"><li class="entry ts" title="TS nº 163 (SEI 97704646). Substitui ST OSVALDIR. "><span class="name">ST PASSOS</span><span class="chip ts">TS · OSVALDIR</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">1º SGT NIKHOLAS</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">3º SGT HENRIQUE</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD PICCINI</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD HUGO</span><span class="chip ord">ORD</span></li></ul>
+<li class="entry ord" title="Ordinário"><span class="name">1º SGT NIKHOLAS</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">3º SGT HENRIQUE</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">SD PICCINI</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">SD HUGO</span><span class="chip ord">ORDINÁRIO</span></li></ul>
 <div class="day-foot"><span>5 recursos de 24h</span><span class="pending">Faltam 1 recurso</span></div>
 </section>
 <section aria-label="25 de novembro, ala Delta" class="day" data-ala="DELTA" id="dia-25">
 <div class="day-head delta"><div class="day-date"><span class="day-num">25</span><span class="ala-badge delta">DELTA</span></div><span class="weekday-label">QUA</span></div>
-<ul class="entry-list"><li class="entry ord" title="Ordinário"><span class="name">ST PASSOS</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">2º SGT GEYDSON</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">2º SGT WANDERSON</span><span class="chip ord">ORD</span></li>
+<ul class="entry-list"><li class="entry ord" title="Ordinário"><span class="name">ST PASSOS</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">2º SGT GEYDSON</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">2º SGT WANDERSON</span><span class="chip ord">ORDINÁRIO</span></li>
 <li class="entry ts" title="TS nº 157 (SEI 97544001). Substitui SD SANTOS. "><span class="name">SD PICCINI</span><span class="chip ts">TS · SANTOS</span></li></ul>
 <div class="day-foot"><span>4 recursos de 24h</span><span class="pending">Faltam 2 recursos</span></div>
 </section>
 <section aria-label="26 de novembro, ala Alpha" class="day" data-ala="ALPHA" id="dia-26">
 <div class="day-head alpha"><div class="day-date"><span class="day-num">26</span><span class="ala-badge alpha">ALPHA</span></div><span class="weekday-label">QUI</span></div>
-<ul class="entry-list"><li class="entry ord" title="Ordinário"><span class="name">ST DA SILVA</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">2º SGT DIEGO</span><span class="chip ord">ORD</span></li>
+<ul class="entry-list"><li class="entry ord" title="Ordinário"><span class="name">ST DA SILVA</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">2º SGT DIEGO</span><span class="chip ord">ORDINÁRIO</span></li>
 <li class="entry ts" title="TS nº 166 (SEI 97832330). Substitui ST AISLAN. "><span class="name">2º SGT SCHUSSLER</span><span class="chip ts">TS · AISLAN</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">CB RABELO</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD MARTINS</span><span class="chip ord">ORD</span></li></ul>
+<li class="entry ord" title="Ordinário"><span class="name">CB RABELO</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">SD MARTINS</span><span class="chip ord">ORDINÁRIO</span></li></ul>
 <div class="day-foot"><span>5 recursos de 24h</span><span class="pending">Faltam 1 recurso</span></div>
 </section>
 <section aria-label="27 de novembro, ala Bravo" class="day" data-ala="BRAVO" id="dia-27">
 <div class="day-head bravo"><div class="day-date"><span class="day-num">27</span><span class="ala-badge bravo">BRAVO</span></div><span class="weekday-label">SEX</span></div>
-<ul class="entry-list"><li class="entry ord" title="Ordinário"><span class="name">ST TAVARES</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">1º SGT HELLYSSON</span><span class="chip ord">ORD</span></li>
+<ul class="entry-list"><li class="entry ord" title="Ordinário"><span class="name">ST TAVARES</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">1º SGT HELLYSSON</span><span class="chip ord">ORDINÁRIO</span></li>
 <li class="entry pay" title="TS CIA — Pagando serviço. SEI 97587323"><span class="name">2º SGT DIEGO</span><span class="chip pay">TS CIA · Pagando</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">2º SGT SCHUSSLER</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">3º SGT JORGE</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD CAVALCANTE</span><span class="chip ord">ORD</span></li></ul>
+<li class="entry ord" title="Ordinário"><span class="name">2º SGT SCHUSSLER</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">3º SGT JORGE</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">SD CAVALCANTE</span><span class="chip ord">ORDINÁRIO</span></li></ul>
 <div class="day-foot"><span>6 recursos de 24h</span><span>Meta de 6 recursos</span></div>
 </section>
 <section aria-label="28 de novembro, ala Charlie" class="day" data-ala="CHARLIE" id="dia-28">
 <div class="day-head charlie"><div class="day-date"><span class="day-num">28</span><span class="ala-badge charlie">CHARLIE</span></div><span class="weekday-label">SÁB</span></div>
-<ul class="entry-list"><li class="entry ord" title="Ordinário"><span class="name">ST OSVALDIR</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">1º SGT NIKHOLAS</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">3º SGT HENRIQUE</span><span class="chip ord">ORD</span></li>
+<ul class="entry-list"><li class="entry ord" title="Ordinário"><span class="name">ST OSVALDIR</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">1º SGT NIKHOLAS</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">3º SGT HENRIQUE</span><span class="chip ord">ORDINÁRIO</span></li>
 <li class="entry ts" title="TS nº 158 (SEI 97544104). Substitui SD PICCINI. "><span class="name">SD SANTOS</span><span class="chip ts">TS · PICCINI</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD HUGO</span><span class="chip ord">ORD</span></li></ul>
+<li class="entry ord" title="Ordinário"><span class="name">SD HUGO</span><span class="chip ord">ORDINÁRIO</span></li></ul>
 <div class="day-foot"><span>5 recursos de 24h</span><span class="pending">Faltam 1 recurso</span></div>
 </section>
 <section aria-label="29 de novembro, ala Delta" class="day" data-ala="DELTA" id="dia-29">
 <div class="day-head delta"><div class="day-date"><span class="day-num">29</span><span class="ala-badge delta">DELTA</span></div><span class="weekday-label">DOM</span></div>
 <ul class="entry-list"><li class="entry ts" title="TS nº 164 (SEI 97705098). Substitui ST PASSOS. "><span class="name">ST OSVALDIR</span><span class="chip ts">TS · PASSOS</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">2º SGT GEYDSON</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">2º SGT WANDERSON</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD SANTOS</span><span class="chip ord">ORD</span></li></ul>
+<li class="entry ord" title="Ordinário"><span class="name">2º SGT GEYDSON</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">2º SGT WANDERSON</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">SD SANTOS</span><span class="chip ord">ORDINÁRIO</span></li></ul>
 <div class="day-foot"><span>4 recursos de 24h</span><span class="pending">Faltam 2 recursos</span></div>
 </section>
 <section aria-label="30 de novembro, ala Alpha" class="day" data-ala="ALPHA" id="dia-30">
 <div class="day-head alpha"><div class="day-date"><span class="day-num">30</span><span class="ala-badge alpha">ALPHA</span></div><span class="weekday-label">SEG</span></div>
-<ul class="entry-list"><li class="entry ord" title="Ordinário"><span class="name">ST DA SILVA</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">ST AISLAN</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">2º SGT DIEGO</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">CB RABELO</span><span class="chip ord">ORD</span></li>
-<li class="entry ord" title="Ordinário"><span class="name">SD MARTINS</span><span class="chip ord">ORD</span></li></ul>
+<ul class="entry-list"><li class="entry ord" title="Ordinário"><span class="name">ST DA SILVA</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">ST AISLAN</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">2º SGT DIEGO</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">CB RABELO</span><span class="chip ord">ORDINÁRIO</span></li>
+<li class="entry ord" title="Ordinário"><span class="name">SD MARTINS</span><span class="chip ord">ORDINÁRIO</span></li></ul>
 <div class="day-foot"><span>5 recursos de 24h</span><span class="pending">Faltam 1 recurso</span></div>
 </section></div>
-<div class="info"><strong>Regras e ressalvas:</strong> As trocas entre militares substituem a pessoa da escala, mas não geram AC4. Nas trocas com a Companhia, quem está <strong>Dispensado</strong> aparece em vermelho e não integra os recursos disponíveis. Os serviços de AC4 só constam quando confirmados nas OS e ES fornecidas (01 a 04/11). O número de recursos considera cobertura por 24h; duas jornadas AC4 de 12h que se complementam somam um recurso de 24h. Oficial de Dia não integra os seis recursos da ala. A TS nº 154 duplica a movimentação da TS nº 153. <strong>TS nº 159 (17/11):</strong> registra substituição do ST AISLAN, que não pertence à Ala Delta no dia indicado; a entrada do 3º Sgt HENRIQUE aparece como <em>a conferir</em> e não entra na contagem. Até 15/11, os Oficiais de Dia exibidos baseiam-se nas Partes Diárias, Escalas e nas designações informadas; depois dessa data, não há designação confirmada. Vagas faltantes não significam AC4 autorizado. <strong>Documento de planejamento, não substitui a ES/OS homologada.</strong></div>
+<div class="info"><strong>Regras e ressalvas:</strong> as informações apresentadas aqui são previsões do planejamento da escala, o que não substitui a Escala de Serviço e Ordem de Serviço homologadas.</div>
 </main><script>
 (() => {
   'use strict';
