@@ -8790,7 +8790,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     const badges = element('span', `badges${oddWithAc4 ? ' has-odd-ac4' : ''}${assignments.length ? ' has-adjunto' : ''}`);
     const services = assignments.length ? element('span', 'service-badges') : badges;
     if (assignments.length) {
-      const chip = element('span', 'chip chief', 'ADJUNTO');
+      const chip = element('span', 'chip chief', 'ACA');
       chip.title = 'Chefe de Ala / COB · Previsão por antiguidade (ORD do Plano de Chamada)';
       badges.append(chip, services);
     }
