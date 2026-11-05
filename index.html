@@ -316,14 +316,32 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 /* Share desktop rows so roster and SAT content cannot offset the action bars. */
 @media screen and (min-width:761px){
  @supports (grid-template-rows:subgrid){
-  .day{display:grid;grid-template-rows:subgrid;grid-row:span 6;row-gap:0}
+  .day{display:grid;grid-template-rows:subgrid;grid-row:span 7;row-gap:0}
   .operational-section{display:grid;grid-template-rows:subgrid;grid-row:span 4;row-gap:0}
   .sat-section{display:flex;flex-direction:column}
   .sat-section>.day-actions{margin-top:auto}
  }
 }
+
+/* Currency comes from the schedule; only the quota is configured per month. */
+.monthly-finance{margin-top:13px;padding:12px 14px;border:1px solid #ffffff40;border-radius:10px;background:#ffffff0d;width:min(560px,100%);font-size:13px;line-height:1.45;min-width:0}
+.finance-fact{display:flex;justify-content:space-between;gap:5px 14px;flex-wrap:wrap;margin:4px 0;font-variant-numeric:tabular-nums}
+.finance-fact strong{font-weight:650}.finance-fact span{font-weight:800}
+.finance-status{font-size:12px;line-height:1.5;margin:8px 0}
+.finance-note{font-size:11px;line-height:1.5;margin:8px 0 0;color:#d4e5f7}
+.finance-composition{font-size:12px;margin-top:8px}.finance-composition summary{font-weight:700;cursor:pointer}.finance-composition p{margin:5px 0}
+.monthly-finance.over-quota{border-color:#ffb9aa}.finance-warning{color:#ae271b;font-weight:700}.header .finance-warning{color:#ffd2c6}
+.daily-finance{border-top:1px solid #dce6f1;background:#f5f9ff;padding:9px 11px;font-size:10px;line-height:1.5;color:#34516d;min-width:0;font-variant-numeric:tabular-nums}
+.daily-finance p{margin:3px 0;overflow-wrap:anywhere}.daily-balance{font-weight:750;color:#17634b}.days-remaining{color:#61758a}
+.ac4-cost{color:#425976;font-size:10px;font-weight:800;line-height:1.3;text-align:right;font-variant-numeric:tabular-nums;max-width:100%}
+.is-cancelled .chip.ac4{background:#eef2f6;color:#64748b;border-color:#cbd5e1;box-shadow:none;text-shadow:none;text-decoration:line-through}
+.is-cancelled .ac4-meta,.is-cancelled .ac4-cost{color:#64748b}
+.event-finance{border-top:1px solid #ded6eb;margin-top:8px;padding-top:7px}.event-finance-total{font-weight:800;color:#473573}
+.finance-slices{font-size:12px;line-height:1.5;padding-left:18px}.finance-slices li{margin:5px 0}
+@media screen and (max-width:760px){.monthly-finance{font-size:13px;padding:10px;margin-top:11px}.finance-fact{column-gap:4px}.finance-note{font-size:12px}.finance-composition{font-size:13px}.daily-finance{font-size:12px;padding:10px 13px}.ac4-cost{font-size:12px}.finance-slices{font-size:13px}}
+@media print{.monthly-finance{border-color:#bfcbd7;background:white;color:#142c49}.finance-note{color:#53627a}.daily-finance{font-size:8px}.ac4-cost{font-size:8px}}
 </style></head><body><main>
-<header class="header"><div class="header-main"><h1><span class="header-title">Previsão Escalas de Serviço</span></h1><div class="header-month month-controls" role="group" aria-label="Selecionar mês e ano"><select id="selecionar-mes" aria-label="Mês da previsão"></select><span aria-hidden="true">/</span><select id="selecionar-ano" aria-label="Ano da previsão"></select></div><p class="header-org">8ª Companhia Independente Bombeiro Militar - Cristalina</p><p class="header-period">Previsão de 01 a 30/11/2026</p></div><div class="header-copy"><span>© 2026 ASP OF CARVALHO.</span><span>Todos os direitos reservados.</span></div></header>
+<header class="header"><div class="header-main"><h1><span class="header-title">Previsão Escalas de Serviço</span></h1><div class="header-month month-controls" role="group" aria-label="Selecionar mês e ano"><select id="selecionar-mes" aria-label="Mês da previsão"></select><span aria-hidden="true">/</span><select id="selecionar-ano" aria-label="Ano da previsão"></select></div><p class="header-org">8ª Companhia Independente Bombeiro Militar - Cristalina</p><p class="header-period">Previsão de 01 a 30/11/2026</p><section id="ac4-month-summary" class="monthly-finance" aria-label="Controle mensal da cota AC4" aria-live="polite"></section></div><div class="header-copy"><span>© 2026 ASP OF CARVALHO.</span><span>Todos os direitos reservados.</span></div></header>
 
 <div class="filterbar"><div aria-label="Filtrar alas" class="filters" role="group"><button aria-pressed="true" data-filter="TODAS" type="button">Todas as alas</button><button aria-pressed="false" data-filter="ALPHA" type="button">Alpha</button><button aria-pressed="false" data-filter="BRAVO" type="button">Bravo</button><button aria-pressed="false" data-filter="CHARLIE" type="button">Charlie</button><button aria-pressed="false" data-filter="DELTA" type="button">Delta</button></div><small>Serviço operacional e previsões PROEBOM · Clique no AC4 com OS definida para copiar o SEI.</small></div>
 <nav aria-label="Navegação entre os dias" class="mobile-nav"><button aria-label="Dia anterior" id="dia-anterior" type="button">‹</button><div class="mobile-nav-center"><select aria-label="Selecionar dia de serviço" id="selecionar-dia"></select><span aria-live="polite" class="mobile-nav-count" id="indicador-dias"></span></div><button aria-label="Próximo dia" id="dia-seguinte" type="button">›</button></nav><div aria-label="Calendário de novembro de 2026" class="calendar"></div>
@@ -8870,6 +8888,102 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
   }
 }
 </script>
+<script type="application/json" id="ac4-financial-config">
+{
+  "monthlyQuotaCents": {
+    "2026-11": 4560000
+  }
+}
+</script>
+<script>(() => {
+  'use strict';
+  const MINUTE=60000,DAY=1440;
+  const normalize=value=>String(value??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[\s_]+/g,'-');
+  function civilDate(value){
+    const match=String(value??'').match(/^(\d{4})-(\d{2})-(\d{2})$/);if(!match)return null;
+    const [year,month,day]=match.slice(1).map(Number),stamp=Date.UTC(year,month-1,day),date=new Date(stamp);
+    return date.getUTCFullYear()===year&&date.getUTCMonth()===month-1&&date.getUTCDate()===day?stamp/MINUTE:null;
+  }
+  function clock(value){const m=String(value??'').match(/^(\d{1,2})(?:h|:)(\d{2})?$/);return m&&Number(m[1])<24&&Number(m[2]||0)<60?Number(m[1])*60+Number(m[2]||0):null;}
+  const isoDate=minute=>new Date(minute*MINUTE).toISOString().slice(0,10);
+  const clockText=minute=>{const m=((minute%DAY)+DAY)%DAY;return `${String(Math.floor(m/60)).padStart(2,'0')}h${String(m%60).padStart(2,'0')}`;};
+  function status(event){
+    if(event.active===false||event.cancelled===true||event.canceled===true||['cancelled','canceled','cancelado','cancelada','anulado','anulada'].includes(normalize(event.status)))return 'cancelled';
+    if(event.executionConfirmed===true||event.execucao_confirmada===true||['confirmed','confirmada','confirmado'].includes(normalize(event.executionStatus))||['executed','executado','executada','execution-confirmed','confirmed-execution','execucao-confirmada'].includes(normalize(event.status)))return 'executed';
+    return 'forecast';
+  }
+  const active=event=>status(event)!=='cancelled';
+  function price(event,date){
+    const startDate=event.startDate||date,base=civilDate(startDate),startClock=clock(event.start),endClock=clock(event.end),endBase=event.endDate?civilDate(event.endDate):base;
+    const fail=reason=>({valid:false,error:reason,status:status(event),startDate,financialMonth:String(startDate).slice(0,7),costCents:null,commitmentCents:0,segments:[]});
+    if(base===null||endBase===null||startClock===null||endClock===null)return fail('Data ou horário de AC4 inválido.');
+    const start=base+startClock,end=endBase+endClock+(!event.endDate&&event.nextDay===true?DAY:0),minutes=end-start;
+    if(minutes<=0||minutes>31*DAY)return fail('Duração do AC4 inválida; conferir o término e a virada do dia.');
+    if(event.hours!==undefined&&(!Number.isFinite(Number(event.hours))||Math.abs(Number(event.hours)*60-minutes)>1e-7))return fail('A carga horária do AC4 diverge dos horários de início e término.');
+    const segments=[];let cursor=start,numerator=0;
+    while(cursor<end){
+      const dayStart=Math.floor(cursor/DAY)*DAY,minute=cursor-dayStart,night=minute<300||minute>=1320;
+      const anchor=minute<300?dayStart-DAY:dayStart,weekday=new Date(anchor*MINUTE).getUTCDay(),red=weekday===0||weekday>=5;
+      const boundary=minute<300?dayStart+300:minute<1320?dayStart+1320:dayStart+DAY+300,finish=Math.min(end,boundary),duration=finish-cursor,rateCents=night?(red?4500:3300):(red?4000:3000),fraction=duration*rateCents;
+      segments.push({startDate:isoDate(cursor),start:clockText(cursor),endDate:isoDate(finish),end:clockText(finish),minutes:duration,rateCents,night,scale:red?'Vermelha':'Azul',nightStartDate:night?isoDate(anchor):null,amountCents:Math.floor(fraction/60),remainder:fraction%60});
+      numerator+=fraction;cursor=finish;
+    }
+    const costCents=Math.round(numerator/60),roundedBase=segments.reduce((sum,s)=>sum+s.amountCents,0);
+    const remainders=segments.map((s,i)=>({i,remainder:s.remainder})).sort((a,b)=>b.remainder-a.remainder||a.i-b.i);
+    for(let i=0;i<costCents-roundedBase;i++)segments[remainders[i].i].amountCents++;
+    for(const s of segments)delete s.remainder;
+    const state=status(event);
+    return {valid:true,status:state,startDate:isoDate(start),endDate:isoDate(end),start:clockText(start),end:clockText(end),financialMonth:isoDate(start).slice(0,7),minutes,costCents,commitmentCents:state==='cancelled'?0:costCents,segments};
+  }
+  const category=(event,area)=>/proebom/i.test(event.mode||'')?'operational':area==='sat'||/^(sat|inspec|an[aá]lise)/i.test(event.mode||'')?'sat':'operational';
+  function month(schedules,period,quotaCents=null){
+    if(!/^\d{4}-(?:0[1-9]|1[0-2])$/.test(period))throw new Error('Competência financeira inválida.');
+    const quota=Number.isSafeInteger(quotaCents)&&quotaCents>=0?quotaCents:null,map=new Map(),aliases=new WeakMap(),warnings=[];let ordinal=0;
+    for(const [sourcePeriod,schedule] of Object.entries(schedules))for(const day of schedule.days||[])for(const [area,members] of [['operational',day.members||[]],['sat',day.sat?.members||[]]])for(const member of members)for(const event of member.events||[]){
+      const date=`${sourcePeriod}-${String(day.day).padStart(2,'0')}`,value=price(event,date),modality=category(event,area),person=String(member.rg||member.name).normalize('NFC').trim().toUpperCase();
+      const identity=event.serviceId||event.id,key=identity?`${person}|id:${identity}`:`${person}|${value.startDate}|${value.start||event.start}|${value.endDate||event.endDate||date}|${value.end||event.end}`;
+      const candidate={...value,financialMonth:/^\d{4}-(?:0[1-9]|1[0-2])$/.test(value.financialMonth)?value.financialMonth:sourcePeriod,key,member:member.name,event,category:modality,sourcePeriod,sourceDay:day.day,version:Number(event.revision)||0,updated:Number.isFinite(Date.parse(event.updatedAt))?Date.parse(event.updatedAt):0,ordinal:ordinal++,aliases:[event]};
+      const prior=map.get(key);
+      if(!prior){map.set(key,candidate);continue;}
+      if(prior.category!==candidate.category)warnings.push(`${member.name}: registro duplicado com modalidades divergentes; conferir a classificação.`);
+      const priority=x=>x.status==='cancelled'?3:x.status==='executed'?2:1;
+      const compare=candidate.version-prior.version||candidate.updated-prior.updated||priority(candidate)-priority(prior)||candidate.ordinal-prior.ordinal;
+      if(compare>=0){candidate.aliases.push(...prior.aliases);map.set(key,candidate);}else prior.aliases.push(event);
+    }
+    const records=[...map.values()].filter(r=>r.financialMonth===period),daily=new Map();
+    let operationalCents=0,satCents=0,forecastCents=0,executedCents=0,cancelledCount=0,invalidCount=0,duplicateCount=0;
+    for(const record of records){
+      for(const event of record.aliases)aliases.set(event,record);duplicateCount+=record.aliases.length-1;
+      if(!record.valid){invalidCount++;warnings.push(`${record.member}: ${record.error}`);continue;}
+      if(record.status==='cancelled'){cancelledCount++;continue;}
+      const amount=record.commitmentCents;if(record.category==='sat')satCents+=amount;else operationalCents+=amount;
+      if(record.status==='executed')executedCents+=amount;else forecastCents+=amount;
+      if(!daily.has(record.startDate))daily.set(record.startDate,{operationalCents:0,satCents:0,committedCents:0,forecastCents:0,executedCents:0});
+      const d=daily.get(record.startDate);d[record.category==='sat'?'satCents':'operationalCents']+=amount;d.committedCents+=amount;d[record.status==='executed'?'executedCents':'forecastCents']+=amount;
+    }
+    const [year,monthNumber]=period.split('-').map(Number),length=new Date(Date.UTC(year,monthNumber,0)).getUTCDate();let cumulativeCents=0;
+    for(let day=1;day<=length;day++){
+      const date=`${period}-${String(day).padStart(2,'0')}`,d=daily.get(date)||{operationalCents:0,satCents:0,committedCents:0,forecastCents:0,executedCents:0};
+      cumulativeCents+=d.committedCents;Object.assign(d,{date,cumulativeCents,remainingCents:quota===null?null:quota-cumulativeCents,daysRemaining:length-day});daily.set(date,d);
+    }
+    const committedCents=operationalCents+satCents;
+    return {period,quotaCents:quota,committedCents,operationalCents,satCents,forecastCents,executedCents,remainingCents:quota===null?null:quota-committedCents,cancelledCount,invalidCount,duplicateCount,records,daily,byEvent:aliases,warnings};
+  }
+  window.AC4Finance={price,month,status,active};
+  if(typeof document!=='undefined'){
+    const schedules=JSON.parse(document.getElementById('calendar-data').textContent),quotas=JSON.parse(document.getElementById('ac4-financial-config').textContent).monthlyQuotaCents;
+    const refresh=()=>document.dispatchEvent(new CustomEvent('calendar-schedule-change'));
+    window.ServiceCalendar={schedules,quotas,refresh,updateAC4(location,changes){
+      const day=schedules[location.period]?.days.find(d=>d.day===Number(location.day)),member=(location.area==='sat'?day?.sat?.members:day?.members)?.find(m=>m.name===location.member),event=member?.events[location.eventIndex||0];
+      if(!event)throw new Error('AC4 não encontrado.');
+      const next={...event,...changes},result=price(next,`${location.period}-${String(location.day).padStart(2,'0')}`);
+      if(!result.valid)throw new Error(result.error);
+      const original=price(event,`${location.period}-${String(location.day).padStart(2,'0')}`),aliases=month(schedules,original.financialMonth).byEvent.get(event)?.aliases||[event];
+      for(const alias of aliases)Object.assign(alias,changes);refresh();return result;
+    }};
+  }
+})();
+</script>
 <script>
 (() => {
   'use strict';
@@ -8878,7 +8992,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
   const officer = m => m.badges?.some(b=>b.kind==='officer') || /^(?:ASP|CAP|TEN|MAJ|CEL|TCEL)\b/.test(normalize(m.name));
   const square = m => /^(?:ST|SUBTENENTE|[123][º°]?\s*SGT|CB|SD)\b/u.test(normalize(m.name));
   const absent = m => m.disponivel===false || m.afastado===true || m.badges?.some(b=>b.kind==='disp');
-  const operational = e => !/SAT|INSPECAO|ANALISE|PROEBOM|PROJETO|EXTERN/.test(normalize(e.mode)) && e.integrante_operacional!==false && (e.integrante_operacional===true || /^(?:OPERACIONAL(?:\/SOP)?|SOP)$/.test(normalize(e.mode)));
+  const operational = e => window.AC4Finance?.active(e)!==false && !/SAT|INSPECAO|ANALISE|PROEBOM|PROJETO|EXTERN/.test(normalize(e.mode)) && e.integrante_operacional!==false && (e.integrante_operacional===true || /^(?:OPERACIONAL(?:\/SOP)?|SOP)$/.test(normalize(e.mode)));
   const hasChiefRole = m => /CHEFE DE ALA|\bCOB\b/.test(normalize(m.funcao||m.function));
   const driver = (m,e) => e.motorista===true || /\bMOTORISTA\b/.test(normalize(e.funcao||e.function||e.role||(!m.badges?.some(b=>['ord','ts','pay'].includes(b.kind))?(m.funcao||m.function):'')));
   function subtract(ranges, blocks) {
@@ -8991,7 +9105,9 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 (() => {
   'use strict';
   // Public calendar data only. Add a new YYYY-MM period after its scale is supplied.
-  const schedules = JSON.parse(document.getElementById('calendar-data').textContent);
+  const schedules = window.ServiceCalendar.schedules;
+  const finance=window.AC4Finance,currency=new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}),percent=new Intl.NumberFormat('pt-BR',{maximumFractionDigits:2});
+  let financialSummary;
   const periods = Object.keys(schedules).sort();
   const currentDate = new Date();
   const currentPeriod = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}`;
@@ -9048,6 +9164,40 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     label.append(count, element(tag, 'name', member.name));
     return label;
   }
+  const money=cents=>currency.format(cents/100);
+  const ratio=cents=>financialSummary.quotaCents>0?`${percent.format(cents/financialSummary.quotaCents*100)}%`:'—';
+  const valueWithRatio=cents=>`${money(cents)} | ${ratio(cents)}`;
+  function financialRecord(event,day){return financialSummary.byEvent.get(event)||finance.price(event,`${period}-${String(day.day).padStart(2,'0')}`);}
+  function updateFinancialHeader(){
+    const target=document.getElementById('ac4-month-summary');target.replaceChildren();
+    const line=(label,value)=>{const p=element('p','finance-fact');p.append(element('strong','',label),element('span','',value));target.append(p);};
+    line('Cota Mensal AC4:',financialSummary.quotaCents===null?'não informada':`${money(financialSummary.quotaCents)} | ${financialSummary.quotaCents>0?'100%':'—'}`);
+    line('Valor utilizado:',valueWithRatio(financialSummary.committedCents));
+    line('Valor disponível:',financialSummary.remainingCents===null?'cota não informada':valueWithRatio(financialSummary.remainingCents));
+    target.classList.toggle('over-quota',financialSummary.remainingCents!==null&&financialSummary.remainingCents<0);
+    const details=element('details','finance-composition');details.append(element('summary','','Composição da cota'));
+    for(const [label,amount] of [['AC4 Operacional (inclui PROEBOM)',financialSummary.operationalCents],['AC4 SAT',financialSummary.satCents],['Previstos, sem execução confirmada',financialSummary.forecastCents],['Execução confirmada',financialSummary.executedCents]])details.append(element('p','',`${label}: ${money(amount)}`));
+    details.append(element('p','finance-rule','Saldos diários descontam os AC4 acumulados até o dia. Mês financeiro definido pela data de início.'));
+    details.append(element('p','',`Serviços considerados: ${financialSummary.records.filter(r=>r.valid&&r.status!=='cancelled').length}. Cancelados: ${financialSummary.cancelledCount}. Duplicações desconsideradas: ${financialSummary.duplicateCount}.`));target.append(element('p','finance-status',`Previstos: ${money(financialSummary.forecastCents)} · Execução confirmada: ${money(financialSummary.executedCents)}`),details);
+    target.append(element('p','finance-note','Utilizado = comprometido no planejamento; não indica pagamento.'));
+    for(const warning of financialSummary.warnings)details.append(element('p','finance-warning',warning));
+    if(financialSummary.invalidCount)target.append(element('p','finance-warning',`${financialSummary.invalidCount} AC4 com dados inconsistentes não incluídos no total. Confira os detalhes dos serviços.`));
+  }
+  function makeDailyFinance(day){
+    const data=financialSummary.daily.get(`${period}-${String(day.day).padStart(2,'0')}`),section=element('section','daily-finance');section.setAttribute('aria-label',`Controle da cota AC4 do dia ${day.day}`);
+    for(const [label,amount] of [['AC4 Operacional',data.operationalCents],['AC4 SAT',data.satCents],['Total AC4 do dia',data.committedCents]])section.append(element('p','',`${label}: ${valueWithRatio(amount)}`));
+    section.append(element('p',data.remainingCents!==null&&data.remainingCents<0?'finance-warning':'daily-balance',`Saldo disponível: ${data.remainingCents===null?'cota não informada':valueWithRatio(data.remainingCents)}`));
+    const remaining=element('p','days-remaining',`Dias restantes: ${data.daysRemaining}`);remaining.title='Dias após esta data até o término do mês.';section.append(remaining);return section;
+  }
+  function eventFinanceDetails(event,day){
+    const record=financialRecord(event,day),box=element('div','event-finance');
+    if(!record.valid){box.append(element('p','finance-warning',record.error));return box;}
+    const label=record.status==='cancelled'?'Cancelado — fora da cota':record.status==='executed'?'Execução confirmada':'Custo previsto';
+    box.append(element('p','event-finance-total',`${label}: ${money(record.commitmentCents)}`));
+    const list=element('ul','finance-slices');
+    for(const segment of record.segments){const duration=segment.minutes%60?`${Math.floor(segment.minutes/60)}h${String(segment.minutes%60).padStart(2,'0')}`:`${segment.minutes/60}h`;const start=segment.startDate.split('-').reverse().join('/'),end=segment.endDate===segment.startDate?'':` de ${segment.endDate.split('-').reverse().join('/')}`;list.append(element('li','',`${start} ${segment.start} às ${segment.end}${end}: ${duration} × ${money(segment.rateCents)}/h = ${money(segment.amountCents)} · Escala ${segment.scale}, ${segment.night?'noturna':'diurna'}`));}
+    box.append(list,element('p','detail-note',`Competência financeira: ${record.financialMonth.split('-').reverse().join('/')}. ${record.status==='executed'?'Pagamento não presumido.':'Execução e pagamento não confirmados.'}`));return box;
+  }
   function shortHour(value) {
     const match = value.match(/^(\d{1,2})h(\d{2})?$/);
     if (!match) return value;
@@ -9059,10 +9209,10 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     // Copy the OS document number, never a process number or an undefined OS.
     return event.document.match(/(?:^|[;,]\s*)SEI\s*(?:n[º°o.]?\s*)?(\d{6,12})\b/i)?.[1] || '';
   }
-  function ac4Badge(event, memberName) {
+  function ac4Badge(event, memberName, day) {
     const service = element('span', 'ac4-service');
     const sei = seiForEvent(event);
-    const chip = element(sei ? 'button' : 'span', `chip ac4${sei ? ' copy-sei' : ''}`, `AC4 de ${event.hours}h`);
+    const chip = element(sei ? 'button' : 'span', `chip ac4${sei ? ' copy-sei' : ''}`, `AC4 ${event.hours}h`);
     if (sei) {
       chip.type = 'button';
       chip.dataset.copySei = sei;
@@ -9071,16 +9221,20 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     } else chip.title = statusText(event);
     const meta = element('span', 'ac4-meta');
     meta.append(element('span', 'ac4-period', ac4Period(event)));
-    if (event.status === 'planned') {
+    if (event.status === 'planned' && finance.status(event)==='forecast') {
       const planned = element('span', 'ac4-planned', 'Previsto');
       planned.title = `${event.mode} · OS a definir`;
       meta.append(planned);
     }
-    service.append(chip, meta);
+    const value=financialRecord(event,day);
+    service.classList.toggle('is-cancelled',value.status==='cancelled');
+    const cost=element('span','ac4-cost',value.valid?`${money(value.commitmentCents)}${value.status==='executed'?' · Executado':value.status==='cancelled'?' · Cancelado':''}`:'Valor a conferir');
+    cost.title=value.status==='executed'?'Execução confirmada; pagamento não presumido.':value.status==='cancelled'?'Serviço cancelado, sem comprometimento da cota.':'Custo previsto, incluído no comprometimento da cota.';
+    service.append(chip, meta, cost);
     return service;
   }
   function badgeNodes(member,chief,day) {
-    const oddWithAc4 = member.badges.some(badge => badge.kind === 'officer') && member.events.length > 0;
+    const oddWithAc4 = member.badges.some(badge => badge.kind === 'officer') && member.events.some(finance.active);
     const assignments = chief.assignments.filter(a => a.name === member.name);
     const badges = element('span', `badges${oddWithAc4 ? ' has-odd-ac4' : ''}${assignments.length ? ' has-adjunto' : ''}`);
     const services = assignments.length ? element('span', 'service-badges') : badges;
@@ -9091,7 +9245,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     }
     for (const badge of member.badges) {
       if (badge.kind === 'ac4') continue;
-      const label = badge.kind === 'officer' ? (oddWithAc4 ? 'ODD' : 'ODD - Alcançável') : badge.kind === 'ord' && badge.hours && badge.hours !== 24 ? `ORDINÁRIO - ${badge.hours}h` : badge.text;
+      const label = badge.kind === 'officer' ? (oddWithAc4 ? 'ODD' : 'ODD Alcançável') : badge.kind === 'ord' && badge.hours && badge.hours !== 24 ? `ORDINÁRIO - ${badge.hours}h` : badge.text;
       const company=['pay','disp'].includes(badge.kind)&&badge.text.startsWith('TS CIA');
       const sei=company?String(badge.troca?.sei || member.notes.join(' ').match(/\bSEI\s+(\d{6,12})\b/)?.[1] || ''):'';
       const canCopy=/^\d{6,12}$/.test(sei);
@@ -9101,7 +9255,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
         const service=element('span','ordinary-service');service.append(chip,element('span','ac4-period',`${shortHour(badge.start)} às ${shortHour(badge.end)}`));services.append(service);
       }else services.append(chip);
     }
-    for (const event of member.events) services.append(ac4Badge(event, member.name));
+    for (const event of member.events) services.append(ac4Badge(event, member.name, day));
     for(const assigned of assignments){
       if(assigned.start!==0||assigned.end!==1440)services.append(element('span','chief-period',window.ServiceChief.period(day,assigned)));
     }
@@ -9120,6 +9274,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     return `${event.hours}h · ${event.start}–${event.end}${until}`;
   }
   function statusText(event) {
+    if(finance.status(event)==='cancelled')return 'AC4 cancelado — fora do comprometimento da cota';
+    if(finance.status(event)==='executed')return 'Execução confirmada — pagamento não presumido';
     if (event.status === 'planned') return 'PREVISTO — OS a definir';
     if (event.status === 'documented-sat') return 'OS documentada — execução ainda não comprovada por parte diária';
     return 'OS/ES documentadas — previsão sujeita à conferência da execução';
@@ -9172,7 +9328,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     operational.append(actions);
     if (day.alerts.length) operational.append(element('div', 'print-notes day-print-alerts', day.alerts.join(' ')));
     operational.append(foot);
-    card.append(head,operational,makeSatSection(day));
+    card.append(head,operational,makeSatSection(day),makeDailyFinance(day));
     return card;
   }
   function makeSatSection(day){
@@ -9222,6 +9378,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     const hasData = days.length > 0;
     const today = new Date();
     selected = selections.get(period) ?? (year === today.getFullYear() && month === today.getMonth() + 1 ? today.getDate() : days[0]?.day);
+    financialSummary=finance.month(schedules,period,window.ServiceCalendar.quotas[period]);
+    updateFinancialHeader();
     cards = days.map(makeCard);
     calendar.replaceChildren(...cards);
     calendar.hidden = !hasData;
@@ -9288,6 +9446,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
         const detail = element('div', 'event-detail');
         detail.dataset.status = event.status;
         detail.append(element('p', 'event-status', statusText(event)), element('p', 'event-time', `${event.mode} · ${eventTime({...event, day: day.day})}`), observation(event.observation), element('p', 'detail-note', event.document));
+        detail.append(eventFinanceDetails(event,day));
         section.append(detail);
       }
       dialogBody.append(section);
@@ -9352,6 +9511,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
   calendar.addEventListener('touchstart', event => { if (!mobile.matches) return; startX = event.changedTouches[0].screenX; startY = event.changedTouches[0].screenY; }, {passive: true});
   calendar.addEventListener('touchend', event => { if (!mobile.matches) return; const dx = event.changedTouches[0].screenX - startX, dy = event.changedTouches[0].screenY - startY; if (Math.abs(dx) > 65 && Math.abs(dx) > Math.abs(dy) * 1.4) move(dx < 0 ? 1 : -1); }, {passive: true});
   document.addEventListener('service-directory-change',event=>{ordOverrides=new Map(event.detail.map(p=>[p.name,p.ord]));renderPeriod();if(dialog.open){dialog.close();openDetails(detailDay,detailArea);}});
+  document.addEventListener('calendar-schedule-change',()=>{renderPeriod();if(dialog.open){dialog.close();openDetails(detailDay,detailArea);}});
   renderPeriod();
 })();
 
@@ -9369,7 +9529,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     scaleCopy: byId('sei-copy-scale'), orderCopy: byId('sei-copy-order'),
     scaleSelect: byId('sei-select-scale'), orderSelect: byId('sei-select-order')
   };
-  const schedules = JSON.parse(byId('calendar-data').textContent);
+  const schedules = window.ServiceCalendar.schedules;
   const normalize = value => String(value ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase().replace(/\s+/g, ' ').trim();
   const pad = value => String(value).padStart(2, '0');
   const esHeaders = ['ORDEM','FUNÇÃO','MILITAR DE SERVIÇO','CPF','ALTERAÇÕES / OBSERVAÇÕES','AC-4','FONTE DO RECURSO'];
@@ -9553,10 +9713,11 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
   function orderedMembers() {
     const merged = new Map();
     for (const source of current.day.members) {
+      if(!source.badges.length&&source.events.length&&!source.events.some(window.AC4Finance.active))continue;
       const key = normalize(source.name);
       if (!merged.has(key)) merged.set(key, {...source,name:source.name,funcao:typeof source.funcao==='string'?source.funcao:typeof source.function==='string'?source.function:'',badges:[],notes:[],events:[]});
       const m = merged.get(key);
-      for (const field of ['badges','notes','events']) for (const item of source[field]) if (!m[field].some(x=>JSON.stringify(x)===JSON.stringify(item))) m[field].push(item);
+      for (const field of ['badges','notes','events']) for (const item of source[field]) if((field!=='events'||window.AC4Finance.active(item))&&!m[field].some(x=>JSON.stringify(x)===JSON.stringify(item))) m[field].push(item);
     }
     return [...merged.values()].sort((a,b)=>{
       const ao=a.badges.some(x=>x.kind==='officer'),bo=b.badges.some(x=>x.kind==='officer');
@@ -9747,6 +9908,11 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     const day=schedules[period]?.days.find(d=>d.day===Number(button.dataset.seiDay));if(!day)return;
     const area=button.dataset.serviceArea==='sat'?'sat':'operational',sat=day.sat || {members:[],alerts:[]};
     current={period,area,day:area==='sat'?{...day,members:sat.members,alerts:sat.alerts||[]}:day};ui.feedback.textContent='';render();ui.dialog.showModal();ui.dialog.scrollTop=0;
+  });
+  document.addEventListener('calendar-schedule-change',()=>{
+    if(!current)return;
+    const day=schedules[current.period]?.days.find(d=>d.day===current.day.day);if(!day)return;
+    current.day=current.area==='sat'?{...day,members:day.sat?.members||[],alerts:day.sat?.alerts||[]}:day;render();
   });
   byId('sei-close').addEventListener('click',()=>ui.dialog.close());
   ui.file.addEventListener('change',async()=>{
