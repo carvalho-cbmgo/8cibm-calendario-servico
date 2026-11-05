@@ -112,10 +112,12 @@ h1{font-size:clamp(24px,2.7vw,39px);font-weight:850;letter-spacing:-.047em;line-
 
 [hidden]{display:none!important}
 .header-main h1{margin-bottom:5px}
-.month-controls{display:flex;align-items:center;gap:6px;margin:0 0 12px;color:#c8e3ff;font-size:clamp(19px,2.16vw,31px);font-weight:800;letter-spacing:-.025em}
-.month-controls select{max-width:100%;border:0;border-bottom:1px solid #ffffff65;border-radius:3px;background:transparent;color:inherit;font:inherit;letter-spacing:inherit;padding:1px 2px;cursor:pointer;color-scheme:dark}
-.month-controls option{color:var(--ink);background:#fff}
-.month-controls select:focus-visible,.day-notes-button:focus-visible,.empty-state button:focus-visible,.dialog-close:focus-visible{outline:3px solid #94baff;outline-offset:2px}
+.month-controls{display:flex;align-items:center;gap:10px;margin:0 0 12px;color:#c8e3ff;font-size:clamp(19px,2.16vw,31px);font-weight:800;letter-spacing:-.025em}
+.month-controls button{display:inline-flex;align-items:center;justify-content:center;flex:0 0 44px;width:44px;height:44px;padding:0;border:1px solid #ffffff38;border-radius:9px;background:#ffffff0a;color:inherit;cursor:pointer}
+.month-controls button:hover{background:#ffffff20;border-color:#ffffff65}
+.month-controls button svg{width:22px;height:22px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.month-label{white-space:nowrap;min-width:0;font-variant-numeric:tabular-nums}
+.month-controls button:focus-visible,.day-notes-button:focus-visible,.empty-state button:focus-visible,.dialog-close:focus-visible{outline:3px solid #94baff;outline-offset:2px}
 .badges{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;justify-self:end;gap:3px;max-width:138px;min-width:0}
 .badges .chip{flex:0 1 auto}
 .badges.has-odd-ac4{display:flex;flex-wrap:wrap;align-items:flex-end;gap:3px}
@@ -167,7 +169,6 @@ body:has(dialog[open]){overflow:hidden}
 .coverage-note{font-size:11px;line-height:1.5;color:#617086;margin:15px 0 0}
 @media screen and (max-width:760px){
  .month-controls{font-size:clamp(13.6px,3.76vw,20px);gap:4px;margin:0 0 4px}
- .month-controls select{padding:0 1px}
  .badges{gap:2px;max-width:150px}
  .day-notes-button{font-size:9px;padding:4px 3px}
  .entry .chip.ac4{padding:2px 4px;letter-spacing:0}
@@ -200,7 +201,7 @@ body:has(dialog[open]){overflow:hidden}
 }
 @media print{
  .month-controls{color:#223e57;font-size:20px}
- .month-controls select{color:#223e57;border:0;appearance:none;color-scheme:light}
+ .month-controls button{display:none}
  .day-notes-button,dialog,.copy-status{display:none!important}
  .print-notes{display:block;grid-column:1/-1;font-size:7px;line-height:1.35;color:#53627a}
 }
@@ -243,7 +244,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
  .header{gap:10px;padding:15px 14px;border-radius:14px}
  .header-main h1{font-size:clamp(20px,5.2vw,27px);margin-bottom:9px}
  .header-title{white-space:normal}
- .month-controls{font-size:20px;margin-bottom:9px}
+ .month-controls{font-size:clamp(18px,5.1vw,22px);gap:6px;margin-bottom:9px}
  .header-org{white-space:normal;font-size:12px;line-height:1.4;letter-spacing:0;margin-bottom:5px}
  .header-period{font-size:12px;line-height:1.4}
  .header-copy{font-size:11px;line-height:1.35}
@@ -404,7 +405,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
  .finance-usage{margin-top:10px}.finance-composition{margin-top:6px}
 }
 </style></head><body><main>
-<header class="header"><div class="header-main"><h1><span class="header-title">Previsão Escalas de Serviço</span></h1><div class="header-month month-controls" role="group" aria-label="Selecionar mês e ano"><select id="selecionar-mes" aria-label="Mês da previsão"></select><span aria-hidden="true">/</span><select id="selecionar-ano" aria-label="Ano da previsão"></select></div><p class="header-org">8ª Companhia Independente Bombeiro Militar - Cristalina</p><p class="header-period">Previsão de 01 a 30/11/2026</p><section id="ac4-month-summary" class="monthly-finance" aria-label="Controle mensal da cota AC4" aria-live="polite"></section></div><div class="header-copy"><span>© 2026 ASP OF CARVALHO.</span><span>Todos os direitos reservados.</span></div></header>
+<header class="header"><div class="header-main"><h1><span class="header-title">Previsão Escalas de Serviço</span></h1><nav class="header-month month-controls" aria-label="Navegação entre os meses"><button id="mes-anterior" type="button" aria-label="Mês anterior"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m14 6-6 6 6 6"/></svg></button><span id="competencia-selecionada" class="month-label" aria-live="polite" aria-atomic="true">Novembro/2026</span><button id="mes-seguinte" type="button" aria-label="Mês seguinte"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m10 6 6 6-6 6"/></svg></button></nav><p class="header-org">8ª Companhia Independente Bombeiro Militar - Cristalina</p><p class="header-period">Previsão de 01 a 30/11/2026</p><section id="ac4-month-summary" class="monthly-finance" aria-label="Controle mensal da cota AC4" aria-live="polite"></section></div><div class="header-copy"><span>© 2026 ASP OF CARVALHO.</span><span>Todos os direitos reservados.</span></div></header>
 
 <div class="filterbar"><div aria-label="Filtrar alas" class="filters" role="group"><button aria-pressed="true" data-filter="TODAS" type="button">Todas as alas</button><button aria-pressed="false" data-filter="ALPHA" type="button">Alpha</button><button aria-pressed="false" data-filter="BRAVO" type="button">Bravo</button><button aria-pressed="false" data-filter="CHARLIE" type="button">Charlie</button><button aria-pressed="false" data-filter="DELTA" type="button">Delta</button></div><small>Serviço operacional e previsões PROEBOM · Clique no AC4 com OS definida para copiar o SEI.</small></div>
 <nav aria-label="Navegação entre os dias" class="mobile-nav"><button aria-label="Dia anterior" id="dia-anterior" type="button">‹</button><div class="mobile-nav-center"><select aria-label="Selecionar dia de serviço" id="selecionar-dia"></select><span aria-live="polite" class="mobile-nav-count" id="indicador-dias"></span></div><button aria-label="Próximo dia" id="dia-seguinte" type="button">›</button></nav><div aria-label="Calendário de novembro de 2026" class="calendar"></div>
@@ -769,7 +770,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
                   "numero": "166",
                   "sei": "97832330",
                   "data": "2026-11-03",
-                  "substituido": "2º SGT SCHUSSLER"
+                  "substituido": "2º SGT SCHUSSLER",
+                  "data_servico_substituido": "2026-11-26"
                 }
               }
             ],
@@ -1214,7 +1216,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
                   "numero": "161",
                   "sei": "97703197",
                   "data": "2026-11-05",
-                  "substituido": "ST PASSOS"
+                  "substituido": "ST PASSOS",
+                  "data_servico_substituido": "2026-11-08"
                 }
               }
             ],
@@ -1237,7 +1240,9 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
                 "hours": 4,
                 "observation": "PROEBOM 2026",
                 "document": "OS a definir (não informada)",
-                "status": "planned"
+                "status": "planned",
+                "executionConfirmed": true,
+                "executionConfirmedOn": "2026-11-05"
               }
             ],
             "ord": 11
@@ -1290,7 +1295,9 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
                 "hours": 12,
                 "observation": "AC4 12h noturno — OS a definir",
                 "document": "OS a definir (não informada)",
-                "status": "planned"
+                "status": "planned",
+                "executionConfirmed": true,
+                "executionConfirmedOn": "2026-11-05"
               }
             ],
             "ord": 16
@@ -1322,7 +1329,9 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
                 "hours": 12,
                 "observation": "PROEBOM 2026",
                 "document": "OS a definir (não informada)",
-                "status": "planned"
+                "status": "planned",
+                "executionConfirmed": true,
+                "executionConfirmedOn": "2026-11-05"
               }
             ],
             "ord": 22
@@ -1337,7 +1346,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
                   "numero": "155",
                   "sei": "97542993",
                   "data": "2026-11-05",
-                  "substituido": "SD SANTOS"
+                  "substituido": "SD SANTOS",
+                  "data_servico_substituido": "2026-10-31"
                 }
               }
             ],
@@ -1380,7 +1390,9 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
                   "observation": "ATIVIDADES TÉCNICAS — SAT",
                   "document": "OS nº 343/2026; SEI 97776333",
                   "status": "documented-sat",
-                  "activity": "Vistoria"
+                  "activity": "Vistoria",
+                  "executionConfirmed": true,
+                  "executionConfirmedOn": "2026-11-05"
                 }
               ]
             },
@@ -1399,7 +1411,9 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
                   "observation": "ATIVIDADES TÉCNICAS — SAT",
                   "document": "OS nº 343/2026; SEI 97776333",
                   "status": "documented-sat",
-                  "activity": "Protocolo"
+                  "activity": "Protocolo",
+                  "executionConfirmed": true,
+                  "executionConfirmedOn": "2026-11-05"
                 },
                 {
                   "mode": "SAT",
@@ -1410,12 +1424,20 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
                   "observation": "ATIVIDADES TÉCNICAS — SAT",
                   "document": "OS nº 343/2026; SEI 97776333",
                   "status": "documented-sat",
-                  "activity": "Protocolo"
+                  "activity": "Protocolo",
+                  "executionConfirmed": true,
+                  "executionConfirmedOn": "2026-11-05"
                 }
               ]
             }
           ],
           "alerts": []
+        },
+        "confirmation": {
+          "status": "confirmed",
+          "date": "2026-11-05",
+          "source": "user",
+          "previousAlerts": []
         }
       },
       {
@@ -1460,7 +1482,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
                   "numero": "160",
                   "sei": "97660634",
                   "data": "2026-11-06",
-                  "substituido": "ST AISLAN"
+                  "substituido": "ST AISLAN",
+                  "data_servico_substituido": "2026-10-30"
                 }
               }
             ],
@@ -1529,7 +1552,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
                   "numero": "153/154",
                   "sei": "97515824 / 97518560",
                   "data": "2026-11-06",
-                  "substituido": "SD MARTINS"
+                  "substituido": "SD MARTINS",
+                  "data_servico_substituido": "2026-10-31"
                 }
               }
             ],
@@ -1825,7 +1849,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
                   "numero": "161",
                   "sei": "97703197",
                   "data": "2026-11-08",
-                  "substituido": "ST OSVALDIR"
+                  "substituido": "ST OSVALDIR",
+                  "data_servico_substituido": "2026-11-05"
                 }
               }
             ],
@@ -1873,7 +1898,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
                   "numero": "156",
                   "sei": "97543668",
                   "data": "2026-11-08",
-                  "substituido": "SD PICCINI"
+                  "substituido": "SD PICCINI",
+                  "data_servico_substituido": "2026-11-17"
                 }
               }
             ],
@@ -2394,7 +2420,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
                   "numero": "162",
                   "sei": "97704006",
                   "data": "2026-11-13",
-                  "substituido": "ST PASSOS"
+                  "substituido": "ST PASSOS",
+                  "data_servico_substituido": "2026-11-16"
                 }
               }
             ],
@@ -2502,7 +2529,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
                   "numero": "164/2026",
                   "sei": "97705098",
                   "data": "2026-11-14",
-                  "substituido": "ST DA SILVA"
+                  "substituido": "ST DA SILVA",
+                  "data_servico_substituido": "2026-11-29"
                 }
               }
             ],
@@ -2690,7 +2718,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
                   "numero": "162",
                   "sei": "97704006",
                   "data": "2026-11-16",
-                  "substituido": "ST OSVALDIR"
+                  "substituido": "ST OSVALDIR",
+                  "data_servico_substituido": "2026-11-13"
                 }
               }
             ],
@@ -2819,7 +2848,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
                   "numero": "159",
                   "sei": "97553091",
                   "data": "2026-11-17",
-                  "substituido": "ST AISLAN"
+                  "substituido": "ST AISLAN",
+                  "data_servico_substituido": "2026-10-31"
                 }
               }
             ],
@@ -2839,7 +2869,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
                   "numero": "156",
                   "sei": "97543668",
                   "data": "2026-11-17",
-                  "substituido": "SD SANTOS"
+                  "substituido": "SD SANTOS",
+                  "data_servico_substituido": "2026-11-08"
                 }
               }
             ],
@@ -3083,7 +3114,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
                   "numero": "157",
                   "sei": "97544001",
                   "data": "2026-11-20",
-                  "substituido": "SD PICCINI"
+                  "substituido": "SD PICCINI",
+                  "data_servico_substituido": "2026-11-25"
                 }
               }
             ],
@@ -3128,7 +3160,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
                   "numero": "163",
                   "sei": "97704646",
                   "data": "2026-11-21",
-                  "substituido": "ST PASSOS"
+                  "substituido": "ST PASSOS",
+                  "data_servico_substituido": "2026-11-24"
                 }
               }
             ],
@@ -3370,7 +3403,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
                   "numero": "163",
                   "sei": "97704646",
                   "data": "2026-11-24",
-                  "substituido": "ST OSVALDIR"
+                  "substituido": "ST OSVALDIR",
+                  "data_servico_substituido": "2026-11-21"
                 }
               }
             ],
@@ -3499,7 +3533,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
                   "numero": "157",
                   "sei": "97544001",
                   "data": "2026-11-25",
-                  "substituido": "SD SANTOS"
+                  "substituido": "SD SANTOS",
+                  "data_servico_substituido": "2026-11-20"
                 }
               }
             ],
@@ -3558,7 +3593,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
                   "numero": "166",
                   "sei": "97832330",
                   "data": "2026-11-26",
-                  "substituido": "ST AISLAN"
+                  "substituido": "ST AISLAN",
+                  "data_servico_substituido": "2026-11-03"
                 }
               }
             ],
@@ -3761,7 +3797,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
                   "numero": "158",
                   "sei": "97544104",
                   "data": "2026-11-28",
-                  "substituido": "SD PICCINI"
+                  "substituido": "SD PICCINI",
+                  "data_servico_substituido": "2026-12-03"
                 }
               }
             ],
@@ -3809,7 +3846,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
                   "sei": "97705098",
                   "data": "2026-11-29",
                   "substituido": "ST OSVALDIR",
-                  "substituido_original": "ST PASSOS"
+                  "substituido_original": "ST PASSOS",
+                  "data_servico_substituido": "2026-11-14"
                 }
               }
             ],
@@ -4071,7 +4109,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
                   "numero": "164/2026",
                   "sei": "97705098",
                   "data": "2026-12-02",
-                  "substituido": "ST OSVALDIR"
+                  "substituido": "ST OSVALDIR",
+                  "data_servico_substituido": "2026-11-14"
                 }
               }
             ],
@@ -4213,7 +4252,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
                   "numero": "158",
                   "sei": "97544104",
                   "data": "2026-12-03",
-                  "substituido": "SD SANTOS"
+                  "substituido": "SD SANTOS",
+                  "data_servico_substituido": "2026-11-28"
                 }
               }
             ],
@@ -4501,7 +4541,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
                   "numero": "165",
                   "sei": "97705425",
                   "data": "2026-12-07",
-                  "substituido": "ST PASSOS"
+                  "substituido": "ST PASSOS",
+                  "data_servico_substituido": "2026-12-10"
                 }
               }
             ],
@@ -4764,7 +4805,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
                   "numero": "165",
                   "sei": "97705425",
                   "data": "2026-12-10",
-                  "substituido": "ST OSVALDIR"
+                  "substituido": "ST OSVALDIR",
+                  "data_servico_substituido": "2026-12-07"
                 }
               }
             ],
@@ -9467,8 +9509,9 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
   const weekdays = ['DOM','SEG','TER','QUA','QUI','SEX','SÁB'];
   const calendar = document.querySelector('.calendar');
   const filterButtons = [...document.querySelectorAll('[data-filter]')];
-  const monthPicker = document.getElementById('selecionar-mes');
-  const yearPicker = document.getElementById('selecionar-ano');
+  const monthLabel = document.getElementById('competencia-selecionada');
+  const previousMonth = document.getElementById('mes-anterior');
+  const nextMonth = document.getElementById('mes-seguinte');
   const dayPicker = document.getElementById('selecionar-dia');
   const previous = document.getElementById('dia-anterior');
   const next = document.getElementById('dia-seguinte');
@@ -9565,7 +9608,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     const line=(label,value,className='')=>{const row=element('div',`daily-finance-row ${className}`.trim());row.append(element('span','daily-finance-label',`${label}:`),element('span','daily-finance-value',value));section.append(row);};
     line('AC4 Operacional',valueWithRatio(data.operationalCents));
     line('AC4 SAT',valueWithRatio(data.satCents));
-    line('Total AC4 (Operacional + SAT)',valueWithRatio(data.committedCents),'daily-finance-total');
+    line('AC4 (Operacional + SAT)',valueWithRatio(data.committedCents),'daily-finance-total');
     line('Saldo disponível',data.remainingCents===null?'cota não informada':valueWithRatio(data.remainingCents),data.remainingCents!==null&&data.remainingCents<0?'finance-warning':'daily-balance');
     const remaining=element('p','days-remaining',`Dias restantes: ${data.daysRemaining}`);remaining.title='Dias após esta data até o término do mês.';section.append(remaining);return section;
   }
@@ -9628,8 +9671,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     chip.title=`Mesmo AC4 de ${event.hours}h, das ${ac4Period(event)}. Valor integral exibido no turno de início.`;
     service.append(chip,element('span','ac4-period',`13h às ${shortHour(event.end)}`),element('span','ac4-state',`Mesmo AC4 ${event.hours}h`));return service;
   }
-  function exchangeHint(member,badge,day){
-    const source=badge.troca||{},notes=member.notes.join(' '),date=`${period}-${String(day.day).padStart(2,'0')}`;
+  function exchangeHint(member,badge){
+    const source=badge.troca||{},notes=member.notes.join(' ');
     const format=value=>/^\d{4}-\d{2}-\d{2}$/.test(String(value||''))?value.split('-').reverse().join('/'):'não informada';
     if(['pay','disp'].includes(badge.kind)&&badge.text.startsWith('TS CIA')){
       const sei=source.sei||notes.match(/\bSEI\s+(\d{6,12})\b/)?.[1]||'não informado';
@@ -9640,7 +9683,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     if(['ts','review'].includes(badge.kind)){
       const doc=notes.match(/TS\s*n[º°o.]?\s*([\d/\s]+)\s*\(SEI\s*([^)]+)\)/i),number=source.numero||doc?.[1]?.trim()||'não informado',sei=source.sei||doc?.[2]||notes.match(/\bSEI\s+(\d{6,12})\b/)?.[1]||'não informado';
       const target=source.substituido||notes.match(/Substitui\s+([^.;]+)/i)?.[1]||badge.text.replace(/^TS\s*·\s*/,'').replace(/\s*\(A CONFERIR\)/,'');
-      return [`TS nº ${number} (SEI ${sei})`,`Militar Substituído: ${target} de serviço dia ${format(source.data||date)}`];
+      const workDate=source.data_servico_substituido;
+      return [`TS nº ${number} (SEI ${sei})`,`Militar Substituído: ${target} de serviço ${workDate?`dia ${format(workDate)}`:'em data a confirmar'}`];
     }
     return null;
   }
@@ -9664,7 +9708,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
       const chip = element(canCopy?'button':'span', `chip ${badge.kind}${canCopy?' company-sei':''}`, label);
       if(badge.kind==='officer'&&oddWithAc4){officerChip=chip;continue;}
       if(canCopy){chip.type='button';chip.dataset.copySei=sei;chip.dataset.companySei=sei;chip.title=`Botão direito: copiar SEI ${sei} da TS Cia`;chip.setAttribute('aria-label',`${label}. Copiar SEI ${sei} da TS Cia`);}
-      const hint=exchangeHint(member,badge,day);
+      const hint=exchangeHint(member,badge);
       if(hint){chip.classList.add('exchange-hint');chip.dataset.exchangeTooltip=hint.join('\n');chip.tabIndex=0;chip.title='';}
       if(['ord','compensation'].includes(badge.kind)&&badge.start&&badge.end){
         const service=element('span','ordinary-service');service.append(chip,element('span','ac4-period',`${shortHour(badge.start)} às ${shortHour(badge.end)}`));services.append(service);
@@ -9804,8 +9848,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
   }
   function renderPeriod() {
     const [year, month] = period.split('-').map(Number);
-    monthPicker.value = String(month);
-    yearPicker.value = String(year);
+    window.ServiceCalendar.period=period;
+    monthLabel.textContent=periodLabel();
     const days = periodDays();
     const hasData = days.length > 0;
     const today = new Date();
@@ -9825,8 +9869,9 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     document.querySelector('meta[name="description"]').content = `Previsão de serviço da 8ª CIBM — ${periodLabel()}.`;
     draw();
   }
-  function changePeriod() {
-    period = `${yearPicker.value}-${monthPicker.value.padStart(2, '0')}`;
+  function moveMonth(direction) {
+    const [year,month]=period.split('-').map(Number),target=new Date(Date.UTC(year,month-1+direction,1));
+    period=`${target.getUTCFullYear()}-${String(target.getUTCMonth()+1).padStart(2,'0')}`;
     renderPeriod();
   }
   function move(direction) {
@@ -9976,13 +10021,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
   document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!exchangeTooltip.hidden){event.preventDefault();event.stopPropagation();hideExchangeTooltip();}},true);
   document.addEventListener('scroll',event=>{if(!exchangeTooltip.hidden&&!exchangeTooltip.contains(event.target))positionExchangeTooltip();},true);
   window.addEventListener('resize',hideExchangeTooltip);dialog.addEventListener('close',hideExchangeTooltip);
-  monthNames.forEach((name, index) => { const option = element('option', '', name); option.value = String(index + 1); monthPicker.append(option); });
-  const years = periods.map(key => Number(key.split('-')[0]));
-  for (let year = Math.min(...years) - 1; year <= Math.max(...years) + 5; year++) {
-    const option = element('option', '', String(year)); option.value = String(year); yearPicker.append(option);
-  }
-  monthPicker.addEventListener('change', changePeriod);
-  yearPicker.addEventListener('change', changePeriod);
+  previousMonth.addEventListener('click',()=>moveMonth(-1));
+  nextMonth.addEventListener('click',()=>moveMonth(1));
   filterButtons.forEach(button => button.addEventListener('click', () => { filter = button.dataset.filter; draw(); }));
   dayPicker.addEventListener('change', () => { selected = Number(dayPicker.value); draw(); });
   previous.addEventListener('click', () => move(-1));
@@ -10236,7 +10276,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     const lines=[{kind:'strong',text:proebom?'PROEBOM 2026':'REFORÇO OPERACIONAL'},`${time.start} às ${time.end}`];
     const number=event.document?.match(/\bOS\s*(?:n[º°o.]?\s*)?(\d+(?:\/\d+)?)/i)?.[1];
     const sei=event.document?.match(/(?:^|[;,]\s*)SEI\s*(?:n[º°o.]?\s*)?(\d{6,12})\b/i)?.[1];
-    lines.push(number?`OS nº ${number} (SEI ${sei || 'não informado'})`:'OS a definir — PREVISTO');
+    lines.push(number?`OS nº ${number} (SEI ${sei || 'não informado'})`:window.AC4Finance.status(event)==='executed'?'OS a definir — execução confirmada':'OS a definir — PREVISTO');
     const redundant=/^AC4\s+\d+h\s+(?:noturno|diurno)\s*[—-]\s*OS a definir\.?$/i.test(event.observation||'');
     if(event.observation&&!['REFORÇO OPERACIONAL','PROEBOM 2026'].includes(event.observation)&&!redundant)lines.push(event.observation);
     if(/Processo SEI/i.test(event.document))lines.push(event.document.replace(/^OS a definir;\s*/,''));
@@ -10356,7 +10396,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     const osValidation=renderOrder();
     const pending=[...current.day.alerts,...validation.hard,...validation.warnings,...osValidation.hard];
     if(!directory.size)pending.unshift('Importe o Plano de Chamada (.xlsx) ou o cadastro local (.json) para preencher as identificações completas antes de copiar.');
-    if(groups.some(g=>g.rows.some(r=>r.event.status==='planned')))pending.push('Há AC4 previstos com OS a definir. O SEI de processo não é tratado como número do documento da OS.');
+    if(groups.some(g=>g.rows.some(r=>r.event.status==='planned')))pending.push('Há AC4 com OS a definir. O SEI de processo não é tratado como número do documento da OS.');
     showValidation(pending);
   }
   const dataRows = table => [...table.tBodies].flatMap(body=>[...body.rows]);
@@ -10397,7 +10437,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
   }
   document.addEventListener('click',event=>{
     const button=event.target.closest('[data-sei-day]');if(!button)return;
-    const period=`${byId('selecionar-ano').value}-${pad(byId('selecionar-mes').value)}`;
+    const period=window.ServiceCalendar.period;
     const day=schedules[period]?.days.find(d=>d.day===Number(button.dataset.seiDay));if(!day)return;
     const area=button.dataset.serviceArea==='sat'?'sat':'operational',sat=day.sat || {members:[],alerts:[]};
     current={period,area,day:area==='sat'?{...day,members:sat.members,alerts:sat.alerts||[]}:day};ui.feedback.textContent='';render();ui.dialog.showModal();ui.dialog.scrollTop=0;
