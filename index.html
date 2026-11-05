@@ -527,7 +527,13 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
               {
                 "kind": "disp",
                 "text": "TS CIA · Dispensado",
-                "hours": 24
+                "hours": 24,
+                "troca": {
+                  "numero": null,
+                  "sei": "97586670",
+                  "dispensa": "2026-11-02",
+                  "pagamento": "2026-11-05"
+                }
               }
             ],
             "notes": [
@@ -725,7 +731,13 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
               {
                 "kind": "disp",
                 "text": "TS CIA · Dispensado",
-                "hours": 24
+                "hours": 24,
+                "troca": {
+                  "numero": null,
+                  "sei": "97766395",
+                  "dispensa": "2026-11-03",
+                  "pagamento": "2026-11-10"
+                }
               }
             ],
             "notes": [
@@ -930,7 +942,13 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
               {
                 "kind": "pay",
                 "text": "TS CIA · Pagando",
-                "hours": 24
+                "hours": 24,
+                "troca": {
+                  "numero": null,
+                  "sei": "97586670",
+                  "dispensa": "2026-11-02",
+                  "pagamento": "2026-11-05"
+                }
               }
             ],
             "notes": [
@@ -1090,7 +1108,13 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
               {
                 "kind": "pay",
                 "text": "TS CIA · Pagando",
-                "hours": 24
+                "hours": 24,
+                "troca": {
+                  "numero": null,
+                  "sei": "97654793",
+                  "dispensa": "2026-10-30",
+                  "pagamento": "2026-11-06"
+                }
               }
             ],
             "notes": [
@@ -1606,7 +1630,13 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
               {
                 "kind": "pay",
                 "text": "TS CIA · Pagando",
-                "hours": 24
+                "hours": 24,
+                "troca": {
+                  "numero": null,
+                  "sei": "97766395",
+                  "dispensa": "2026-11-03",
+                  "pagamento": "2026-11-10"
+                }
               }
             ],
             "notes": [
@@ -1688,7 +1718,13 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
               {
                 "kind": "pay",
                 "text": "TS CIA · Pagando",
-                "hours": 24
+                "hours": 24,
+                "troca": {
+                  "numero": null,
+                  "sei": "97587098",
+                  "dispensa": "2026-11-18",
+                  "pagamento": "2026-11-11"
+                }
               }
             ],
             "notes": [
@@ -1993,7 +2029,13 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
               {
                 "kind": "disp",
                 "text": "TS CIA · Dispensado",
-                "hours": 24
+                "hours": 24,
+                "troca": {
+                  "numero": null,
+                  "sei": "97587323",
+                  "dispensa": "2026-11-14",
+                  "pagamento": "2026-11-27"
+                }
               }
             ],
             "notes": [
@@ -2334,7 +2376,13 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
               {
                 "kind": "disp",
                 "text": "TS CIA · Dispensado",
-                "hours": 24
+                "hours": 24,
+                "troca": {
+                  "numero": null,
+                  "sei": "97587098",
+                  "dispensa": "2026-11-18",
+                  "pagamento": "2026-11-11"
+                }
               }
             ],
             "notes": [
@@ -2645,7 +2693,13 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
               {
                 "kind": "disp",
                 "text": "TS CIA · Dispensado",
-                "hours": 24
+                "hours": 24,
+                "troca": {
+                  "numero": null,
+                  "sei": "97922344",
+                  "dispensa": "2026-11-22",
+                  "pagamento": "2026-11-29"
+                }
               }
             ],
             "notes": [
@@ -3037,7 +3091,13 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
               {
                 "kind": "pay",
                 "text": "TS CIA · Pagando",
-                "hours": 24
+                "hours": 24,
+                "troca": {
+                  "numero": null,
+                  "sei": "97587323",
+                  "dispensa": "2026-11-14",
+                  "pagamento": "2026-11-27"
+                }
               }
             ],
             "notes": [
@@ -3200,7 +3260,13 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
               {
                 "kind": "pay",
                 "text": "TS CIA · Pagando",
-                "hours": 24
+                "hours": 24,
+                "troca": {
+                  "numero": null,
+                  "sei": "97922344",
+                  "dispensa": "2026-11-22",
+                  "pagamento": "2026-11-29"
+                }
               }
             ],
             "notes": [
@@ -9052,6 +9118,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
   const pad = value => String(value).padStart(2, '0');
   const esHeaders = ['ORDEM','FUNÇÃO','MILITAR DE SERVIÇO','CPF','ALTERAÇÕES / OBSERVAÇÕES','AC-4','FONTE DO RECURSO'];
   const osHeaders = ['INÍCIO — DATA','HORÁRIO','TÉRMINO — DATA','HORÁRIO','MILITAR DE AC4','CPF','AC4'];
+  const companyColors={pay:'#0050b3',disp:'#c00000'};
   const cellStyle = 'border:1px solid #333;padding:5px 6px;vertical-align:middle;';
   let directory = new Map(), references = {ts:[], cia:[], events:[]};
   let current = null, groups = [], scaleTable, orderTable;
@@ -9199,6 +9266,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     if(typeof text==='object'){
       if(text.kind==='identity'){line.append(node('strong','',text.prefix.trim()),document.createTextNode(' '));appendIdentification(line,{name:text.name});}
       else if(text.kind==='strong')line.append(node('strong','',text.text));
+      else if(text.kind==='prefix')line.append(node('strong','',text.prefix),document.createTextNode(text.suffix));
       cell.append(line);return;
     }
     text.split('PROEBOM 2026').forEach((part, index) => {
@@ -9241,6 +9309,21 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     });
   }
   const isAbsent = m => m.badges.some(b=>b.kind==='disp');
+  function companyExchange(member) {
+    const badge=member.badges.find(b=>['pay','disp'].includes(b.kind)&&b.text.startsWith('TS CIA'));
+    if(!badge)return null;
+    const source=badge.troca || {},sei=source.sei || member.notes.join(' ').match(/\bSEI\s+(\d{8})\b/)?.[1];
+    const direction=badge.kind==='pay'?'pagamento':'dispensa';
+    const matches=references.cia.filter(t=>t[direction]===isoDate()&&normalize(t.militar)===normalize(member.name)&&(!sei||String(t.sei)===String(sei)));
+    const ref=matches.length===1?matches[0]:{};
+    const number=String(source.numero ?? ref.numero ?? ref.numero_ts_cia ?? ref.numero_ts ?? ref.ts ?? '').trim();
+    return {badge,sei:sei||ref.sei,number:/^\d+(?:\/\d{4})?$/.test(number)&&Number(number.split('/')[0])>0?number:null,dispensa:source.dispensa||ref.dispensa,pagamento:source.pagamento||ref.pagamento};
+  }
+  function exchangeDate(value) {
+    const match=String(value||'').match(/^(\d{4})-(\d{2})-(\d{2})$/);if(!match)return null;
+    const [year,month,day]=match.slice(1).map(Number),date=new Date(Date.UTC(year,month-1,day));
+    return date.getUTCFullYear()===year&&date.getUTCMonth()===month-1&&date.getUTCDate()===day?formatDate(date):null;
+  }
   function eventLines(event) {
     const proebom=/PROEBOM/i.test(event.mode),time=interval(event);
     const lines=[{kind:'strong',text:proebom?'PROEBOM 2026':'REFORÇO OPERACIONAL'},`${time.start} às ${time.end}`];
@@ -9255,7 +9338,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
   function observations(member) {
     const lines=[], notes=member.notes || [], day=isoDate();
     const change=member.badges.find(b=>['ts','review'].includes(b.kind));
-    const cia=member.badges.find(b=>['pay','disp'].includes(b.kind)&&b.text.startsWith('TS CIA'));
+    const cia=companyExchange(member);
     if (change) {
       const ref=references.ts.find(t=>t.data===day&&normalize(t.substituto)===normalize(member.name));
       const text=notes.join(' '),match=text.match(/TS\s*n[º°o.]?\s*([\d/\s]+)\s*\(SEI\s*([^)]+)\)/i);
@@ -9269,12 +9352,10 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
         if (!note.startsWith('TS nº') || /duplicad|inconsisten|conferir/i.test(note)) lines.push(note);
       }
     } else if (cia) {
-      const sei=notes.join(' ').match(/\bSEI\s+(\d{8})\b/)?.[1];
-      const direction=cia.kind==='pay'?'pagamento':'dispensa';
-      const ref=references.cia.find(t=>t[direction]===day&&normalize(t.militar)===normalize(member.name)&&(!sei||String(t.sei)===sei));
-      const hours=ref?.[cia.kind==='pay'?'horas_pagamento':'horas_dispensa'] ?? cia.hours;
-      lines.push(`TS Cia Operacional (SEI ${sei || ref?.sei || 'não informado'})${hours?` - ${hours}h`:''}`,cia.kind==='pay'?'Pagando Serviço.':'Dispensado.');
-      for (const note of notes) if (!/^TS CIA — (?:Dispensado|Pagando serviço)\. SEI \d+$/i.test(note)) lines.push(note);
+      lines.push({kind:'strong',text:`TS Cia Operacional nº ${cia.number || 'não informado'} (SEI ${cia.sei || 'não informado'})`});
+      const paying=cia.badge.kind==='pay',date=exchangeDate(paying?cia.dispensa:cia.pagamento)||'data não informada';
+      lines.push({kind:'prefix',prefix:paying?'Pagando serviço':'Dispensado do serviço',suffix:paying?` em função da dispensa do dia ${date}`:` por estar de serviço no dia ${date}`});
+      for (const note of notes) if (!/^TS CIA\s*[—:-]/i.test(note)||/confer|inconsisten|diverg|pendente/i.test(note)) lines.push(note);
     } else if (member.badges.some(b=>b.text==='DISP. RECOMPENSA')) {
       const exact=notes.find(note=>/^(?:ALTERAÇÕES \/ OBSERVAÇÕES:\s*)?Dispensa Recompensa SEI/i.test(note));
       if(exact)lines.push(exact.replace(/^ALTERAÇÕES \/ OBSERVAÇÕES:\s*/,''));
@@ -9284,7 +9365,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     }
     if (member.badges.some(b=>b.kind==='officer')&&!member.events.length) lines.push('Alcançável.');
     const ac4Lines=member.events.flatMap(eventLines);
-    const ordered=change?[...lines,...ac4Lines]:[...ac4Lines,...lines];
+    const ordered=change||cia?[...lines,...ac4Lines]:[...ac4Lines,...lines];
     return ordered.filter((line,i)=>ordered.findIndex(other=>JSON.stringify(other)===JSON.stringify(line))===i);
   }
   function resourceFor() { return '8ª CIBM - CRISTALINA'; }
@@ -9299,6 +9380,11 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
   function validationFor(members,checkReplacements=true) {
     const hard=[],warnings=[];
     for(const m of members){const errors=personErrors(m.name);if(errors.length)hard.push(`${m.name}: ${errors.join(', ')}.`);const p=person(m.name);if(p){if(!p.cpf)warnings.push(`${m.name}: CPF ${p.cpf===null?'inválido':'não informado'}; campo em branco.`);if(p.ord===null)warnings.push(`${m.name}: ORD não informado; mantido após a antiguidade conhecida.`);}for(const line of checkReplacements?observations(m):[])if(line?.kind==='identity'&&personErrors(line.name).length)hard.push(`${line.name}: identificação do militar substituído não disponível no cadastro.`);for(const e of m.events)if(!interval(e).valid)hard.push(`${m.name}: conferir data, horários e duração do AC4.`);}
+    for(const member of members){
+      const cia=companyExchange(member);if(!cia)continue;
+      if(!cia.number)warnings.push('TS Cia Operacional: numeração própria não informada nas autorizações; conferir pelo SEI.');
+      if(!exchangeDate(cia.dispensa)||!exchangeDate(cia.pagamento))warnings.push(`${member.name}: data de dispensa ou pagamento da TS Cia não informada; conferir a autorização.`);
+    }
     return {hard,warnings};
   }
   function showValidation(messages) {
@@ -9328,7 +9414,21 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     const hasOfficer=members.some(m=>m.badges.some(b=>b.kind==='officer'));
     let order=1;
     if(!hasOfficer){const row=node('tr');row.append(cell(pad(order++),'center'),cell('OFICIAL DE DIA'),cell(),cell('','center'),cell(),cell('','center'),cell());body.append(row);validation.warnings.push('Oficial de Dia não informado: primeira linha reservada, sem inventar designação.');}
-    for(const member of members){const row=node('tr'),absent=isAbsent(member);row.append(cell(pad(order++),'center'),cell(member.badges.some(b=>b.kind==='officer')?'OFICIAL DE DIA':chief.assignments.some(a=>a.name===member.name)?'Chefe de Ala':/CHEFE DE ALA|\bCOB\b/i.test(member.funcao)?'':member.funcao));const name=cell();appendIdentification(name,member);if(absent)name.style.color='#c00000';const cpf=cell(person(member.name)?.cpf || '','center'),obs=cell();for(const line of observations(member))appendRichLine(obs,line);for(const assigned of chief.assignments.filter(a=>a.name===member.name))if(assigned.start!==0||assigned.end!==1440)appendRichLine(obs,`Chefia: ${window.ServiceChief.period(current.day,assigned)}`);if(absent)obs.style.color='#c00000';const funds=[...new Set(member.events.map(e=>resourceFor(member,e)).filter(Boolean))];const fund=cell();for(const source of funds)appendRichLine(fund,source);row.append(name,cpf,obs,cell(member.events.map(e=>`${e.hours}h`).join(' + '),'center'),fund);body.append(row);}
+    for(const member of members){
+      const row=node('tr'),absent=isAbsent(member),cia=companyExchange(member);
+      const role=member.badges.some(b=>b.kind==='officer')?'OFICIAL DE DIA':chief.assignments.some(a=>a.name===member.name)?'Chefe de Ala':/CHEFE DE ALA|\bCOB\b/i.test(member.funcao)?'':member.funcao;
+      row.append(cell(pad(order++),'center'),cell(role));
+      const name=cell();appendIdentification(name,member);if(absent)name.style.color='#c00000';
+      const cpf=cell(person(member.name)?.cpf || '','center'),obs=cell();
+      for(const line of observations(member))appendRichLine(obs,line);
+      for(const assigned of chief.assignments.filter(a=>a.name===member.name))if(assigned.start!==0||assigned.end!==1440)appendRichLine(obs,`Chefia: ${window.ServiceChief.period(current.day,assigned)}`);
+      if(absent)obs.style.color='#c00000';
+      const funds=[...new Set(member.events.map(e=>resourceFor(member,e)).filter(Boolean))],fund=cell();
+      for(const source of funds)appendRichLine(fund,source);
+      row.append(name,cpf,obs,cell(member.events.map(e=>`${e.hours}h`).join(' + '),'center'),fund);
+      if(cia){row.style.color=companyColors[cia.badge.kind];for(const td of row.cells)td.style.color=companyColors[cia.badge.kind];}
+      body.append(row);
+    }
     ui.scale.replaceChildren(scaleTable);scaleValid=!!members.length&&!validation.hard.length;ui.scaleCopy.disabled=false;ui.scaleSelect.disabled=!scaleValid;
     allOrderRows=members.flatMap(member=>member.events.map(event=>({member,event})));
     const grouped=new Map();
