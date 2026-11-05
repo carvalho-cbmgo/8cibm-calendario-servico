@@ -118,9 +118,9 @@ h1{font-size:clamp(24px,2.7vw,39px);font-weight:850;letter-spacing:-.047em;line-
 .month-controls select:focus-visible,.day-notes-button:focus-visible,.empty-state button:focus-visible,.dialog-close:focus-visible{outline:3px solid #94baff;outline-offset:2px}
 .badges{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;justify-self:end;gap:3px;max-width:138px;min-width:0}
 .badges .chip{flex:0 1 auto}
-.badges.has-odd-ac4{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:start;gap:2px 4px}
-.has-odd-ac4>.chip.officer{grid-column:1;grid-row:1;padding:4px 7px}
-.has-odd-ac4 .ac4-service{grid-column:2;min-width:0}
+.badges.has-odd-ac4{display:flex;flex-wrap:wrap;align-items:flex-end;gap:3px}
+.ac4-badge-line>.chip.officer{padding:4px 7px}
+.has-odd-ac4 .ac4-service{min-width:0}
 .ac4-service{display:flex;flex-direction:column;align-items:flex-end;gap:2px;max-width:100%}
 .ac4-meta{display:block;white-space:nowrap;text-align:right;color:#526882;font-size:10px;font-weight:400;line-height:1.3}
 .ac4-service .ac4-meta .ac4-period{font-size:inherit;font-weight:400;color:inherit}
@@ -171,7 +171,7 @@ body:has(dialog[open]){overflow:hidden}
  .badges{gap:2px;max-width:150px}
  .day-notes-button{font-size:9px;padding:4px 3px}
  .entry .chip.ac4{padding:2px 4px;letter-spacing:0}
- .has-odd-ac4>.chip.officer{padding:2px 5px}
+ .ac4-badge-line>.chip.officer{padding:2px 5px}
  .ac4-period{font-size:9px}
  .ac4-planned{font-size:8px}
  .dialog-heading{padding:10px}
@@ -195,7 +195,7 @@ body:has(dialog[open]){overflow:hidden}
  main{gap:2px}
  .header{padding:4px 10px}
  .entry{padding:0}
- .chip,.chip.ac4,.entry .chip.ac4,.has-odd-ac4>.chip.officer{padding-top:1px;padding-bottom:1px}
+ .chip,.chip.ac4,.entry .chip.ac4,.ac4-badge-line>.chip.officer{padding-top:1px;padding-bottom:1px}
  .ac4-service{gap:1px}
 }
 @media print{
@@ -263,7 +263,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
  .badges{max-width:150px;gap:4px}
  .chip{font-size:12px;line-height:1.35;white-space:normal;padding:4px 6px}
  .chip.ac4,.entry .chip.ac4{padding:4px 6px}
- .has-odd-ac4>.chip.officer{padding:4px 6px}
+ .ac4-badge-line>.chip.officer{padding:4px 6px}
  .ac4-service{gap:4px}
  .ac4-meta{font-size:12px}
  .ac4-period{font-size:12px}
@@ -342,6 +342,22 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 .finance-slices{font-size:12px;line-height:1.5;padding-left:18px}.finance-slices li{margin:5px 0}
 @media screen and (max-width:760px){.monthly-finance{font-size:13px;padding:10px;margin-top:11px}.finance-fact{column-gap:4px}.finance-note{font-size:12px}.finance-composition{font-size:13px}.daily-finance{font-size:12px;padding:10px 13px}.ac4-cost,.ac4-state{font-size:12px}.finance-slices{font-size:13px}}
 @media print{.monthly-finance{border-color:#bfcbd7;background:white;color:#142c49}.finance-note{color:#53627a}.daily-finance{font-size:8px}.ac4-meta{font-size:8px}}
+
+.ac4-badge-line{display:flex;align-items:center;justify-content:flex-end;gap:3px;max-width:100%}
+.ac4-badge-line>.chip{flex:0 0 auto;white-space:nowrap}
+.daily-finance-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:3px 8px;align-items:baseline;margin:3px 0}
+.daily-finance-label{min-width:0;overflow-wrap:anywhere}
+.daily-finance-value{text-align:right;justify-self:end;font-variant-numeric:tabular-nums;white-space:nowrap}
+.daily-finance-total{color:#c00000;font-weight:800}
+.day-notes-caption{display:block}
+.day-notes-arrow{font-size:1.15em;font-weight:750;line-height:1}
+.day-notes-pending{display:block;margin-top:2px;font-size:.95em;line-height:1.3}
+.day-state{display:flex;flex-direction:column;align-items:flex-end;gap:4px;min-width:0}
+.day.is-scale-confirmed{border-color:#b8d4c3;background:#f8fcf9}
+.is-scale-confirmed .day-head{background:#eef7f1}
+.scale-confirmed-label{padding:2px 5px;border:1px solid #c7ddcf;border-radius:5px;background:#f7fcf8;color:#35624a;font-size:9px;font-weight:650;line-height:1.3;white-space:nowrap}
+.scale-confirmation-note{margin:0 0 10px;padding:8px 10px;border-radius:7px;background:#eff8f2;color:#35624a;font-size:12px;line-height:1.45}
+@media screen and (max-width:760px){.scale-confirmed-label{font-size:11px}.scale-confirmation-note{font-size:13px}}
 </style></head><body><main>
 <header class="header"><div class="header-main"><h1><span class="header-title">Previsão Escalas de Serviço</span></h1><div class="header-month month-controls" role="group" aria-label="Selecionar mês e ano"><select id="selecionar-mes" aria-label="Mês da previsão"></select><span aria-hidden="true">/</span><select id="selecionar-ano" aria-label="Ano da previsão"></select></div><p class="header-org">8ª Companhia Independente Bombeiro Militar - Cristalina</p><p class="header-period">Previsão de 01 a 30/11/2026</p><section id="ac4-month-summary" class="monthly-finance" aria-label="Controle mensal da cota AC4" aria-live="polite"></section></div><div class="header-copy"><span>© 2026 ASP OF CARVALHO.</span><span>Todos os direitos reservados.</span></div></header>
 
@@ -474,7 +490,9 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
                 "hours": 24,
                 "observation": "REFORÇO OPERACIONAL",
                 "document": "OS nº 344/2026; SEI 97830860",
-                "status": "documented-sop"
+                "status": "documented-sop",
+                "executionConfirmed": true,
+                "executionConfirmedOn": "2026-11-05"
               }
             ],
             "ord": 26
@@ -498,9 +516,15 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
           "6 recursos de 24h",
           "Meta de 6 recursos"
         ],
-        "alerts": [
-          "Oficial de Dia: designação anterior mantida, ainda a conferir nesta atualização."
-        ]
+        "alerts": [],
+        "confirmation": {
+          "status": "confirmed",
+          "date": "2026-11-05",
+          "source": "user",
+          "previousAlerts": [
+            "Oficial de Dia: designação anterior mantida, ainda a conferir nesta atualização."
+          ]
+        }
       },
       {
         "day": 2,
@@ -547,7 +571,9 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
                 "hours": 24,
                 "observation": "REFORÇO OPERACIONAL",
                 "document": "OS nº 345/2026; SEI 97833006",
-                "status": "documented-sop"
+                "status": "documented-sop",
+                "executionConfirmed": true,
+                "executionConfirmedOn": "2026-11-05"
               }
             ],
             "ord": 7
@@ -614,7 +640,9 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
                 "hours": 24,
                 "observation": "REFORÇO OPERACIONAL",
                 "document": "OS nº 345/2026; SEI 97833006",
-                "status": "documented-sop"
+                "status": "documented-sop",
+                "executionConfirmed": true,
+                "executionConfirmedOn": "2026-11-05"
               }
             ],
             "ord": 28
@@ -638,9 +666,15 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
           "6 recursos de 24h",
           "Meta de 6 recursos"
         ],
-        "alerts": [
-          "Oficial de Dia: designação anterior mantida, ainda a conferir nesta atualização."
-        ]
+        "alerts": [],
+        "confirmation": {
+          "status": "confirmed",
+          "date": "2026-11-05",
+          "source": "user",
+          "previousAlerts": [
+            "Oficial de Dia: designação anterior mantida, ainda a conferir nesta atualização."
+          ]
+        }
       },
       {
         "day": 3,
@@ -715,7 +749,9 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
                 "hours": 24,
                 "observation": "REFORÇO OPERACIONAL",
                 "document": "OS nº 346/2026; SEI 97833074",
-                "status": "documented-sop"
+                "status": "documented-sop",
+                "executionConfirmed": true,
+                "executionConfirmedOn": "2026-11-05"
               }
             ],
             "ord": 15
@@ -733,7 +769,9 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
                 "hours": 12,
                 "observation": "REFORÇO OPERACIONAL",
                 "document": "OS nº 346/2026; SEI 97833074",
-                "status": "documented-sop"
+                "status": "documented-sop",
+                "executionConfirmed": true,
+                "executionConfirmedOn": "2026-11-05"
               }
             ],
             "ord": 16
@@ -765,7 +803,9 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
                 "hours": 12,
                 "observation": "REFORÇO OPERACIONAL",
                 "document": "OS nº 346/2026; SEI 97833074",
-                "status": "documented-sop"
+                "status": "documented-sop",
+                "executionConfirmed": true,
+                "executionConfirmedOn": "2026-11-05"
               }
             ],
             "ord": 22
@@ -796,9 +836,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
           "6 recursos de 24h",
           "Meta de 6 recursos"
         ],
-        "alerts": [
-          "Oficial de Dia: designação anterior mantida, ainda a conferir nesta atualização."
-        ],
+        "alerts": [],
         "sat": {
           "ordinaryStatus": "not-informed",
           "members": [
@@ -816,7 +854,9 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
                   "hours": 4,
                   "observation": "ATIVIDADES TÉCNICAS — SAT",
                   "document": "OS nº 343/2026; SEI 97776333",
-                  "status": "documented-sat"
+                  "status": "documented-sat",
+                  "executionConfirmed": true,
+                  "executionConfirmedOn": "2026-11-05"
                 }
               ]
             },
@@ -834,12 +874,22 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
                   "hours": 4,
                   "observation": "ATIVIDADES TÉCNICAS — SAT",
                   "document": "OS nº 343/2026; SEI 97776333",
-                  "status": "documented-sat"
+                  "status": "documented-sat",
+                  "executionConfirmed": true,
+                  "executionConfirmedOn": "2026-11-05"
                 }
               ]
             }
           ],
           "alerts": []
+        },
+        "confirmation": {
+          "status": "confirmed",
+          "date": "2026-11-05",
+          "source": "user",
+          "previousAlerts": [
+            "Oficial de Dia: designação anterior mantida, ainda a conferir nesta atualização."
+          ]
         }
       },
       {
@@ -887,7 +937,9 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
                 "hours": 24,
                 "observation": "REFORÇO OPERACIONAL",
                 "document": "OS nº 347/2026; SEI 97833404",
-                "status": "documented-sop"
+                "status": "documented-sop",
+                "executionConfirmed": true,
+                "executionConfirmedOn": "2026-11-05"
               }
             ],
             "ord": 5
@@ -969,9 +1021,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
           "6 recursos de 24h",
           "Meta de 6 recursos"
         ],
-        "alerts": [
-          "Oficial de Dia: designação anterior mantida, ainda a conferir nesta atualização."
-        ],
+        "alerts": [],
         "sat": {
           "ordinaryStatus": "not-informed",
           "members": [
@@ -989,7 +1039,9 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
                   "hours": 10,
                   "observation": "ATIVIDADES TÉCNICAS — SAT",
                   "document": "OS nº 343/2026; SEI 97776333",
-                  "status": "documented-sat"
+                  "status": "documented-sat",
+                  "executionConfirmed": true,
+                  "executionConfirmedOn": "2026-11-05"
                 }
               ]
             },
@@ -1007,7 +1059,9 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
                   "hours": 5,
                   "observation": "ATIVIDADES TÉCNICAS — SAT",
                   "document": "OS nº 343/2026; SEI 97776333",
-                  "status": "documented-sat"
+                  "status": "documented-sat",
+                  "executionConfirmed": true,
+                  "executionConfirmedOn": "2026-11-05"
                 }
               ]
             },
@@ -1025,12 +1079,22 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
                   "hours": 4,
                   "observation": "ATIVIDADES TÉCNICAS — SAT",
                   "document": "OS nº 343/2026; SEI 97776333",
-                  "status": "documented-sat"
+                  "status": "documented-sat",
+                  "executionConfirmed": true,
+                  "executionConfirmedOn": "2026-11-05"
                 }
               ]
             }
           ],
           "alerts": []
+        },
+        "confirmation": {
+          "status": "confirmed",
+          "date": "2026-11-05",
+          "source": "user",
+          "previousAlerts": [
+            "Oficial de Dia: designação anterior mantida, ainda a conferir nesta atualização."
+          ]
         }
       },
       {
@@ -9223,8 +9287,11 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
   }
   function makeDailyFinance(day){
     const data=financialSummary.daily.get(`${period}-${String(day.day).padStart(2,'0')}`),section=element('section','daily-finance');section.setAttribute('aria-label',`Controle da cota AC4 do dia ${day.day}`);
-    for(const [label,amount] of [['AC4 Operacional',data.operationalCents],['AC4 SAT',data.satCents],['Total AC4 do dia',data.committedCents]])section.append(element('p','',`${label}: ${valueWithRatio(amount)}`));
-    section.append(element('p',data.remainingCents!==null&&data.remainingCents<0?'finance-warning':'daily-balance',`Saldo disponível: ${data.remainingCents===null?'cota não informada':valueWithRatio(data.remainingCents)}`));
+    const line=(label,value,className='')=>{const row=element('div',`daily-finance-row ${className}`.trim());row.append(element('span','daily-finance-label',`${label}:`),element('span','daily-finance-value',value));section.append(row);};
+    line('AC4 Operacional',valueWithRatio(data.operationalCents));
+    line('AC4 SAT',valueWithRatio(data.satCents));
+    line('Total AC4 (Operacional + SAT)',valueWithRatio(data.committedCents),'daily-finance-total');
+    line('Saldo disponível',data.remainingCents===null?'cota não informada':valueWithRatio(data.remainingCents),data.remainingCents!==null&&data.remainingCents<0?'finance-warning':'daily-balance');
     const remaining=element('p','days-remaining',`Dias restantes: ${data.daysRemaining}`);remaining.title='Dias após esta data até o término do mês.';section.append(remaining);return section;
   }
   function eventFinanceDetails(event,day){
@@ -9247,7 +9314,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     // Copy the OS document number, never a process number or an undefined OS.
     return event.document.match(/(?:^|[;,]\s*)SEI\s*(?:n[º°o.]?\s*)?(\d{6,12})\b/i)?.[1] || '';
   }
-  function ac4Badge(event, memberName, day) {
+  function ac4Badge(event, memberName, day, officerChip=null) {
     const service = element('span', 'ac4-service');
     const sei = seiForEvent(event);
     const chip = element(sei ? 'button' : 'span', `chip ac4${sei ? ' copy-sei' : ''}`, `AC4 ${event.hours}h`);
@@ -9264,7 +9331,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     const cost=element(value.valid?'strong':'span',value.valid?'ac4-cost':'ac4-cost-pending',value.valid?money(value.commitmentCents):'Valor a conferir');
     cost.title=value.status==='executed'?'Execução confirmada; pagamento não presumido.':value.status==='cancelled'?'Serviço cancelado, sem comprometimento da cota.':'Custo previsto, incluído no comprometimento da cota.';
     meta.append(document.createTextNode(' - '),cost);
-    service.append(chip,meta);
+    const heading=element('span','ac4-badge-line');if(officerChip)heading.append(officerChip);heading.append(chip);
+    service.append(heading,meta);
     if (event.status === 'planned' && value.status==='forecast') {
       const planned = element('span', 'ac4-planned', 'Previsto');
       planned.title = `${event.mode} · OS a definir`;
@@ -9278,6 +9346,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     const assignments = chief.assignments.filter(a => a.name === member.name);
     const badges = element('span', `badges${oddWithAc4 ? ' has-odd-ac4' : ''}${assignments.length ? ' has-adjunto' : ''}`);
     const services = assignments.length ? element('span', 'service-badges') : badges;
+    let officerChip=null;
     if (assignments.length) {
       const chip = element('span', 'chip chief', 'ACA');
       chip.title = 'Chefe de Ala / COB · Previsão por antiguidade (ORD do Plano de Chamada)';
@@ -9290,12 +9359,13 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
       const sei=company?String(badge.troca?.sei || member.notes.join(' ').match(/\bSEI\s+(\d{6,12})\b/)?.[1] || ''):'';
       const canCopy=/^\d{6,12}$/.test(sei);
       const chip = element(canCopy?'button':'span', `chip ${badge.kind}${canCopy?' company-sei':''}`, label);
+      if(badge.kind==='officer'&&oddWithAc4){officerChip=chip;continue;}
       if(canCopy){chip.type='button';chip.dataset.copySei=sei;chip.dataset.companySei=sei;chip.title=`Botão direito: copiar SEI ${sei} da TS Cia`;chip.setAttribute('aria-label',`${label}. Copiar SEI ${sei} da TS Cia`);}
       if(badge.kind==='ord'&&badge.start&&badge.end){
         const service=element('span','ordinary-service');service.append(chip,element('span','ac4-period',`${shortHour(badge.start)} às ${shortHour(badge.end)}`));services.append(service);
       }else services.append(chip);
     }
-    for (const event of member.events) services.append(ac4Badge(event, member.name, day));
+    for (const event of member.events){const paired=officerChip&&finance.active(event)?officerChip:null;services.append(ac4Badge(event,member.name,day,paired));if(paired)officerChip=null;}
     for(const assigned of assignments){
       if(assigned.start!==0||assigned.end!==1440)services.append(element('span','chief-period',window.ServiceChief.period(day,assigned)));
     }
@@ -9322,7 +9392,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
   }
   function makeCard(day) {
     const chief=chiefFor(day);
-    const card = element('section', 'day');
+    const confirmed=day.confirmation?.status==='confirmed';
+    const card = element('section', `day${confirmed?' is-scale-confirmed':''}`);
     card.id = `dia-${String(day.day).padStart(2, '0')}`;
     card.dataset.ala = day.ala;
     card.dataset.day = String(day.day);
@@ -9331,7 +9402,9 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     const date = element('div', 'day-date');
     date.append(element('span', 'day-num', String(day.day).padStart(2, '0')), element('span', `ala-badge ${day.ala.toLowerCase()}`, day.ala));
     const [year, month] = period.split('-').map(Number);
-    head.append(date, element('span', 'weekday-label', weekdays[new Date(Date.UTC(year, month - 1, day.day)).getUTCDay()]));
+    const dayState=element('span','day-state');dayState.append(element('span','weekday-label',weekdays[new Date(Date.UTC(year, month - 1, day.day)).getUTCDay()]));
+    if(confirmed){const label=element('span','scale-confirmed-label','Escala confirmada');label.title='Escala confirmada pelo usuário';dayState.append(label);}
+    head.append(date,dayState);
     const list = element('ul', 'entry-list operational-list');
     const members = orderedDayMembers(day);
     for (const [index, member] of members.entries()) {
@@ -9346,8 +9419,12 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
       }
       list.append(row);
     }
-    const ac4Count = day.members.reduce((sum, member) => sum + member.events.length, 0);
-    const notes = element('button', `day-notes-button${day.alerts.length ? ' pending' : ''}`, `Detalhes do dia${ac4Count ? ` · ${ac4Count} AC4` : ''}${day.alerts.length ? ' · A conferir' : ''}`);
+    const ac4Count = day.members.reduce((sum, member) => sum + member.events.filter(finance.active).length, 0);
+    const notes = element('button', `day-notes-button${day.alerts.length ? ' pending' : ''}`);
+    const caption=element('span','day-notes-caption');caption.append(document.createTextNode('Detalhes do dia'));
+    if(ac4Count){const arrow=element('span','day-notes-arrow','→');arrow.setAttribute('aria-hidden','true');caption.append(document.createTextNode(' '),arrow,document.createTextNode(` ${ac4Count} AC4`));}
+    notes.append(caption);
+    if(day.alerts.length)notes.append(element('span','day-notes-pending','A conferir'));
     notes.type = 'button';
     notes.dataset.details = String(day.day);
     notes.setAttribute('aria-haspopup', 'dialog');
@@ -9463,6 +9540,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     const chief=sat?{assignments:[],warnings:[]}:chiefFor(day);
     document.getElementById('detalhes-titulo').textContent = `${String(day.day).padStart(2, '0')}/${period.split('-')[1]}/${period.split('-')[0]} · ${sat?'SAT':`Ala ${day.ala}`}`;
     dialogBody.replaceChildren();
+    if(original.confirmation?.status==='confirmed')dialogBody.append(element('p','scale-confirmation-note',`Escala confirmada pelo usuário em ${original.confirmation.date.split('-').reverse().join('/')}.`));
     if(sat&&ordinaryPending(data))dialogBody.append(element('p','detail-note','Expediente ordinário da SAT ainda não informado.'));
     if(sat&&!day.members.length)dialogBody.append(element('p','detail-note','Nenhum serviço SAT informado para este dia.'));
     if(chief.status==='pending')dialogBody.append(element('p','chief-pending',chief.label));
