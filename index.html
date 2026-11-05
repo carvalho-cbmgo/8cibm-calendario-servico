@@ -5,16 +5,16 @@
 html{scroll-behavior:smooth}
 body{margin:0;background:var(--page);color:var(--ink);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;-webkit-font-smoothing:antialiased}
 main{max-width:1800px;margin:0 auto;padding:clamp(10px,2.4vw,28px) clamp(10px,2.5vw,34px) 42px}
-.header{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;gap:20px;overflow:hidden;background:linear-gradient(115deg,#10283f 5%,#193d61 58%,#125479);border:1px solid #2d5377;border-radius:19px;padding:clamp(17px,2.6vw,31px);color:#fff;box-shadow:0 8px 28px rgba(14,42,74,.15)}
+.header{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,440px);grid-template-areas:". copyright" "main finance";align-items:start;gap:14px clamp(22px,3vw,42px);overflow:hidden;background:linear-gradient(115deg,#10283f 5%,#193d61 58%,#125479);border:1px solid #2d5377;border-radius:19px;padding:clamp(17px,2.6vw,31px);color:#fff;box-shadow:0 8px 28px rgba(14,42,74,.15)}
 .header::after{content:"";position:absolute;width:320px;height:320px;right:-125px;top:-210px;border:1px solid #ffffff2b;border-radius:50%;box-shadow:0 0 0 48px #ffffff08,0 0 0 97px #ffffff06;pointer-events:none}
 h1{font-size:clamp(24px,2.7vw,39px);font-weight:850;letter-spacing:-.047em;line-height:1.13;margin:0 0 13px}
-.header-main{position:relative;z-index:1}
+.header-main{grid-area:main;position:relative;z-index:1;min-width:0}
 .header-title,.header-month{display:block}
-.header-title{white-space:nowrap}
+.header-title{white-space:normal}
 .header-month{margin-top:7px;color:#c8e3ff;font-size:.8em;letter-spacing:-.025em}
-.header-org{margin:0 0 5px;font-size:clamp(10px,1.35vw,15px);font-weight:680;letter-spacing:-.015em;white-space:nowrap}
+.header-org{margin:0 0 5px;font-size:clamp(10px,1.35vw,15px);font-weight:680;letter-spacing:-.015em}
 .header-period{margin:0;color:#c8e3ff;font-size:clamp(12px,1.3vw,15px);font-weight:600}
-.header-copy{position:relative;z-index:1;display:flex;flex-direction:column;align-items:flex-end;justify-self:end;gap:2px;margin:0;padding:0;color:#d7e9ff;font-size:clamp(10px,1.1vw,12px);line-height:1.4;font-weight:700;letter-spacing:.01em;text-align:right;white-space:nowrap}
+.header-copy{grid-area:copyright;position:relative;z-index:1;display:flex;flex-direction:column;align-items:flex-end;justify-self:end;gap:2px;margin:0;padding:0;color:#d7e9ff;font-size:clamp(10px,1.1vw,12px);line-height:1.4;font-weight:700;letter-spacing:.01em;text-align:right;white-space:nowrap}
 .filterbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:18px 0}
 .filters{display:flex;flex-wrap:wrap;gap:7px}
 .filters button{border:1px solid #d7e0ec;border-radius:11px;padding:9px 14px;background:white;color:#344a62;cursor:pointer;font-size:12px;font-weight:750;transition:transform .15s,box-shadow .15s,border-color .15s}
@@ -66,7 +66,7 @@ h1{font-size:clamp(24px,2.7vw,39px);font-weight:850;letter-spacing:-.047em;line-
 @media screen and (max-width:760px){
  body{background:#edf3fa}
  main{display:grid;grid-template-rows:auto auto auto 1fr auto;gap:6px;min-height:100vh;min-height:100dvh;padding:6px 8px max(6px,env(safe-area-inset-bottom));max-width:640px}
- .header{grid-template-columns:minmax(0,1fr);gap:5px;padding:8px 10px;border-radius:12px}
+ .header{grid-template-columns:minmax(0,1fr);grid-template-areas:"copyright" "main" "finance";gap:5px;padding:8px 10px;border-radius:12px}
  .header-main{grid-row:2}
  h1{font-size:clamp(17px,4.7vw,25px);margin:0 0 5px;letter-spacing:-.035em}
  .header-month{margin-top:3px}
@@ -349,14 +349,15 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 }
 
 /* Currency comes from the schedule; only the quota is configured per month. */
-.monthly-finance{margin-top:15px;padding:12px 0 0;border:0;border-top:1px solid #ffffff26;border-radius:0;background:transparent;width:min(640px,100%);font-size:13px;line-height:1.45;min-width:0}
-.finance-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0}
-.finance-metric{display:flex;flex-direction:column;gap:3px;padding:0 16px;min-width:0;font-variant-numeric:tabular-nums}
-.finance-metric:first-child{padding-left:0}.finance-metric+.finance-metric{border-left:1px solid #ffffff20}
-.finance-metric-label{font-size:11.5px;font-weight:500;color:#c2d5e8;line-height:1.4}
+.monthly-finance{grid-area:finance;position:relative;z-index:1;margin:0;padding:0 0 0 clamp(20px,2.2vw,32px);border:0;border-left:1px solid #ffffff26;border-radius:0;background:transparent;width:100%;font-size:13px;line-height:1.45;min-width:0}
+.finance-metrics{display:grid;gap:4px}
+.finance-metric{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:8px;padding:3px 0;min-width:0;font-variant-numeric:tabular-nums}
+.finance-metric-label{font-size:12px;font-weight:500;color:#c2d5e8;line-height:1.4}
 .finance-metric-amount{font-size:16px;font-weight:650;line-height:1.4;letter-spacing:-.01em;white-space:nowrap}
-.finance-metric-share{font-size:11px;color:#b9cee2;line-height:1.4}
+.finance-metric-share{min-width:54px;padding:3px 6px;border:1px solid #ffffff16;border-radius:5px;background:#ffffff08;font-size:11px;color:#c7dbea;line-height:1.4;text-align:right}
 .finance-metric-available .finance-metric-amount{color:#deefe6}
+.finance-days-remaining{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:11px 0 0;font-size:12px;line-height:1.5;color:#bfd1e3}
+.finance-days-remaining strong{color:#d9e9f5;font-weight:650;font-variant-numeric:tabular-nums}
 .finance-usage{height:3px;background:#ffffff19;border-radius:3px;overflow:hidden;margin:12px 0 0}
 .finance-usage-fill{display:block;height:100%;background:#9ebfd6;border-radius:inherit}
 .finance-composition{font-size:12px;margin-top:9px;color:#d1e1ef}
@@ -378,8 +379,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 .ac4-state{font-size:10px;line-height:1.3;color:#61758a;text-align:right}
 .event-finance{border-top:1px solid #ded6eb;margin-top:8px;padding-top:7px}.event-finance-total{font-weight:800;color:#473573}
 .finance-slices{font-size:12px;line-height:1.5;padding-left:18px}.finance-slices li{margin:5px 0}
-@media screen and (max-width:760px){.monthly-finance{font-size:13px;padding:11px 0 0;margin-top:13px}.finance-note{font-size:12px}.finance-composition{font-size:13px}.daily-finance{font-size:12px;padding:10px 13px}.ac4-cost,.ac4-state{font-size:12px}.finance-slices{font-size:13px}}
-@media print{.monthly-finance{border-color:#bfcbd7;background:white;color:#142c49}.finance-metric-label,.finance-metric-share,.finance-composition,.finance-composition summary,.finance-metric-available .finance-metric-amount,.finance-rule,.finance-counts{color:#53627a}.finance-note{color:#53627a}.daily-finance{font-size:8px}.ac4-meta{font-size:8px}}
+@media screen and (max-width:760px){.monthly-finance{font-size:13px;padding:11px 0 0;margin-top:3px;border-left:0;border-top:1px solid #ffffff26}.finance-note{font-size:12px}.finance-composition{font-size:13px}.daily-finance{font-size:12px;padding:10px 13px}.ac4-cost,.ac4-state{font-size:12px}.finance-slices{font-size:13px}}
+@media print{.header{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"main copyright" "finance finance"}.monthly-finance{border-left:0;border-top:1px solid #bfcbd7;padding:10px 0 0;background:white;color:#142c49}.finance-metric-label,.finance-metric-share,.finance-composition,.finance-composition summary,.finance-metric-available .finance-metric-amount,.finance-rule,.finance-counts,.finance-days-remaining,.finance-days-remaining strong{color:#53627a}.finance-note{color:#53627a}.daily-finance{font-size:8px}.ac4-meta{font-size:8px}}
 
 .ac4-badge-line{display:flex;align-items:center;justify-content:flex-end;gap:3px;max-width:100%}
 .ac4-badge-line>.chip{flex:0 0 auto;white-space:nowrap}
@@ -397,15 +398,12 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 .scale-confirmation-note{margin:0 0 10px;padding:8px 10px;border-radius:7px;background:#eff8f2;color:#35624a;font-size:12px;line-height:1.45}
 @media screen and (max-width:760px){.scale-confirmed-label{font-size:11px}.scale-confirmation-note{font-size:13px}}
 @media screen and (max-width:480px){
- .finance-metrics{display:block}
- .finance-metric{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:baseline;gap:8px;padding:3px 0}
- .finance-metric+.finance-metric{border-left:0}
  .finance-metric-label{font-size:12px}.finance-metric-amount{font-size:14px;text-align:right}
- .finance-metric-share{font-size:11px;text-align:right;min-width:48px;border-left:1px solid #ffffff20;padding-left:8px}
+ .finance-metric-share{font-size:11px;min-width:50px}
  .finance-usage{margin-top:10px}.finance-composition{margin-top:6px}
 }
 </style></head><body><main>
-<header class="header"><div class="header-main"><h1><span class="header-title">Previsão Escalas de Serviço</span></h1><nav class="header-month month-controls" aria-label="Navegação entre os meses"><button id="mes-anterior" type="button" aria-label="Mês anterior"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m14 6-6 6 6 6"/></svg></button><span id="competencia-selecionada" class="month-label" aria-live="polite" aria-atomic="true">Novembro/2026</span><button id="mes-seguinte" type="button" aria-label="Mês seguinte"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m10 6 6 6-6 6"/></svg></button></nav><p class="header-org">8ª Companhia Independente Bombeiro Militar - Cristalina</p><p class="header-period">Previsão de 01 a 30/11/2026</p><section id="ac4-month-summary" class="monthly-finance" aria-label="Controle mensal da cota AC4" aria-live="polite"></section></div><div class="header-copy"><span>© 2026 ASP OF CARVALHO.</span><span>Todos os direitos reservados.</span></div></header>
+<header class="header"><div class="header-main"><h1><span class="header-title">Previsão Escalas de Serviço</span></h1><nav class="header-month month-controls" aria-label="Navegação entre os meses"><button id="mes-anterior" type="button" aria-label="Mês anterior"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m14 6-6 6 6 6"/></svg></button><span id="competencia-selecionada" class="month-label" aria-live="polite" aria-atomic="true">Novembro/2026</span><button id="mes-seguinte" type="button" aria-label="Mês seguinte"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m10 6 6 6-6 6"/></svg></button></nav><p class="header-org">8ª Companhia Independente Bombeiro Militar - Cristalina</p><p class="header-period">Previsão de 01 a 30/11/2026</p></div><section id="ac4-month-summary" class="monthly-finance" aria-label="Controle mensal da cota AC4" aria-live="polite"></section><div class="header-copy"><span>© 2026 ASP OF CARVALHO.</span><span>Todos os direitos reservados.</span></div></header>
 
 <div class="filterbar"><div aria-label="Filtrar alas" class="filters" role="group"><button aria-pressed="true" data-filter="TODAS" type="button">Todas as alas</button><button aria-pressed="false" data-filter="ALPHA" type="button">Alpha</button><button aria-pressed="false" data-filter="BRAVO" type="button">Bravo</button><button aria-pressed="false" data-filter="CHARLIE" type="button">Charlie</button><button aria-pressed="false" data-filter="DELTA" type="button">Delta</button></div><small>Serviço operacional e previsões PROEBOM · Clique no AC4 com OS definida para copiar o SEI.</small></div>
 <nav aria-label="Navegação entre os dias" class="mobile-nav"><button aria-label="Dia anterior" id="dia-anterior" type="button">‹</button><div class="mobile-nav-center"><select aria-label="Selecionar dia de serviço" id="selecionar-dia"></select><span aria-live="polite" class="mobile-nav-count" id="indicador-dias"></span></div><button aria-label="Próximo dia" id="dia-seguinte" type="button">›</button></nav><div aria-label="Calendário de novembro de 2026" class="calendar"></div>
@@ -9502,8 +9500,13 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
   const finance=window.AC4Finance,currency=new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}),percent=new Intl.NumberFormat('pt-BR',{maximumFractionDigits:2});
   let financialSummary;
   const periods = Object.keys(schedules).sort();
-  const currentDate = new Date();
-  const currentPeriod = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}`;
+  const accessDateFormat=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Sao_Paulo',year:'numeric',month:'2-digit',day:'2-digit'});
+  function accessDate(){
+    const parts=Object.fromEntries(accessDateFormat.formatToParts(new Date()).map(part=>[part.type,part.value]));
+    return {year:Number(parts.year),month:Number(parts.month),day:Number(parts.day)};
+  }
+  const currentDate = accessDate();
+  const currentPeriod = `${currentDate.year}-${String(currentDate.month).padStart(2, '0')}`;
   const initialPeriod = periods.includes(currentPeriod) ? currentPeriod : periods.at(-1);
   const monthNames = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
   const weekdays = ['DOM','SEG','TER','QUA','QUI','SEX','SÁB'];
@@ -9582,6 +9585,13 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
   const ratio=cents=>financialSummary.quotaCents>0?`${percent.format(cents/financialSummary.quotaCents*100)}%`:'—';
   const valueWithRatio=cents=>`${money(cents)} | ${ratio(cents)}`;
   function financialRecord(event,day){return financialSummary.byEvent.get(event)||finance.price(event,`${period}-${String(day.day).padStart(2,'0')}`);}
+  function updateMonthCountdown(){
+    const target=document.getElementById('ac4-month-days');if(!target)return;
+    const today=accessDate(),[year,month]=period.split('-').map(Number),length=new Date(Date.UTC(year,month,0)).getUTCDate();
+    const remaining=Math.max(0,Math.min(length,(Date.UTC(year,month-1,length)-Date.UTC(today.year,today.month-1,today.day))/86400000));
+    target.querySelector('strong').textContent=`${remaining} ${remaining===1?'dia':'dias'}`;
+    target.title=`Data de acesso: ${String(today.day).padStart(2,'0')}/${String(today.month).padStart(2,'0')}/${today.year}, horário de Brasília. Não inclui o dia atual; meses futuros mantêm todos os dias.`;
+  }
   function updateFinancialHeader(){
     const target=document.getElementById('ac4-month-summary'),expanded=target.querySelector('details')?.open||false;
     target.replaceChildren();
@@ -9596,6 +9606,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
       bar.setAttribute('role','progressbar');bar.setAttribute('aria-label','Comprometimento da cota mensal AC4');bar.setAttribute('aria-valuemin','0');bar.setAttribute('aria-valuemax','100');bar.setAttribute('aria-valuenow',String(Math.min(100,Math.max(0,used))));bar.setAttribute('aria-valuetext',`${ratio(financialSummary.committedCents)} da cota comprometida`);
       fill.style.width=`${Math.min(100,Math.max(0,used))}%`;bar.append(fill);target.append(bar);
     }
+    const days=element('p','finance-days-remaining');days.id='ac4-month-days';days.append(element('span','','Dias restantes no mês'),element('strong'));target.append(days);updateMonthCountdown();
     const details=element('details','finance-composition');details.open=expanded;details.append(element('summary','','Detalhamento da cota'));
     const breakdown=element('dl','finance-breakdown');
     for(const [label,amount] of [['AC4 Operacional (inclui PROEBOM)',financialSummary.operationalCents],['AC4 SAT',financialSummary.satCents],['Previstos, sem execução confirmada',financialSummary.forecastCents],['Execução confirmada',financialSummary.executedCents]])breakdown.append(element('dt','',label),element('dd','',money(amount)));
@@ -9608,7 +9619,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     const line=(label,value,className='')=>{const row=element('div',`daily-finance-row ${className}`.trim());row.append(element('span','daily-finance-label',`${label}:`),element('span','daily-finance-value',value));section.append(row);};
     line('AC4 Operacional',valueWithRatio(data.operationalCents));
     line('AC4 SAT',valueWithRatio(data.satCents));
-    line('AC4 (Operacional + SAT)',valueWithRatio(data.committedCents),'daily-finance-total');
+    line('TOTAL AC4',valueWithRatio(data.committedCents),'daily-finance-total');
     line('Saldo disponível',data.remainingCents===null?'cota não informada':valueWithRatio(data.remainingCents),data.remainingCents!==null&&data.remainingCents<0?'finance-warning':'daily-balance');
     const remaining=element('p','days-remaining',`Dias restantes: ${data.daysRemaining}`);remaining.title='Dias após esta data até o término do mês.';section.append(remaining);return section;
   }
@@ -9852,8 +9863,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     monthLabel.textContent=periodLabel();
     const days = periodDays();
     const hasData = days.length > 0;
-    const today = new Date();
-    selected = selections.get(period) ?? (year === today.getFullYear() && month === today.getMonth() + 1 ? today.getDate() : days[0]?.day);
+    const today = accessDate();
+    selected = selections.get(period) ?? (year === today.year && month === today.month ? today.day : days[0]?.day);
     financialSummary=finance.month(schedules,period,window.ServiceCalendar.quotas[period]);
     updateFinancialHeader();
     cards = days.map(makeCard);
@@ -10042,6 +10053,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
   calendar.addEventListener('touchend', event => { if (!mobile.matches) return; const dx = event.changedTouches[0].screenX - startX, dy = event.changedTouches[0].screenY - startY; if (Math.abs(dx) > 65 && Math.abs(dx) > Math.abs(dy) * 1.4) move(dx < 0 ? 1 : -1); }, {passive: true});
   document.addEventListener('service-directory-change',event=>{ordOverrides=new Map(event.detail.map(p=>[p.name,p.ord]));renderPeriod();if(dialog.open){dialog.close();openDetails(detailDay,detailArea);}});
   document.addEventListener('calendar-schedule-change',()=>{renderPeriod();if(dialog.open){dialog.close();openDetails(detailDay,detailArea);}});
+  window.addEventListener('pageshow',updateMonthCountdown);
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)updateMonthCountdown();});
   renderPeriod();
 })();
 
