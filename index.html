@@ -300,6 +300,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 
 /* SAT has its own list and OS; operational coverage remains above this section. */
 .operational-section{display:flex;flex-direction:column;flex:1;min-width:0}
+.operational-roster{display:flex;flex-direction:column;flex:1;min-width:0}
 .service-area-heading{margin:0;padding:8px 11px 3px;font-size:10px;font-weight:800;letter-spacing:.05em;color:#586f86;line-height:1.4}
 .sat-section{border-top:2px solid #d9e5ef;background:#f8fafc;min-width:0}
 .sat-heading{padding:10px 11px 5px;color:#294d6b}
@@ -312,6 +313,15 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 .company-sei:focus-visible{outline:3px solid #94baff;outline-offset:2px}
 @media screen and (max-width:760px){.service-area-heading{font-size:12px;padding:10px 13px 4px}.sat-heading{font-size:14px}.sat-status{font-size:12px;padding:4px 13px 9px}}
 @media print{.sat-section{background:#fff}.service-area-heading{font-size:8px}.sat-status{font-size:7px}}
+/* Share desktop rows so roster and SAT content cannot offset the action bars. */
+@media screen and (min-width:761px){
+ @supports (grid-template-rows:subgrid){
+  .day{display:grid;grid-template-rows:subgrid;grid-row:span 6;row-gap:0}
+  .operational-section{display:grid;grid-template-rows:subgrid;grid-row:span 4;row-gap:0}
+  .sat-section{display:flex;flex-direction:column}
+  .sat-section>.day-actions{margin-top:auto}
+ }
+}
 </style></head><body><main>
 <header class="header"><div class="header-main"><h1><span class="header-title">Previsão Escalas de Serviço</span></h1><div class="header-month month-controls" role="group" aria-label="Selecionar mês e ano"><select id="selecionar-mes" aria-label="Mês da previsão"></select><span aria-hidden="true">/</span><select id="selecionar-ano" aria-label="Ano da previsão"></select></div><p class="header-org">8ª Companhia Independente Bombeiro Militar - Cristalina</p><p class="header-period">Previsão de 01 a 30/11/2026</p></div><div class="header-copy"><span>© 2026 ASP OF CARVALHO.</span><span>Todos os direitos reservados.</span></div></header>
 
@@ -9156,8 +9166,9 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     documents.setAttribute('aria-label', `Gerar Escala e Ordem de Serviço do dia ${day.day} de ${periodLabel()}`);
     actions.append(notes, documents);
     const operational=element('div','operational-section');
-    operational.append(element('h3','service-area-heading','OPERACIONAL'),list);
-    if(chief.status==='pending')operational.append(element('p','chief-pending',chief.label));
+    const roster=element('div','operational-roster');roster.append(list);
+    if(chief.status==='pending')roster.append(element('p','chief-pending',chief.label));
+    operational.append(element('h3','service-area-heading','OPERACIONAL'),roster);
     operational.append(actions);
     if (day.alerts.length) operational.append(element('div', 'print-notes day-print-alerts', day.alerts.join(' ')));
     operational.append(foot);
@@ -9166,7 +9177,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
   }
   function makeSatSection(day){
     const sat=satFor(day),section=element('section','sat-section');section.setAttribute('aria-label',`SAT do dia ${day.day}`);
-    section.append(element('h3','service-area-heading sat-heading','SAT · Atividades técnicas'));
+    section.append(element('h3','service-area-heading sat-heading','SEÇÃO ATIVIDADES TÉCNICAS'));
     if(ordinaryPending(sat))section.append(element('p','sat-status','Expediente ordinário ainda não informado.'));
     const list=element('ul','entry-list sat-list'),members=orderedDayMembers({members:sat.members});
     for(const [index,member] of members.entries()){
