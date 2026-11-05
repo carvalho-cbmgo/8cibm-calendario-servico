@@ -5,16 +5,18 @@
 html{scroll-behavior:smooth}
 body{margin:0;background:var(--page);color:var(--ink);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;-webkit-font-smoothing:antialiased}
 main{max-width:1800px;margin:0 auto;padding:clamp(10px,2.4vw,28px) clamp(10px,2.5vw,34px) 42px}
-.header{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,440px);grid-template-areas:"main copyright" "main finance";align-items:start;gap:12px clamp(22px,3vw,42px);overflow:hidden;background:linear-gradient(115deg,#10283f 5%,#193d61 58%,#125479);border:1px solid #2d5377;border-radius:19px;padding:clamp(18px,1.8vw,24px) clamp(17px,2.6vw,31px);color:#fff;box-shadow:0 8px 28px rgba(14,42,74,.15)}
+.page-copyright{margin:0 2px 9px;text-align:right;white-space:nowrap;color:#65758a;font-size:11px;font-weight:550;line-height:1.4}
+.header{position:relative;display:grid;grid-template-columns:minmax(0,1fr) clamp(280px,36vw,420px);grid-template-areas:"main finance";align-items:start;gap:clamp(22px,3vw,42px);overflow:hidden;background:linear-gradient(115deg,#111f30 5%,#192e43 58%,#203f54);border:1px solid #344c60;border-radius:18px;padding:clamp(18px,1.8vw,26px) clamp(17px,2.6vw,31px);color:#fff;box-shadow:0 8px 28px rgba(14,42,74,.12)}
 .header::after{content:"";position:absolute;width:320px;height:320px;right:-125px;top:-210px;border:1px solid #ffffff2b;border-radius:50%;box-shadow:0 0 0 48px #ffffff08,0 0 0 97px #ffffff06;pointer-events:none}
 h1{font-size:clamp(24px,2.7vw,39px);font-weight:850;letter-spacing:-.047em;line-height:1.13;margin:0 0 13px}
 .header-main{grid-area:main;position:relative;z-index:1;min-width:0}
+.header-brand{display:flex;align-items:center;gap:16px;min-width:0}
+.header-emblem{width:92px;height:76px;object-fit:contain;flex:0 0 auto}
+.header-identity{min-width:0}
 .header-title,.header-month{display:block}
 .header-title{white-space:normal}
 .header-month{margin-top:7px;color:#c8e3ff;font-size:.8em;letter-spacing:-.025em}
-.header-org{margin:0 0 16px;color:#ffdc8a;font-size:clamp(12px,1.2vw,15px);font-weight:750;line-height:1.45;letter-spacing:.005em}
-.header-period{margin:0;color:#c8e3ff;font-size:clamp(12px,1.3vw,15px);font-weight:600}
-.header-copy{grid-area:copyright;position:relative;z-index:1;display:flex;flex-direction:column;align-items:flex-end;justify-self:end;gap:2px;margin:0;padding:0;color:#d7e9ff;font-size:clamp(10px,1.1vw,12px);line-height:1.4;font-weight:700;letter-spacing:.01em;text-align:right;white-space:nowrap}
+.header-org{margin:0;color:#f4d184;font-size:clamp(12px,1.2vw,15px);font-weight:650;line-height:1.45;letter-spacing:.005em}
 .filterbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:18px 0}
 .filters{display:flex;flex-wrap:wrap;gap:7px}
 .filters button{border:1px solid #d7e0ec;border-radius:11px;padding:9px 14px;background:white;color:#344a62;cursor:pointer;font-size:12px;font-weight:750;transition:transform .15s,box-shadow .15s,border-color .15s}
@@ -66,13 +68,10 @@ h1{font-size:clamp(24px,2.7vw,39px);font-weight:850;letter-spacing:-.047em;line-
 @media screen and (max-width:760px){
  body{background:#edf3fa}
  main{display:grid;grid-template-rows:auto auto auto 1fr auto;gap:6px;min-height:100vh;min-height:100dvh;padding:6px 8px max(6px,env(safe-area-inset-bottom));max-width:640px}
- .header{grid-template-columns:minmax(0,1fr);grid-template-areas:"copyright" "main" "finance";gap:5px;padding:8px 10px;border-radius:12px}
- .header-main{grid-row:2}
+ .header{grid-template-columns:minmax(0,1fr);grid-template-areas:"main" "finance";gap:5px;padding:8px 10px;border-radius:12px}
  h1{font-size:clamp(17px,4.7vw,25px);margin:0 0 5px;letter-spacing:-.035em}
  .header-month{margin-top:3px}
  .header-org{margin-bottom:3px;font-size:clamp(8.7px,2.5vw,11px);letter-spacing:-.045em;line-height:1.25}
- .header-period{font-size:10px;line-height:1.25}
- .header-copy{grid-row:1;gap:0;font-size:9px;line-height:1.25}
  .filterbar{margin:0;display:block}
  .filters{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}
  .filters button{min-height:30px;font-size:10.5px;line-height:1.15;padding:4px 1px;border-radius:8px}
@@ -107,14 +106,14 @@ h1{font-size:clamp(24px,2.7vw,39px);font-weight:850;letter-spacing:-.047em;line-
  .day-foot{padding:5px 10px}
 }
 @media print{
- body{background:#fff}main{max-width:none;padding:8px}.header{color:#142c49;background:#fff;box-shadow:none;border:1px solid #aaa;padding:12px}.header-copy,.header-period{color:#223e57}.filterbar,.mobile-nav{display:none!important}.calendar{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}.day{display:flex!important;min-height:0;break-inside:avoid;box-shadow:none;border:1px solid #aaa}.day.is-hidden{display:flex}.info{font-size:9px}.entry{font-size:9px}.chip{font-size:8px}.ala-badge{box-shadow:none}.header::after{display:none}
+ body{background:#fff}main{max-width:none;padding:8px}.header{color:#142c49;background:#fff;box-shadow:none;border:1px solid #aaa;padding:12px}.filterbar,.mobile-nav{display:none!important}.calendar{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}.day{display:flex!important;min-height:0;break-inside:avoid;box-shadow:none;border:1px solid #aaa}.day.is-hidden{display:flex}.info{font-size:9px}.entry{font-size:9px}.chip{font-size:8px}.ala-badge{box-shadow:none}.header::after{display:none}
 }
 
 [hidden]{display:none!important}
 .header-main h1{margin-bottom:8px}
-.month-controls{display:inline-grid;grid-template-columns:44px minmax(0,1fr) 44px;align-items:center;gap:6px;width:max-content;max-width:100%;margin:0 0 10px;padding:4px;border:1px solid #b7d9f133;border-radius:14px;background:linear-gradient(120deg,#ffffff0e,#0b253e45);color:#e6f4ff;font-size:clamp(19px,2vw,27px);font-weight:750;letter-spacing:-.02em;box-shadow:inset 0 1px 0 #ffffff0a}
-.month-controls button{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;padding:0;border:1px solid #dceefbcc;border-radius:10px;background:#e0effa;color:#234b6b;box-shadow:0 2px 5px #061d3026;cursor:pointer;transition:background .15s,transform .15s}
-.month-controls button:hover{background:#fff;border-color:#fff}
+.month-controls{display:inline-grid;grid-template-columns:44px minmax(0,1fr) 44px;align-items:center;gap:6px;width:max-content;max-width:100%;margin:16px 0 0 108px;padding:0;border:0;background:none;color:#e6f0f8;font-size:clamp(19px,2vw,27px);font-weight:700;letter-spacing:-.02em}
+.month-controls button{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;padding:0;border:0;border-radius:50%;background:transparent;color:#f4d184;cursor:pointer;transition:background .15s,transform .15s}
+.month-controls button:hover{background:#ffffff12;color:#fff}
 .month-controls button:active{transform:translateY(1px)}
 .month-controls button svg{width:22px;height:22px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
 .month-label{white-space:nowrap;min-width:0;padding:0 8px;text-align:center;font-variant-numeric:tabular-nums;line-height:1.3}
@@ -243,14 +242,15 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 @media screen and (max-width:760px){
  body{font-size:15px}
  main{display:block;min-height:100dvh;padding:10px 10px max(24px,env(safe-area-inset-bottom))}
- .header{gap:6px;padding:12px 14px 14px;border-radius:14px}
+ .header{gap:14px;padding:16px 14px;border-radius:14px}
+ .page-copyright{font-size:clamp(8px,2.55vw,10px);margin-bottom:8px}
+ .header-brand{gap:11px}
+ .header-emblem{width:54px;height:46px}
  .header-main h1{font-size:clamp(20px,5.2vw,27px);margin-bottom:7px}
  .header-title{white-space:normal}
- .month-controls{font-size:clamp(18px,4.9vw,21px);gap:4px;padding:3px;margin-bottom:10px}
+ .month-controls{font-size:clamp(18px,4.9vw,21px);gap:4px;margin:12px 0 0;padding:0}
  .month-label{padding:0 6px}
- .header-org{white-space:normal;font-size:12px;line-height:1.4;letter-spacing:0;margin-bottom:12px}
- .header-period{font-size:12px;line-height:1.4}
- .header-copy{font-size:10px;line-height:1.3}
+ .header-org{white-space:normal;font-size:12px;line-height:1.4;letter-spacing:0;margin:0}
  .filterbar{margin:13px 0}
  .filters{gap:6px}
  .filters button{font-size:12px;min-height:44px;padding:7px 2px;line-height:1.25}
@@ -352,31 +352,32 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 }
 
 /* Currency comes from the schedule; only the quota is configured per month. */
-.monthly-finance{grid-area:finance;position:relative;z-index:1;margin:0;padding:14px 16px;border:1px solid #91c4df38;border-radius:14px;background:linear-gradient(135deg,#163954b3,#0e334b99);box-shadow:inset 0 1px 0 #ffffff0a;width:100%;font-size:13px;line-height:1.45;min-width:0}
+.monthly-finance{grid-area:finance;position:relative;z-index:1;margin:0;padding:0 0 0 24px;border:0;border-left:1px solid #c6d6e324;background:none;width:100%;font-size:13px;line-height:1.45;min-width:0}
+.finance-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:5px}
+.finance-toolbar h2{margin:0;color:#b7c8d7;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+.finance-details-button{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;padding:0;border:0;border-radius:50%;background:none;color:#f4d184;cursor:pointer;flex:0 0 auto}
+.finance-details-button:hover{background:#ffffff0e;color:#fff}
+.finance-details-button:focus-visible{outline:3px solid #f4d184;outline-offset:2px}
+.finance-details-button svg{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 .finance-metrics{display:grid;gap:6px}
 .finance-metric{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:8px;padding:3px 0;min-width:0;font-variant-numeric:tabular-nums}
 .finance-metric-label{font-size:12px;font-weight:500;color:#c9dfeb;line-height:1.4}
 .finance-metric-amount{font-size:16px;font-weight:650;line-height:1.4;letter-spacing:-.01em;white-space:nowrap}
-.finance-metric-share{min-width:54px;padding:3px 6px;border:1px solid #a6d9f32b;border-radius:6px;background:#8acff00d;font-size:11px;color:#cbeaff;line-height:1.4;text-align:right}
+.finance-metric-share{min-width:48px;padding:0;border:0;background:none;font-size:11px;color:#c1d0dd;line-height:1.4;text-align:right}
 .finance-metric-quota .finance-metric-amount{color:#d7f1ff}
 .finance-metric-committed .finance-metric-amount{color:#ffd49c}
-.finance-metric-committed .finance-metric-share{color:#ffd49c;background:#ffd49c0c;border-color:#ffd49c26}
+.finance-metric-committed .finance-metric-share{color:#e5c59b}
 .finance-metric-available .finance-metric-amount{color:#9be8d3}
-.finance-metric-available .finance-metric-share{color:#9be8d3;background:#9be8d30c;border-color:#9be8d326}
-.finance-days-remaining{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:7px 0 0;padding-top:7px;border-top:1px solid #b2d2e31c;font-size:12px;line-height:1.5;color:#bfd8e5}
+.finance-metric-available .finance-metric-share{color:#a3d7cb}
+.finance-days-remaining{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:9px 0 0;padding:0;border:0;font-size:12px;line-height:1.5;color:#bfd8e5}
 .finance-days-remaining strong{color:#d7f1ff;font-weight:650;font-variant-numeric:tabular-nums}
-.finance-usage{height:4px;background:#a9d1e520;border-radius:4px;overflow:hidden;margin:12px 0 0}
-.finance-usage-fill{display:block;height:100%;background:linear-gradient(90deg,#74c9f3,#58d4c6);border-radius:inherit}
-.finance-composition{font-size:12px;margin-top:9px;color:#d1e1ef}
-.finance-composition summary{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:4px 0;list-style:none;cursor:pointer;color:#c2d5e8;font-weight:500}
-.finance-composition summary::-webkit-details-marker{display:none}
-.finance-composition summary::after{content:'';width:6px;height:6px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg);margin:0 3px 3px 0;flex:none}
-.finance-composition[open] summary::after{transform:rotate(225deg);margin-bottom:-2px}
-.finance-composition summary:focus-visible{outline:2px solid #a9cceb;outline-offset:3px;border-radius:3px}
-.finance-breakdown{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:7px 14px;margin:10px 0 0;padding-top:10px;border-top:1px solid #ffffff1c}
+.finance-dialog{width:min(640px,calc(100% - 24px))}
+.finance-dialog-body{padding:18px 20px 22px}
+.finance-breakdown{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px 18px;margin:0;color:#38516b;font-size:14px;line-height:1.5}
 .finance-breakdown dt{min-width:0}.finance-breakdown dd{margin:0;text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums;font-weight:600}
-.finance-note,.finance-rule,.finance-counts{font-size:11px;line-height:1.5;margin:9px 0 0;color:#bfd1e3}
-.over-quota .finance-metric-available .finance-metric-amount{color:#ffd2c6}.over-quota .finance-usage-fill{background:#efb3a7}
+.finance-breakdown .finance-breakdown-divider{padding-top:12px;border-top:1px solid #e1e8f0}
+.finance-note,.finance-rule,.finance-counts{font-size:12px;line-height:1.6;margin:14px 0 0;color:#62758a}
+.over-quota .finance-metric-available .finance-metric-amount{color:#ffd2c6}
 .finance-warning{color:#ae271b;font-weight:700}.header .finance-warning{color:#ffd2c6}
 .daily-finance{border-top:1px solid #dce6f1;background:#f5f9ff;padding:9px 11px;font-size:10px;line-height:1.5;color:#34516d;min-width:0;font-variant-numeric:tabular-nums}
 .daily-finance p{margin:3px 0;overflow-wrap:anywhere}.daily-balance{font-weight:750;color:#17634b}.days-remaining{color:#61758a}
@@ -386,8 +387,9 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 .ac4-state{font-size:10px;line-height:1.3;color:#61758a;text-align:right}
 .event-finance{border-top:1px solid #ded6eb;margin-top:8px;padding-top:7px}.event-finance-total{font-weight:800;color:#473573}
 .finance-slices{font-size:12px;line-height:1.5;padding-left:18px}.finance-slices li{margin:5px 0}
-@media screen and (max-width:760px){.monthly-finance{font-size:13px;padding:12px;margin-top:4px}.finance-note{font-size:12px}.finance-composition{font-size:13px}.daily-finance{font-size:12px;padding:10px 13px}.ac4-cost,.ac4-state{font-size:12px}.finance-slices{font-size:13px}}
-@media print{.header{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"main copyright" "finance finance"}.header-org{color:#223e57}.monthly-finance{border:1px solid #bfcbd7;padding:10px;background:white;box-shadow:none;color:#142c49}.monthly-finance .finance-metric-amount,.monthly-finance .finance-metric-share,.finance-metric-label,.finance-composition,.finance-composition summary,.finance-rule,.finance-counts,.finance-days-remaining,.finance-days-remaining strong{color:#53627a}.finance-note{color:#53627a}.daily-finance{font-size:8px}.ac4-meta{font-size:8px}}
+@media screen and (min-width:761px) and (max-width:1100px){.header-emblem{width:70px;height:56px}.header-brand{gap:12px}.month-controls{margin-left:0}}
+@media screen and (max-width:760px){.monthly-finance{font-size:13px;padding:8px 0 0;margin:0;border-left:0;border-top:1px solid #ffffff18}.finance-dialog-body{padding:16px 14px 20px}.daily-finance{font-size:12px;padding:10px 13px}.ac4-cost,.ac4-state{font-size:12px}.finance-slices{font-size:13px}}
+@media print{.header{grid-template-columns:minmax(0,1fr);grid-template-areas:"main" "finance"}.header-org{color:#223e57}.monthly-finance{border:0;border-top:1px solid #bfcbd7;padding:10px 0 0;background:white;color:#142c49}.finance-details-button{display:none}.monthly-finance .finance-metric-amount,.monthly-finance .finance-metric-share,.finance-metric-label,.finance-days-remaining,.finance-days-remaining strong{color:#53627a}.daily-finance{font-size:8px}.ac4-meta{font-size:8px}}
 
 .ac4-badge-line{display:flex;align-items:center;justify-content:flex-end;gap:3px;max-width:100%}
 .ac4-badge-line>.chip{flex:0 0 auto;white-space:nowrap}
@@ -406,11 +408,20 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 @media screen and (max-width:760px){.scale-confirmed-label{font-size:11px}.scale-confirmation-note{font-size:13px}}
 @media screen and (max-width:480px){
  .finance-metric-label{font-size:12px}.finance-metric-amount{font-size:14px;text-align:right}
- .finance-metric-share{font-size:11px;min-width:50px}
- .finance-usage{margin-top:10px}.finance-composition{margin-top:6px}
+ .finance-metric-share{font-size:11px;min-width:46px}
 }
 </style></head><body><main>
-<header class="header"><div class="header-main"><h1><span class="header-title">Previsão Escalas de Serviço</span></h1><p class="header-org">8ª Companhia Independente Bombeiro Militar - Cristalina</p><nav class="header-month month-controls" aria-label="Navegação entre os meses"><button id="mes-anterior" type="button" aria-label="Mês anterior"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m14 6-6 6 6 6"/></svg></button><span id="competencia-selecionada" class="month-label" aria-live="polite" aria-atomic="true">Novembro/2026</span><button id="mes-seguinte" type="button" aria-label="Mês seguinte"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m10 6 6 6-6 6"/></svg></button></nav><p class="header-period">Previsão de 01 a 30/11/2026</p></div><section id="ac4-month-summary" class="monthly-finance" aria-label="Controle mensal da cota AC4" aria-live="polite"></section><div class="header-copy"><span>© 2026 ASP OF CARVALHO.</span><span>Todos os direitos reservados.</span></div></header>
+<p class="page-copyright">© 2026 ASP OF CARVALHO. Todos os direitos reservados.</p>
+<header class="header">
+ <div class="header-main">
+  <div class="header-brand">
+   <img class="header-emblem" src="assets/cbmgo-emblema.png" width="92" height="76" alt="Emblema do Corpo de Bombeiros Militar do Estado de Goiás" decoding="async" fetchpriority="high"/>
+   <div class="header-identity"><h1><span class="header-title">Previsão Escalas de Serviço</span></h1><p class="header-org">8ª Companhia Independente Bombeiro Militar - Cristalina</p></div>
+  </div>
+  <nav class="header-month month-controls" aria-label="Navegação entre os meses"><button id="mes-anterior" type="button" aria-label="Mês anterior"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m14 6-6 6 6 6"/></svg></button><span id="competencia-selecionada" class="month-label" aria-live="polite" aria-atomic="true">Novembro/2026</span><button id="mes-seguinte" type="button" aria-label="Mês seguinte"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m10 6 6 6-6 6"/></svg></button></nav>
+ </div>
+ <section id="ac4-month-summary" class="monthly-finance" aria-label="Controle mensal da cota AC4" aria-live="polite"></section>
+</header>
 
 <div class="filterbar"><div aria-label="Filtrar alas" class="filters" role="group"><button aria-pressed="true" data-filter="TODAS" type="button">Todas as alas</button><button aria-pressed="false" data-filter="ALPHA" type="button">Alpha</button><button aria-pressed="false" data-filter="BRAVO" type="button">Bravo</button><button aria-pressed="false" data-filter="CHARLIE" type="button">Charlie</button><button aria-pressed="false" data-filter="DELTA" type="button">Delta</button></div><small>Serviço operacional e previsões PROEBOM · Clique no AC4 com OS definida para copiar o SEI.</small></div>
 <nav aria-label="Navegação entre os dias" class="mobile-nav"><button aria-label="Dia anterior" id="dia-anterior" type="button">‹</button><div class="mobile-nav-center"><select aria-label="Selecionar dia de serviço" id="selecionar-dia"></select><span aria-live="polite" class="mobile-nav-count" id="indicador-dias"></span></div><button aria-label="Próximo dia" id="dia-seguinte" type="button">›</button></nav><div aria-label="Calendário de novembro de 2026" class="calendar"></div>
@@ -418,6 +429,10 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 <noscript>Ative o JavaScript para selecionar o período e visualizar a previsão de serviço.</noscript>
 <div class="info"><strong>Regras e ressalvas:</strong> as informações apresentadas aqui são previsões do planejamento da escala, o que não substitui a Escala de Serviço e Ordem de Serviço homologadas.</div>
 </main>
+<dialog id="ac4-finance-dialog" class="finance-dialog" aria-labelledby="ac4-finance-title">
+ <div class="dialog-heading"><h2 id="ac4-finance-title">Cota AC4</h2><button type="button" class="dialog-close" id="ac4-finance-close">Fechar</button></div>
+ <div id="ac4-finance-content" class="finance-dialog-body"></div>
+</dialog>
 <dialog id="detalhes-servico" aria-labelledby="detalhes-titulo"><div class="dialog-heading"><h2 id="detalhes-titulo"></h2><button type="button" class="dialog-close" id="fechar-detalhes">Fechar</button></div><div class="dialog-copy-status" id="dialog-copy-status" role="status" aria-live="polite" aria-atomic="true"></div><div class="dialog-body" id="detalhes-conteudo"></div></dialog>
 <div class="copy-status" id="copy-status" role="status" aria-live="polite" aria-atomic="true"></div>
 <dialog id="sei-generator" class="sei-generator" aria-labelledby="sei-date-title">
@@ -4283,15 +4298,22 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
             "name": "ST DA SILVA",
             "badges": [
               {
-                "kind": "ord",
-                "text": "ORDINÁRIO"
+                "kind": "disp",
+                "text": "FÉRIAS"
               }
             ],
             "notes": [
-              "Ordinário"
+              "Férias de 04/12/2026 a 02/01/2027 (30 dias). Documento SEI a informar. Não integra o efetivo disponível."
             ],
             "events": [],
-            "ord": 5
+            "ord": 5,
+            "afastamento": {
+              "tipo": "ferias",
+              "inicio": "2026-12-04",
+              "termino": "2027-01-02",
+              "dias": 30,
+              "sei": null
+            }
           },
           {
             "name": "ST AISLAN",
@@ -4365,8 +4387,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
           }
         ],
         "coverage": [
-          "6 recursos de 24h",
-          "Meta de 6 recursos"
+          "5 recursos de 24h",
+          "Faltam 1 recurso"
         ],
         "alerts": []
       },
@@ -4628,15 +4650,22 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
             "name": "ST DA SILVA",
             "badges": [
               {
-                "kind": "ord",
-                "text": "ORDINÁRIO"
+                "kind": "disp",
+                "text": "FÉRIAS"
               }
             ],
             "notes": [
-              "Ordinário"
+              "Férias de 04/12/2026 a 02/01/2027 (30 dias). Documento SEI a informar. Não integra o efetivo disponível."
             ],
             "events": [],
-            "ord": 5
+            "ord": 5,
+            "afastamento": {
+              "tipo": "ferias",
+              "inicio": "2026-12-04",
+              "termino": "2027-01-02",
+              "dias": 30,
+              "sei": null
+            }
           },
           {
             "name": "ST AISLAN",
@@ -4710,8 +4739,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
           }
         ],
         "coverage": [
-          "6 recursos de 24h",
-          "Meta de 6 recursos"
+          "5 recursos de 24h",
+          "Faltam 1 recurso"
         ],
         "alerts": []
       },
@@ -4973,15 +5002,22 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
             "name": "ST DA SILVA",
             "badges": [
               {
-                "kind": "ord",
-                "text": "ORDINÁRIO"
+                "kind": "disp",
+                "text": "FÉRIAS"
               }
             ],
             "notes": [
-              "Ordinário"
+              "Férias de 04/12/2026 a 02/01/2027 (30 dias). Documento SEI a informar. Não integra o efetivo disponível."
             ],
             "events": [],
-            "ord": 5
+            "ord": 5,
+            "afastamento": {
+              "tipo": "ferias",
+              "inicio": "2026-12-04",
+              "termino": "2027-01-02",
+              "dias": 30,
+              "sei": null
+            }
           },
           {
             "name": "ST AISLAN",
@@ -5055,8 +5091,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
           }
         ],
         "coverage": [
-          "6 recursos de 24h",
-          "Meta de 6 recursos"
+          "5 recursos de 24h",
+          "Faltam 1 recurso"
         ],
         "alerts": []
       },
@@ -5311,15 +5347,22 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
             "name": "ST DA SILVA",
             "badges": [
               {
-                "kind": "ord",
-                "text": "ORDINÁRIO"
+                "kind": "disp",
+                "text": "FÉRIAS"
               }
             ],
             "notes": [
-              "Ordinário"
+              "Férias de 04/12/2026 a 02/01/2027 (30 dias). Documento SEI a informar. Não integra o efetivo disponível."
             ],
             "events": [],
-            "ord": 5
+            "ord": 5,
+            "afastamento": {
+              "tipo": "ferias",
+              "inicio": "2026-12-04",
+              "termino": "2027-01-02",
+              "dias": 30,
+              "sei": null
+            }
           },
           {
             "name": "ST AISLAN",
@@ -5393,8 +5436,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
           }
         ],
         "coverage": [
-          "6 recursos de 24h",
-          "Meta de 6 recursos"
+          "5 recursos de 24h",
+          "Faltam 1 recurso"
         ],
         "alerts": []
       },
@@ -5649,15 +5692,22 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
             "name": "ST DA SILVA",
             "badges": [
               {
-                "kind": "ord",
-                "text": "ORDINÁRIO"
+                "kind": "disp",
+                "text": "FÉRIAS"
               }
             ],
             "notes": [
-              "Ordinário"
+              "Férias de 04/12/2026 a 02/01/2027 (30 dias). Documento SEI a informar. Não integra o efetivo disponível."
             ],
             "events": [],
-            "ord": 5
+            "ord": 5,
+            "afastamento": {
+              "tipo": "ferias",
+              "inicio": "2026-12-04",
+              "termino": "2027-01-02",
+              "dias": 30,
+              "sei": null
+            }
           },
           {
             "name": "ST AISLAN",
@@ -5731,8 +5781,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
           }
         ],
         "coverage": [
-          "6 recursos de 24h",
-          "Meta de 6 recursos"
+          "5 recursos de 24h",
+          "Faltam 1 recurso"
         ],
         "alerts": []
       },
@@ -5987,15 +6037,22 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
             "name": "ST DA SILVA",
             "badges": [
               {
-                "kind": "ord",
-                "text": "ORDINÁRIO"
+                "kind": "disp",
+                "text": "FÉRIAS"
               }
             ],
             "notes": [
-              "Ordinário"
+              "Férias de 04/12/2026 a 02/01/2027 (30 dias). Documento SEI a informar. Não integra o efetivo disponível."
             ],
             "events": [],
-            "ord": 5
+            "ord": 5,
+            "afastamento": {
+              "tipo": "ferias",
+              "inicio": "2026-12-04",
+              "termino": "2027-01-02",
+              "dias": 30,
+              "sei": null
+            }
           },
           {
             "name": "ST AISLAN",
@@ -6069,8 +6126,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
           }
         ],
         "coverage": [
-          "6 recursos de 24h",
-          "Meta de 6 recursos"
+          "5 recursos de 24h",
+          "Faltam 1 recurso"
         ],
         "alerts": []
       },
@@ -6325,15 +6382,22 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
             "name": "ST DA SILVA",
             "badges": [
               {
-                "kind": "ord",
-                "text": "ORDINÁRIO"
+                "kind": "disp",
+                "text": "FÉRIAS"
               }
             ],
             "notes": [
-              "Ordinário"
+              "Férias de 04/12/2026 a 02/01/2027 (30 dias). Documento SEI a informar. Não integra o efetivo disponível."
             ],
             "events": [],
-            "ord": 5
+            "ord": 5,
+            "afastamento": {
+              "tipo": "ferias",
+              "inicio": "2026-12-04",
+              "termino": "2027-01-02",
+              "dias": 30,
+              "sei": null
+            }
           },
           {
             "name": "ST AISLAN",
@@ -6407,8 +6471,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
           }
         ],
         "coverage": [
-          "6 recursos de 24h",
-          "Meta de 6 recursos"
+          "5 recursos de 24h",
+          "Faltam 1 recurso"
         ],
         "alerts": []
       },
@@ -6667,15 +6731,22 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
             "name": "ST DA SILVA",
             "badges": [
               {
-                "kind": "ord",
-                "text": "ORDINÁRIO"
+                "kind": "disp",
+                "text": "FÉRIAS"
               }
             ],
             "notes": [
-              "Ordinário"
+              "Férias de 04/12/2026 a 02/01/2027 (30 dias). Documento SEI a informar. Não integra o efetivo disponível."
             ],
             "events": [],
-            "ord": 5
+            "ord": 5,
+            "afastamento": {
+              "tipo": "ferias",
+              "inicio": "2026-12-04",
+              "termino": "2027-01-02",
+              "dias": 30,
+              "sei": null
+            }
           },
           {
             "name": "ST AISLAN",
@@ -6749,8 +6820,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
           }
         ],
         "coverage": [
-          "6 recursos de 24h",
-          "Meta de 6 recursos"
+          "5 recursos de 24h",
+          "Faltam 1 recurso"
         ],
         "alerts": []
       },
@@ -9600,8 +9671,11 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     target.title=`Data de acesso: ${String(today.day).padStart(2,'0')}/${String(today.month).padStart(2,'0')}/${today.year}, horário de Brasília. Não inclui o dia atual; meses futuros mantêm todos os dias.`;
   }
   function updateFinancialHeader(){
-    const target=document.getElementById('ac4-month-summary'),expanded=target.querySelector('details')?.open||false;
-    target.replaceChildren();
+    const target=document.getElementById('ac4-month-summary');target.replaceChildren();
+    const toolbar=element('div','finance-toolbar'),shortcut=element('button','finance-details-button');
+    shortcut.type='button';shortcut.dataset.financeDetails='';shortcut.title='Ver detalhamento da cota AC4';shortcut.setAttribute('aria-label','Abrir detalhamento da cota AC4');shortcut.setAttribute('aria-haspopup','dialog');shortcut.setAttribute('aria-controls','ac4-finance-dialog');
+    shortcut.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 4v16h16M8 15v-4m5 4V7m5 8v-6"/></svg>';
+    toolbar.append(element('h2','','Controle AC4'),shortcut);target.append(toolbar);
     const metrics=element('div','finance-metrics');
     const metric=(label,amount,share,className='')=>{const item=element('div',`finance-metric ${className}`.trim());item.append(element('span','finance-metric-label',label),element('strong','finance-metric-amount',amount),element('span','finance-metric-share',share));metrics.append(item);};
     metric('Cota mensal AC4',financialSummary.quotaCents===null?'Não informada':money(financialSummary.quotaCents),financialSummary.quotaCents>0?'100%':'—','finance-metric-quota');
@@ -9609,17 +9683,16 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     metric('Disponível',financialSummary.remainingCents===null?'Não informada':money(financialSummary.remainingCents),financialSummary.remainingCents===null?'—':ratio(financialSummary.remainingCents),'finance-metric-available');
     target.append(metrics);target.classList.toggle('over-quota',financialSummary.remainingCents!==null&&financialSummary.remainingCents<0);
     const days=element('p','finance-days-remaining');days.id='ac4-month-days';days.append(element('span','','Dias restantes no mês'),element('strong'));target.append(days);updateMonthCountdown();
-    if(financialSummary.quotaCents>0){
-      const used=financialSummary.committedCents/financialSummary.quotaCents*100,bar=element('div','finance-usage'),fill=element('span','finance-usage-fill');
-      bar.setAttribute('role','progressbar');bar.setAttribute('aria-label','Comprometimento da cota mensal AC4');bar.setAttribute('aria-valuemin','0');bar.setAttribute('aria-valuemax','100');bar.setAttribute('aria-valuenow',String(Math.min(100,Math.max(0,used))));bar.setAttribute('aria-valuetext',`${ratio(financialSummary.committedCents)} da cota comprometida`);
-      fill.style.width=`${Math.min(100,Math.max(0,used))}%`;bar.append(fill);target.append(bar);
-    }
-    const details=element('details','finance-composition');details.open=expanded;details.append(element('summary','','Detalhamento da cota'));
-    const breakdown=element('dl','finance-breakdown');
-    for(const [label,amount] of [['AC4 Operacional (inclui PROEBOM)',financialSummary.operationalCents],['AC4 SAT',financialSummary.satCents],['Previstos, sem execução confirmada',financialSummary.forecastCents],['Execução confirmada',financialSummary.executedCents]])breakdown.append(element('dt','',label),element('dd','',money(amount)));
-    details.append(breakdown,element('p','finance-note','Comprometido no planejamento; não indica pagamento.'),element('p','finance-rule','Saldos diários acumulados até cada data. Competência financeira definida pela data de início do serviço.'),element('p','finance-counts',`${financialSummary.records.filter(r=>r.valid&&r.status!=='cancelled').length} serviços considerados · ${financialSummary.cancelledCount} cancelados · ${financialSummary.duplicateCount} duplicações desconsideradas.`));
-    for(const warning of financialSummary.warnings)details.append(element('p','finance-warning',warning));target.append(details);
     if(financialSummary.invalidCount)target.append(element('p','finance-warning',`${financialSummary.invalidCount} AC4 com dados inconsistentes não incluídos no total. Confira os detalhes dos serviços.`));
+    renderFinanceDialog();
+  }
+  function renderFinanceDialog(){
+    document.getElementById('ac4-finance-title').textContent=`Cota AC4 · ${periodLabel()}`;
+    const body=document.getElementById('ac4-finance-content'),breakdown=element('dl','finance-breakdown');body.replaceChildren();
+    const entries=[['Cota mensal',financialSummary.quotaCents===null?'Não informada':money(financialSummary.quotaCents)],['Comprometido',money(financialSummary.committedCents)],['Disponível',financialSummary.remainingCents===null?'Não informada':money(financialSummary.remainingCents)],['AC4 Operacional (inclui PROEBOM)',money(financialSummary.operationalCents)],['AC4 SAT',money(financialSummary.satCents)],['Previstos, sem execução confirmada',money(financialSummary.forecastCents)],['Execução confirmada',money(financialSummary.executedCents)]];
+    for(const [index,[label,amount]] of entries.entries()){const divider=index===3?'finance-breakdown-divider':'';breakdown.append(element('dt',divider,label),element('dd',divider,amount));}
+    body.append(breakdown,element('p','finance-note','Comprometido no planejamento; não indica pagamento.'),element('p','finance-rule','Saldos diários acumulados até cada data. Competência financeira definida pela data de início do serviço.'),element('p','finance-counts',`${financialSummary.records.filter(r=>r.valid&&r.status!=='cancelled').length} serviços considerados · ${financialSummary.cancelledCount} cancelados · ${financialSummary.duplicateCount} duplicações desconsideradas.`));
+    for(const warning of financialSummary.warnings)body.append(element('p','finance-warning',warning));
   }
   function makeDailyFinance(day){
     const data=financialSummary.daily.get(`${period}-${String(day.day).padStart(2,'0')}`),section=element('section','daily-finance');section.setAttribute('aria-label',`Controle da cota AC4 do dia ${day.day}`);
@@ -9882,7 +9955,6 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     document.getElementById('competencia-vazia').textContent = periodLabel();
     document.querySelector('.mobile-nav').hidden = !hasData;
     document.querySelector('.filterbar').hidden = !hasData;
-    document.querySelector('.header-period').textContent = hasData ? `Previsão de 01 a ${new Date(Date.UTC(year, month, 0)).getUTCDate()}/${String(month).padStart(2, '0')}/${year}` : 'Sem previsão cadastrada para este período';
     document.title = `Previsão Escalas de Serviço · ${periodLabel()} | 8ª CIBM`;
     document.querySelector('meta[name="description"]').content = `Previsão de serviço da 8ª CIBM — ${periodLabel()}.`;
     draw();
@@ -10039,6 +10111,11 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
   document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!exchangeTooltip.hidden){event.preventDefault();event.stopPropagation();hideExchangeTooltip();}},true);
   document.addEventListener('scroll',event=>{if(!exchangeTooltip.hidden&&!exchangeTooltip.contains(event.target))positionExchangeTooltip();},true);
   window.addEventListener('resize',hideExchangeTooltip);dialog.addEventListener('close',hideExchangeTooltip);
+  const financeDialog=document.getElementById('ac4-finance-dialog');
+  document.addEventListener('click',event=>{if(event.target.closest('[data-finance-details]')){hideExchangeTooltip();financeDialog.showModal();financeDialog.scrollTop=0;}});
+  document.getElementById('ac4-finance-close').addEventListener('click',()=>financeDialog.close());
+  financeDialog.addEventListener('close',()=>document.querySelector('[data-finance-details]')?.focus({preventScroll:true}));
+  financeDialog.addEventListener('click',event=>{if(event.target===financeDialog){const r=financeDialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)financeDialog.close();}});
   previousMonth.addEventListener('click',()=>moveMonth(-1));
   nextMonth.addEventListener('click',()=>moveMonth(1));
   filterButtons.forEach(button => button.addEventListener('click', () => { filter = button.dataset.filter; draw(); }));
