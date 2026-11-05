@@ -308,12 +308,29 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 .sat-status{margin:0;padding:3px 11px 8px;font-size:10px;line-height:1.45;color:#61758a}
 .sat-list{background:#fff;flex:none}
 .sat-list:empty{display:none}
+.sat-shift{min-width:0;padding-top:5px}
+.sat-shift+.sat-shift{border-top:1px solid #dce5ee;margin-top:5px}
+.sat-shift-heading{display:flex;align-items:baseline;justify-content:space-between;gap:5px;margin:0;padding:5px 11px;color:#35536d;font-size:11px;line-height:1.4}
+.sat-shift-heading span{font-size:10px;font-weight:500;color:#6a7d90;white-space:nowrap}
+.sat-activity-heading{margin:0;padding:6px 11px 2px;font-size:10px;font-weight:650;color:#687c90;line-height:1.4}
+.sat-shift .sat-list{padding-top:1px;padding-bottom:3px}
+.sat-status.holiday{color:#35536d;font-weight:600;padding-top:5px}
+.chip.compensation{background:#edf3f8;color:#48647d;border-color:#d9e4ee}
+.chip.ac4-continuation{background:#f1e9f9;color:#692e99;border-color:#dfccef;box-shadow:none;text-shadow:none;letter-spacing:0;font-weight:650}
+/* Give names the first row; long AC4 periods use the full width underneath. */
+@media screen and (min-width:761px){
+ .sat-list .badges,.sat-list .ac4-service,.sat-list .ordinary-service{display:contents}
+ .sat-list .member-label{grid-column:1;grid-row:1}
+ .sat-list .ac4-badge-line,.sat-list .ordinary-service>.chip,.sat-list .ac4-service>.chip{grid-column:2;grid-row:1;justify-self:end}
+ .sat-list .ac4-meta,.sat-list .ac4-period,.sat-list .ac4-state{grid-column:1/-1;justify-self:end}
+ .sat-list .chip.ac4-continuation{font-size:9px;padding:3px 5px}
+}
 .ordinary-service{display:flex;flex-direction:column;align-items:flex-end;gap:3px}
 .entry.pay .name,.member-details.pay .name{color:var(--payment)}
 .company-sei{cursor:pointer}
 .company-sei:focus-visible{outline:3px solid #94baff;outline-offset:2px}
-@media screen and (max-width:760px){.service-area-heading{font-size:12px;padding:10px 13px 4px}.sat-heading{font-size:14px}.sat-status{font-size:12px;padding:4px 13px 9px}}
-@media print{.sat-section{background:#fff}.service-area-heading{font-size:8px}.sat-status{font-size:7px}}
+@media screen and (max-width:760px){.service-area-heading{font-size:12px;padding:10px 13px 4px}.sat-heading{font-size:14px}.sat-status{font-size:12px;padding:4px 13px 9px}.sat-shift-heading{font-size:14px;padding:7px 13px}.sat-shift-heading span,.sat-activity-heading{font-size:12px}.sat-activity-heading{padding:7px 13px 3px}}
+@media print{.sat-section{background:#fff}.service-area-heading{font-size:8px}.sat-status{font-size:7px}.sat-shift-heading{font-size:9px}.sat-shift-heading span,.sat-activity-heading{font-size:8px}}
 /* Share desktop rows so roster and SAT content cannot offset the action bars. */
 @media screen and (min-width:761px){
  @supports (grid-template-rows:subgrid){
@@ -696,6 +713,12 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
           "previousAlerts": [
             "Oficial de Dia: designação anterior mantida, ainda a conferir nesta atualização."
           ]
+        },
+        "sat": {
+          "ordinaryStatus": "informed",
+          "expedientStatus": "holiday",
+          "members": [],
+          "alerts": []
         }
       },
       {
@@ -860,12 +883,21 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
         ],
         "alerts": [],
         "sat": {
-          "ordinaryStatus": "not-informed",
+          "ordinaryStatus": "informed",
           "members": [
             {
               "name": "2º SGT WANDERSON",
               "ord": 17,
-              "badges": [],
+              "badges": [
+                {
+                  "kind": "compensation",
+                  "text": "PAGANDO HORAS",
+                  "hours": 4,
+                  "start": "08h00",
+                  "end": "12h00",
+                  "activity": "Vistoria"
+                }
+              ],
               "notes": [],
               "events": [
                 {
@@ -878,14 +910,24 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
                   "document": "OS nº 343/2026; SEI 97776333",
                   "status": "documented-sat",
                   "executionConfirmed": true,
-                  "executionConfirmedOn": "2026-11-05"
+                  "executionConfirmedOn": "2026-11-05",
+                  "activity": "Vistoria"
                 }
               ]
             },
             {
               "name": "3º SGT ROBERTO",
               "ord": 21,
-              "badges": [],
+              "badges": [
+                {
+                  "kind": "ord",
+                  "text": "ORDINÁRIO",
+                  "hours": 5,
+                  "start": "13h00",
+                  "end": "18h00",
+                  "activity": "Protocolo"
+                }
+              ],
               "notes": [],
               "events": [
                 {
@@ -898,7 +940,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
                   "document": "OS nº 343/2026; SEI 97776333",
                   "status": "documented-sat",
                   "executionConfirmed": true,
-                  "executionConfirmedOn": "2026-11-05"
+                  "executionConfirmedOn": "2026-11-05",
+                  "activity": "Protocolo"
                 }
               ]
             }
@@ -1045,7 +1088,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
         ],
         "alerts": [],
         "sat": {
-          "ordinaryStatus": "not-informed",
+          "ordinaryStatus": "informed",
           "members": [
             {
               "name": "2º SGT WANDERSON",
@@ -1063,7 +1106,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
                   "document": "OS nº 343/2026; SEI 97776333",
                   "status": "documented-sat",
                   "executionConfirmed": true,
-                  "executionConfirmedOn": "2026-11-05"
+                  "executionConfirmedOn": "2026-11-05",
+                  "activity": "Vistoria"
                 }
               ]
             },
@@ -1083,14 +1127,24 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
                   "document": "OS nº 343/2026; SEI 97776333",
                   "status": "documented-sat",
                   "executionConfirmed": true,
-                  "executionConfirmedOn": "2026-11-05"
+                  "executionConfirmedOn": "2026-11-05",
+                  "activity": "Vistoria"
                 }
               ]
             },
             {
               "name": "3º SGT ROBERTO",
               "ord": 21,
-              "badges": [],
+              "badges": [
+                {
+                  "kind": "ord",
+                  "text": "ORDINÁRIO",
+                  "hours": 5,
+                  "start": "13h00",
+                  "end": "18h00",
+                  "activity": "Protocolo"
+                }
+              ],
               "notes": [],
               "events": [
                 {
@@ -1103,7 +1157,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
                   "document": "OS nº 343/2026; SEI 97776333",
                   "status": "documented-sat",
                   "executionConfirmed": true,
-                  "executionConfirmedOn": "2026-11-05"
+                  "executionConfirmedOn": "2026-11-05",
+                  "activity": "Protocolo"
                 }
               ]
             }
@@ -1275,12 +1330,21 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
         ],
         "alerts": [],
         "sat": {
-          "ordinaryStatus": "not-informed",
+          "ordinaryStatus": "informed",
           "members": [
             {
               "name": "3º SGT ROBERTO",
               "ord": 21,
-              "badges": [],
+              "badges": [
+                {
+                  "kind": "ord",
+                  "text": "ORDINÁRIO",
+                  "hours": 5,
+                  "start": "13h00",
+                  "end": "18h00",
+                  "activity": "Vistoria"
+                }
+              ],
               "notes": [],
               "events": [
                 {
@@ -1291,7 +1355,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
                   "hours": 4,
                   "observation": "ATIVIDADES TÉCNICAS — SAT",
                   "document": "OS nº 343/2026; SEI 97776333",
-                  "status": "documented-sat"
+                  "status": "documented-sat",
+                  "activity": "Vistoria"
                 }
               ]
             },
@@ -1309,7 +1374,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
                   "hours": 4,
                   "observation": "ATIVIDADES TÉCNICAS — SAT",
                   "document": "OS nº 343/2026; SEI 97776333",
-                  "status": "documented-sat"
+                  "status": "documented-sat",
+                  "activity": "Protocolo"
                 },
                 {
                   "mode": "SAT",
@@ -1319,7 +1385,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
                   "hours": 4,
                   "observation": "ATIVIDADES TÉCNICAS — SAT",
                   "document": "OS nº 343/2026; SEI 97776333",
-                  "status": "documented-sat"
+                  "status": "documented-sat",
+                  "activity": "Protocolo"
                 }
               ]
             }
@@ -1443,7 +1510,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
         ],
         "alerts": [],
         "sat": {
-          "ordinaryStatus": "not-informed",
+          "ordinaryStatus": "informed",
           "members": [
             {
               "name": "3º SGT BERTONCELLO",
@@ -1459,14 +1526,24 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
                   "hours": 5,
                   "observation": "ATIVIDADES TÉCNICAS — SAT",
                   "document": "OS nº 343/2026; SEI 97776333",
-                  "status": "documented-sat"
+                  "status": "documented-sat",
+                  "activity": "Vistoria"
                 }
               ]
             },
             {
               "name": "3º SGT ROBERTO",
               "ord": 21,
-              "badges": [],
+              "badges": [
+                {
+                  "kind": "ord",
+                  "text": "ORDINÁRIO",
+                  "hours": 5,
+                  "start": "13h00",
+                  "end": "18h00",
+                  "activity": "Protocolo"
+                }
+              ],
               "notes": [],
               "events": [
                 {
@@ -1477,7 +1554,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
                   "hours": 4,
                   "observation": "ATIVIDADES TÉCNICAS — SAT",
                   "document": "OS nº 343/2026; SEI 97776333",
-                  "status": "documented-sat"
+                  "status": "documented-sat",
+                  "activity": "Protocolo"
                 }
               ]
             }
@@ -9260,6 +9338,26 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
   const chiefFor=day=>window.ServiceChief.select(day,m=>ordOverrides.has(m.name)?ordOverrides.get(m.name):m.ord);
   const satFor=day=>day.sat || {members:[],ordinaryStatus:'not-informed',alerts:[]};
   const ordinaryPending=sat=>sat.ordinaryStatus!=='informed';
+  const satShifts=[{key:'matutino',label:'Matutino',start:0,end:780,ordinary:'8h às 12h'},{key:'vespertino',label:'Vespertino',start:780,end:1440,ordinary:'13h às 18h'}];
+  const satClock=value=>{const m=String(value??'').match(/^(\d{1,2})h(\d{2})?$/);return m&&Number(m[1])<24&&Number(m[2]||0)<60?Number(m[1])*60+Number(m[2]||0):null;};
+  function satInShift(service,shift){
+    const start=satClock(service.start),end=satClock(service.end);
+    // Keep an incomplete record visible for review instead of silently omitting it.
+    if(start===null||end===null)return shift.key==='matutino';
+    return start<shift.end&&end+(service.nextDay?1440:0)>shift.start;
+  }
+  const satActivity=service=>['Protocolo','Vistoria'].find(name=>name.toLowerCase()===String(service.activity||'').toLowerCase())||'Atividade não informada';
+  const satContinuation=(event,shift)=>shift?.key==='vespertino'&&satClock(event.start)!==null&&satClock(event.start)<shift.start&&satInShift(event,shift);
+  function satGroups(sat){
+    const members=orderedDayMembers({members:sat.members});
+    return satShifts.map(shift=>({...shift,groups:['Protocolo','Vistoria','Atividade não informada'].map(activity=>({activity,members:members.flatMap((member,index)=>{
+      const badges=member.badges.filter(service=>satInShift(service,shift)&&satActivity(service)===activity),events=member.events.filter(service=>satInShift(service,shift)&&satActivity(service)===activity);
+      return badges.length||events.length?[{member:{...member,badges,events},index,total:members.length}]:[];
+    })})).filter(group=>group.members.length)}));
+  }
+  function satShiftHeading(shift,tag='h4'){
+    const heading=element(tag,'sat-shift-heading',shift.label),hours=element('span','',shift.ordinary);hours.title='Horário padrão do expediente ordinário';heading.append(hours);return heading;
+  }
 
   function element(tag, className, text) {
     const node = document.createElement(tag);
@@ -9369,7 +9467,19 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     if(value.status==='executed'||value.status==='cancelled')service.append(element('span','ac4-state',value.status==='executed'?'Execução confirmada':'Cancelado'));
     return service;
   }
-  function badgeNodes(member,chief,day) {
+  function satAc4Badge(event,memberName,day,shift){
+    if(!satContinuation(event,shift)){
+      const service=ac4Badge(event,memberName,day);
+      if(shift?.key==='matutino'&&satInShift(event,satShifts[1]))service.append(element('span','ac4-state','Contínuo · segue no Vespertino'));
+      return service;
+    }
+    // This is the same canonical AC4, not a second service or a second charge.
+    const service=element('span','ac4-service ac4-continuation'),sei=seiForEvent(event),chip=element(sei?'button':'span','chip ac4 ac4-continuation','AC4 · Continuação');
+    if(sei){chip.type='button';chip.dataset.copySei=sei;chip.setAttribute('aria-label',`Copiar SEI ${sei} do AC4 contínuo de ${memberName}`);}
+    chip.title=`Mesmo AC4 de ${event.hours}h, das ${ac4Period(event)}. Valor integral exibido no turno de início.`;
+    service.append(chip,element('span','ac4-period',`13h às ${shortHour(event.end)}`),element('span','ac4-state',`Mesmo AC4 ${event.hours}h`));return service;
+  }
+  function badgeNodes(member,chief,day,satShift=null) {
     const oddWithAc4 = member.badges.some(badge => badge.kind === 'officer') && member.events.some(finance.active);
     const assignments = chief.assignments.filter(a => a.name === member.name);
     const badges = element('span', `badges${oddWithAc4 ? ' has-odd-ac4' : ''}${assignments.length ? ' has-adjunto' : ''}`);
@@ -9389,11 +9499,11 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
       const chip = element(canCopy?'button':'span', `chip ${badge.kind}${canCopy?' company-sei':''}`, label);
       if(badge.kind==='officer'&&oddWithAc4){officerChip=chip;continue;}
       if(canCopy){chip.type='button';chip.dataset.copySei=sei;chip.dataset.companySei=sei;chip.title=`Botão direito: copiar SEI ${sei} da TS Cia`;chip.setAttribute('aria-label',`${label}. Copiar SEI ${sei} da TS Cia`);}
-      if(badge.kind==='ord'&&badge.start&&badge.end){
+      if(['ord','compensation'].includes(badge.kind)&&badge.start&&badge.end){
         const service=element('span','ordinary-service');service.append(chip,element('span','ac4-period',`${shortHour(badge.start)} às ${shortHour(badge.end)}`));services.append(service);
       }else services.append(chip);
     }
-    for (const event of member.events){const paired=officerChip&&finance.active(event)?officerChip:null;services.append(ac4Badge(event,member.name,day,paired));if(paired)officerChip=null;}
+    for (const event of member.events){const paired=officerChip&&finance.active(event)?officerChip:null;services.append(satShift?satAc4Badge(event,member.name,day,satShift):ac4Badge(event,member.name,day,paired));if(paired)officerChip=null;}
     for(const assigned of assignments){
       if(assigned.start!==0||assigned.end!==1440)services.append(element('span','chief-period',window.ServiceChief.period(day,assigned)));
     }
@@ -9480,14 +9590,23 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     const sat=satFor(day),section=element('section','sat-section');section.setAttribute('aria-label',`SAT do dia ${day.day}`);
     section.append(element('h3','service-area-heading sat-heading','SEÇÃO ATIVIDADES TÉCNICAS'));
     if(ordinaryPending(sat))section.append(element('p','sat-status','Expediente ordinário ainda não informado.'));
-    const list=element('ul','entry-list sat-list'),members=orderedDayMembers({members:sat.members});
-    for(const [index,member] of members.entries()){
-      const row=element('li',`entry ${memberClasses(member)}`);
-      row.append(memberLabel(member,index,members.length),badgeNodes(member,{assignments:[]},day));
-      row.title=[...member.notes,...member.events.map(event=>`${eventTime({...event,day:day.day})} · ${event.document}`)].join('\n');list.append(row);
+    if(sat.expedientStatus==='holiday')section.append(element('p','sat-status holiday','Feriado · Sem expediente'));
+    for(const shift of satGroups(sat)){
+      if(!shift.groups.length)continue;
+      const block=element('section','sat-shift');block.dataset.shift=shift.key;block.setAttribute('aria-label',`Turno ${shift.label}`);block.append(satShiftHeading(shift));
+      for(const group of shift.groups){
+        const activity=element('div','sat-activity');activity.dataset.activity=group.activity;activity.append(element('h5','sat-activity-heading',group.activity));
+        const list=element('ul','entry-list sat-list');
+        for(const {member,index,total} of group.members){
+          const row=element('li',`entry ${memberClasses(member)}`);
+          row.append(memberLabel(member,index,total),badgeNodes(member,{assignments:[]},day,shift));
+          row.title=[`${shift.label} · ${group.activity}`,...member.notes,...member.events.map(event=>`${eventTime({...event,day:day.day})} · ${event.document}`)].join('\n');list.append(row);
+        }
+        activity.append(list);block.append(activity);
+      }
+      section.append(block);
     }
-    section.append(list);
-    if(!members.length)section.append(element('p','sat-status','Nenhum serviço SAT informado para este dia.'));
+    if(!sat.members.length&&sat.expedientStatus!=='holiday')section.append(element('p','sat-status','Nenhum serviço SAT informado para este dia.'));
     const actions=element('div','day-actions'),details=element('button','day-notes-button','Detalhes do dia'),order=element('button','day-documents-button','Gerar OS');
     details.type='button';details.dataset.details=String(day.day);details.dataset.serviceArea='sat';details.setAttribute('aria-haspopup','dialog');details.setAttribute('aria-label',`Detalhes da SAT do dia ${day.day}`);
     order.type='button';order.dataset.seiDay=String(day.day);order.dataset.serviceArea='sat';order.setAttribute('aria-haspopup','dialog');order.setAttribute('aria-label',`Gerar Ordem de Serviço da SAT do dia ${day.day}`);
@@ -9570,7 +9689,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     dialogBody.replaceChildren();
     if(original.confirmation?.status==='confirmed')dialogBody.append(element('p','scale-confirmation-note',`Escala confirmada pelo usuário em ${original.confirmation.date.split('-').reverse().join('/')}.`));
     if(sat&&ordinaryPending(data))dialogBody.append(element('p','detail-note','Expediente ordinário da SAT ainda não informado.'));
-    if(sat&&!day.members.length)dialogBody.append(element('p','detail-note','Nenhum serviço SAT informado para este dia.'));
+    if(sat&&data.expedientStatus==='holiday')dialogBody.append(element('p','detail-note','Feriado · Sem expediente'));
+    else if(sat&&!day.members.length)dialogBody.append(element('p','detail-note','Nenhum serviço SAT informado para este dia.'));
     if(chief.status==='pending')dialogBody.append(element('p','chief-pending',chief.label));
     for(const warning of chief.warnings)dialogBody.append(element('p','detail-note',warning));
     if (day.alerts.length) {
@@ -9580,22 +9700,35 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
       dialogBody.append(alerts);
     }
     if (!sat&&!day.members.some(member => member.badges.some(b => b.kind === 'officer'))) dialogBody.append(element('p', 'detail-note', 'Oficial de Dia: designação não informada para este dia.'));
-    const members = orderedDayMembers(day);
-    for (const [index, member] of members.entries()) {
+    const appendMember=(container,member,index,total,shift=null)=>{
       const section = element('section', `member-details ${memberClasses(member)}`);
       const heading = element('div', 'member-heading');
-      heading.append(memberLabel(member, index, members.length, 'h3'), badgeNodes(member,chief,day));
+      heading.append(memberLabel(member,index,total,'h3'),badgeNodes(member,chief,day,shift));
       section.append(heading);
       for (const note of member.notes) section.append(element('p', 'detail-note', note));
-      for(const badge of member.badges)if(sat&&badge.kind==='ord'&&badge.start&&badge.end)section.append(element('p','detail-note',`Expediente ordinário SAT: ${badge.start} às ${badge.end}.`));
+      for(const badge of member.badges)if(sat&&['ord','compensation'].includes(badge.kind)&&badge.start&&badge.end)section.append(element('p','detail-note',`${badge.kind==='ord'?'Expediente ordinário SAT':'Compensação de horas na SAT'} · ${satActivity(badge)}: ${badge.start} às ${badge.end}.`));
       for (const event of member.events) {
+        if(satContinuation(event,shift)){section.append(element('p','detail-note',`Continuação do mesmo AC4 de ${event.hours}h (${ac4Period(event)}). Um único serviço na OS e no cálculo da cota.`));continue;}
         const detail = element('div', 'event-detail');
         detail.dataset.status = event.status;
-        detail.append(element('p', 'event-status', statusText(event)), element('p', 'event-time', `${event.mode} · ${eventTime({...event, day: day.day})}`), observation(event.observation), element('p', 'detail-note', event.document));
+        detail.append(element('p', 'event-status', statusText(event)), element('p', 'event-time', `${event.mode}${sat?` · ${satActivity(event)}`:''} · ${eventTime({...event, day: day.day})}`), observation(event.observation), element('p', 'detail-note', event.document));
         detail.append(eventFinanceDetails(event,day));
         section.append(detail);
       }
-      dialogBody.append(section);
+      container.append(section);
+    };
+    if(sat){
+      for(const shift of satGroups(data)){
+        if(!shift.groups.length)continue;
+        const block=element('section','sat-shift');block.dataset.shift=shift.key;block.append(satShiftHeading(shift,'h3'));
+        for(const group of shift.groups){
+          block.append(element('h4','sat-activity-heading',group.activity));
+          for(const {member,index,total} of group.members)appendMember(block,member,index,total,shift);
+        }
+        dialogBody.append(block);
+      }
+    }else{
+      const members=orderedDayMembers(day);for(const [index,member] of members.entries())appendMember(dialogBody,member,index,members.length);
     }
     dialogBody.append(element('p', 'coverage-note', sat?'Serviços da SAT apresentados separadamente do efetivo operacional. A OS contém somente os períodos de AC4 informados.':'Exibição do serviço operacional e das previsões PROEBOM informadas. PROEBOM e jornadas parciais não completam automaticamente recursos operacionais de 24h. Este calendário não comprova execução ou pagamento.'));
     dialog.showModal();
