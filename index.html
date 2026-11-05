@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="pt-BR"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><meta content="Calendário de serviço da 8ª CIBM, novembro de 2026: alas, militares e modalidades de serviço." name="description"/><title>Escalas de Serviço · Novembro 2026 | 8ª CIBM</title><style>
-:root{color-scheme:light;--ink:#162b40;--muted:#64748b;--line:#e1e8f2;--page:#f1f5fb;--white:#fff;--shadow:0 4px 22px rgba(21,43,69,.07);--alpha:#225ce0;--bravo:#eca018;--charlie:#0f8a68;--delta:#cb286f;--ac4:#7115cd}
+:root{color-scheme:light;--ink:#162b40;--muted:#64748b;--line:#e1e8f2;--page:#f1f5fb;--white:#fff;--shadow:0 4px 22px rgba(21,43,69,.07);--alpha:#225ce0;--bravo:#eca018;--charlie:#0f8a68;--delta:#cb286f;--ac4:#7115cd;--payment:#2563b3}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{margin:0;background:var(--page);color:var(--ink);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;-webkit-font-smoothing:antialiased}
@@ -46,7 +46,7 @@ h1{font-size:clamp(24px,2.7vw,39px);font-weight:850;letter-spacing:-.047em;line-
 .chip{display:inline-flex;align-items:center;justify-content:center;justify-self:end;max-width:100%;border-radius:7px;border:1px solid transparent;padding:3px 7px;white-space:normal;font-size:10px;font-weight:830;letter-spacing:.005em;line-height:1.4;text-align:center;vertical-align:middle}
 .chip.ord{background:#eef2f7;color:#53627a;border-color:#dfe6ee}
 .chip.ts{background:#e6f0ff;color:#165aac;border-color:#c9dcff}
-.chip.pay{background:#fff1d9;color:#8c5705;border-color:#f2d69d}
+.chip.pay{background:var(--payment);color:#fff;border-color:#205ba2}
 .chip.disp{background:#ffebed;color:#b51c33;border-color:#ffc3cb}
 .chip.ac4{background:linear-gradient(130deg,#9b37ef,var(--ac4));color:#fff;border-color:#6810b8;box-shadow:0 2px 8px #8523de5c;text-shadow:0 1px 1px #36075c40;padding:4px 11px;letter-spacing:.045em}
 .chip.officer{background:#e1efff;color:#18569c;border-color:#c2dafa}
@@ -297,6 +297,21 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 .service-badges{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:3px;min-width:0;max-width:90px}
 @media screen and (max-width:760px){.member-count{min-width:18px;height:18px;font-size:10px}.member-label{gap:5px}}
 @media print{.member-count{min-width:12px;height:12px;font-size:7px}.member-label{gap:3px}}
+
+/* SAT has its own list and OS; operational coverage remains above this section. */
+.operational-section{display:flex;flex-direction:column;flex:1;min-width:0}
+.service-area-heading{margin:0;padding:8px 11px 3px;font-size:10px;font-weight:800;letter-spacing:.05em;color:#586f86;line-height:1.4}
+.sat-section{border-top:2px solid #d9e5ef;background:#f8fafc;min-width:0}
+.sat-heading{padding:10px 11px 5px;color:#294d6b}
+.sat-status{margin:0;padding:3px 11px 8px;font-size:10px;line-height:1.45;color:#61758a}
+.sat-list{background:#fff;flex:none}
+.sat-list:empty{display:none}
+.ordinary-service{display:flex;flex-direction:column;align-items:flex-end;gap:3px}
+.entry.pay .name,.member-details.pay .name{color:var(--payment)}
+.company-sei{cursor:pointer}
+.company-sei:focus-visible{outline:3px solid #94baff;outline-offset:2px}
+@media screen and (max-width:760px){.service-area-heading{font-size:12px;padding:10px 13px 4px}.sat-heading{font-size:14px}.sat-status{font-size:12px;padding:4px 13px 9px}}
+@media print{.sat-section{background:#fff}.service-area-heading{font-size:8px}.sat-status{font-size:7px}}
 </style></head><body><main>
 <header class="header"><div class="header-main"><h1><span class="header-title">Previsão Escalas de Serviço</span></h1><div class="header-month month-controls" role="group" aria-label="Selecionar mês e ano"><select id="selecionar-mes" aria-label="Mês da previsão"></select><span aria-hidden="true">/</span><select id="selecionar-ano" aria-label="Ano da previsão"></select></div><p class="header-org">8ª Companhia Independente Bombeiro Militar - Cristalina</p><p class="header-period">Previsão de 01 a 30/11/2026</p></div><div class="header-copy"><span>© 2026 ASP OF CARVALHO.</span><span>Todos os direitos reservados.</span></div></header>
 
@@ -321,7 +336,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
   </div>
   <div id="sei-feedback" class="sei-feedback" role="status" aria-live="polite" aria-atomic="true"></div>
   <details id="sei-validation" class="sei-validation" open></details>
-  <section class="sei-section" aria-labelledby="sei-es-title">
+  <section id="sei-scale-section" class="sei-section" aria-labelledby="sei-es-title">
    <h3 id="sei-es-title">ESCALA DE SERVIÇO</h3>
    <div class="sei-tools"><button type="button" id="sei-copy-scale">Copiar Escala de Serviço para o SEI</button><button type="button" class="sei-secondary" id="sei-select-scale" disabled>Selecionar tabela</button></div>
    <div id="sei-scale-container" class="sei-table-scroll" role="region" aria-label="Tabela da Escala de Serviço" tabindex="0"></div>
@@ -753,7 +768,49 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
         ],
         "alerts": [
           "Oficial de Dia: designação anterior mantida, ainda a conferir nesta atualização."
-        ]
+        ],
+        "sat": {
+          "ordinaryStatus": "not-informed",
+          "members": [
+            {
+              "name": "2º SGT WANDERSON",
+              "ord": 17,
+              "badges": [],
+              "notes": [],
+              "events": [
+                {
+                  "mode": "SAT",
+                  "start": "14h00",
+                  "end": "18h00",
+                  "nextDay": false,
+                  "hours": 4,
+                  "observation": "ATIVIDADES TÉCNICAS — SAT",
+                  "document": "OS nº 343/2026; SEI 97776333",
+                  "status": "documented-sat"
+                }
+              ]
+            },
+            {
+              "name": "3º SGT ROBERTO",
+              "ord": 21,
+              "badges": [],
+              "notes": [],
+              "events": [
+                {
+                  "mode": "SAT",
+                  "start": "08h00",
+                  "end": "12h00",
+                  "nextDay": false,
+                  "hours": 4,
+                  "observation": "ATIVIDADES TÉCNICAS — SAT",
+                  "document": "OS nº 343/2026; SEI 97776333",
+                  "status": "documented-sat"
+                }
+              ]
+            }
+          ],
+          "alerts": []
+        }
       },
       {
         "day": 4,
@@ -884,7 +941,67 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
         ],
         "alerts": [
           "Oficial de Dia: designação anterior mantida, ainda a conferir nesta atualização."
-        ]
+        ],
+        "sat": {
+          "ordinaryStatus": "not-informed",
+          "members": [
+            {
+              "name": "2º SGT WANDERSON",
+              "ord": 17,
+              "badges": [],
+              "notes": [],
+              "events": [
+                {
+                  "mode": "SAT",
+                  "start": "08h00",
+                  "end": "18h00",
+                  "nextDay": false,
+                  "hours": 10,
+                  "observation": "ATIVIDADES TÉCNICAS — SAT",
+                  "document": "OS nº 343/2026; SEI 97776333",
+                  "status": "documented-sat"
+                }
+              ]
+            },
+            {
+              "name": "3º SGT BERTONCELLO",
+              "ord": 20,
+              "badges": [],
+              "notes": [],
+              "events": [
+                {
+                  "mode": "SAT",
+                  "start": "13h00",
+                  "end": "18h00",
+                  "nextDay": false,
+                  "hours": 5,
+                  "observation": "ATIVIDADES TÉCNICAS — SAT",
+                  "document": "OS nº 343/2026; SEI 97776333",
+                  "status": "documented-sat"
+                }
+              ]
+            },
+            {
+              "name": "3º SGT ROBERTO",
+              "ord": 21,
+              "badges": [],
+              "notes": [],
+              "events": [
+                {
+                  "mode": "SAT",
+                  "start": "08h00",
+                  "end": "12h00",
+                  "nextDay": false,
+                  "hours": 4,
+                  "observation": "ATIVIDADES TÉCNICAS — SAT",
+                  "document": "OS nº 343/2026; SEI 97776333",
+                  "status": "documented-sat"
+                }
+              ]
+            }
+          ],
+          "alerts": []
+        }
       },
       {
         "day": 5,
@@ -1040,7 +1157,59 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
           "5 recursos de 24h",
           "Faltam 1 recurso"
         ],
-        "alerts": []
+        "alerts": [],
+        "sat": {
+          "ordinaryStatus": "not-informed",
+          "members": [
+            {
+              "name": "3º SGT ROBERTO",
+              "ord": 21,
+              "badges": [],
+              "notes": [],
+              "events": [
+                {
+                  "mode": "SAT",
+                  "start": "08h00",
+                  "end": "12h00",
+                  "nextDay": false,
+                  "hours": 4,
+                  "observation": "ATIVIDADES TÉCNICAS — SAT",
+                  "document": "OS nº 343/2026; SEI 97776333",
+                  "status": "documented-sat"
+                }
+              ]
+            },
+            {
+              "name": "SD MARTINS",
+              "ord": 29,
+              "badges": [],
+              "notes": [],
+              "events": [
+                {
+                  "mode": "SAT",
+                  "start": "08h00",
+                  "end": "12h00",
+                  "nextDay": false,
+                  "hours": 4,
+                  "observation": "ATIVIDADES TÉCNICAS — SAT",
+                  "document": "OS nº 343/2026; SEI 97776333",
+                  "status": "documented-sat"
+                },
+                {
+                  "mode": "SAT",
+                  "start": "14h00",
+                  "end": "18h00",
+                  "nextDay": false,
+                  "hours": 4,
+                  "observation": "ATIVIDADES TÉCNICAS — SAT",
+                  "document": "OS nº 343/2026; SEI 97776333",
+                  "status": "documented-sat"
+                }
+              ]
+            }
+          ],
+          "alerts": []
+        }
       },
       {
         "day": 6,
@@ -1156,7 +1325,49 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
           "6 recursos de 24h",
           "Meta de 6 recursos"
         ],
-        "alerts": []
+        "alerts": [],
+        "sat": {
+          "ordinaryStatus": "not-informed",
+          "members": [
+            {
+              "name": "3º SGT BERTONCELLO",
+              "ord": 20,
+              "badges": [],
+              "notes": [],
+              "events": [
+                {
+                  "mode": "SAT",
+                  "start": "13h00",
+                  "end": "18h00",
+                  "nextDay": false,
+                  "hours": 5,
+                  "observation": "ATIVIDADES TÉCNICAS — SAT",
+                  "document": "OS nº 343/2026; SEI 97776333",
+                  "status": "documented-sat"
+                }
+              ]
+            },
+            {
+              "name": "3º SGT ROBERTO",
+              "ord": 21,
+              "badges": [],
+              "notes": [],
+              "events": [
+                {
+                  "mode": "SAT",
+                  "start": "08h00",
+                  "end": "12h00",
+                  "nextDay": false,
+                  "hours": 4,
+                  "observation": "ATIVIDADES TÉCNICAS — SAT",
+                  "document": "OS nº 343/2026; SEI 97776333",
+                  "status": "documented-sat"
+                }
+              ]
+            }
+          ],
+          "alerts": []
+        }
       },
       {
         "day": 7,
@@ -8795,7 +9006,10 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
   let selected;
   let cards = [];
   let ordOverrides=new Map();
+  let detailArea='operational',detailDay=null;
   const chiefFor=day=>window.ServiceChief.select(day,m=>ordOverrides.has(m.name)?ordOverrides.get(m.name):m.ord);
+  const satFor=day=>day.sat || {members:[],ordinaryStatus:'not-informed',alerts:[]};
+  const ordinaryPending=sat=>sat.ordinaryStatus!=='informed';
 
   function element(tag, className, text) {
     const node = document.createElement(tag);
@@ -8868,8 +9082,14 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     for (const badge of member.badges) {
       if (badge.kind === 'ac4') continue;
       const label = badge.kind === 'officer' ? (oddWithAc4 ? 'ODD' : 'ODD - Alcançável') : badge.kind === 'ord' && badge.hours && badge.hours !== 24 ? `ORDINÁRIO - ${badge.hours}h` : badge.text;
-      const chip = element('span', `chip ${badge.kind}`, label);
-      services.append(chip);
+      const company=['pay','disp'].includes(badge.kind)&&badge.text.startsWith('TS CIA');
+      const sei=company?String(badge.troca?.sei || member.notes.join(' ').match(/\bSEI\s+(\d{6,12})\b/)?.[1] || ''):'';
+      const canCopy=/^\d{6,12}$/.test(sei);
+      const chip = element(canCopy?'button':'span', `chip ${badge.kind}${canCopy?' company-sei':''}`, label);
+      if(canCopy){chip.type='button';chip.dataset.copySei=sei;chip.dataset.companySei=sei;chip.title=`Botão direito: copiar SEI ${sei} da TS Cia`;chip.setAttribute('aria-label',`${label}. Copiar SEI ${sei} da TS Cia`);}
+      if(badge.kind==='ord'&&badge.start&&badge.end){
+        const service=element('span','ordinary-service');service.append(chip,element('span','ac4-period',`${shortHour(badge.start)} às ${shortHour(badge.end)}`));services.append(service);
+      }else services.append(chip);
     }
     for (const event of member.events) services.append(ac4Badge(event, member.name));
     for(const assigned of assignments){
@@ -8906,7 +9126,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     date.append(element('span', 'day-num', String(day.day).padStart(2, '0')), element('span', `ala-badge ${day.ala.toLowerCase()}`, day.ala));
     const [year, month] = period.split('-').map(Number);
     head.append(date, element('span', 'weekday-label', weekdays[new Date(Date.UTC(year, month - 1, day.day)).getUTCDay()]));
-    const list = element('ul', 'entry-list');
+    const list = element('ul', 'entry-list operational-list');
     const members = orderedDayMembers(day);
     for (const [index, member] of members.entries()) {
       const row = element('li', `entry ${memberClasses(member)}`);
@@ -8935,12 +9155,31 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     documents.setAttribute('aria-haspopup', 'dialog');
     documents.setAttribute('aria-label', `Gerar Escala e Ordem de Serviço do dia ${day.day} de ${periodLabel()}`);
     actions.append(notes, documents);
-    card.append(head, list);
-    if(chief.status==='pending')card.append(element('p','chief-pending',chief.label));
-    card.append(actions);
-    if (day.alerts.length) card.append(element('div', 'print-notes day-print-alerts', day.alerts.join(' ')));
-    card.append(foot);
+    const operational=element('div','operational-section');
+    operational.append(element('h3','service-area-heading','OPERACIONAL'),list);
+    if(chief.status==='pending')operational.append(element('p','chief-pending',chief.label));
+    operational.append(actions);
+    if (day.alerts.length) operational.append(element('div', 'print-notes day-print-alerts', day.alerts.join(' ')));
+    operational.append(foot);
+    card.append(head,operational,makeSatSection(day));
     return card;
+  }
+  function makeSatSection(day){
+    const sat=satFor(day),section=element('section','sat-section');section.setAttribute('aria-label',`SAT do dia ${day.day}`);
+    section.append(element('h3','service-area-heading sat-heading','SAT · Atividades técnicas'));
+    if(ordinaryPending(sat))section.append(element('p','sat-status','Expediente ordinário ainda não informado.'));
+    const list=element('ul','entry-list sat-list'),members=orderedDayMembers({members:sat.members});
+    for(const [index,member] of members.entries()){
+      const row=element('li',`entry ${memberClasses(member)}`);
+      row.append(memberLabel(member,index,members.length),badgeNodes(member,{assignments:[]},day));
+      row.title=[...member.notes,...member.events.map(event=>`${eventTime({...event,day:day.day})} · ${event.document}`)].join('\n');list.append(row);
+    }
+    section.append(list);
+    if(!members.length)section.append(element('p','sat-status','Nenhum serviço SAT informado para este dia.'));
+    const actions=element('div','day-actions'),details=element('button','day-notes-button','Detalhes do dia'),order=element('button','day-documents-button','Gerar OS');
+    details.type='button';details.dataset.details=String(day.day);details.dataset.serviceArea='sat';details.setAttribute('aria-haspopup','dialog');details.setAttribute('aria-label',`Detalhes da SAT do dia ${day.day}`);
+    order.type='button';order.dataset.seiDay=String(day.day);order.dataset.serviceArea='sat';order.setAttribute('aria-haspopup','dialog');order.setAttribute('aria-label',`Gerar Ordem de Serviço da SAT do dia ${day.day}`);
+    actions.append(details,order);section.append(actions);return section;
   }
   function draw() {
     const available = filteredDays();
@@ -9007,12 +9246,16 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     field.append(p);
     return field;
   }
-  function openDetails(dayNumber) {
-    const day = periodDays().find(item => item.day === dayNumber);
-    if (!day) return;
-    const chief=chiefFor(day);
-    document.getElementById('detalhes-titulo').textContent = `${String(day.day).padStart(2, '0')}/${period.split('-')[1]}/${period.split('-')[0]} · Ala ${day.ala}`;
+  function openDetails(dayNumber,area='operational') {
+    const original = periodDays().find(item => item.day === dayNumber);
+    if (!original) return;
+    detailArea=area;detailDay=dayNumber;
+    const sat=area==='sat',data=satFor(original),day=sat?{...original,members:data.members,alerts:data.alerts||[]}:original;
+    const chief=sat?{assignments:[],warnings:[]}:chiefFor(day);
+    document.getElementById('detalhes-titulo').textContent = `${String(day.day).padStart(2, '0')}/${period.split('-')[1]}/${period.split('-')[0]} · ${sat?'SAT':`Ala ${day.ala}`}`;
     dialogBody.replaceChildren();
+    if(sat&&ordinaryPending(data))dialogBody.append(element('p','detail-note','Expediente ordinário da SAT ainda não informado.'));
+    if(sat&&!day.members.length)dialogBody.append(element('p','detail-note','Nenhum serviço SAT informado para este dia.'));
     if(chief.status==='pending')dialogBody.append(element('p','chief-pending',chief.label));
     for(const warning of chief.warnings)dialogBody.append(element('p','detail-note',warning));
     if (day.alerts.length) {
@@ -9021,7 +9264,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
       for (const alert of day.alerts) alerts.append(element('p', '', alert));
       dialogBody.append(alerts);
     }
-    if (!day.members.some(member => member.badges.some(b => b.kind === 'officer'))) dialogBody.append(element('p', 'detail-note', 'Oficial de Dia: designação não informada para este dia.'));
+    if (!sat&&!day.members.some(member => member.badges.some(b => b.kind === 'officer'))) dialogBody.append(element('p', 'detail-note', 'Oficial de Dia: designação não informada para este dia.'));
     const members = orderedDayMembers(day);
     for (const [index, member] of members.entries()) {
       const section = element('section', `member-details ${memberClasses(member)}`);
@@ -9029,6 +9272,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
       heading.append(memberLabel(member, index, members.length, 'h3'), badgeNodes(member,chief,day));
       section.append(heading);
       for (const note of member.notes) section.append(element('p', 'detail-note', note));
+      for(const badge of member.badges)if(sat&&badge.kind==='ord'&&badge.start&&badge.end)section.append(element('p','detail-note',`Expediente ordinário SAT: ${badge.start} às ${badge.end}.`));
       for (const event of member.events) {
         const detail = element('div', 'event-detail');
         detail.dataset.status = event.status;
@@ -9037,7 +9281,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
       }
       dialogBody.append(section);
     }
-    dialogBody.append(element('p', 'coverage-note', 'Exibição do serviço operacional e das previsões PROEBOM informadas. PROEBOM e jornadas parciais não completam automaticamente recursos operacionais de 24h. Este calendário não comprova execução ou pagamento.'));
+    dialogBody.append(element('p', 'coverage-note', sat?'Serviços da SAT apresentados separadamente do efetivo operacional. A OS contém somente os períodos de AC4 informados.':'Exibição do serviço operacional e das previsões PROEBOM informadas. PROEBOM e jornadas parciais não completam automaticamente recursos operacionais de 24h. Este calendário não comprova execução ou pagamento.'));
     dialog.showModal();
     dialog.scrollTop = 0;
   }
@@ -9085,7 +9329,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
   next.addEventListener('click', () => move(1));
   document.getElementById('voltar-competencia').textContent = `Voltar a ${monthNames[Number(initialPeriod.split('-')[1]) - 1]}/${initialPeriod.split('-')[0]}`;
   document.getElementById('voltar-competencia').addEventListener('click', () => { period = initialPeriod; renderPeriod(); });
-  calendar.addEventListener('click', event => { const button = event.target.closest('[data-details]'); if (button) openDetails(Number(button.dataset.details)); });
+  calendar.addEventListener('click', event => { const button = event.target.closest('[data-details]'); if (button) openDetails(Number(button.dataset.details),button.dataset.serviceArea||'operational'); });
+  document.addEventListener('contextmenu',event=>{const badge=event.target.closest('button[data-company-sei]');if(badge){event.preventDefault();copySei(badge.dataset.companySei);}});
   document.addEventListener('click', event => {
     const button = event.target.closest('button[data-copy-sei]');
     if (button) copySei(button.dataset.copySei);
@@ -9095,7 +9340,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
   let startX = 0, startY = 0;
   calendar.addEventListener('touchstart', event => { if (!mobile.matches) return; startX = event.changedTouches[0].screenX; startY = event.changedTouches[0].screenY; }, {passive: true});
   calendar.addEventListener('touchend', event => { if (!mobile.matches) return; const dx = event.changedTouches[0].screenX - startX, dy = event.changedTouches[0].screenY - startY; if (Math.abs(dx) > 65 && Math.abs(dx) > Math.abs(dy) * 1.4) move(dx < 0 ? 1 : -1); }, {passive: true});
-  document.addEventListener('service-directory-change',event=>{ordOverrides=new Map(event.detail.map(p=>[p.name,p.ord]));renderPeriod();if(dialog.open){const day=Number(document.getElementById('detalhes-titulo').textContent.slice(0,2));dialog.close();openDetails(day);}});
+  document.addEventListener('service-directory-change',event=>{ordOverrides=new Map(event.detail.map(p=>[p.name,p.ord]));renderPeriod();if(dialog.open){dialog.close();openDetails(detailDay,detailArea);}});
   renderPeriod();
 })();
 
@@ -9108,7 +9353,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
   const ui = {
     dialog: byId('sei-generator'), title: byId('sei-date-title'), file: byId('sei-local-file'),
     registerStatus: byId('sei-register-status'), validation: byId('sei-validation'),
-    scale: byId('sei-scale-container'), order: byId('sei-order-container'),
+    scaleSection: byId('sei-scale-section'), orderTitle: byId('sei-os-title'), scale: byId('sei-scale-container'), order: byId('sei-order-container'),
     scope: byId('sei-order-scope'), scopeStatus: byId('sei-order-count'), empty: byId('sei-os-empty'), feedback: byId('sei-feedback'),
     scaleCopy: byId('sei-copy-scale'), orderCopy: byId('sei-copy-order'),
     scaleSelect: byId('sei-select-scale'), orderSelect: byId('sei-select-order')
@@ -9118,7 +9363,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
   const pad = value => String(value).padStart(2, '0');
   const esHeaders = ['ORDEM','FUNÇÃO','MILITAR DE SERVIÇO','CPF','ALTERAÇÕES / OBSERVAÇÕES','AC-4','FONTE DO RECURSO'];
   const osHeaders = ['INÍCIO — DATA','HORÁRIO','TÉRMINO — DATA','HORÁRIO','MILITAR DE AC4','CPF','AC4'];
-  const companyColors={pay:'#0050b3',disp:'#c00000'};
+  const companyColors={pay:'#2563b3',disp:'#c00000'};
   const cellStyle = 'border:1px solid #333;padding:5px 6px;vertical-align:middle;';
   let directory = new Map(), references = {ts:[], cia:[], events:[]};
   let current = null, groups = [], scaleTable, orderTable;
@@ -9397,44 +9642,50 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
   function renderOrder() {
     const rows=ui.scope.value==='all'?allOrderRows:groups[Number(ui.scope.value)]?.rows || [];
     const validation=validationFor(rows.map(r=>r.member),false);
+    const scopeLabel=current.area==='sat'?'Todos os AC4 da SAT':'Todos os AC4 do dia';
     orderTable=makeTable(osHeaders,[12,8,12,8,40,14,6],'sei-order-table');const body=orderTable.tBodies[0];
     for(const {member,event} of rows){const time=interval(event),tr=node('tr');tr.append(cell(time.startDate,'center'),cell(time.start,'center'),cell(time.endDate,'center'),cell(time.end,'center'));const name=cell();appendIdentification(name,member);tr.append(name,cell(person(member.name)?.cpf || '','center'),cell(`${event.hours}h`,'center'));body.append(tr);}
     ui.order.replaceChildren(orderTable);ui.empty.hidden=!!rows.length;
-    ui.scopeStatus.textContent=`${rows.length} de ${allOrderRows.length} serviços de AC4 exibidos.${ui.scope.value!=='all'&&allOrderRows.length?' Filtro ativo; selecione Todos os AC4 do dia para incluir todos.':''}`;
+    ui.scopeStatus.textContent=`${rows.length} de ${allOrderRows.length} serviços de AC4 exibidos.${ui.scope.value!=='all'&&allOrderRows.length?` Filtro ativo; selecione ${scopeLabel} para incluir todos.`:''}`;
     orderValid=!!rows.length&&!validation.hard.length;ui.orderCopy.disabled=false;ui.orderSelect.disabled=!orderValid;
     return validation;
   }
   function render() {
     if(!current)return;
-    const members=orderedMembers(),validation=validationFor(members);
-    const chief=window.ServiceChief.select({...current.day,members},m=>person(m.name)?person(m.name).ord:m.ord);
+    const sat=current.area==='sat',members=orderedMembers(),validation=validationFor(members,!sat);
+    const chief=sat?{assignments:[],warnings:[]}:window.ServiceChief.select({...current.day,members},m=>person(m.name)?person(m.name).ord:m.ord);
     validation.warnings.push(...chief.warnings);if(chief.status==='pending')validation.warnings.push(chief.label);
-    ui.title.textContent=`Documentos de ${formatDate(dateInfo().start)} · Ala ${current.day.ala}`;
-    scaleTable=makeTable(esHeaders,[7,10,28,13,30,5,7],'sei-scale-table');const body=scaleTable.tBodies[0];
-    const hasOfficer=members.some(m=>m.badges.some(b=>b.kind==='officer'));
-    let order=1;
-    if(!hasOfficer){const row=node('tr');row.append(cell(pad(order++),'center'),cell('OFICIAL DE DIA'),cell(),cell('','center'),cell(),cell('','center'),cell());body.append(row);validation.warnings.push('Oficial de Dia não informado: primeira linha reservada, sem inventar designação.');}
-    for(const member of members){
-      const row=node('tr'),absent=isAbsent(member),cia=companyExchange(member);
-      const role=member.badges.some(b=>b.kind==='officer')?'OFICIAL DE DIA':chief.assignments.some(a=>a.name===member.name)?'Chefe de Ala':/CHEFE DE ALA|\bCOB\b/i.test(member.funcao)?'':member.funcao;
-      row.append(cell(pad(order++),'center'),cell(role));
-      const name=cell();appendIdentification(name,member);if(absent)name.style.color='#c00000';
-      const cpf=cell(person(member.name)?.cpf || '','center'),obs=cell();
-      for(const line of observations(member))appendRichLine(obs,line);
-      for(const assigned of chief.assignments.filter(a=>a.name===member.name))if(assigned.start!==0||assigned.end!==1440)appendRichLine(obs,`Chefia: ${window.ServiceChief.period(current.day,assigned)}`);
-      if(absent)obs.style.color='#c00000';
-      const funds=[...new Set(member.events.map(e=>resourceFor(member,e)).filter(Boolean))],fund=cell();
-      for(const source of funds)appendRichLine(fund,source);
-      row.append(name,cpf,obs,cell(member.events.map(e=>`${e.hours}h`).join(' + '),'center'),fund);
-      if(cia){row.style.color=companyColors[cia.badge.kind];for(const td of row.cells)td.style.color=companyColors[cia.badge.kind];}
-      body.append(row);
+    ui.title.textContent=sat?`Ordem de Serviço SAT de ${formatDate(dateInfo().start)}`:`Documentos de ${formatDate(dateInfo().start)} · Ala ${current.day.ala}`;
+    ui.orderTitle.textContent=sat?'ORDEM DE SERVIÇO — SAT (AC4)':'ORDEM DE SERVIÇO (AC4)';
+    ui.empty.textContent=sat?'Nenhum AC4 SAT informado para esta data.':'Não há AC4 previsto para esta data.';
+    ui.scaleSection.hidden=sat;
+    if(sat){scaleTable=null;scaleValid=false;ui.scale.replaceChildren();ui.scaleCopy.disabled=true;ui.scaleSelect.disabled=true;}else{
+      scaleTable=makeTable(esHeaders,[7,10,28,13,30,5,7],'sei-scale-table');const body=scaleTable.tBodies[0];
+      const hasOfficer=members.some(m=>m.badges.some(b=>b.kind==='officer'));
+      let order=1;
+      if(!hasOfficer){const row=node('tr');row.append(cell(pad(order++),'center'),cell('OFICIAL DE DIA'),cell(),cell('','center'),cell(),cell('','center'),cell());body.append(row);validation.warnings.push('Oficial de Dia não informado: primeira linha reservada, sem inventar designação.');}
+      for(const member of members){
+        const row=node('tr'),absent=isAbsent(member),cia=companyExchange(member);
+        const role=member.badges.some(b=>b.kind==='officer')?'OFICIAL DE DIA':chief.assignments.some(a=>a.name===member.name)?'Chefe de Ala':/CHEFE DE ALA|\bCOB\b/i.test(member.funcao)?'':member.funcao;
+        row.append(cell(pad(order++),'center'),cell(role));
+        const name=cell();appendIdentification(name,member);if(absent)name.style.color='#c00000';
+        const cpf=cell(person(member.name)?.cpf || '','center'),obs=cell();
+        for(const line of observations(member))appendRichLine(obs,line);
+        for(const assigned of chief.assignments.filter(a=>a.name===member.name))if(assigned.start!==0||assigned.end!==1440)appendRichLine(obs,`Chefia: ${window.ServiceChief.period(current.day,assigned)}`);
+        if(absent)obs.style.color='#c00000';
+        const funds=[...new Set(member.events.map(e=>resourceFor(member,e)).filter(Boolean))],fund=cell();
+        for(const source of funds)appendRichLine(fund,source);
+        row.append(name,cpf,obs,cell(member.events.map(e=>`${e.hours}h`).join(' + '),'center'),fund);
+        if(cia){row.style.color=companyColors[cia.badge.kind];for(const td of row.cells)td.style.color=companyColors[cia.badge.kind];}
+        body.append(row);
+      }
+      ui.scale.replaceChildren(scaleTable);scaleValid=!!members.length&&!validation.hard.length;ui.scaleCopy.disabled=false;ui.scaleSelect.disabled=!scaleValid;
     }
-    ui.scale.replaceChildren(scaleTable);scaleValid=!!members.length&&!validation.hard.length;ui.scaleCopy.disabled=false;ui.scaleSelect.disabled=!scaleValid;
     allOrderRows=members.flatMap(member=>member.events.map(event=>({member,event})));
     const grouped=new Map();
     for(const row of allOrderRows){const {event}=row,key=`${event.mode}\u0000${event.document}`;if(!grouped.has(key))grouped.set(key,{key,mode:event.mode,document:event.document,rows:[]});grouped.get(key).rows.push(row);}
     groups=[...grouped.values()];ui.scope.replaceChildren();
-    const all=node('option','',`Todos os AC4 do dia (${allOrderRows.length})`);all.value='all';ui.scope.append(all);
+    const all=node('option','',`${sat?'Todos os AC4 da SAT':'Todos os AC4 do dia'} (${allOrderRows.length})`);all.value='all';ui.scope.append(all);
     groups.forEach((group,index)=>{const option=node('option','',`${group.mode} · ${group.document}`);option.value=String(index);ui.scope.append(option)});
     ui.scope.value='all';ui.scope.disabled=groups.length<2;
     const osValidation=renderOrder();
@@ -9483,7 +9734,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     const button=event.target.closest('[data-sei-day]');if(!button)return;
     const period=`${byId('selecionar-ano').value}-${pad(byId('selecionar-mes').value)}`;
     const day=schedules[period]?.days.find(d=>d.day===Number(button.dataset.seiDay));if(!day)return;
-    current={period,day};ui.feedback.textContent='';render();ui.dialog.showModal();ui.dialog.scrollTop=0;
+    const area=button.dataset.serviceArea==='sat'?'sat':'operational',sat=day.sat || {members:[],alerts:[]};
+    current={period,area,day:area==='sat'?{...day,members:sat.members,alerts:sat.alerts||[]}:day};ui.feedback.textContent='';render();ui.dialog.showModal();ui.dialog.scrollTop=0;
   });
   byId('sei-close').addEventListener('click',()=>ui.dialog.close());
   ui.file.addEventListener('change',async()=>{
@@ -9495,7 +9747,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
       const nextReferences={ts:[...(input.trocas_entre_militares||[]),...(input.trocas_anteriores_relevantes||[]),...(input.trocas_futuras_relevantes||[])],cia:input.trocas_companhia||[],events:input.ac4_eventos||[]};
       if(input._xlsx){for(const [key,p] of directory)if(!people.has(key))people.set(key,p);}
       directory=people;if(!input._xlsx)references=nextReferences;
-      document.dispatchEvent(new CustomEvent('service-directory-change',{detail:[...new Set(Object.values(schedules).flatMap(s=>s.days.flatMap(d=>d.members.map(m=>m.name))))].flatMap(name=>person(name)?[{name,ord:person(name).ord}]:[])}));
+      document.dispatchEvent(new CustomEvent('service-directory-change',{detail:[...new Set(Object.values(schedules).flatMap(s=>s.days.flatMap(d=>[...d.members,...(d.sat?.members||[])].map(m=>m.name))))].flatMap(name=>person(name)?[{name,ord:person(name).ord}]:[])}));
       ui.registerStatus.textContent=`${directory.size} militares carregados apenas nesta sessão. CPFs não informados permanecerão em branco.`;ui.feedback.textContent='Cadastro local carregado. Confira as tabelas e clique no botão de cópia desejado.';render();
     }catch(error){ui.feedback.textContent=`Não foi possível importar: ${error instanceof SyntaxError?'JSON inválido.':error.message}`;}
     finally{ui.file.value='';}
@@ -9503,17 +9755,18 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
   byId('sei-clear-register').addEventListener('click',()=>{directory.clear();references={ts:[],cia:[],events:[]};document.dispatchEvent(new CustomEvent('service-directory-change',{detail:[]}));ui.registerStatus.textContent='Nenhum cadastro importado.';ui.feedback.textContent='Cadastro removido da sessão.';render();});
   ui.scope.addEventListener('change',()=>{renderOrder();ui.feedback.textContent='';});
   function requestCopy(kind) {
-    if(kind==='order'&&!groups.length){ui.feedback.textContent='Não há serviço de AC4 neste dia para gerar Ordem de Serviço.';return;}
+    if(kind==='scale'&&current?.area==='sat'){ui.feedback.textContent='A SAT utiliza somente a tabela de Ordem de Serviço dos AC4.';return;}
+    if(kind==='order'&&!groups.length){ui.feedback.textContent=current.area==='sat'?'Nenhum AC4 SAT informado neste dia para gerar Ordem de Serviço.':'Não há serviço de AC4 neste dia para gerar Ordem de Serviço.';return;}
     if(!(kind==='scale'?scaleValid:orderValid)){
       ui.feedback.textContent=directory.size?'Confira as identificações pendentes acima e importe um cadastro que as complete.':'Selecione o Plano de Chamada (.xlsx) ou cadastro local (.json) para preencher os nomes e CPFs antes de copiar.';
       ui.validation.open=true;
       if(!directory.size)ui.file.click();else ui.file.focus();return;
     }
-    copyTable(kind==='scale'?scaleTable:orderTable,kind==='scale'?'Escala de Serviço':'Ordem de Serviço');
+    copyTable(kind==='scale'?scaleTable:orderTable,kind==='scale'?'Escala de Serviço':current.area==='sat'?'Ordem de Serviço SAT':'Ordem de Serviço');
   }
   ui.scaleCopy.addEventListener('click',()=>requestCopy('scale'));
   ui.orderCopy.addEventListener('click',()=>requestCopy('order'));
-  ui.scaleSelect.addEventListener('click',()=>{selectTable(scaleTable);ui.feedback.textContent='Linhas de dados da Escala selecionadas, sem cabeçalho. Use Ctrl+C para copiar.';});
+  ui.scaleSelect.addEventListener('click',()=>{if(!scaleTable)return;selectTable(scaleTable);ui.feedback.textContent='Linhas de dados da Escala selecionadas, sem cabeçalho. Use Ctrl+C para copiar.';});
   ui.orderSelect.addEventListener('click',()=>{selectTable(orderTable);ui.feedback.textContent='Linhas de dados da Ordem selecionadas, sem cabeçalho. Use Ctrl+C para copiar.';});
 })();
 
