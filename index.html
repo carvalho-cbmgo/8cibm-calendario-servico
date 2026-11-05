@@ -5,14 +5,14 @@
 html{scroll-behavior:smooth}
 body{margin:0;background:var(--page);color:var(--ink);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;-webkit-font-smoothing:antialiased}
 main{max-width:1800px;margin:0 auto;padding:clamp(10px,2.4vw,28px) clamp(10px,2.5vw,34px) 42px}
-.header{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,440px);grid-template-areas:". copyright" "main finance";align-items:start;gap:14px clamp(22px,3vw,42px);overflow:hidden;background:linear-gradient(115deg,#10283f 5%,#193d61 58%,#125479);border:1px solid #2d5377;border-radius:19px;padding:clamp(17px,2.6vw,31px);color:#fff;box-shadow:0 8px 28px rgba(14,42,74,.15)}
+.header{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,440px);grid-template-areas:"main copyright" "main finance";align-items:start;gap:12px clamp(22px,3vw,42px);overflow:hidden;background:linear-gradient(115deg,#10283f 5%,#193d61 58%,#125479);border:1px solid #2d5377;border-radius:19px;padding:clamp(18px,1.8vw,24px) clamp(17px,2.6vw,31px);color:#fff;box-shadow:0 8px 28px rgba(14,42,74,.15)}
 .header::after{content:"";position:absolute;width:320px;height:320px;right:-125px;top:-210px;border:1px solid #ffffff2b;border-radius:50%;box-shadow:0 0 0 48px #ffffff08,0 0 0 97px #ffffff06;pointer-events:none}
 h1{font-size:clamp(24px,2.7vw,39px);font-weight:850;letter-spacing:-.047em;line-height:1.13;margin:0 0 13px}
 .header-main{grid-area:main;position:relative;z-index:1;min-width:0}
 .header-title,.header-month{display:block}
 .header-title{white-space:normal}
 .header-month{margin-top:7px;color:#c8e3ff;font-size:.8em;letter-spacing:-.025em}
-.header-org{margin:0 0 5px;font-size:clamp(10px,1.35vw,15px);font-weight:680;letter-spacing:-.015em}
+.header-org{margin:0 0 16px;color:#ffdc8a;font-size:clamp(12px,1.2vw,15px);font-weight:750;line-height:1.45;letter-spacing:.005em}
 .header-period{margin:0;color:#c8e3ff;font-size:clamp(12px,1.3vw,15px);font-weight:600}
 .header-copy{grid-area:copyright;position:relative;z-index:1;display:flex;flex-direction:column;align-items:flex-end;justify-self:end;gap:2px;margin:0;padding:0;color:#d7e9ff;font-size:clamp(10px,1.1vw,12px);line-height:1.4;font-weight:700;letter-spacing:.01em;text-align:right;white-space:nowrap}
 .filterbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:18px 0}
@@ -111,12 +111,13 @@ h1{font-size:clamp(24px,2.7vw,39px);font-weight:850;letter-spacing:-.047em;line-
 }
 
 [hidden]{display:none!important}
-.header-main h1{margin-bottom:5px}
-.month-controls{display:flex;align-items:center;gap:10px;margin:0 0 12px;color:#c8e3ff;font-size:clamp(19px,2.16vw,31px);font-weight:800;letter-spacing:-.025em}
-.month-controls button{display:inline-flex;align-items:center;justify-content:center;flex:0 0 44px;width:44px;height:44px;padding:0;border:1px solid #ffffff38;border-radius:9px;background:#ffffff0a;color:inherit;cursor:pointer}
-.month-controls button:hover{background:#ffffff20;border-color:#ffffff65}
+.header-main h1{margin-bottom:8px}
+.month-controls{display:inline-grid;grid-template-columns:44px minmax(0,1fr) 44px;align-items:center;gap:6px;width:max-content;max-width:100%;margin:0 0 10px;padding:4px;border:1px solid #b7d9f133;border-radius:14px;background:linear-gradient(120deg,#ffffff0e,#0b253e45);color:#e6f4ff;font-size:clamp(19px,2vw,27px);font-weight:750;letter-spacing:-.02em;box-shadow:inset 0 1px 0 #ffffff0a}
+.month-controls button{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;padding:0;border:1px solid #dceefbcc;border-radius:10px;background:#e0effa;color:#234b6b;box-shadow:0 2px 5px #061d3026;cursor:pointer;transition:background .15s,transform .15s}
+.month-controls button:hover{background:#fff;border-color:#fff}
+.month-controls button:active{transform:translateY(1px)}
 .month-controls button svg{width:22px;height:22px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
-.month-label{white-space:nowrap;min-width:0;font-variant-numeric:tabular-nums}
+.month-label{white-space:nowrap;min-width:0;padding:0 8px;text-align:center;font-variant-numeric:tabular-nums;line-height:1.3}
 .month-controls button:focus-visible,.day-notes-button:focus-visible,.empty-state button:focus-visible,.dialog-close:focus-visible{outline:3px solid #94baff;outline-offset:2px}
 .badges{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;justify-self:end;gap:3px;max-width:138px;min-width:0}
 .badges .chip{flex:0 1 auto}
@@ -200,8 +201,9 @@ body:has(dialog[open]){overflow:hidden}
  .ac4-service{gap:1px}
 }
 @media print{
- .month-controls{color:#223e57;font-size:20px}
+ .month-controls{display:block;padding:0;border:0;background:none;box-shadow:none;color:#223e57;font-size:20px}
  .month-controls button{display:none}
+ .month-label{display:block;padding:0;text-align:left}
  .day-notes-button,dialog,.copy-status{display:none!important}
  .print-notes{display:block;grid-column:1/-1;font-size:7px;line-height:1.35;color:#53627a}
 }
@@ -241,13 +243,14 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 @media screen and (max-width:760px){
  body{font-size:15px}
  main{display:block;min-height:100dvh;padding:10px 10px max(24px,env(safe-area-inset-bottom))}
- .header{gap:10px;padding:15px 14px;border-radius:14px}
- .header-main h1{font-size:clamp(20px,5.2vw,27px);margin-bottom:9px}
+ .header{gap:6px;padding:12px 14px 14px;border-radius:14px}
+ .header-main h1{font-size:clamp(20px,5.2vw,27px);margin-bottom:7px}
  .header-title{white-space:normal}
- .month-controls{font-size:clamp(18px,5.1vw,22px);gap:6px;margin-bottom:9px}
- .header-org{white-space:normal;font-size:12px;line-height:1.4;letter-spacing:0;margin-bottom:5px}
+ .month-controls{font-size:clamp(18px,4.9vw,21px);gap:4px;padding:3px;margin-bottom:10px}
+ .month-label{padding:0 6px}
+ .header-org{white-space:normal;font-size:12px;line-height:1.4;letter-spacing:0;margin-bottom:12px}
  .header-period{font-size:12px;line-height:1.4}
- .header-copy{font-size:11px;line-height:1.35}
+ .header-copy{font-size:10px;line-height:1.3}
  .filterbar{margin:13px 0}
  .filters{gap:6px}
  .filters button{font-size:12px;min-height:44px;padding:7px 2px;line-height:1.25}
@@ -349,17 +352,21 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 }
 
 /* Currency comes from the schedule; only the quota is configured per month. */
-.monthly-finance{grid-area:finance;position:relative;z-index:1;margin:0;padding:0 0 0 clamp(20px,2.2vw,32px);border:0;border-left:1px solid #ffffff26;border-radius:0;background:transparent;width:100%;font-size:13px;line-height:1.45;min-width:0}
-.finance-metrics{display:grid;gap:4px}
+.monthly-finance{grid-area:finance;position:relative;z-index:1;margin:0;padding:14px 16px;border:1px solid #91c4df38;border-radius:14px;background:linear-gradient(135deg,#163954b3,#0e334b99);box-shadow:inset 0 1px 0 #ffffff0a;width:100%;font-size:13px;line-height:1.45;min-width:0}
+.finance-metrics{display:grid;gap:6px}
 .finance-metric{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:8px;padding:3px 0;min-width:0;font-variant-numeric:tabular-nums}
-.finance-metric-label{font-size:12px;font-weight:500;color:#c2d5e8;line-height:1.4}
+.finance-metric-label{font-size:12px;font-weight:500;color:#c9dfeb;line-height:1.4}
 .finance-metric-amount{font-size:16px;font-weight:650;line-height:1.4;letter-spacing:-.01em;white-space:nowrap}
-.finance-metric-share{min-width:54px;padding:3px 6px;border:1px solid #ffffff16;border-radius:5px;background:#ffffff08;font-size:11px;color:#c7dbea;line-height:1.4;text-align:right}
-.finance-metric-available .finance-metric-amount{color:#deefe6}
-.finance-days-remaining{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:11px 0 0;font-size:12px;line-height:1.5;color:#bfd1e3}
-.finance-days-remaining strong{color:#d9e9f5;font-weight:650;font-variant-numeric:tabular-nums}
-.finance-usage{height:3px;background:#ffffff19;border-radius:3px;overflow:hidden;margin:12px 0 0}
-.finance-usage-fill{display:block;height:100%;background:#9ebfd6;border-radius:inherit}
+.finance-metric-share{min-width:54px;padding:3px 6px;border:1px solid #a6d9f32b;border-radius:6px;background:#8acff00d;font-size:11px;color:#cbeaff;line-height:1.4;text-align:right}
+.finance-metric-quota .finance-metric-amount{color:#d7f1ff}
+.finance-metric-committed .finance-metric-amount{color:#ffd49c}
+.finance-metric-committed .finance-metric-share{color:#ffd49c;background:#ffd49c0c;border-color:#ffd49c26}
+.finance-metric-available .finance-metric-amount{color:#9be8d3}
+.finance-metric-available .finance-metric-share{color:#9be8d3;background:#9be8d30c;border-color:#9be8d326}
+.finance-days-remaining{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:7px 0 0;padding-top:7px;border-top:1px solid #b2d2e31c;font-size:12px;line-height:1.5;color:#bfd8e5}
+.finance-days-remaining strong{color:#d7f1ff;font-weight:650;font-variant-numeric:tabular-nums}
+.finance-usage{height:4px;background:#a9d1e520;border-radius:4px;overflow:hidden;margin:12px 0 0}
+.finance-usage-fill{display:block;height:100%;background:linear-gradient(90deg,#74c9f3,#58d4c6);border-radius:inherit}
 .finance-composition{font-size:12px;margin-top:9px;color:#d1e1ef}
 .finance-composition summary{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:4px 0;list-style:none;cursor:pointer;color:#c2d5e8;font-weight:500}
 .finance-composition summary::-webkit-details-marker{display:none}
@@ -379,8 +386,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 .ac4-state{font-size:10px;line-height:1.3;color:#61758a;text-align:right}
 .event-finance{border-top:1px solid #ded6eb;margin-top:8px;padding-top:7px}.event-finance-total{font-weight:800;color:#473573}
 .finance-slices{font-size:12px;line-height:1.5;padding-left:18px}.finance-slices li{margin:5px 0}
-@media screen and (max-width:760px){.monthly-finance{font-size:13px;padding:11px 0 0;margin-top:3px;border-left:0;border-top:1px solid #ffffff26}.finance-note{font-size:12px}.finance-composition{font-size:13px}.daily-finance{font-size:12px;padding:10px 13px}.ac4-cost,.ac4-state{font-size:12px}.finance-slices{font-size:13px}}
-@media print{.header{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"main copyright" "finance finance"}.monthly-finance{border-left:0;border-top:1px solid #bfcbd7;padding:10px 0 0;background:white;color:#142c49}.finance-metric-label,.finance-metric-share,.finance-composition,.finance-composition summary,.finance-metric-available .finance-metric-amount,.finance-rule,.finance-counts,.finance-days-remaining,.finance-days-remaining strong{color:#53627a}.finance-note{color:#53627a}.daily-finance{font-size:8px}.ac4-meta{font-size:8px}}
+@media screen and (max-width:760px){.monthly-finance{font-size:13px;padding:12px;margin-top:4px}.finance-note{font-size:12px}.finance-composition{font-size:13px}.daily-finance{font-size:12px;padding:10px 13px}.ac4-cost,.ac4-state{font-size:12px}.finance-slices{font-size:13px}}
+@media print{.header{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"main copyright" "finance finance"}.header-org{color:#223e57}.monthly-finance{border:1px solid #bfcbd7;padding:10px;background:white;box-shadow:none;color:#142c49}.monthly-finance .finance-metric-amount,.monthly-finance .finance-metric-share,.finance-metric-label,.finance-composition,.finance-composition summary,.finance-rule,.finance-counts,.finance-days-remaining,.finance-days-remaining strong{color:#53627a}.finance-note{color:#53627a}.daily-finance{font-size:8px}.ac4-meta{font-size:8px}}
 
 .ac4-badge-line{display:flex;align-items:center;justify-content:flex-end;gap:3px;max-width:100%}
 .ac4-badge-line>.chip{flex:0 0 auto;white-space:nowrap}
@@ -403,7 +410,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
  .finance-usage{margin-top:10px}.finance-composition{margin-top:6px}
 }
 </style></head><body><main>
-<header class="header"><div class="header-main"><h1><span class="header-title">Previsão Escalas de Serviço</span></h1><nav class="header-month month-controls" aria-label="Navegação entre os meses"><button id="mes-anterior" type="button" aria-label="Mês anterior"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m14 6-6 6 6 6"/></svg></button><span id="competencia-selecionada" class="month-label" aria-live="polite" aria-atomic="true">Novembro/2026</span><button id="mes-seguinte" type="button" aria-label="Mês seguinte"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m10 6 6 6-6 6"/></svg></button></nav><p class="header-org">8ª Companhia Independente Bombeiro Militar - Cristalina</p><p class="header-period">Previsão de 01 a 30/11/2026</p></div><section id="ac4-month-summary" class="monthly-finance" aria-label="Controle mensal da cota AC4" aria-live="polite"></section><div class="header-copy"><span>© 2026 ASP OF CARVALHO.</span><span>Todos os direitos reservados.</span></div></header>
+<header class="header"><div class="header-main"><h1><span class="header-title">Previsão Escalas de Serviço</span></h1><p class="header-org">8ª Companhia Independente Bombeiro Militar - Cristalina</p><nav class="header-month month-controls" aria-label="Navegação entre os meses"><button id="mes-anterior" type="button" aria-label="Mês anterior"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m14 6-6 6 6 6"/></svg></button><span id="competencia-selecionada" class="month-label" aria-live="polite" aria-atomic="true">Novembro/2026</span><button id="mes-seguinte" type="button" aria-label="Mês seguinte"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m10 6 6 6-6 6"/></svg></button></nav><p class="header-period">Previsão de 01 a 30/11/2026</p></div><section id="ac4-month-summary" class="monthly-finance" aria-label="Controle mensal da cota AC4" aria-live="polite"></section><div class="header-copy"><span>© 2026 ASP OF CARVALHO.</span><span>Todos os direitos reservados.</span></div></header>
 
 <div class="filterbar"><div aria-label="Filtrar alas" class="filters" role="group"><button aria-pressed="true" data-filter="TODAS" type="button">Todas as alas</button><button aria-pressed="false" data-filter="ALPHA" type="button">Alpha</button><button aria-pressed="false" data-filter="BRAVO" type="button">Bravo</button><button aria-pressed="false" data-filter="CHARLIE" type="button">Charlie</button><button aria-pressed="false" data-filter="DELTA" type="button">Delta</button></div><small>Serviço operacional e previsões PROEBOM · Clique no AC4 com OS definida para copiar o SEI.</small></div>
 <nav aria-label="Navegação entre os dias" class="mobile-nav"><button aria-label="Dia anterior" id="dia-anterior" type="button">‹</button><div class="mobile-nav-center"><select aria-label="Selecionar dia de serviço" id="selecionar-dia"></select><span aria-live="polite" class="mobile-nav-count" id="indicador-dias"></span></div><button aria-label="Próximo dia" id="dia-seguinte" type="button">›</button></nav><div aria-label="Calendário de novembro de 2026" class="calendar"></div>
@@ -9597,16 +9604,16 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     target.replaceChildren();
     const metrics=element('div','finance-metrics');
     const metric=(label,amount,share,className='')=>{const item=element('div',`finance-metric ${className}`.trim());item.append(element('span','finance-metric-label',label),element('strong','finance-metric-amount',amount),element('span','finance-metric-share',share));metrics.append(item);};
-    metric('Cota mensal AC4',financialSummary.quotaCents===null?'Não informada':money(financialSummary.quotaCents),financialSummary.quotaCents>0?'100%':'—');
-    metric('Comprometido',money(financialSummary.committedCents),ratio(financialSummary.committedCents));
+    metric('Cota mensal AC4',financialSummary.quotaCents===null?'Não informada':money(financialSummary.quotaCents),financialSummary.quotaCents>0?'100%':'—','finance-metric-quota');
+    metric('Comprometido',money(financialSummary.committedCents),ratio(financialSummary.committedCents),'finance-metric-committed');
     metric('Disponível',financialSummary.remainingCents===null?'Não informada':money(financialSummary.remainingCents),financialSummary.remainingCents===null?'—':ratio(financialSummary.remainingCents),'finance-metric-available');
     target.append(metrics);target.classList.toggle('over-quota',financialSummary.remainingCents!==null&&financialSummary.remainingCents<0);
+    const days=element('p','finance-days-remaining');days.id='ac4-month-days';days.append(element('span','','Dias restantes no mês'),element('strong'));target.append(days);updateMonthCountdown();
     if(financialSummary.quotaCents>0){
       const used=financialSummary.committedCents/financialSummary.quotaCents*100,bar=element('div','finance-usage'),fill=element('span','finance-usage-fill');
       bar.setAttribute('role','progressbar');bar.setAttribute('aria-label','Comprometimento da cota mensal AC4');bar.setAttribute('aria-valuemin','0');bar.setAttribute('aria-valuemax','100');bar.setAttribute('aria-valuenow',String(Math.min(100,Math.max(0,used))));bar.setAttribute('aria-valuetext',`${ratio(financialSummary.committedCents)} da cota comprometida`);
       fill.style.width=`${Math.min(100,Math.max(0,used))}%`;bar.append(fill);target.append(bar);
     }
-    const days=element('p','finance-days-remaining');days.id='ac4-month-days';days.append(element('span','','Dias restantes no mês'),element('strong'));target.append(days);updateMonthCountdown();
     const details=element('details','finance-composition');details.open=expanded;details.append(element('summary','','Detalhamento da cota'));
     const breakdown=element('dl','finance-breakdown');
     for(const [label,amount] of [['AC4 Operacional (inclui PROEBOM)',financialSummary.operationalCents],['AC4 SAT',financialSummary.satCents],['Previstos, sem execução confirmada',financialSummary.forecastCents],['Execução confirmada',financialSummary.executedCents]])breakdown.append(element('dt','',label),element('dd','',money(amount)));
