@@ -329,6 +329,12 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 .entry.pay .name,.member-details.pay .name{color:var(--payment)}
 .company-sei{cursor:pointer}
 .company-sei:focus-visible{outline:3px solid #94baff;outline-offset:2px}
+.exchange-hint{cursor:help}
+.exchange-hint:focus-visible{outline:3px solid #94baff;outline-offset:2px}
+.exchange-tooltip{position:fixed;inset:auto;margin:0;width:max-content;max-width:min(440px,calc(100vw - 20px));padding:10px 12px;border:1px solid #cfdae8;border-radius:9px;background:#fff;color:#243c54;box-shadow:0 6px 24px #10283f26;font:12px/1.5 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;text-align:left;overflow-wrap:anywhere;z-index:1000}
+.exchange-tooltip p{margin:0}.exchange-tooltip p+p{margin-top:4px}.exchange-tooltip p:first-child{font-weight:750;color:#1f4f7c}
+@media screen and (max-width:760px){.exchange-tooltip{font-size:13px}}
+@media print{.exchange-tooltip{display:none!important}}
 @media screen and (max-width:760px){.service-area-heading{font-size:12px;padding:10px 13px 4px}.sat-heading{font-size:14px}.sat-status{font-size:12px;padding:4px 13px 9px}.sat-shift-heading{font-size:14px;padding:7px 13px}.sat-shift-heading span,.sat-activity-heading{font-size:12px}.sat-activity-heading{padding:7px 13px 3px}}
 @media print{.sat-section{background:#fff}.service-area-heading{font-size:8px}.sat-status{font-size:7px}.sat-shift-heading{font-size:9px}.sat-shift-heading span,.sat-activity-heading{font-size:8px}}
 /* Share desktop rows so roster and SAT content cannot offset the action bars. */
@@ -758,7 +764,13 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
             "badges": [
               {
                 "kind": "ts",
-                "text": "TS · SCHUSSLER"
+                "text": "TS · SCHUSSLER",
+                "troca": {
+                  "numero": "166",
+                  "sei": "97832330",
+                  "data": "2026-11-03",
+                  "substituido": "2º SGT SCHUSSLER"
+                }
               }
             ],
             "notes": [
@@ -1197,7 +1209,13 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
             "badges": [
               {
                 "kind": "ts",
-                "text": "TS · PASSOS"
+                "text": "TS · PASSOS",
+                "troca": {
+                  "numero": "161",
+                  "sei": "97703197",
+                  "data": "2026-11-05",
+                  "substituido": "ST PASSOS"
+                }
               }
             ],
             "notes": [
@@ -1299,9 +1317,9 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
               {
                 "mode": "PROEBOM 2026",
                 "start": "08h00",
-                "end": "12h00",
+                "end": "20h00",
                 "nextDay": false,
-                "hours": 4,
+                "hours": 12,
                 "observation": "PROEBOM 2026",
                 "document": "OS a definir (não informada)",
                 "status": "planned"
@@ -1314,7 +1332,13 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
             "badges": [
               {
                 "kind": "ts",
-                "text": "TS · SANTOS"
+                "text": "TS · SANTOS",
+                "troca": {
+                  "numero": "155",
+                  "sei": "97542993",
+                  "data": "2026-11-05",
+                  "substituido": "SD SANTOS"
+                }
               }
             ],
             "notes": [
@@ -1431,7 +1455,13 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
             "badges": [
               {
                 "kind": "ts",
-                "text": "TS · AISLAN"
+                "text": "TS · AISLAN",
+                "troca": {
+                  "numero": "160",
+                  "sei": "97660634",
+                  "data": "2026-11-06",
+                  "substituido": "ST AISLAN"
+                }
               }
             ],
             "notes": [
@@ -1494,7 +1524,13 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
             "badges": [
               {
                 "kind": "ts",
-                "text": "TS · MARTINS"
+                "text": "TS · MARTINS",
+                "troca": {
+                  "numero": "153/154",
+                  "sei": "97515824 / 97518560",
+                  "data": "2026-11-06",
+                  "substituido": "SD MARTINS"
+                }
               }
             ],
             "notes": [
@@ -1784,7 +1820,13 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
             "badges": [
               {
                 "kind": "ts",
-                "text": "TS · OSVALDIR"
+                "text": "TS · OSVALDIR",
+                "troca": {
+                  "numero": "161",
+                  "sei": "97703197",
+                  "data": "2026-11-08",
+                  "substituido": "ST OSVALDIR"
+                }
               }
             ],
             "notes": [
@@ -1826,7 +1868,13 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
             "badges": [
               {
                 "kind": "ts",
-                "text": "TS · PICCINI"
+                "text": "TS · PICCINI",
+                "troca": {
+                  "numero": "156",
+                  "sei": "97543668",
+                  "data": "2026-11-08",
+                  "substituido": "SD PICCINI"
+                }
               }
             ],
             "notes": [
@@ -2341,7 +2389,13 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
             "badges": [
               {
                 "kind": "ts",
-                "text": "TS · PASSOS"
+                "text": "TS · PASSOS",
+                "troca": {
+                  "numero": "162",
+                  "sei": "97704006",
+                  "data": "2026-11-13",
+                  "substituido": "ST PASSOS"
+                }
               }
             ],
             "notes": [
@@ -2437,18 +2491,25 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
             "ord": 2
           },
           {
-            "name": "ST DA SILVA",
+            "name": "ST OSVALDIR",
+            "ord": 4,
             "badges": [
               {
-                "kind": "ord",
-                "text": "ORDINÁRIO"
+                "kind": "ts",
+                "text": "TS · DA SILVA",
+                "hours": 24,
+                "troca": {
+                  "numero": "164/2026",
+                  "sei": "97705098",
+                  "data": "2026-11-14",
+                  "substituido": "ST DA SILVA"
+                }
               }
             ],
             "notes": [
-              "Ordinário"
+              "TS nº 164/2026 (SEI 97705098). Substitui ST DA SILVA. Permuta tripla de 24h."
             ],
-            "events": [],
-            "ord": 5
+            "events": []
           },
           {
             "name": "ST AISLAN",
@@ -2624,7 +2685,13 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
             "badges": [
               {
                 "kind": "ts",
-                "text": "TS · OSVALDIR"
+                "text": "TS · OSVALDIR",
+                "troca": {
+                  "numero": "162",
+                  "sei": "97704006",
+                  "data": "2026-11-16",
+                  "substituido": "ST OSVALDIR"
+                }
               }
             ],
             "notes": [
@@ -2747,7 +2814,13 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
             "badges": [
               {
                 "kind": "review",
-                "text": "TS · AISLAN (A CONFERIR)"
+                "text": "TS · AISLAN (A CONFERIR)",
+                "troca": {
+                  "numero": "159",
+                  "sei": "97553091",
+                  "data": "2026-11-17",
+                  "substituido": "ST AISLAN"
+                }
               }
             ],
             "notes": [
@@ -2761,7 +2834,13 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
             "badges": [
               {
                 "kind": "ts",
-                "text": "TS · SANTOS"
+                "text": "TS · SANTOS",
+                "troca": {
+                  "numero": "156",
+                  "sei": "97543668",
+                  "data": "2026-11-17",
+                  "substituido": "SD SANTOS"
+                }
               }
             ],
             "notes": [
@@ -2999,7 +3078,13 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
             "badges": [
               {
                 "kind": "ts",
-                "text": "TS · PICCINI"
+                "text": "TS · PICCINI",
+                "troca": {
+                  "numero": "157",
+                  "sei": "97544001",
+                  "data": "2026-11-20",
+                  "substituido": "SD PICCINI"
+                }
               }
             ],
             "notes": [
@@ -3038,7 +3123,13 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
             "badges": [
               {
                 "kind": "ts",
-                "text": "TS · PASSOS"
+                "text": "TS · PASSOS",
+                "troca": {
+                  "numero": "163",
+                  "sei": "97704646",
+                  "data": "2026-11-21",
+                  "substituido": "ST PASSOS"
+                }
               }
             ],
             "notes": [
@@ -3274,7 +3365,13 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
             "badges": [
               {
                 "kind": "ts",
-                "text": "TS · OSVALDIR"
+                "text": "TS · OSVALDIR",
+                "troca": {
+                  "numero": "163",
+                  "sei": "97704646",
+                  "data": "2026-11-24",
+                  "substituido": "ST OSVALDIR"
+                }
               }
             ],
             "notes": [
@@ -3397,7 +3494,13 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
             "badges": [
               {
                 "kind": "ts",
-                "text": "TS · SANTOS"
+                "text": "TS · SANTOS",
+                "troca": {
+                  "numero": "157",
+                  "sei": "97544001",
+                  "data": "2026-11-25",
+                  "substituido": "SD SANTOS"
+                }
               }
             ],
             "notes": [
@@ -3450,7 +3553,13 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
             "badges": [
               {
                 "kind": "ts",
-                "text": "TS · AISLAN"
+                "text": "TS · AISLAN",
+                "troca": {
+                  "numero": "166",
+                  "sei": "97832330",
+                  "data": "2026-11-26",
+                  "substituido": "ST AISLAN"
+                }
               }
             ],
             "notes": [
@@ -3647,7 +3756,13 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
             "badges": [
               {
                 "kind": "ts",
-                "text": "TS · PICCINI"
+                "text": "TS · PICCINI",
+                "troca": {
+                  "numero": "158",
+                  "sei": "97544104",
+                  "data": "2026-11-28",
+                  "substituido": "SD PICCINI"
+                }
               }
             ],
             "notes": [
@@ -3682,18 +3797,27 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
         "ala": "DELTA",
         "members": [
           {
-            "name": "ST OSVALDIR",
+            "name": "ST DA SILVA",
+            "ord": 5,
             "badges": [
               {
                 "kind": "ts",
-                "text": "TS · PASSOS"
+                "text": "TS · OSVALDIR",
+                "hours": 24,
+                "troca": {
+                  "numero": "164/2026",
+                  "sei": "97705098",
+                  "data": "2026-11-29",
+                  "substituido": "ST OSVALDIR",
+                  "substituido_original": "ST PASSOS"
+                }
               }
             ],
             "notes": [
-              "TS nº 164 (SEI 97705098). Substitui ST PASSOS."
+              "TS nº 164/2026 (SEI 97705098). Substitui ST OSVALDIR. Permuta tripla de 24h.",
+              "Permuta tripla: ST OSVALDIR substituiria ST PASSOS; o serviço de 29/11/2026 é assumido por ST DA SILVA."
             ],
-            "events": [],
-            "ord": 4
+            "events": []
           },
           {
             "name": "2º SGT DIEGO",
@@ -3937,17 +4061,24 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
         "members": [
           {
             "name": "ST PASSOS",
+            "ord": 6,
             "badges": [
               {
                 "kind": "ts",
-                "text": "TS · OSVALDIR"
+                "text": "TS · OSVALDIR",
+                "hours": 24,
+                "troca": {
+                  "numero": "164/2026",
+                  "sei": "97705098",
+                  "data": "2026-12-02",
+                  "substituido": "ST OSVALDIR"
+                }
               }
             ],
             "notes": [
-              "TS nº 164 (SEI 97705098). Substitui ST OSVALDIR. 24h."
+              "TS nº 164/2026 (SEI 97705098). Substitui ST OSVALDIR. Permuta tripla de 24h."
             ],
-            "events": [],
-            "ord": 6
+            "events": []
           },
           {
             "name": "1º SGT NIKHOLAS",
@@ -4077,7 +4208,13 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
             "badges": [
               {
                 "kind": "ts",
-                "text": "TS · SANTOS"
+                "text": "TS · SANTOS",
+                "troca": {
+                  "numero": "158",
+                  "sei": "97544104",
+                  "data": "2026-12-03",
+                  "substituido": "SD SANTOS"
+                }
               }
             ],
             "notes": [
@@ -4101,12 +4238,12 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
             "name": "ST DA SILVA",
             "badges": [
               {
-                "kind": "disp",
-                "text": "LICENÇA ESPECIAL"
+                "kind": "ord",
+                "text": "ORDINÁRIO"
               }
             ],
             "notes": [
-              "Licença Especial de 01/12/2026 a 31/12/2026. Não integra o efetivo disponível."
+              "Ordinário"
             ],
             "events": [],
             "ord": 5
@@ -4183,8 +4320,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
           }
         ],
         "coverage": [
-          "5 recursos de 24h",
-          "Faltam 1 recurso"
+          "6 recursos de 24h",
+          "Meta de 6 recursos"
         ],
         "alerts": []
       },
@@ -4359,7 +4496,13 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
             "badges": [
               {
                 "kind": "ts",
-                "text": "TS · PASSOS"
+                "text": "TS · PASSOS",
+                "troca": {
+                  "numero": "165",
+                  "sei": "97705425",
+                  "data": "2026-12-07",
+                  "substituido": "ST PASSOS"
+                }
               }
             ],
             "notes": [
@@ -4439,12 +4582,12 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
             "name": "ST DA SILVA",
             "badges": [
               {
-                "kind": "disp",
-                "text": "LICENÇA ESPECIAL"
+                "kind": "ord",
+                "text": "ORDINÁRIO"
               }
             ],
             "notes": [
-              "Licença Especial de 01/12/2026 a 31/12/2026. Não integra o efetivo disponível."
+              "Ordinário"
             ],
             "events": [],
             "ord": 5
@@ -4521,8 +4664,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
           }
         ],
         "coverage": [
-          "5 recursos de 24h",
-          "Faltam 1 recurso"
+          "6 recursos de 24h",
+          "Meta de 6 recursos"
         ],
         "alerts": []
       },
@@ -4616,7 +4759,13 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
             "badges": [
               {
                 "kind": "ts",
-                "text": "TS · OSVALDIR"
+                "text": "TS · OSVALDIR",
+                "troca": {
+                  "numero": "165",
+                  "sei": "97705425",
+                  "data": "2026-12-10",
+                  "substituido": "ST OSVALDIR"
+                }
               }
             ],
             "notes": [
@@ -4777,12 +4926,12 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
             "name": "ST DA SILVA",
             "badges": [
               {
-                "kind": "disp",
-                "text": "LICENÇA ESPECIAL"
+                "kind": "ord",
+                "text": "ORDINÁRIO"
               }
             ],
             "notes": [
-              "Licença Especial de 01/12/2026 a 31/12/2026. Não integra o efetivo disponível."
+              "Ordinário"
             ],
             "events": [],
             "ord": 5
@@ -4859,8 +5008,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
           }
         ],
         "coverage": [
-          "5 recursos de 24h",
-          "Faltam 1 recurso"
+          "6 recursos de 24h",
+          "Meta de 6 recursos"
         ],
         "alerts": []
       },
@@ -5115,12 +5264,12 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
             "name": "ST DA SILVA",
             "badges": [
               {
-                "kind": "disp",
-                "text": "LICENÇA ESPECIAL"
+                "kind": "ord",
+                "text": "ORDINÁRIO"
               }
             ],
             "notes": [
-              "Licença Especial de 01/12/2026 a 31/12/2026. Não integra o efetivo disponível."
+              "Ordinário"
             ],
             "events": [],
             "ord": 5
@@ -5197,8 +5346,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
           }
         ],
         "coverage": [
-          "5 recursos de 24h",
-          "Faltam 1 recurso"
+          "6 recursos de 24h",
+          "Meta de 6 recursos"
         ],
         "alerts": []
       },
@@ -5453,12 +5602,12 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
             "name": "ST DA SILVA",
             "badges": [
               {
-                "kind": "disp",
-                "text": "LICENÇA ESPECIAL"
+                "kind": "ord",
+                "text": "ORDINÁRIO"
               }
             ],
             "notes": [
-              "Licença Especial de 01/12/2026 a 31/12/2026. Não integra o efetivo disponível."
+              "Ordinário"
             ],
             "events": [],
             "ord": 5
@@ -5535,8 +5684,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
           }
         ],
         "coverage": [
-          "5 recursos de 24h",
-          "Faltam 1 recurso"
+          "6 recursos de 24h",
+          "Meta de 6 recursos"
         ],
         "alerts": []
       },
@@ -5791,12 +5940,12 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
             "name": "ST DA SILVA",
             "badges": [
               {
-                "kind": "disp",
-                "text": "LICENÇA ESPECIAL"
+                "kind": "ord",
+                "text": "ORDINÁRIO"
               }
             ],
             "notes": [
-              "Licença Especial de 01/12/2026 a 31/12/2026. Não integra o efetivo disponível."
+              "Ordinário"
             ],
             "events": [],
             "ord": 5
@@ -5873,8 +6022,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
           }
         ],
         "coverage": [
-          "5 recursos de 24h",
-          "Faltam 1 recurso"
+          "6 recursos de 24h",
+          "Meta de 6 recursos"
         ],
         "alerts": []
       },
@@ -6129,12 +6278,12 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
             "name": "ST DA SILVA",
             "badges": [
               {
-                "kind": "disp",
-                "text": "LICENÇA ESPECIAL"
+                "kind": "ord",
+                "text": "ORDINÁRIO"
               }
             ],
             "notes": [
-              "Licença Especial de 01/12/2026 a 31/12/2026. Não integra o efetivo disponível."
+              "Ordinário"
             ],
             "events": [],
             "ord": 5
@@ -6211,8 +6360,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
           }
         ],
         "coverage": [
-          "5 recursos de 24h",
-          "Faltam 1 recurso"
+          "6 recursos de 24h",
+          "Meta de 6 recursos"
         ],
         "alerts": []
       },
@@ -9479,6 +9628,22 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     chip.title=`Mesmo AC4 de ${event.hours}h, das ${ac4Period(event)}. Valor integral exibido no turno de início.`;
     service.append(chip,element('span','ac4-period',`13h às ${shortHour(event.end)}`),element('span','ac4-state',`Mesmo AC4 ${event.hours}h`));return service;
   }
+  function exchangeHint(member,badge,day){
+    const source=badge.troca||{},notes=member.notes.join(' '),date=`${period}-${String(day.day).padStart(2,'0')}`;
+    const format=value=>/^\d{4}-\d{2}-\d{2}$/.test(String(value||''))?value.split('-').reverse().join('/'):'não informada';
+    if(['pay','disp'].includes(badge.kind)&&badge.text.startsWith('TS CIA')){
+      const sei=source.sei||notes.match(/\bSEI\s+(\d{6,12})\b/)?.[1]||'não informado';
+      // Show the related date: the day being compensated, or the day used to compensate it.
+      const paying=badge.kind==='pay',related=paying?source.dispensa:source.pagamento;
+      return [`TS CIA nº ${source.numero||'não informado'} (SEI ${sei})`,`Data ${paying?'dispensa':'pagamento'} serviço ${format(related)}`];
+    }
+    if(['ts','review'].includes(badge.kind)){
+      const doc=notes.match(/TS\s*n[º°o.]?\s*([\d/\s]+)\s*\(SEI\s*([^)]+)\)/i),number=source.numero||doc?.[1]?.trim()||'não informado',sei=source.sei||doc?.[2]||notes.match(/\bSEI\s+(\d{6,12})\b/)?.[1]||'não informado';
+      const target=source.substituido||notes.match(/Substitui\s+([^.;]+)/i)?.[1]||badge.text.replace(/^TS\s*·\s*/,'').replace(/\s*\(A CONFERIR\)/,'');
+      return [`TS nº ${number} (SEI ${sei})`,`Militar Substituído: ${target} de serviço dia ${format(source.data||date)}`];
+    }
+    return null;
+  }
   function badgeNodes(member,chief,day,satShift=null) {
     const oddWithAc4 = member.badges.some(badge => badge.kind === 'officer') && member.events.some(finance.active);
     const assignments = chief.assignments.filter(a => a.name === member.name);
@@ -9499,6 +9664,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
       const chip = element(canCopy?'button':'span', `chip ${badge.kind}${canCopy?' company-sei':''}`, label);
       if(badge.kind==='officer'&&oddWithAc4){officerChip=chip;continue;}
       if(canCopy){chip.type='button';chip.dataset.copySei=sei;chip.dataset.companySei=sei;chip.title=`Botão direito: copiar SEI ${sei} da TS Cia`;chip.setAttribute('aria-label',`${label}. Copiar SEI ${sei} da TS Cia`);}
+      const hint=exchangeHint(member,badge,day);
+      if(hint){chip.classList.add('exchange-hint');chip.dataset.exchangeTooltip=hint.join('\n');chip.tabIndex=0;chip.title='';}
       if(['ord','compensation'].includes(badge.kind)&&badge.start&&badge.end){
         const service=element('span','ordinary-service');service.append(chip,element('span','ac4-period',`${shortHour(badge.start)} às ${shortHour(badge.end)}`));services.append(service);
       }else services.append(chip);
@@ -9613,6 +9780,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     actions.append(details,order);section.append(actions);return section;
   }
   function draw() {
+    hideExchangeTooltip();
     const available = filteredDays();
     if (!available.some(day => day.day === selected)) selected = available[0]?.day;
     for (const card of cards) {
@@ -9765,6 +9933,49 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     }
     reportCopy(copied ? `SEI ${sei} copiado.` : `Não foi possível copiar automaticamente. SEI: ${sei}`);
   }
+  const exchangeTooltip=element('div','exchange-tooltip');exchangeTooltip.id='exchange-tooltip';exchangeTooltip.role='tooltip';exchangeTooltip.hidden=true;
+  const tooltipPopover=typeof exchangeTooltip.showPopover==='function';if(tooltipPopover)exchangeTooltip.setAttribute('popover','manual');
+  document.body.append(exchangeTooltip);
+  let hintedBadge=null,hoveredBadge=null,focusedBadge=null,tooltipHovered=false,hintTimer;
+  function hideExchangeTooltip(){
+    clearTimeout(hintTimer);hintedBadge?.removeAttribute('aria-describedby');hintedBadge=hoveredBadge=focusedBadge=null;tooltipHovered=false;
+    if(tooltipPopover&&exchangeTooltip.matches(':popover-open'))exchangeTooltip.hidePopover();exchangeTooltip.hidden=true;
+  }
+  function showExchangeTooltip(badge){
+    if(!badge?.isConnected)return hideExchangeTooltip();
+    clearTimeout(hintTimer);hintedBadge?.removeAttribute('aria-describedby');hintedBadge=badge;
+    const host=badge.closest('dialog[open]')||document.body;if(exchangeTooltip.parentElement!==host)host.append(exchangeTooltip);
+    exchangeTooltip.replaceChildren(...badge.dataset.exchangeTooltip.split('\n').map(line=>element('p','',line)));
+    badge.setAttribute('aria-describedby',exchangeTooltip.id);exchangeTooltip.hidden=false;
+    if(tooltipPopover&&!exchangeTooltip.matches(':popover-open'))exchangeTooltip.showPopover();
+    positionExchangeTooltip();
+  }
+  function positionExchangeTooltip(){
+    if(!hintedBadge?.isConnected)return hideExchangeTooltip();
+    const anchor=hintedBadge.getBoundingClientRect(),box=exchangeTooltip.getBoundingClientRect(),margin=10,gap=8;
+    if(!anchor.width||anchor.bottom<=0||anchor.top>=innerHeight)return hideExchangeTooltip();
+    const left=Math.max(margin,Math.min(anchor.right-box.width,innerWidth-box.width-margin));
+    const top=anchor.top-box.height-gap>=margin?anchor.top-box.height-gap:Math.min(anchor.bottom+gap,innerHeight-box.height-margin);
+    exchangeTooltip.style.left=`${left}px`;exchangeTooltip.style.top=`${Math.max(margin,top)}px`;
+  }
+  function settleExchangeTooltip(){
+    clearTimeout(hintTimer);hintTimer=setTimeout(()=>{const badge=hoveredBadge||focusedBadge;if(badge)showExchangeTooltip(badge);else if(!tooltipHovered)hideExchangeTooltip();},80);
+  }
+  document.addEventListener('pointerover',event=>{
+    const badge=event.target.closest('[data-exchange-tooltip]');if(!badge||badge.contains(event.relatedTarget))return;
+    hoveredBadge=badge;showExchangeTooltip(badge);
+  });
+  document.addEventListener('pointerout',event=>{
+    const badge=event.target.closest('[data-exchange-tooltip]');if(!badge||badge.contains(event.relatedTarget))return;
+    if(hoveredBadge===badge)hoveredBadge=null;settleExchangeTooltip();
+  });
+  document.addEventListener('focusin',event=>{const badge=event.target.closest('[data-exchange-tooltip]');if(badge){focusedBadge=badge;showExchangeTooltip(badge);}});
+  document.addEventListener('focusout',event=>{if(focusedBadge===event.target){focusedBadge=null;settleExchangeTooltip();}});
+  exchangeTooltip.addEventListener('pointerenter',()=>{tooltipHovered=true;clearTimeout(hintTimer);});
+  exchangeTooltip.addEventListener('pointerleave',()=>{tooltipHovered=false;settleExchangeTooltip();});
+  document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!exchangeTooltip.hidden){event.preventDefault();event.stopPropagation();hideExchangeTooltip();}},true);
+  document.addEventListener('scroll',event=>{if(!exchangeTooltip.hidden&&!exchangeTooltip.contains(event.target))positionExchangeTooltip();},true);
+  window.addEventListener('resize',hideExchangeTooltip);dialog.addEventListener('close',hideExchangeTooltip);
   monthNames.forEach((name, index) => { const option = element('option', '', name); option.value = String(index + 1); monthPicker.append(option); });
   const years = periods.map(key => Number(key.split('-')[0]));
   for (let year = Math.min(...years) - 1; year <= Math.max(...years) + 5; year++) {
@@ -10036,15 +10247,18 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     const change=member.badges.find(b=>['ts','review'].includes(b.kind));
     const cia=companyExchange(member);
     if (change) {
+      const source=change.troca||{};
       const ref=references.ts.find(t=>t.data===day&&normalize(t.substituto)===normalize(member.name));
       const text=notes.join(' '),match=text.match(/TS\s*n[º°o.]?\s*([\d/\s]+)\s*\(SEI\s*([^)]+)\)/i);
-      const number=match?.[1]?.trim() || ref?.ts || (change.kind==='review'?current.day.alerts.join(' ').match(/TS\s*n[º°o.]?\s*(\d+)/i)?.[1]:'');
-      const sei=match?.[2] || text.match(/\bSEI\s+(\d{8})\b/)?.[1] || ref?.sei;
+      const number=source.numero || match?.[1]?.trim() || ref?.ts || (change.kind==='review'?current.day.alerts.join(' ').match(/TS\s*n[º°o.]?\s*(\d+)/i)?.[1]:'');
+      const sei=source.sei || match?.[2] || text.match(/\bSEI\s+(\d{8})\b/)?.[1] || ref?.sei;
       if (number || sei) lines.push(`TS nº ${number || 'não informado'} (SEI ${sei || 'não informado'})`);
       const sourceTarget=notes.join(' ').match(/Substitui\s+([^.;]+)[.;]?/i)?.[1];
-      const target=ref?.substituido || sourceTarget || change.text.replace(/^TS\s*·\s*/,'').replace(/\s*\(A CONFERIR\)/,'');
+      const target=source.substituido || ref?.substituido || sourceTarget || change.text.replace(/^TS\s*·\s*/,'').replace(/\s*\(A CONFERIR\)/,'');
       if (target) lines.push({kind:'identity',prefix:'Militar substituído: ',name:target});
+      if(source.substituido_original)lines.push({kind:'identity',prefix:'Militar originalmente escalado: ',name:source.substituido_original});
       for (const note of notes) {
+        if(source.substituido_original&&note.startsWith('Permuta tripla:'))continue;
         if (!note.startsWith('TS nº') || /duplicad|inconsisten|conferir/i.test(note)) lines.push(note);
       }
     } else if (cia) {
