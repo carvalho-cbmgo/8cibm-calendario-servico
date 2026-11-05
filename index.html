@@ -118,11 +118,12 @@ h1{font-size:clamp(24px,2.7vw,39px);font-weight:850;letter-spacing:-.047em;line-
 .month-controls select:focus-visible,.day-notes-button:focus-visible,.empty-state button:focus-visible,.dialog-close:focus-visible{outline:3px solid #94baff;outline-offset:2px}
 .badges{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;justify-self:end;gap:3px;max-width:138px;min-width:0}
 .badges .chip{flex:0 1 auto}
-.badges.has-odd-ac4{display:grid;grid-template-columns:auto auto;align-items:start;gap:2px 4px}
+.badges.has-odd-ac4{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:start;gap:2px 4px}
 .has-odd-ac4>.chip.officer{grid-column:1;grid-row:1;padding:4px 7px}
-.has-odd-ac4 .ac4-service{grid-column:2}
+.has-odd-ac4 .ac4-service{grid-column:2;min-width:0}
 .ac4-service{display:flex;flex-direction:column;align-items:flex-end;gap:2px;max-width:100%}
-.ac4-meta{display:inline-flex;align-items:baseline;justify-content:flex-end;gap:4px;white-space:nowrap}
+.ac4-meta{display:block;white-space:nowrap;text-align:right;color:#526882;font-size:10px;font-weight:400;line-height:1.3}
+.ac4-service .ac4-meta .ac4-period{font-size:inherit;font-weight:400;color:inherit}
 .ac4-period{color:#526882;font-size:10px;font-weight:750;line-height:1.2;white-space:nowrap}
 .ac4-planned{color:#975914;font-size:9px;font-weight:750;line-height:1.2;white-space:nowrap}
 button.chip{font-family:inherit}
@@ -264,7 +265,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
  .chip.ac4,.entry .chip.ac4{padding:4px 6px}
  .has-odd-ac4>.chip.officer{padding:4px 6px}
  .ac4-service{gap:4px}
- .ac4-meta{gap:5px}
+ .ac4-meta{font-size:12px}
  .ac4-period{font-size:12px}
  .ac4-planned{font-size:11px}
  .day-actions .day-notes-button,.day-documents-button{font-size:12px;line-height:1.35;padding:10px 7px;min-height:44px}
@@ -333,13 +334,14 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 .monthly-finance.over-quota{border-color:#ffb9aa}.finance-warning{color:#ae271b;font-weight:700}.header .finance-warning{color:#ffd2c6}
 .daily-finance{border-top:1px solid #dce6f1;background:#f5f9ff;padding:9px 11px;font-size:10px;line-height:1.5;color:#34516d;min-width:0;font-variant-numeric:tabular-nums}
 .daily-finance p{margin:3px 0;overflow-wrap:anywhere}.daily-balance{font-weight:750;color:#17634b}.days-remaining{color:#61758a}
-.ac4-cost{color:#425976;font-size:10px;font-weight:800;line-height:1.3;text-align:right;font-variant-numeric:tabular-nums;max-width:100%}
+.ac4-cost{color:#c00000;font-size:inherit;font-weight:800;font-variant-numeric:tabular-nums}
 .is-cancelled .chip.ac4{background:#eef2f6;color:#64748b;border-color:#cbd5e1;box-shadow:none;text-shadow:none;text-decoration:line-through}
-.is-cancelled .ac4-meta,.is-cancelled .ac4-cost{color:#64748b}
+.is-cancelled .ac4-meta{color:#64748b}
+.ac4-state{font-size:10px;line-height:1.3;color:#61758a;text-align:right}
 .event-finance{border-top:1px solid #ded6eb;margin-top:8px;padding-top:7px}.event-finance-total{font-weight:800;color:#473573}
 .finance-slices{font-size:12px;line-height:1.5;padding-left:18px}.finance-slices li{margin:5px 0}
-@media screen and (max-width:760px){.monthly-finance{font-size:13px;padding:10px;margin-top:11px}.finance-fact{column-gap:4px}.finance-note{font-size:12px}.finance-composition{font-size:13px}.daily-finance{font-size:12px;padding:10px 13px}.ac4-cost{font-size:12px}.finance-slices{font-size:13px}}
-@media print{.monthly-finance{border-color:#bfcbd7;background:white;color:#142c49}.finance-note{color:#53627a}.daily-finance{font-size:8px}.ac4-cost{font-size:8px}}
+@media screen and (max-width:760px){.monthly-finance{font-size:13px;padding:10px;margin-top:11px}.finance-fact{column-gap:4px}.finance-note{font-size:12px}.finance-composition{font-size:13px}.daily-finance{font-size:12px;padding:10px 13px}.ac4-cost,.ac4-state{font-size:12px}.finance-slices{font-size:13px}}
+@media print{.monthly-finance{border-color:#bfcbd7;background:white;color:#142c49}.finance-note{color:#53627a}.daily-finance{font-size:8px}.ac4-meta{font-size:8px}}
 </style></head><body><main>
 <header class="header"><div class="header-main"><h1><span class="header-title">Previsão Escalas de Serviço</span></h1><div class="header-month month-controls" role="group" aria-label="Selecionar mês e ano"><select id="selecionar-mes" aria-label="Mês da previsão"></select><span aria-hidden="true">/</span><select id="selecionar-ano" aria-label="Ano da previsão"></select></div><p class="header-org">8ª Companhia Independente Bombeiro Militar - Cristalina</p><p class="header-period">Previsão de 01 a 30/11/2026</p><section id="ac4-month-summary" class="monthly-finance" aria-label="Controle mensal da cota AC4" aria-live="polite"></section></div><div class="header-copy"><span>© 2026 ASP OF CARVALHO.</span><span>Todos os direitos reservados.</span></div></header>
 
@@ -9257,16 +9259,18 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     } else chip.title = statusText(event);
     const meta = element('span', 'ac4-meta');
     meta.append(element('span', 'ac4-period', ac4Period(event)));
-    if (event.status === 'planned' && finance.status(event)==='forecast') {
-      const planned = element('span', 'ac4-planned', 'Previsto');
-      planned.title = `${event.mode} · OS a definir`;
-      meta.append(planned);
-    }
     const value=financialRecord(event,day);
     service.classList.toggle('is-cancelled',value.status==='cancelled');
-    const cost=element('span','ac4-cost',value.valid?`${money(value.commitmentCents)}${value.status==='executed'?' · Executado':value.status==='cancelled'?' · Cancelado':''}`:'Valor a conferir');
+    const cost=element(value.valid?'strong':'span',value.valid?'ac4-cost':'ac4-cost-pending',value.valid?money(value.commitmentCents):'Valor a conferir');
     cost.title=value.status==='executed'?'Execução confirmada; pagamento não presumido.':value.status==='cancelled'?'Serviço cancelado, sem comprometimento da cota.':'Custo previsto, incluído no comprometimento da cota.';
-    service.append(chip, meta, cost);
+    meta.append(document.createTextNode(' - '),cost);
+    service.append(chip,meta);
+    if (event.status === 'planned' && value.status==='forecast') {
+      const planned = element('span', 'ac4-planned', 'Previsto');
+      planned.title = `${event.mode} · OS a definir`;
+      service.append(planned);
+    }
+    if(value.status==='executed'||value.status==='cancelled')service.append(element('span','ac4-state',value.status==='executed'?'Execução confirmada':'Cancelado'));
     return service;
   }
   function badgeNodes(member,chief,day) {
