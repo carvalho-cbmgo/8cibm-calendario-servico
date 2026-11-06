@@ -396,6 +396,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 .daily-finance-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:3px 8px;align-items:baseline;margin:3px 0}
 .daily-finance-label{min-width:0;overflow-wrap:anywhere}
 .daily-finance-value{text-align:right;justify-self:end;font-variant-numeric:tabular-nums;white-space:nowrap}
+.daily-finance-service{color:#c00000;font-weight:400}
 .daily-finance-total{color:#c00000;font-weight:800}
 .day-notes-caption{display:block}
 .day-notes-arrow{font-size:1.15em;font-weight:750;line-height:1}
@@ -9699,7 +9700,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     const line=(label,value,className='')=>{const row=element('div',`daily-finance-row ${className}`.trim());row.append(element('span','daily-finance-label',`${label}:`),element('span','daily-finance-value',value));section.append(row);};
     line('AC4 Operacional',valueWithRatio(data.operationalCents));
     line('AC4 SAT',valueWithRatio(data.satCents));
-    line('TOTAL AC4',valueWithRatio(data.committedCents),'daily-finance-total');
+    line('AC4 SERVIÇO',valueWithRatio(data.committedCents),'daily-finance-service');
+    line('TOTAL AC4',valueWithRatio(data.cumulativeCents),'daily-finance-total');
     line('Saldo disponível',data.remainingCents===null?'cota não informada':valueWithRatio(data.remainingCents),data.remainingCents!==null&&data.remainingCents<0?'finance-warning':'daily-balance');
     const remaining=element('p','days-remaining',`Dias restantes: ${data.daysRemaining}`);remaining.title='Dias após esta data até o término do mês.';section.append(remaining);return section;
   }
