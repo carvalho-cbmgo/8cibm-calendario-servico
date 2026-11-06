@@ -425,6 +425,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 .daily-finance-toggle:focus-visible{outline:2px solid #2563b3;outline-offset:2px}
 .daily-finance-breakdown{margin:2px 0 6px 3px;padding:1px 0 1px 8px;border-left:2px solid #dce6f1}
 .daily-finance-breakdown[hidden]{display:none}
+.daily-finance-breakdown[data-finance-breakdown="cumulative"]{color:#c00000;text-transform:uppercase}
 .daily-finance-breakdown .daily-finance-row{display:flex;flex-wrap:wrap;justify-content:space-between;gap:1px 8px;margin:5px 0}
 .daily-finance-breakdown .daily-finance-label{flex:1 1 115px}
 .daily-finance-breakdown .daily-finance-value{margin-left:auto}
@@ -10057,7 +10058,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
       group.append(content);section.append(group);
     };
     disclosure('service','AC4 SERVIÇO',data.committedCents,'daily-finance-service',[['AC4 Operacional',data.operationalCents],['AC4 SAT',data.satCents]]);
-    disclosure('cumulative','TOTAL AC4',data.cumulativeCents,'daily-finance-total',[['AC4 Operacional Acumulado',data.cumulativeOperationalCents],['AC4 SAT Acumulado',data.cumulativeSatCents]]);
+    disclosure('cumulative','TOTAL AC4',data.cumulativeCents,'daily-finance-total',[['AC4 OPERACIONAL',data.cumulativeOperationalCents],['AC4 SAT',data.cumulativeSatCents]]);
     line(section,'AC4 DISPONÍVEL',data.remainingCents===null?'COTA NÃO INFORMADA':valueWithRatio(data.remainingCents),'daily-balance');
     return section;
   }
