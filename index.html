@@ -385,13 +385,14 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 .finance-weekly-table caption{text-align:left;margin-bottom:10px;color:#243e58;font-size:15px;font-weight:700}
 .finance-weekly-table th,.finance-weekly-table td{padding:11px 10px;border-bottom:1px solid #e0e8f1;text-align:right;vertical-align:middle}
 .finance-weekly-table thead th{background:#f0f5fa;color:#47617b;font-size:11px;font-weight:750;letter-spacing:.025em}
-.finance-weekly-table th:first-child{width:28%;text-align:left}
+.finance-weekly-table th:first-child{width:20%;text-align:left}
 .finance-weekly-table th[scope="row"]{font-weight:650}
-.finance-weekly-table td{white-space:nowrap;font-weight:600}
+.finance-weekly-table td{white-space:normal;font-weight:600}
+.finance-weekly-table .finance-week-total{color:#c00000;font-weight:800}
 .finance-week-range,.finance-week-empty,.finance-week-pending{display:block;white-space:normal;font-size:11px;line-height:1.45;font-weight:400;color:#728398;margin-top:2px}
 .finance-week-pending{color:#a15e13}
 .finance-weekly-note{font-size:12px;line-height:1.6;color:#62758a;margin:11px 0 0}
-@media screen and (max-width:480px){.finance-weekly-table{font-size:12px}.finance-weekly-table th,.finance-weekly-table td{padding:10px 5px}.finance-weekly-table thead th,.finance-week-range,.finance-week-empty,.finance-week-pending{font-size:10px}}
+@media screen and (max-width:480px){.finance-weekly-table{font-size:12px}.finance-weekly-table th,.finance-weekly-table td{padding:10px 4px}.finance-weekly-table thead th{padding-inline:2px;letter-spacing:0}.finance-weekly-table thead th,.finance-week-range,.finance-week-empty,.finance-week-pending{font-size:10px}}
 .over-quota .finance-metric-available .finance-metric-amount{color:#ffd2c6}
 .finance-warning{color:#ae271b;font-weight:700}.header .finance-warning{color:#ffd2c6}
 .daily-finance{border-top:1px solid #dce6f1;background:#f5f9ff;padding:9px 11px;font-size:10px;line-height:1.5;color:#34516d;min-width:0;font-variant-numeric:tabular-nums}
@@ -404,6 +405,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 .finance-slices{font-size:12px;line-height:1.5;padding-left:18px}.finance-slices li{margin:5px 0}
 @media screen and (min-width:761px) and (max-width:1100px){.header-emblem{width:70px;height:56px}.header-brand{gap:12px}.month-controls{margin-left:0}}
 @media screen and (max-width:760px){.monthly-finance{font-size:13px;padding:8px 0 0;margin:0;border-left:0;border-top:1px solid #ffffff18}.finance-dialog-body{padding:16px 14px 20px}.daily-finance{font-size:12px;padding:10px 13px}.ac4-cost,.ac4-state{font-size:12px}.finance-slices{font-size:13px}}
+@media screen and (max-width:360px){.finance-dialog{width:calc(100% - 12px);max-width:calc(100% - 12px)}.finance-dialog-body{padding-inline:8px}}
 @media print{.header{grid-template-columns:minmax(0,1fr);grid-template-areas:"main" "finance"}.header-org{color:#223e57}.monthly-finance{border:0;border-top:1px solid #bfcbd7;padding:10px 0 0;background:white;color:#142c49}.finance-details-button{display:none}.monthly-finance .finance-metric-amount,.monthly-finance .finance-metric-share,.finance-metric-label,.finance-days-remaining,.finance-days-remaining strong{color:#53627a}.daily-finance{font-size:8px}.ac4-meta{font-size:8px}}
 
 .ac4-badge-line{display:flex;align-items:center;justify-content:flex-end;gap:3px;max-width:100%}
@@ -9982,7 +9984,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     const section=element('section','finance-weekly'),table=element('table','finance-weekly-table');
     table.append(element('caption','',`Contabilização semanal · ${periodLabel()}`));
     const head=element('thead'),headers=element('tr');
-    for(const label of ['Semana','AC4 SAT','AC4 OPERACIONAL']){const cell=element('th','',label);cell.scope='col';headers.append(cell);}head.append(headers);table.append(head);
+    for(const label of ['Semana','AC4 SAT','AC4 OPERACIONAL','AC4 SEMANAL']){const cell=element('th',label==='AC4 SEMANAL'?'finance-week-total':'',label);cell.scope='col';headers.append(cell);}head.append(headers);table.append(head);
     const rows=element('tbody');
     for(let index=0;index<4;index++){
       const start=index*7+1,end=index===3?length:(index+1)*7,totals={sat:0,operational:0};
@@ -9999,12 +10001,13 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
       const row=element('tr'),label=element('th','',`${index+1}ª semana`);label.scope='row';
       label.append(element('span','finance-week-range',`${String(start).padStart(2,'0')}–${String(end).padStart(2,'0')}/${String(month).padStart(2,'0')}`));row.append(label);
       for(const category of ['sat','operational']){
-        const cell=element('td','',money(totals[category])),items=records.filter(record=>record.category===category),pending=items.filter(record=>!record.valid).length;
+        const cell=element('td','',money(totals[category]).replace(/\s/g,' ')),items=records.filter(record=>record.category===category),pending=items.filter(record=>!record.valid).length;
         cell.dataset.category=category;
         if(pending)cell.append(element('span','finance-week-pending',`${pending} AC4 a conferir`));
         else if(!items.length)cell.append(element('span','finance-week-empty','Sem registros ativos'));
         row.append(cell);
       }
+      const total=element('td','finance-week-total',money(totals.sat+totals.operational).replace(/\s/g,' '));total.dataset.category='total';row.append(total);
       rows.append(row);
     }
     table.append(rows);section.append(table,element('p','finance-weekly-note','Inclui os valores dos AC4 cadastrados, previstos ou com execução confirmada, sem exigir confirmação da escala. PROEBOM integra o Operacional. A 4ª semana inclui os dias finais do mês; valores ainda não definidos ficam a conferir.'));
