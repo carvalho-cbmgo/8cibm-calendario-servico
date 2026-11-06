@@ -389,6 +389,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 .finance-weekly-table th[scope="row"]{font-weight:650}
 .finance-weekly-table td{white-space:normal;font-weight:600}
 .finance-weekly-table .finance-week-total{color:#c00000;font-weight:800}
+.finance-weekly-table tfoot th[scope="row"],.finance-weekly-table tfoot td{color:#c00000;font-weight:800;border-top:2px solid #d5e0ec}
 .finance-week-range,.finance-week-empty,.finance-week-pending{display:block;white-space:normal;font-size:11px;line-height:1.45;font-weight:400;color:#728398;margin-top:2px}
 .finance-week-pending{color:#a15e13}
 .finance-weekly-note{font-size:12px;line-height:1.6;color:#62758a;margin:11px 0 0}
@@ -9985,7 +9986,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     table.append(element('caption','',`Contabilização semanal · ${periodLabel()}`));
     const head=element('thead'),headers=element('tr');
     for(const label of ['Semana','AC4 SAT','AC4 OPERACIONAL','AC4 SEMANAL']){const cell=element('th',label==='AC4 SEMANAL'?'finance-week-total':'',label);cell.scope='col';headers.append(cell);}head.append(headers);table.append(head);
-    const rows=element('tbody');
+    const rows=element('tbody'),monthlyTotals={sat:0,operational:0};
     for(let index=0;index<4;index++){
       const start=index*7+1,end=index===3?length:(index+1)*7,totals={sat:0,operational:0};
       for(let day=start;day<=end;day++){
@@ -10001,6 +10002,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
       const row=element('tr'),label=element('th','',`${index+1}ª semana`);label.scope='row';
       label.append(element('span','finance-week-range',`${String(start).padStart(2,'0')}–${String(end).padStart(2,'0')}/${String(month).padStart(2,'0')}`));row.append(label);
       for(const category of ['sat','operational']){
+        monthlyTotals[category]+=totals[category];
         const cell=element('td','',money(totals[category]).replace(/\s/g,' ')),items=records.filter(record=>record.category===category),pending=items.filter(record=>!record.valid).length;
         cell.dataset.category=category;
         if(pending)cell.append(element('span','finance-week-pending',`${pending} AC4 a conferir`));
@@ -10010,7 +10012,12 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
       const total=element('td','finance-week-total',money(totals.sat+totals.operational).replace(/\s/g,' '));total.dataset.category='total';row.append(total);
       rows.append(row);
     }
-    table.append(rows);section.append(table,element('p','finance-weekly-note','Inclui os valores dos AC4 cadastrados, previstos ou com execução confirmada, sem exigir confirmação da escala. PROEBOM integra o Operacional. A 4ª semana inclui os dias finais do mês; valores ainda não definidos ficam a conferir.'));
+    const foot=element('tfoot'),totalRow=element('tr'),totalLabel=element('th','','AC4 TOTAL');totalLabel.scope='row';totalRow.append(totalLabel);
+    for(const category of ['sat','operational','total']){
+      const amount=category==='total'?monthlyTotals.sat+monthlyTotals.operational:monthlyTotals[category],cell=element('td','',money(amount).replace(/\s/g,' '));
+      cell.dataset.category=category;totalRow.append(cell);
+    }
+    foot.append(totalRow);table.append(rows,foot);section.append(table,element('p','finance-weekly-note','Inclui os valores dos AC4 cadastrados, previstos ou com execução confirmada, sem exigir confirmação da escala. PROEBOM integra o Operacional. A 4ª semana inclui os dias finais do mês; valores ainda não definidos ficam a conferir.'));
     return section;
   }
   function makeDailyFinance(day){
