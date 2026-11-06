@@ -377,6 +377,18 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 .finance-breakdown dt{min-width:0}.finance-breakdown dd{margin:0;text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums;font-weight:600}
 .finance-breakdown .finance-breakdown-divider{padding-top:12px;border-top:1px solid #e1e8f0}
 .finance-note,.finance-rule,.finance-counts{font-size:12px;line-height:1.6;margin:14px 0 0;color:#62758a}
+.finance-weekly{margin-top:22px}
+.finance-weekly-table{width:100%;table-layout:fixed;border-collapse:collapse;color:#38516b;font-size:13px;line-height:1.5;font-variant-numeric:tabular-nums}
+.finance-weekly-table caption{text-align:left;margin-bottom:10px;color:#243e58;font-size:15px;font-weight:700}
+.finance-weekly-table th,.finance-weekly-table td{padding:11px 10px;border-bottom:1px solid #e0e8f1;text-align:right;vertical-align:middle}
+.finance-weekly-table thead th{background:#f0f5fa;color:#47617b;font-size:11px;font-weight:750;letter-spacing:.025em}
+.finance-weekly-table th:first-child{width:28%;text-align:left}
+.finance-weekly-table th[scope="row"]{font-weight:650}
+.finance-weekly-table td{white-space:nowrap;font-weight:600}
+.finance-week-range,.finance-week-empty,.finance-week-pending{display:block;white-space:normal;font-size:11px;line-height:1.45;font-weight:400;color:#728398;margin-top:2px}
+.finance-week-pending{color:#a15e13}
+.finance-weekly-note{font-size:12px;line-height:1.6;color:#62758a;margin:11px 0 0}
+@media screen and (max-width:480px){.finance-weekly-table{font-size:12px}.finance-weekly-table th,.finance-weekly-table td{padding:10px 5px}.finance-weekly-table thead th,.finance-week-range,.finance-week-empty,.finance-week-pending{font-size:10px}}
 .over-quota .finance-metric-available .finance-metric-amount{color:#ffd2c6}
 .finance-warning{color:#ae271b;font-weight:700}.header .finance-warning{color:#ffd2c6}
 .daily-finance{border-top:1px solid #dce6f1;background:#f5f9ff;padding:9px 11px;font-size:10px;line-height:1.5;color:#34516d;min-width:0;font-variant-numeric:tabular-nums}
@@ -9694,6 +9706,40 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     for(const [index,[label,amount]] of entries.entries()){const divider=index===3?'finance-breakdown-divider':'';breakdown.append(element('dt',divider,label),element('dd',divider,amount));}
     body.append(breakdown,element('p','finance-note','Comprometido no planejamento; não indica pagamento.'),element('p','finance-rule','Saldos diários acumulados até cada data. Competência financeira definida pela data de início do serviço.'),element('p','finance-counts',`${financialSummary.records.filter(r=>r.valid&&r.status!=='cancelled').length} serviços considerados · ${financialSummary.cancelledCount} cancelados · ${financialSummary.duplicateCount} duplicações desconsideradas.`));
     for(const warning of financialSummary.warnings)body.append(element('p','finance-warning',warning));
+    body.append(makeWeeklyFinance());
+  }
+  function makeWeeklyFinance(){
+    const [year,month]=period.split('-').map(Number),length=new Date(Date.UTC(year,month,0)).getUTCDate();
+    const section=element('section','finance-weekly'),table=element('table','finance-weekly-table');
+    table.append(element('caption','',`Contabilização semanal · ${periodLabel()}`));
+    const head=element('thead'),headers=element('tr');
+    for(const label of ['Semana','AC4 SAT','AC4 OPERACIONAL']){const cell=element('th','',label);cell.scope='col';headers.append(cell);}head.append(headers);table.append(head);
+    const rows=element('tbody');
+    for(let index=0;index<4;index++){
+      const start=index*7+1,end=index===3?length:(index+1)*7,totals={sat:0,operational:0};
+      for(let day=start;day<=end;day++){
+        const data=financialSummary.daily.get(`${period}-${String(day).padStart(2,'0')}`);
+        totals.sat+=data.satCents;totals.operational+=data.operationalCents;
+      }
+      const records=financialSummary.records.filter(record=>{
+        if(record.status==='cancelled')return false;
+        const date=String(record.startDate||'');
+        const day=date.startsWith(`${period}-`)?Number(date.slice(8,10)):record.sourcePeriod===period?record.sourceDay:null;
+        return day!==null&&day>=start&&day<=end;
+      });
+      const row=element('tr'),label=element('th','',`${index+1}ª semana`);label.scope='row';
+      label.append(element('span','finance-week-range',`${String(start).padStart(2,'0')}–${String(end).padStart(2,'0')}/${String(month).padStart(2,'0')}`));row.append(label);
+      for(const category of ['sat','operational']){
+        const cell=element('td','',money(totals[category])),items=records.filter(record=>record.category===category),pending=items.filter(record=>!record.valid).length;
+        cell.dataset.category=category;
+        if(pending)cell.append(element('span','finance-week-pending',`${pending} AC4 a conferir`));
+        else if(!items.length)cell.append(element('span','finance-week-empty','Sem registros ativos'));
+        row.append(cell);
+      }
+      rows.append(row);
+    }
+    table.append(rows);section.append(table,element('p','finance-weekly-note','Inclui os valores dos AC4 cadastrados, previstos ou com execução confirmada, sem exigir confirmação da escala. PROEBOM integra o Operacional. A 4ª semana inclui os dias finais do mês; valores ainda não definidos ficam a conferir.'));
+    return section;
   }
   function makeDailyFinance(day){
     const data=financialSummary.daily.get(`${period}-${String(day.day).padStart(2,'0')}`),section=element('section','daily-finance');section.setAttribute('aria-label',`Controle da cota AC4 do dia ${day.day}`);
