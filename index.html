@@ -397,7 +397,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 .over-quota .finance-metric-available .finance-metric-amount{color:#ffd2c6}
 .finance-warning{color:#ae271b;font-weight:700}.header .finance-warning{color:#ffd2c6}
 .daily-finance{border-top:1px solid #dce6f1;background:#f5f9ff;padding:9px 11px;font-size:10px;line-height:1.5;color:#34516d;min-width:0;font-variant-numeric:tabular-nums}
-.daily-finance p{margin:3px 0;overflow-wrap:anywhere}.daily-balance{font-weight:750;color:#17634b}.days-remaining{color:#61758a}
+.daily-finance p{margin:3px 0;overflow-wrap:anywhere}.daily-balance{font-weight:800;color:#17634b;text-transform:uppercase}.days-remaining{color:#61758a}
 .ac4-cost{color:#c00000;font-size:inherit;font-weight:800;font-variant-numeric:tabular-nums}
 .is-cancelled .chip.ac4{background:#eef2f6;color:#64748b;border-color:#cbd5e1;box-shadow:none;text-shadow:none;text-decoration:line-through}
 .is-cancelled .ac4-meta{color:#64748b}
@@ -416,6 +416,19 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 .daily-finance-value{text-align:right;justify-self:end;font-variant-numeric:tabular-nums;white-space:nowrap}
 .daily-finance-service{color:#c00000;font-weight:400}
 .daily-finance-total{color:#c00000;font-weight:800}
+.daily-finance-disclosure>.daily-finance-row{align-items:center}
+.daily-finance-toggle{display:inline-flex;align-items:center;gap:4px;min-width:0;min-height:28px;padding:3px 0;border:0;border-radius:4px;background:none;color:inherit;font:inherit;text-align:left;cursor:pointer}
+.daily-finance-toggle span{min-width:0;overflow-wrap:anywhere}
+.daily-finance-toggle svg{width:13px;height:13px;flex:0 0 auto;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.daily-finance-toggle[aria-expanded="true"] svg{transform:rotate(180deg)}
+.daily-finance-toggle:hover{background:#dce8f36b}
+.daily-finance-toggle:focus-visible{outline:2px solid #2563b3;outline-offset:2px}
+.daily-finance-breakdown{margin:2px 0 6px 3px;padding:1px 0 1px 8px;border-left:2px solid #dce6f1}
+.daily-finance-breakdown[hidden]{display:none}
+.daily-finance-breakdown .daily-finance-row{display:flex;flex-wrap:wrap;justify-content:space-between;gap:1px 8px;margin:5px 0}
+.daily-finance-breakdown .daily-finance-label{flex:1 1 115px}
+.daily-finance-breakdown .daily-finance-value{margin-left:auto}
+@media screen and (max-width:760px){.daily-finance-toggle{min-height:44px}}
 .day-notes-caption{display:block}
 .day-notes-arrow{font-size:1.15em;font-weight:750;line-height:1}
 .day-notes-pending{display:block;margin-top:2px;font-size:.95em;line-height:1.3}
@@ -9710,10 +9723,10 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
       if(!daily.has(record.startDate))daily.set(record.startDate,{operationalCents:0,satCents:0,committedCents:0,forecastCents:0,executedCents:0});
       const d=daily.get(record.startDate);d[record.category==='sat'?'satCents':'operationalCents']+=amount;d.committedCents+=amount;d[record.status==='executed'?'executedCents':'forecastCents']+=amount;
     }
-    const [year,monthNumber]=period.split('-').map(Number),length=new Date(Date.UTC(year,monthNumber,0)).getUTCDate();let cumulativeCents=0;
+    const [year,monthNumber]=period.split('-').map(Number),length=new Date(Date.UTC(year,monthNumber,0)).getUTCDate();let cumulativeCents=0,cumulativeOperationalCents=0,cumulativeSatCents=0;
     for(let day=1;day<=length;day++){
       const date=`${period}-${String(day).padStart(2,'0')}`,d=daily.get(date)||{operationalCents:0,satCents:0,committedCents:0,forecastCents:0,executedCents:0};
-      cumulativeCents+=d.committedCents;Object.assign(d,{date,cumulativeCents,remainingCents:quota===null?null:quota-cumulativeCents,daysRemaining:length-day});daily.set(date,d);
+      cumulativeCents+=d.committedCents;cumulativeOperationalCents+=d.operationalCents;cumulativeSatCents+=d.satCents;Object.assign(d,{date,cumulativeCents,cumulativeOperationalCents,cumulativeSatCents,remainingCents:quota===null?null:quota-cumulativeCents,daysRemaining:length-day});daily.set(date,d);
     }
     const committedCents=operationalCents+satCents;
     return {period,quotaCents:quota,committedCents,operationalCents,satCents,forecastCents,executedCents,remainingCents:quota===null?null:quota-committedCents,cancelledCount,invalidCount,duplicateCount,records,daily,byEvent:aliases,warnings};
@@ -9855,7 +9868,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
   'use strict';
   // Public calendar data only. Add a new YYYY-MM period after its scale is supplied.
   const schedules = window.ServiceCalendar.schedules;
-  const finance=window.AC4Finance,currency=new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}),percent=new Intl.NumberFormat('pt-BR',{maximumFractionDigits:2});
+  const finance=window.AC4Finance,currency=new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}),percent=new Intl.NumberFormat('pt-BR',{maximumFractionDigits:2}),dailyPercent=new Intl.NumberFormat('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
   let financialSummary;
   const periods = Object.keys(schedules).sort();
   const accessDateFormat=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Sao_Paulo',year:'numeric',month:'2-digit',day:'2-digit'});
@@ -9882,6 +9895,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
   const dialogBody = document.getElementById('detalhes-conteudo');
   const mobile = window.matchMedia('(max-width: 760px)');
   const selections = new Map();
+  const dailyFinanceExpanded = new Set();
   let period = initialPeriod;
   let filter = 'TODAS';
   let selected;
@@ -9945,8 +9959,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     return label;
   }
   const money=cents=>currency.format(cents/100);
-  const ratio=cents=>financialSummary.quotaCents>0?`${percent.format(cents/financialSummary.quotaCents*100)}%`:'—';
-  const valueWithRatio=cents=>`${money(cents)} | ${ratio(cents)}`;
+  const ratio=(cents,formatter=percent)=>financialSummary.quotaCents>0?`${formatter.format(cents/financialSummary.quotaCents*100)}%`:'—';
+  const valueWithRatio=cents=>`${money(cents)} | ${ratio(cents,dailyPercent)}`;
   function financialRecord(event,day){return financialSummary.byEvent.get(event)||finance.price(event,`${period}-${String(day.day).padStart(2,'0')}`);}
   function updateMonthCountdown(){
     const target=document.getElementById('ac4-month-days');if(!target)return;
@@ -10022,13 +10036,24 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
   }
   function makeDailyFinance(day){
     const data=financialSummary.daily.get(`${period}-${String(day.day).padStart(2,'0')}`),section=element('section','daily-finance');section.setAttribute('aria-label',`Controle da cota AC4 do dia ${day.day}`);
-    const line=(label,value,className='')=>{const row=element('div',`daily-finance-row ${className}`.trim());row.append(element('span','daily-finance-label',`${label}:`),element('span','daily-finance-value',value));section.append(row);};
-    line('AC4 Operacional',valueWithRatio(data.operationalCents));
-    line('AC4 SAT',valueWithRatio(data.satCents));
-    line('AC4 SERVIÇO',valueWithRatio(data.committedCents),'daily-finance-service');
-    line('TOTAL AC4',valueWithRatio(data.cumulativeCents),'daily-finance-total');
-    line('Saldo disponível',data.remainingCents===null?'cota não informada':valueWithRatio(data.remainingCents),data.remainingCents!==null&&data.remainingCents<0?'finance-warning':'daily-balance');
-    const remaining=element('p','days-remaining',`Dias restantes: ${data.daysRemaining}`);remaining.title='Dias após esta data até o término do mês.';section.append(remaining);return section;
+    const remaining=element('p','days-remaining',`Dias restantes: ${data.daysRemaining}`);remaining.title='Dias após esta data até o término do mês.';section.append(remaining);
+    const line=(target,label,value,className='',button=null)=>{const row=element('div',`daily-finance-row ${className}`.trim());row.append(button||element('span','daily-finance-label',`${label}:`),element('span','daily-finance-value',value));target.append(row);};
+    const disclosure=(key,label,amount,className,items)=>{
+      const group=element('div','daily-finance-disclosure'),button=element('button','daily-finance-label daily-finance-toggle'),content=element('div','daily-finance-breakdown');
+      content.id=`finance-${data.date}-${key}`;content.dataset.financeBreakdown=key;button.type='button';button.dataset.financeToggle=key;
+      button.append(element('span','',`${label}:`));button.insertAdjacentHTML('beforeend','<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg>');
+      button.setAttribute('aria-controls',content.id);
+      const setExpanded=expanded=>{content.hidden=!expanded;button.setAttribute('aria-expanded',String(expanded));button.setAttribute('aria-label',`${expanded?'Recolher':'Expandir'} detalhamento de ${label} do dia ${day.day} de ${periodLabel()}`);};
+      setExpanded(dailyFinanceExpanded.has(content.id));
+      button.addEventListener('click',()=>{const expanded=content.hidden;if(expanded)dailyFinanceExpanded.add(content.id);else dailyFinanceExpanded.delete(content.id);setExpanded(expanded);});
+      line(group,label,valueWithRatio(amount),className,button);
+      for(const [itemLabel,value] of items)line(content,itemLabel,valueWithRatio(value));
+      group.append(content);section.append(group);
+    };
+    disclosure('service','AC4 SERVIÇO',data.committedCents,'daily-finance-service',[['AC4 Operacional',data.operationalCents],['AC4 SAT',data.satCents]]);
+    disclosure('cumulative','TOTAL AC4',data.cumulativeCents,'daily-finance-total',[['AC4 Operacional Acumulado',data.cumulativeOperationalCents],['AC4 SAT Acumulado',data.cumulativeSatCents]]);
+    line(section,'AC4 DISPONÍVEL',data.remainingCents===null?'COTA NÃO INFORMADA':valueWithRatio(data.remainingCents),'daily-balance');
+    return section;
   }
   function eventFinanceDetails(event,day){
     const record=financialRecord(event,day),box=element('div','event-finance');
