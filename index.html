@@ -9675,6 +9675,11 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     return 'forecast';
   }
   const active=event=>status(event)!=='cancelled';
+  function documentInfo(event){
+    const text=String(event.document??''),number=text.match(/\bOS\s*(?:n[º°o.]?\s*)?(\d+(?:\/\d+)?)/i)?.[1]||'';
+    const sei=number?(text.match(/(?:^|[;,(]\s*)SEI\s*(?:n[º°o.]?\s*)?(\d{6,12})\b/i)?.[1]||text.match(/\bOS\s*(?:n[º°o.]?\s*)?\d+(?:\/\d+)?\s*\(\s*(\d{6,12})\s*\)/i)?.[1]||''):'';
+    return {number,sei};
+  }
   function price(event,date){
     const startDate=event.startDate||date,base=civilDate(startDate),startClock=clock(event.start),endClock=clock(event.end),endBase=event.endDate?civilDate(event.endDate):base;
     const fail=reason=>({valid:false,error:reason,status:status(event),startDate,financialMonth:String(startDate).slice(0,7),costCents:null,commitmentCents:0,segments:[]});
@@ -9712,10 +9717,11 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
       const compare=candidate.version-prior.version||candidate.updated-prior.updated||priority(candidate)-priority(prior)||candidate.ordinal-prior.ordinal;
       if(compare>=0){candidate.aliases.push(...prior.aliases);map.set(key,candidate);}else prior.aliases.push(event);
     }
+    for(const record of map.values())for(const event of record.aliases)aliases.set(event,record);
     const records=[...map.values()].filter(r=>r.financialMonth===period),daily=new Map();
     let operationalCents=0,satCents=0,forecastCents=0,executedCents=0,cancelledCount=0,invalidCount=0,duplicateCount=0;
     for(const record of records){
-      for(const event of record.aliases)aliases.set(event,record);duplicateCount+=record.aliases.length-1;
+      duplicateCount+=record.aliases.length-1;
       if(!record.valid){invalidCount++;warnings.push(`${record.member}: ${record.error}`);continue;}
       if(record.status==='cancelled'){cancelledCount++;continue;}
       const amount=record.commitmentCents;if(record.category==='sat')satCents+=amount;else operationalCents+=amount;
@@ -9731,7 +9737,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     const committedCents=operationalCents+satCents;
     return {period,quotaCents:quota,committedCents,operationalCents,satCents,forecastCents,executedCents,remainingCents:quota===null?null:quota-committedCents,cancelledCount,invalidCount,duplicateCount,records,daily,byEvent:aliases,warnings};
   }
-  window.AC4Finance={price,month,status,active};
+  window.AC4Finance={price,month,status,active,documentInfo};
   if(typeof document!=='undefined'){
     const schedules=JSON.parse(document.getElementById('calendar-data').textContent),quotas=JSON.parse(document.getElementById('ac4-financial-config').textContent).monthlyQuotaCents;
     const refresh=()=>document.dispatchEvent(new CustomEvent('calendar-schedule-change'));
@@ -9902,7 +9908,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
   let cards = [];
   let ordOverrides=new Map();
   let detailArea='operational',detailDay=null;
-  const chiefFor=day=>window.ServiceChief.select(day,m=>ordOverrides.has(m.name)?ordOverrides.get(m.name):m.ord);
+  const chiefFor=day=>window.ServiceChief.select({...day,members:orderedDayMembers(day)},m=>ordOverrides.has(m.name)?ordOverrides.get(m.name):m.ord);
   const satFor=day=>day.sat || {members:[],ordinaryStatus:'not-informed',alerts:[]};
   const ordinaryPending=sat=>sat.ordinaryStatus!=='informed';
   const satShifts=[{key:'matutino',label:'Matutino',start:0,end:780,ordinary:'8h às 12h'},{key:'vespertino',label:'Vespertino',start:780,end:1440,ordinary:'13h às 18h'}];
@@ -9949,7 +9955,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
       const ord = ordOverrides.has(member.name) ? ordOverrides.get(member.name) : member.ord;
       return Number.isInteger(ord) && ord > 0 ? ord : Infinity;
     };
-    return [...day.members].sort((a, b) => Number(isOfficer(b)) - Number(isOfficer(a)) || seniority(a) - seniority(b));
+    return day.members.map(member=>({...member,events:[...new Set(member.events.map(event=>financialSummary.byEvent.get(event)?.event||event))]})).sort((a, b) => Number(isOfficer(b)) - Number(isOfficer(a)) || seniority(a) - seniority(b));
   }
   function memberLabel(member, index, total, tag = 'span') {
     const label = element(tag === 'h3' ? 'div' : 'span', 'member-label');
@@ -10065,15 +10071,15 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     box.append(list,element('p','detail-note',`Competência financeira: ${record.financialMonth.split('-').reverse().join('/')}. ${record.status==='executed'?'Pagamento não presumido.':'Execução e pagamento não confirmados.'}`));return box;
   }
   function shortHour(value) {
+    value=String(value??'').replace(':','h');
     const match = value.match(/^(\d{1,2})h(\d{2})?$/);
     if (!match) return value;
     return `${Number(match[1])}h${match[2] && match[2] !== '00' ? match[2] : ''}`;
   }
   function ac4Period(event) { return `${shortHour(event.start)} às ${shortHour(event.end)}`; }
   function seiForEvent(event) {
-    if (event.status === 'planned' || !/\bOS\s*(?:n[º°o.]?\s*)?\d+/i.test(event.document)) return '';
     // Copy the OS document number, never a process number or an undefined OS.
-    return event.document.match(/(?:^|[;,]\s*)SEI\s*(?:n[º°o.]?\s*)?(\d{6,12})\b/i)?.[1] || '';
+    return finance.documentInfo(event).sei;
   }
   function ac4Badge(event, memberName, day, officerChip=null) {
     const service = element('span', 'ac4-service');
@@ -10094,7 +10100,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     meta.append(document.createTextNode(' - '),cost);
     const heading=element('span','ac4-badge-line');if(officerChip)heading.append(officerChip);heading.append(chip);
     service.append(heading,meta);
-    if (event.status === 'planned' && value.status==='forecast') {
+    if (event.status === 'planned' && value.status==='forecast' && !finance.documentInfo(event).number) {
       const planned = element('span', 'ac4-planned', 'Previsto');
       planned.title = `${event.mode} · OS a definir`;
       service.append(planned);
@@ -10112,7 +10118,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     const service=element('span','ac4-service ac4-continuation'),sei=seiForEvent(event),chip=element(sei?'button':'span','chip ac4 ac4-continuation','AC4 · Continuação');
     if(sei){chip.type='button';chip.dataset.copySei=sei;chip.setAttribute('aria-label',`Copiar SEI ${sei} do AC4 contínuo de ${memberName}`);}
     chip.title=`Mesmo AC4 de ${event.hours}h, das ${ac4Period(event)}. Valor integral exibido no turno de início.`;
-    service.append(chip,element('span','ac4-period',`13h às ${shortHour(event.end)}`),element('span','ac4-state',`Mesmo AC4 ${event.hours}h`));return service;
+    const cancelled=!finance.active(event);service.classList.toggle('is-cancelled',cancelled);
+    service.append(chip,element('span','ac4-period',`13h às ${shortHour(event.end)}`),element('span','ac4-state',cancelled?'Cancelado':`Mesmo AC4 ${event.hours}h`));return service;
   }
   function exchangeHint(member,badge){
     const source=badge.troca||{},notes=member.notes.join(' ');
@@ -10178,7 +10185,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
   function statusText(event) {
     if(finance.status(event)==='cancelled')return 'AC4 cancelado — fora do comprometimento da cota';
     if(finance.status(event)==='executed')return 'Execução confirmada — pagamento não presumido';
-    if (event.status === 'planned') return 'PREVISTO — OS a definir';
+    if (event.status === 'planned') return finance.documentInfo(event).number?'OS documentada — execução ainda não comprovada por parte diária':'PREVISTO — OS a definir';
     if (event.status === 'documented-sat') return 'OS documentada — execução ainda não comprovada por parte diária';
     return 'OS/ES documentadas — previsão sujeita à conferência da execução';
   }
@@ -10211,7 +10218,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
       }
       list.append(row);
     }
-    const ac4Count = day.members.reduce((sum, member) => sum + member.events.filter(finance.active).length, 0);
+    const ac4Count = members.reduce((sum, member) => sum + member.events.filter(finance.active).length, 0);
     const notes = element('button', `day-notes-button${day.alerts.length ? ' pending' : ''}`);
     const caption=element('span','day-notes-caption');caption.append(document.createTextNode('Detalhes do dia'));
     if(ac4Count){const arrow=element('span','day-notes-arrow','→');arrow.setAttribute('aria-hidden','true');caption.append(document.createTextNode(' '),arrow,document.createTextNode(` ${ac4Count} AC4`));}
@@ -10681,24 +10688,18 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
   const formatDate = date => `${pad(date.getUTCDate())}/${pad(date.getUTCMonth()+1)}/${date.getUTCFullYear()}`;
   const isoDate = () => `${current.period}-${pad(current.day.day)}`;
   function interval(event) {
-    const parse = value => {
-      const m = String(value).match(/^(\d{1,2})h(\d{2})$/);
-      return m && Number(m[1]) < 24 && Number(m[2]) < 60 ? Number(m[1])*60 + Number(m[2]) : null;
-    };
-    const start = parse(event.start), finish = parse(event.end), base = dateInfo();
-    const endDate = new Date(base.start);
-    if (event.nextDay) endDate.setUTCDate(endDate.getUTCDate()+1);
-    const hours = start === null || finish === null ? NaN : (finish + (event.nextDay ? 1440 : 0) - start)/60;
-    return {valid:base.valid && hours > 0 && hours === Number(event.hours), startDate:formatDate(base.start), endDate:formatDate(endDate), start:start === null ? String(event.start ?? '') : `${pad(Math.floor(start/60))}h${pad(start%60)}`, end:finish === null ? String(event.end ?? '') : `${pad(Math.floor(finish/60))}h${pad(finish%60)}`};
+    const result=window.AC4Finance.price(event,isoDate());
+    return {valid:result.valid,startDate:exchangeDate(result.startDate)||'Data a conferir',endDate:exchangeDate(result.endDate)||'Data a conferir',start:result.start||String(event.start??''),end:result.end||String(event.end??'')};
   }
   function orderedMembers() {
-    const merged = new Map();
+    const merged = new Map(),summary=window.AC4Finance.month(schedules,current.period);
     for (const source of current.day.members) {
-      if(!source.badges.length&&source.events.length&&!source.events.some(window.AC4Finance.active))continue;
+      const events=[...new Set(source.events.map(event=>summary.byEvent.get(event)?.event||event))];
+      if(!source.badges.length&&events.length&&!events.some(window.AC4Finance.active))continue;
       const key = normalize(source.name);
       if (!merged.has(key)) merged.set(key, {...source,name:source.name,funcao:typeof source.funcao==='string'?source.funcao:typeof source.function==='string'?source.function:'',badges:[],notes:[],events:[]});
       const m = merged.get(key);
-      for (const field of ['badges','notes','events']) for (const item of source[field]) if((field!=='events'||window.AC4Finance.active(item))&&!m[field].some(x=>JSON.stringify(x)===JSON.stringify(item))) m[field].push(item);
+      for (const field of ['badges','notes','events']) for (const item of field==='events'?events:source[field])if((field!=='events'||window.AC4Finance.active(item))&&!m[field].some(x=>JSON.stringify(x)===JSON.stringify(item))) m[field].push(item);
     }
     return [...merged.values()].sort((a,b)=>{
       const ao=a.badges.some(x=>x.kind==='officer'),bo=b.badges.some(x=>x.kind==='officer');
@@ -10725,8 +10726,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
   function eventLines(event) {
     const proebom=/PROEBOM/i.test(event.mode),time=interval(event);
     const lines=[{kind:'strong',text:proebom?'PROEBOM 2026':'REFORÇO OPERACIONAL'},`${time.start} às ${time.end}`];
-    const number=event.document?.match(/\bOS\s*(?:n[º°o.]?\s*)?(\d+(?:\/\d+)?)/i)?.[1];
-    const sei=event.document?.match(/(?:^|[;,]\s*)SEI\s*(?:n[º°o.]?\s*)?(\d{6,12})\b/i)?.[1];
+    const {number,sei}=window.AC4Finance.documentInfo(event);
     lines.push(number?`OS nº ${number} (SEI ${sei || 'não informado'})`:window.AC4Finance.status(event)==='executed'?'OS a definir — execução confirmada':'OS a definir — PREVISTO');
     const redundant=/^AC4\s+\d+h\s+(?:noturno|diurno)\s*[—-]\s*OS a definir\.?$/i.test(event.observation||'');
     if(event.observation&&!['REFORÇO OPERACIONAL','PROEBOM 2026'].includes(event.observation)&&!redundant)lines.push(event.observation);
@@ -10797,7 +10797,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
   }
   function renderOrder() {
     const rows=ui.scope.value==='all'?allOrderRows:groups[Number(ui.scope.value)]?.rows || [];
-    const validation=validationFor(rows.map(r=>r.member),false);
+    const validation=validationFor(rows.map(r=>({...r.member,events:[r.event]})),false);
     const scopeLabel=current.area==='sat'?'Todos os AC4 da SAT':'Todos os AC4 do dia';
     orderTable=makeTable(osHeaders,[12,8,12,8,40,14,6],'sei-order-table');const body=orderTable.tBodies[0];
     for(const {member,event} of rows){const time=interval(event),tr=node('tr');tr.append(cell(time.startDate,'center'),cell(time.start,'center'),cell(time.endDate,'center'),cell(time.end,'center'));const name=cell();appendIdentification(name,member);tr.append(name,cell(person(member.name)?.cpf || '','center'),cell(`${event.hours}h`,'center'));body.append(tr);}
@@ -10906,7 +10906,14 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
       const input=/\.xlsx$/i.test(file.name)?await readPlanXlsx(file):JSON.parse(await file.text()),people=prepareDirectory(input);
       for (const key of ['trocas_entre_militares','trocas_anteriores_relevantes','trocas_futuras_relevantes','trocas_companhia','ac4_eventos']) if (input[key] !== undefined && !Array.isArray(input[key])) throw new Error('As referências de trocas e AC4 devem ser listas.');
       const nextReferences={ts:[...(input.trocas_entre_militares||[]),...(input.trocas_anteriores_relevantes||[]),...(input.trocas_futuras_relevantes||[])],cia:input.trocas_companhia||[],events:input.ac4_eventos||[]};
-      if(input._xlsx){for(const [key,p] of directory)if(!people.has(key))people.set(key,p);}
+      if(input._xlsx){
+        const rgKey=p=>p.rg.replace(/\D/g,'').replace(/^0+(?=\d)/,''),byRg=new Map([...people].filter(([,p])=>rgKey(p)).map(entry=>[rgKey(entry[1]),entry]));
+        for(const [key,p] of directory)if(!people.has(key)){
+          const updated=byRg.get(rgKey(p));
+          if(updated){people.delete(updated[0]);people.set(key,{...updated[1],siteName:p.siteName});}
+          else people.set(key,p);
+        }
+      }
       directory=people;if(!input._xlsx)references=nextReferences;
       document.dispatchEvent(new CustomEvent('service-directory-change',{detail:[...new Set(Object.values(schedules).flatMap(s=>s.days.flatMap(d=>[...d.members,...(d.sat?.members||[])].map(m=>m.name))))].flatMap(name=>person(name)?[{name,ord:person(name).ord}]:[])}));
       ui.registerStatus.textContent=`${directory.size} militares carregados apenas nesta sessão. CPFs não informados permanecerão em branco.`;ui.feedback.textContent='Cadastro local carregado. Confira as tabelas e clique no botão de cópia desejado.';render();

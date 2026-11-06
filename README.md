@@ -1,13 +1,18 @@
-# Calendário de Serviço — 8ª CIBM — Novembro/2026
+# Calendário de Serviço — 8ª CIBM
 
-Calendário HTML responsivo e estático para exibição da previsão de militares por ala.
+Calendário HTML responsivo e estático para exibição da previsão de militares por ala, dos serviços SAT e do controle financeiro de AC4. Há dados de novembro/2026 a janeiro/2027; meses sem dados mostram essa condição.
 
 ## Hospedagem via GitHub Pages
 
-1. Criar um repositório público com nome `8cibm-calendario-servico` na conta proprietária, selecionando a opção de inicializar com README para criar a branch `main`.
-2. Fazer commit de `index.html` na branch principal `main`.
-3. Em **Settings → Pages → Build and deployment**, escolher **Deploy from a branch**, **main** e a pasta **/(root)**. Salvar.
-4. Após a publicação, a página deverá ser acessível na URL mostrada pelo GitHub em **Settings → Pages**.
-5. Atualizações futuras podem ser feitas via GitHub conectado ao ChatGPT por commits em `index.html`; o GitHub Pages republica após pushes na branch configurada.
+1. A publicação atual acompanha a branch `v-1`, pasta **/(root)**, em **Settings → Pages → Build and deployment → Deploy from a branch**.
+2. Mantenha `v-1` sincronizada com as alterações revisadas em `main`. Um push para a branch configurada inicia a publicação.
+3. Confira o resultado final da execução **pages build and deployment**, em **Actions**. **Queued** significa aguardando execução; **Success** confirma que a publicação terminou.
+4. Se o artefato for aceito e a implantação terminar com **Deployment failed, try again later**, reexecute o job de publicação em **Re-run jobs → Re-run failed jobs**. Esse erro ocorre depois da construção e precisa ser acompanhado no Pages.
+
+## Verificação local
+
+Execute `node --test tests/finance.test.cjs` para conferir tarifas, viradas de dia/mês, revisões, cancelamentos, acumulados, identificação dos documentos e seleção de chefia. Os testes utilizam dados fictícios separados da escala publicada e conferem invariantes dos dados existentes.
+
+Para abrir o site localmente, execute `python -m http.server 8000` na raiz do repositório e acesse `http://localhost:8000/`. O cadastro de identificação para ES/OS é importado apenas no navegador; arquivos de cadastro e documentos internos devem permanecer fora do repositório.
 
 **Privacidade:** repositórios públicos e GitHub Pages públicos tornam a escala acessível a qualquer pessoa. Obter autorização institucional antes da divulgação. O calendário não substitui documentos oficiais e possui registros pendentes de conferência.
