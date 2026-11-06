@@ -319,6 +319,9 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 .sat-activity-heading{margin:0;padding:6px 11px 2px;font-size:10px;font-weight:650;color:#687c90;line-height:1.4}
 .sat-shift .sat-list{padding-top:1px;padding-bottom:3px}
 .sat-status.holiday{color:#35536d;font-weight:600;padding-top:5px}
+.sat-activity-note{margin:0;padding:6px 11px 10px;color:#526b82;font-size:11px;line-height:1.5}
+.sat-activity-note strong{display:block;color:#35536d;font-weight:650}
+@media screen and (max-width:760px){.sat-activity-note{font-size:13px;padding:7px 13px 11px}}
 .chip.compensation{background:#edf3f8;color:#48647d;border-color:#d9e4ee}
 .chip.ac4-continuation{background:#f1e9f9;color:#692e99;border-color:#dfccef;box-shadow:none;text-shadow:none;letter-spacing:0;font-weight:650}
 /* Give names the first row; long AC4 periods use the full width underneath. */
@@ -2060,7 +2063,60 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
           "5 recursos de 24h",
           "Faltam 1 recurso"
         ],
-        "alerts": []
+        "alerts": [],
+        "sat": {
+          "ordinaryStatus": "informed",
+          "members": [
+            {
+              "name": "3º SGT BERTONCELLO",
+              "ord": 20,
+              "badges": [],
+              "notes": [],
+              "events": [
+                {
+                  "mode": "SAT",
+                  "start": "13h00",
+                  "end": "18h00",
+                  "nextDay": false,
+                  "hours": 5,
+                  "observation": "ATIVIDADES TÉCNICAS — SAT",
+                  "document": "OS a definir (número e SEI não informados)",
+                  "status": "planned",
+                  "activity": "Vistoria"
+                }
+              ]
+            },
+            {
+              "name": "3º SGT ROBERTO",
+              "ord": 21,
+              "badges": [
+                {
+                  "kind": "ord",
+                  "text": "ORDINÁRIO",
+                  "hours": 5,
+                  "start": "13h00",
+                  "end": "18h00",
+                  "activity": "Protocolo"
+                }
+              ],
+              "notes": [],
+              "events": [
+                {
+                  "mode": "SAT",
+                  "start": "08h00",
+                  "end": "12h00",
+                  "nextDay": false,
+                  "hours": 4,
+                  "observation": "ATIVIDADES TÉCNICAS — SAT",
+                  "document": "OS a definir (número e SEI não informados)",
+                  "status": "planned",
+                  "activity": "Protocolo"
+                }
+              ]
+            }
+          ],
+          "alerts": []
+        }
       },
       {
         "day": 10,
@@ -2212,7 +2268,60 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
           "6 recursos de 24h",
           "Meta de 6 recursos"
         ],
-        "alerts": []
+        "alerts": [],
+        "sat": {
+          "ordinaryStatus": "informed",
+          "members": [
+            {
+              "name": "2º SGT WANDERSON",
+              "ord": 17,
+              "badges": [],
+              "notes": [],
+              "events": [
+                {
+                  "mode": "SAT",
+                  "start": "07h00",
+                  "end": "18h00",
+                  "nextDay": false,
+                  "hours": 11,
+                  "observation": "ATIVIDADES TÉCNICAS — SAT",
+                  "document": "OS a definir (número e SEI não informados)",
+                  "status": "planned",
+                  "activity": "Vistoria"
+                }
+              ]
+            },
+            {
+              "name": "3º SGT ROBERTO",
+              "ord": 21,
+              "badges": [
+                {
+                  "kind": "ord",
+                  "text": "ORDINÁRIO",
+                  "hours": 5,
+                  "start": "13h00",
+                  "end": "18h00",
+                  "activity": "Protocolo"
+                }
+              ],
+              "notes": [],
+              "events": [
+                {
+                  "mode": "SAT",
+                  "start": "08h00",
+                  "end": "12h00",
+                  "nextDay": false,
+                  "hours": 4,
+                  "observation": "ATIVIDADES TÉCNICAS — SAT",
+                  "document": "OS a definir (número e SEI não informados)",
+                  "status": "planned",
+                  "activity": "Protocolo"
+                }
+              ]
+            }
+          ],
+          "alerts": []
+        }
       },
       {
         "day": 11,
@@ -2328,7 +2437,56 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
           "6 recursos de 24h",
           "Meta de 6 recursos"
         ],
-        "alerts": []
+        "alerts": [],
+        "sat": {
+          "ordinaryStatus": "informed",
+          "members": [
+            {
+              "name": "3º SGT BERTONCELLO",
+              "ord": 20,
+              "badges": [],
+              "notes": [],
+              "events": [
+                {
+                  "mode": "SAT",
+                  "start": "13h00",
+                  "end": "18h00",
+                  "nextDay": false,
+                  "hours": 5,
+                  "observation": "ATIVIDADES TÉCNICAS — SAT",
+                  "document": "OS a definir (número e SEI não informados)",
+                  "status": "planned",
+                  "activity": "Vistoria"
+                }
+              ]
+            },
+            {
+              "name": "3º SGT ROBERTO",
+              "ord": 21,
+              "badges": [
+                {
+                  "kind": "ord",
+                  "text": "ORDINÁRIO",
+                  "hours": 5,
+                  "start": "13h00",
+                  "end": "18h00",
+                  "activity": "Protocolo"
+                }
+              ],
+              "notes": [],
+              "events": []
+            }
+          ],
+          "alerts": [],
+          "notices": [
+            {
+              "shift": "matutino",
+              "activity": "Protocolo",
+              "title": "Formatura Geral",
+              "description": "Horário e militares participantes não informados."
+            }
+          ]
+        }
       },
       {
         "day": 12,
@@ -2423,7 +2581,60 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
           "5 recursos de 24h",
           "Faltam 1 recurso"
         ],
-        "alerts": []
+        "alerts": [],
+        "sat": {
+          "ordinaryStatus": "informed",
+          "members": [
+            {
+              "name": "2º SGT WANDERSON",
+              "ord": 17,
+              "badges": [],
+              "notes": [],
+              "events": [
+                {
+                  "mode": "SAT",
+                  "start": "08h00",
+                  "end": "18h00",
+                  "nextDay": false,
+                  "hours": 10,
+                  "observation": "ATIVIDADES TÉCNICAS — SAT",
+                  "document": "OS a definir (número e SEI não informados)",
+                  "status": "planned",
+                  "activity": "Vistoria"
+                }
+              ]
+            },
+            {
+              "name": "3º SGT ROBERTO",
+              "ord": 21,
+              "badges": [
+                {
+                  "kind": "ord",
+                  "text": "ORDINÁRIO",
+                  "hours": 5,
+                  "start": "13h00",
+                  "end": "18h00",
+                  "activity": "Protocolo"
+                }
+              ],
+              "notes": [],
+              "events": [
+                {
+                  "mode": "SAT",
+                  "start": "08h00",
+                  "end": "12h00",
+                  "nextDay": false,
+                  "hours": 4,
+                  "observation": "ATIVIDADES TÉCNICAS — SAT",
+                  "document": "OS a definir (número e SEI não informados)",
+                  "status": "planned",
+                  "activity": "Protocolo"
+                }
+              ]
+            }
+          ],
+          "alerts": []
+        }
       },
       {
         "day": 13,
@@ -2530,7 +2741,79 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
           "4 recursos de 24h",
           "Faltam 2 recursos"
         ],
-        "alerts": []
+        "alerts": [],
+        "sat": {
+          "ordinaryStatus": "informed",
+          "members": [
+            {
+              "name": "2º SGT WANDERSON",
+              "ord": 17,
+              "badges": [],
+              "notes": [],
+              "events": [
+                {
+                  "mode": "SAT",
+                  "start": "08h00",
+                  "end": "12h00",
+                  "nextDay": false,
+                  "hours": 4,
+                  "observation": "ATIVIDADES TÉCNICAS — SAT",
+                  "document": "OS a definir (número e SEI não informados)",
+                  "status": "planned",
+                  "activity": "Vistoria"
+                }
+              ]
+            },
+            {
+              "name": "3º SGT BERTONCELLO",
+              "ord": 20,
+              "badges": [],
+              "notes": [],
+              "events": [
+                {
+                  "mode": "SAT",
+                  "start": "13h00",
+                  "end": "18h00",
+                  "nextDay": false,
+                  "hours": 5,
+                  "observation": "ATIVIDADES TÉCNICAS — SAT",
+                  "document": "OS a definir (número e SEI não informados)",
+                  "status": "planned",
+                  "activity": "Vistoria"
+                }
+              ]
+            },
+            {
+              "name": "3º SGT ROBERTO",
+              "ord": 21,
+              "badges": [
+                {
+                  "kind": "ord",
+                  "text": "ORDINÁRIO",
+                  "hours": 5,
+                  "start": "13h00",
+                  "end": "18h00",
+                  "activity": "Protocolo"
+                }
+              ],
+              "notes": [],
+              "events": [
+                {
+                  "mode": "SAT",
+                  "start": "08h00",
+                  "end": "12h00",
+                  "nextDay": false,
+                  "hours": 4,
+                  "observation": "ATIVIDADES TÉCNICAS — SAT",
+                  "document": "OS a definir (número e SEI não informados)",
+                  "status": "planned",
+                  "activity": "Protocolo"
+                }
+              ]
+            }
+          ],
+          "alerts": []
+        }
       },
       {
         "day": 14,
@@ -9639,10 +9922,15 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     return satShifts.map(shift=>({...shift,groups:['Protocolo','Vistoria','Atividade não informada'].map(activity=>({activity,members:members.flatMap((member,index)=>{
       const badges=member.badges.filter(service=>satInShift(service,shift)&&satActivity(service)===activity),events=member.events.filter(service=>satInShift(service,shift)&&satActivity(service)===activity);
       return badges.length||events.length?[{member:{...member,badges,events},index,total:members.length}]:[];
-    })})).filter(group=>group.members.length)}));
+    }),notices:(sat.notices||[]).filter(notice=>notice.shift===shift.key&&satActivity(notice)===activity)})).filter(group=>group.members.length||group.notices.length)}));
   }
   function satShiftHeading(shift,tag='h4'){
-    const heading=element(tag,'sat-shift-heading',shift.label),hours=element('span','',shift.ordinary);hours.title='Horário padrão do expediente ordinário';heading.append(hours);return heading;
+    const heading=element(tag,'sat-shift-heading',shift.label);
+    if(!shift.groups||shift.groups.some(group=>group.members.length)){const hours=element('span','',`Ordinário: ${shift.ordinary}`);hours.title='Horário padrão do expediente ordinário';heading.append(hours);}return heading;
+  }
+  function satNotice(notice){
+    const note=element('p','sat-activity-note');note.append(element('strong','',notice.title));
+    if(notice.description)note.append(document.createTextNode(notice.description));return note;
   }
 
   function element(tag, className, text) {
@@ -9946,6 +10234,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
       const block=element('section','sat-shift');block.dataset.shift=shift.key;block.setAttribute('aria-label',`Turno ${shift.label}`);block.append(satShiftHeading(shift));
       for(const group of shift.groups){
         const activity=element('div','sat-activity');activity.dataset.activity=group.activity;activity.append(element('h5','sat-activity-heading',group.activity));
+        for(const notice of group.notices)activity.append(satNotice(notice));
         const list=element('ul','entry-list sat-list');
         for(const {member,index,total} of group.members){
           const row=element('li',`entry ${memberClasses(member)}`);
@@ -9956,7 +10245,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
       }
       section.append(block);
     }
-    if(!sat.members.length&&sat.expedientStatus!=='holiday')section.append(element('p','sat-status','Nenhum serviço SAT informado para este dia.'));
+    if(!sat.members.length&&!sat.notices?.length&&sat.expedientStatus!=='holiday')section.append(element('p','sat-status','Nenhum serviço SAT informado para este dia.'));
     const actions=element('div','day-actions'),details=element('button','day-notes-button','Detalhes do dia'),order=element('button','day-documents-button','Gerar OS');
     details.type='button';details.dataset.details=String(day.day);details.dataset.serviceArea='sat';details.setAttribute('aria-haspopup','dialog');details.setAttribute('aria-label',`Detalhes da SAT do dia ${day.day}`);
     order.type='button';order.dataset.seiDay=String(day.day);order.dataset.serviceArea='sat';order.setAttribute('aria-haspopup','dialog');order.setAttribute('aria-label',`Gerar Ordem de Serviço da SAT do dia ${day.day}`);
@@ -10041,7 +10330,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     if(original.confirmation?.status==='confirmed')dialogBody.append(element('p','scale-confirmation-note',`Escala confirmada pelo usuário em ${original.confirmation.date.split('-').reverse().join('/')}.`));
     if(sat&&ordinaryPending(data))dialogBody.append(element('p','detail-note','Expediente ordinário da SAT ainda não informado.'));
     if(sat&&data.expedientStatus==='holiday')dialogBody.append(element('p','detail-note','Feriado · Sem expediente'));
-    else if(sat&&!day.members.length)dialogBody.append(element('p','detail-note','Nenhum serviço SAT informado para este dia.'));
+    else if(sat&&!day.members.length&&!data.notices?.length)dialogBody.append(element('p','detail-note','Nenhum serviço SAT informado para este dia.'));
     if(chief.status==='pending')dialogBody.append(element('p','chief-pending',chief.label));
     for(const warning of chief.warnings)dialogBody.append(element('p','detail-note',warning));
     if (day.alerts.length) {
@@ -10074,6 +10363,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
         const block=element('section','sat-shift');block.dataset.shift=shift.key;block.append(satShiftHeading(shift,'h3'));
         for(const group of shift.groups){
           block.append(element('h4','sat-activity-heading',group.activity));
+          for(const notice of group.notices)block.append(satNotice(notice));
           for(const {member,index,total} of group.members)appendMember(block,member,index,total,shift);
         }
         dialogBody.append(block);
