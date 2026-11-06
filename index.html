@@ -62,9 +62,9 @@ h1{font-size:clamp(24px,2.7vw,39px);font-weight:850;letter-spacing:-.047em;line-
 .info{margin-top:22px;background:white;border:1px solid var(--line);border-radius:13px;padding:16px 19px;color:#58687e;font-size:12px;line-height:1.75}
 .info strong{color:#233d59}
 .mobile-nav{display:none}
-@media(max-width:1590px){.calendar{grid-template-columns:repeat(5,minmax(0,1fr))}}
-@media(max-width:1200px){.calendar{grid-template-columns:repeat(4,minmax(0,1fr))}}
-@media(max-width:950px){.calendar{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:1760px){.calendar{grid-template-columns:repeat(5,minmax(0,1fr))}}
+@media(max-width:1280px){.calendar{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(max-width:1024px){.calendar{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media screen and (max-width:760px){
  body{background:#edf3fa}
  main{display:grid;grid-template-rows:auto auto auto 1fr auto;gap:6px;min-height:100vh;min-height:100dvh;padding:6px 8px max(6px,env(safe-area-inset-bottom));max-width:640px}
@@ -425,10 +425,12 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 .daily-finance-toggle:focus-visible{outline:2px solid #2563b3;outline-offset:2px}
 .daily-finance-breakdown{margin:2px 0 6px 3px;padding:1px 0 1px 8px;border-left:2px solid #dce6f1}
 .daily-finance-breakdown[hidden]{display:none}
-.daily-finance-breakdown[data-finance-breakdown="cumulative"]{color:#c00000;font-weight:800}
+.daily-finance-breakdown[data-finance-breakdown="cumulative"]{color:#c00000;font-weight:800;padding-left:6px}
 .daily-finance-breakdown .daily-finance-row{display:flex;flex-wrap:wrap;justify-content:space-between;gap:1px 8px;margin:5px 0}
 .daily-finance-breakdown .daily-finance-label{flex:1 1 115px}
 .daily-finance-breakdown .daily-finance-value{margin-left:auto}
+.daily-finance-breakdown[data-finance-breakdown="cumulative"] .daily-finance-row{flex-wrap:nowrap;column-gap:4px}
+.daily-finance-breakdown[data-finance-breakdown="cumulative"] .daily-finance-label{flex:0 0 auto;white-space:nowrap}
 @media screen and (max-width:760px){.daily-finance-toggle{min-height:44px}}
 .day-notes-caption{display:block}
 .day-notes-arrow{font-size:1.15em;font-weight:750;line-height:1}
