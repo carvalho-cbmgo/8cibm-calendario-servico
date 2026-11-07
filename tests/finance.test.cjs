@@ -45,7 +45,7 @@ test('mesmo validador aceita horários curtos, com h ou dois-pontos e término e
 });
 
 test('OS e SEI são identificados independentemente da confirmação da execução',()=>{
-  for(const document of ['OS nº 347; SEI 97833404','OS nº 347 (SEI 97833404)','OS nº 347 (97833404)']){
+  for(const document of ['OS nº 347; SEI 97833404','OS nº 347 (SEI 97833404)','OS nº 347 (97833404)','Errata à OS nº 347 (SEI 97833404); SEI relacionado 98122118']){
     assert.deepEqual(plain(finance.documentInfo(event({document}))),{number:'347',sei:'97833404'});
   }
   assert.deepEqual(plain(finance.documentInfo(event({document:'OS nº 347/2026; Processo SEI 202600011035274; SEI 97833404'}))),{number:'347/2026',sei:'97833404'});
@@ -195,10 +195,10 @@ test('reforço adicional entra somente com AC4 até o corte e fica sem antiguida
   const before=finance.ranking(summary,'2026-11-07',false,options),after=finance.ranking(summary,'2026-11-07',true,options);
   assert.equal(before.rows.length,27);assert.equal(before.totalCents,709100);
   assert(!before.rows.some(person=>person.member==='1º SGT FERREIRA'));
-  assert.equal(after.rows.length,28);assert.equal(after.totalCents,949100);
+  assert.equal(after.rows.length,28);assert.equal(after.totalCents,1000600);
   const extra=after.rows.at(-1);assert.equal(extra.member,'1º SGT FERREIRA');assert.equal(extra.ord,null);assert.equal(extra.totalCents,48000);
   const officers=finance.ranking(summary,'2026-11-07',true,{...options,includeOfficers:true});
-  assert.equal(officers.rows.length,31);assert.equal(officers.totalCents,997100);
+  assert.equal(officers.rows.length,31);assert.equal(officers.totalCents,1096600);
   const full=finance.ranking(summary,'2026-12-01',true,{...options,includeOfficers:true});
-  assert.equal(full.totalCents,summary.committedCents);assert.equal(full.totalCents,1359700);
+  assert.equal(full.totalCents,summary.committedCents);assert.equal(full.totalCents,1459200);
 });
