@@ -518,19 +518,21 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 .day-notes-arrow{font-size:1.15em;font-weight:750;line-height:1}
 .day-notes-pending{display:block;margin-top:2px;font-size:.95em;line-height:1.3}
 .day-state{display:flex;flex-direction:column;align-items:flex-end;gap:4px;min-width:0}
-.day-head{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px;align-items:center}
+.day-head{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.day-primary{display:flex;align-items:center;gap:5px;flex:0 0 auto;min-width:0;max-width:100%}
 .day-date{gap:5px}
 .day-date .ala-badge{font-size:11px;padding:5px 7px;letter-spacing:.035em}
-.day-resources{display:flex;grid-column:1/-1;grid-row:2;flex-wrap:wrap;align-items:center;gap:5px;min-width:0}
+.day-resources{display:flex;flex:0 0 auto;flex-wrap:nowrap;align-items:center;gap:5px;min-width:0}
 .day-resources .chip{flex:0 0 auto;width:max-content;min-width:0;min-height:30px;font-size:10.5px;line-height:1.25;padding:4px;letter-spacing:0;white-space:nowrap}
-.day-resources .resource-total{background:#79503b;color:#fff8ef;border-color:#65402e}
-.day-head>.day-state{grid-column:2;grid-row:1;flex-direction:column;justify-content:center;align-items:flex-end;justify-self:end}
+.day-head>.resource-total{flex:0 0 100%;color:#718198;font-size:11px;font-weight:500;line-height:1.4;text-align:right}
+.day-head>.day-state{flex:1 0 auto;flex-direction:row;justify-content:flex-end;align-items:center;gap:6px;white-space:nowrap}
 .day-foot{justify-content:flex-end}
 @media screen and (max-width:760px){
  .day-head{padding:10px}
  .day-num{font-size:32px}
  .day-date .ala-badge{font-size:12px}
  .day-resources .chip{font-size:12px;min-height:34px}
+ .day-head>.resource-total{font-size:12px}
 }
 @media screen and (max-width:350px){
  .day-head{gap:5px}
@@ -540,9 +542,10 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
  .day-resources .chip{font-size:11px}
 }
 @media print{
- .day-resources{grid-column:1/-1;grid-row:2}
  .day-resources .chip{font-size:8px;min-height:22px;padding:3px}
- .day-head>.day-state{grid-column:2;grid-row:1;justify-content:flex-end;flex-wrap:wrap}
+ .day-date .ala-badge{font-size:8px;padding:4px 5px}
+ .day-num{font-size:20px}
+ .day-head>.resource-total{font-size:8px}
 }
 .day.is-scale-confirmed{border-color:#b8d4c3;background:#f8fcf9}
 .is-scale-confirmed .day-head{background:#eef7f1}
@@ -10518,13 +10521,14 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     const date = element('div', 'day-date');
     date.append(element('span', 'day-num', String(day.day).padStart(2, '0')), element('span', `ala-badge ${day.ala.toLowerCase()}`, day.ala));
     const [year, month] = period.split('-').map(Number);
-    const dayState=element('span','day-state');dayState.append(element('span','weekday-label',weekdays[new Date(Date.UTC(year, month - 1, day.day)).getUTCDay()]));
+    const dayState=element('span','day-state');
     if(confirmed){const label=element('span','scale-confirmed-label','Escala confirmada');label.title='Escala confirmada pelo usuário';dayState.append(label);}
+    dayState.append(element('span','weekday-label',weekdays[new Date(Date.UTC(year, month - 1, day.day)).getUTCDay()]));
     const resources=element('div','day-resources');resources.setAttribute('aria-label','Recursos do serviço operacional');
-    const total=element('span','chip resource-total',day.coverage[0]);total.title='Recursos de 24h, conforme a cobertura operacional registrada.';
+    const total=element('span','resource-total',day.coverage[0]);total.title='Recursos de 24h, conforme a cobertura operacional registrada.';
     const ordinary=element('span','chip ord resource-ordinary',`${counts.ordinary} ORDINÁRIO`);ordinary.title='Militares em serviço ordinário operacional, incluindo TS e TS CIA de pagamento. Dispensas e trocas pendentes não entram nesta contagem.';
     const ac4=element('span','chip ac4 resource-ac4',`${counts.ac4} AC4`);ac4.title='Serviços AC4 ativos do Operacional, incluindo PROEBOM e jornadas parciais. SAT contabilizada separadamente.';
-    resources.append(total,ordinary,ac4);head.append(date,dayState,resources);
+    const primary=element('div','day-primary');resources.append(ordinary,ac4);primary.append(date,resources);head.append(primary,dayState,total);
     const list = element('ul', 'entry-list operational-list');
     for (const [index, member] of members.entries()) {
       const row = element('li', `entry ${memberClasses(member)}`);
