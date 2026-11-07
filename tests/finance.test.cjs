@@ -104,3 +104,55 @@ test('chefia respeita antiguidade, ausência, ODD e pendências de períodos par
   assert.equal(chief.select({...day,members:[ordinary('ST SEM ORD',null)]}).status,'pending');
   assert.equal(chief.select({...day,members:[member([event({end:'20h00',hours:12})],{name:'ST PARCIAL',ord:2}),ordinary('ST TESTE',3)]}).status,'pending');
 });
+
+test('ranking soma Operacional e SAT, inclui previstos e ordena pelo total numérico',()=>{
+  const data={'2026-11':{days:[
+    {day:3,members:[member([event({executionConfirmed:true})]),member([event({end:'20h00',hours:12})],{name:'2º SGT OUTRO'})],sat:{members:[member([event({mode:'SAT',start:'13h00',end:'18h00',hours:5})])]}},
+    {day:4,members:[member([event({mode:'PROEBOM 2026'})])]},
+    {day:5,members:[member([event()])]}
+  ]}};
+  const summary=finance.month(data,'2026-11'),included=finance.ranking(summary,'2026-11-04'),excluded=finance.ranking(summary,'2026-11-04',false);
+  assert.deepEqual(plain(included.rows.map(row=>row.member)),['ST TESTE','2º SGT OUTRO']);
+  assert.deepEqual(plain(excluded.rows.map(row=>row.member)),['2º SGT OUTRO','ST TESTE']);
+  assert.equal(included.rows[0].operationalCents,24000);assert.equal(included.rows[0].satCents,15000);assert.equal(included.rows[0].totalCents,39000);
+  assert.equal(included.rows[0].records.length,3);assert.equal(included.rows[0].monthlyRecords.length,4);
+  assert.equal(included.totalCents,75000);assert.equal(excluded.totalCents,63000);assert.equal(excluded.cutoffDate,'2026-11-03');
+  assert.equal(included.executedCents,12000);assert.equal(included.forecastCents,63000);
+  assert.equal(included.totalCents,included.operationalCents+included.satCents);
+});
+
+test('ranking exclui cancelados, inválidos e versões duplicadas',()=>{
+  const original=event(),updated=event({revision:2,executionConfirmed:true}),cancelled=event({start:'13h00',end:'17h00',cancelled:true}),invalid=event({start:'18h00',end:'20h00',hours:12});
+  const result=finance.ranking(finance.month(schedule([original,updated,cancelled,invalid]),'2026-11'),'2026-11-30');
+  assert.equal(result.rows.length,1);assert.equal(result.recordCount,1);assert.equal(result.totalCents,12000);assert.equal(result.rows[0].monthlyRecords.length,1);
+});
+
+test('ranking considera a data de início inclusive nas viradas de mês',()=>{
+  const data=schedule([event({startDate:'2026-11-30',endDate:'2026-12-01',end:'08h00',hours:24})],30),summary=finance.month(data,'2026-11');
+  assert.equal(finance.ranking(summary,'2026-11-30').totalCents,74100);
+  assert.equal(finance.ranking(summary,'2026-11-30',false).totalCents,0);
+  assert.equal(finance.ranking(summary,'2026-12-01',false).totalCents,74100);
+  assert.equal(finance.ranking(summary,'2026-10-31').rows.length,0);
+  assert.equal(finance.ranking(finance.month(data,'2026-12'),'2026-12-01').totalCents,0);
+  assert.throws(()=>finance.ranking(summary,'2026-11-31'));
+});
+
+test('ranking tem desempate estável e mantém os serviços mensais em ordem de data',()=>{
+  const data={'2026-11':{days:[{day:5,members:[member([event()],{name:'ST BRAVO'})]},{day:3,members:[member([event()],{name:'ST ALPHA'}),member([event()],{name:'ST BRAVO'})]}]}};
+  const result=finance.ranking(finance.month(data,'2026-11'),'2026-11-03');
+  assert.deepEqual(plain(result.rows.map(row=>row.member)),['ST ALPHA','ST BRAVO']);
+  assert.deepEqual(plain(result.rows[1].monthlyRecords.map(row=>row.startDate)),['2026-11-03','2026-11-05']);
+});
+
+test('ranking confere com os acumulados diários de todos os meses cadastrados',()=>{
+  const data=JSON.parse(scripts.find(([,attrs])=>attrs.includes('id="calendar-data"'))[2]);
+  for(const period of Object.keys(data)){
+    const summary=finance.month(data,period);
+    for(const day of summary.daily.values()){
+      const result=finance.ranking(summary,day.date);
+      assert.equal(result.totalCents,day.cumulativeCents);assert.equal(result.operationalCents,day.cumulativeOperationalCents);assert.equal(result.satCents,day.cumulativeSatCents);
+      assert(result.rows.every((row,index)=>!index||result.rows[index-1].totalCents>=row.totalCents));
+      assert.equal(result.totalCents,result.forecastCents+result.executedCents);
+    }
+  }
+});

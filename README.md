@@ -2,6 +2,8 @@
 
 Calendário HTML responsivo e estático para exibição da previsão de militares por ala, dos serviços SAT e do controle financeiro de AC4. Há dados de novembro/2026 a janeiro/2027; meses sem dados mostram essa condição.
 
+O ícone de troféu, à esquerda do detalhamento da cota, abre o ranking mensal por AC4 Total (Operacional + SAT). O ranking considera os registros até a data de acesso em Brasília e permite incluir ou excluir o serviço do dia corrente. Os previstos são identificados separadamente da execução confirmada; não há presunção de pagamento. Ao clicar no militar, são listados os serviços ativos do mês, sinalizando os que ficaram fora da data de corte. As identificações completas utilizam o mesmo cadastro local do módulo ES/OS, importável também pela janela do ranking.
+
 ## Hospedagem via GitHub Pages
 
 1. A publicação atual acompanha a branch `v-1`, pasta **/(root)**, em **Settings → Pages → Build and deployment → Deploy from a branch**.
