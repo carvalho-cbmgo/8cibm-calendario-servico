@@ -416,9 +416,13 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 .ranking-status-note{margin:0 0 9px;color:#62758a;font-size:13px}
 .ranking-table{width:100%;table-layout:fixed;border-collapse:collapse;font-size:14px;line-height:1.35}
 .ranking-table th,.ranking-table td{padding:7px 6px;border-bottom:1px solid #dfe7f0;vertical-align:middle;text-align:right}
-.ranking-table th:first-child{width:52%;text-align:left}
+.ranking-table .ranking-position{width:5%;text-align:center;color:#62758a;font-weight:650;font-variant-numeric:tabular-nums}
+.ranking-table .ranking-member-cell{width:47%;text-align:left}
+.ranking-table .ranking-total-label{text-align:left}
 .ranking-table thead th{background:#f0f5fa;color:#47617b;font-size:12px;font-weight:750;letter-spacing:.02em}
 .ranking-table .ranking-total{color:#c00000;font-weight:800}
+.ranking-table .ranking-operational{background:#edf5ff;color:#20558d}
+.ranking-table .ranking-sat{background:#f6effc;color:#71318f}
 .ranking-person{display:flex;align-items:center;justify-content:space-between;gap:5px;width:100%;padding:2px 0;border:0;border-radius:4px;background:none;color:#234d73;font:inherit;font-weight:400;text-align:left;cursor:pointer}
 .ranking-person:hover{color:#14375a;background:#eef4fb}
 .ranking-person:focus-visible,.ranking-register input:focus-visible,.ranking-day-toggle input:focus-visible{outline:3px solid #94baff;outline-offset:3px}
@@ -448,10 +452,17 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
  .ranking-summary{font-size:15px}.ranking-status-note{font-size:14px}
  .ranking-table,.ranking-table tbody,.ranking-table tfoot{display:block}
  .ranking-table thead{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
- .ranking-table .ranking-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px 4px;border:1px solid #dce6f1;border-radius:9px;margin-bottom:8px;padding:8px;background:#fff}
- .ranking-table .ranking-row>th{grid-column:1/-1;width:auto;padding:0;border:0}
+ .ranking-table .ranking-row{display:grid;grid-template-columns:24px repeat(3,minmax(0,1fr));gap:6px 4px;border:1px solid #dce6f1;border-radius:9px;margin-bottom:8px;padding:8px;background:#fff}
+ .ranking-table .ranking-row>.ranking-member-cell{grid-column:2/-1;width:auto;padding:0;border:0}
+ .ranking-table .ranking-row>.ranking-total-label{grid-column:1/-1;width:auto;padding:0;border:0}
  .ranking-table .ranking-row>td{padding:0;border:0;min-width:0;text-align:right}
  .ranking-table .ranking-row>td::before{content:attr(data-label);display:block;margin-bottom:3px;font-size:clamp(11px,3vw,13px);line-height:1.3;font-weight:650;color:#62758a;overflow-wrap:anywhere}
+ .ranking-table .ranking-row>.ranking-position{grid-column:1;grid-row:1;display:flex;align-items:center;justify-content:center;align-self:start;min-height:40px;width:auto;font-size:15px}
+ .ranking-table .ranking-row>.ranking-position::before{content:none}
+ .ranking-table .ranking-row>td[data-label="AC4 OPERACIONAL"]{grid-column:1/3}
+ .ranking-table .ranking-row>td[data-label="AC4 SAT"]{grid-column:3}
+ .ranking-table .ranking-row>td[data-label="AC4 TOTAL"]{grid-column:4}
+ .ranking-table .ranking-row>td:is(.ranking-operational,.ranking-sat){padding:4px;border-radius:5px}
  .ranking-person{font-size:15px;min-height:40px}.ranking-member-meta{font-size:13px}
  .ranking-amount{font-size:15px;white-space:normal;overflow-wrap:normal}
  .ranking-table .ranking-total-row{background:#f4f8fd}
@@ -10186,13 +10197,13 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     if(!data.rows.length){content.append(element('p','ranking-empty',`Nenhum AC4 cadastrado até ${rankingDate(displayCutoff)} para ${periodLabel()}.`));return;}
     const table=element('table','ranking-table');table.setAttribute('aria-label','Ranking mensal de AC4 em ordem decrescente de valor total');table.setAttribute('role','table');
     const head=element('thead'),header=element('tr');head.setAttribute('role','rowgroup');header.setAttribute('role','row');
-    for(const label of ['MILITAR','AC4 OPERACIONAL','AC4 SAT','AC4 TOTAL']){const cell=element('th',label==='AC4 TOTAL'?'ranking-total':'',label);cell.scope='col';cell.setAttribute('role','columnheader');header.append(cell);}head.append(header);table.append(head);
+    for(const label of ['Nº','MILITAR','AC4 OPERACIONAL','AC4 SAT','AC4 TOTAL']){const cell=element('th',label==='Nº'?'ranking-position':label==='MILITAR'?'ranking-member-cell':label==='AC4 OPERACIONAL'?'ranking-operational':label==='AC4 SAT'?'ranking-sat':'ranking-total',label);cell.scope='col';cell.setAttribute('role','columnheader');if(label==='Nº')cell.setAttribute('aria-label','Posição no ranking');header.append(cell);}head.append(header);table.append(head);
     const body=element('tbody');body.setAttribute('role','rowgroup');
-    const amountCell=(label,amount,total=false)=>{const cell=element('td',total?'ranking-total':'');cell.dataset.label=label;cell.setAttribute('role','cell');cell.append(element('span','ranking-amount',money(amount).replace(/\s/g,' ')));return cell;};
+    const amountCell=(label,amount,total=false)=>{const cell=element('td',label==='AC4 OPERACIONAL'?'ranking-operational':label==='AC4 SAT'?'ranking-sat':total?'ranking-total':'');cell.dataset.label=label;cell.setAttribute('role','cell');cell.append(element('span','ranking-amount',money(amount).replace(/\s/g,' ')));return cell;};
     data.rows.forEach((person,index)=>{
-      const row=element('tr','ranking-row'),name=element('th'),button=element('button','ranking-person'),identity=element('span','ranking-identification');row.setAttribute('role','row');row.dataset.rankingMember=person.key;name.scope='row';name.setAttribute('role','rowheader');button.type='button';button.dataset.rankingMember=person.key;rankingIdentification(identity,person.member);button.append(identity);
+      const row=element('tr','ranking-row'),position=element('td','ranking-position',String(index+1)),name=element('th','ranking-member-cell'),button=element('button','ranking-person'),identity=element('span','ranking-identification');row.setAttribute('role','row');row.dataset.rankingMember=person.key;position.setAttribute('role','cell');name.scope='row';name.setAttribute('role','rowheader');button.type='button';button.dataset.rankingMember=person.key;rankingIdentification(identity,person.member);button.append(identity);
       button.insertAdjacentHTML('beforeend','<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg>');button.setAttribute('aria-label',`Ver serviços de ${identity.textContent}`);
-      const details=element('tr','ranking-services-row'),detailCell=element('td','ranking-service-cell');details.id=`ac4-ranking-person-${index}`;details.hidden=person.key!==selectedRankingKey;details.setAttribute('role','row');detailCell.colSpan=4;detailCell.setAttribute('role','cell');details.append(detailCell);
+      const details=element('tr','ranking-services-row'),detailCell=element('td','ranking-service-cell');details.id=`ac4-ranking-person-${index}`;details.hidden=person.key!==selectedRankingKey;details.setAttribute('role','row');detailCell.colSpan=5;detailCell.setAttribute('role','cell');details.append(detailCell);
       button.setAttribute('aria-expanded',String(!details.hidden));button.setAttribute('aria-controls',details.id);
       if(!details.hidden)detailCell.append(makeRankingServices(person,data));
       button.addEventListener('click',()=>{
@@ -10203,9 +10214,9 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
       });
       const confirmed=person.records.filter(record=>record.status==='executed').length,forecast=person.records.length-confirmed,states=[];
       if(confirmed)states.push(`${confirmed} confirmado${confirmed===1?'':'s'}`);if(forecast)states.push(`${forecast} previsto${forecast===1?'':'s'}`);
-      name.append(button,element('span','ranking-member-meta',`${index+1}º lugar · ${states.join(' · ')}`));row.append(name,amountCell('AC4 OPERACIONAL',person.operationalCents),amountCell('AC4 SAT',person.satCents),amountCell('AC4 TOTAL',person.totalCents,true));body.append(row,details);
+      name.append(button,element('span','ranking-member-meta',states.join(' · ')));row.append(position,name,amountCell('AC4 OPERACIONAL',person.operationalCents),amountCell('AC4 SAT',person.satCents),amountCell('AC4 TOTAL',person.totalCents,true));body.append(row,details);
     });
-    const foot=element('tfoot'),total=element('tr','ranking-row ranking-total-row'),label=element('th','','TOTAL CONSIDERADO');foot.setAttribute('role','rowgroup');total.setAttribute('role','row');label.scope='row';label.setAttribute('role','rowheader');total.append(label,amountCell('AC4 OPERACIONAL',data.operationalCents),amountCell('AC4 SAT',data.satCents),amountCell('AC4 TOTAL',data.totalCents,true));foot.append(total);table.append(body,foot);content.append(table);
+    const foot=element('tfoot'),total=element('tr','ranking-row ranking-total-row'),label=element('th','ranking-total-label','TOTAL CONSIDERADO');foot.setAttribute('role','rowgroup');total.setAttribute('role','row');label.scope='row';label.colSpan=2;label.setAttribute('role','rowheader');total.append(label,amountCell('AC4 OPERACIONAL',data.operationalCents),amountCell('AC4 SAT',data.satCents),amountCell('AC4 TOTAL',data.totalCents,true));foot.append(total);table.append(body,foot);content.append(table);
   }
   function makeDailyFinance(day){
     const data=financialSummary.daily.get(`${period}-${String(day.day).padStart(2,'0')}`),section=element('section','daily-finance');section.setAttribute('aria-label',`Controle da cota AC4 do dia ${day.day}`);
