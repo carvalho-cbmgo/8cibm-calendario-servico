@@ -9756,7 +9756,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 </script>
 <script type="application/json" id="ranking-personnel">
 [
-  {"name": "CAP LINS", "ord": 1, "officer": true},
+  {"name": "CAP FRANCISCO LINS", "ord": 1, "officer": true},
   {"name": "ASP OF BESSA", "ord": 2, "officer": true},
   {"name": "ASP OF CARVALHO", "ord": 3, "officer": true},
   {"name": "ST OSVALDIR", "ord": 4, "officer": false},
@@ -10129,7 +10129,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     const label = element(tag === 'h3' ? 'div' : 'span', 'member-label');
     const count = element('span', 'member-count', String(index + 1));
     count.setAttribute('aria-label', `Militar ${index + 1} de ${total}`);
-    label.append(count, element(tag, 'name', member.name));
+    label.append(count, element(tag, 'name', member.name === 'CAP LINS' ? 'CAP FRANCISCO LINS' : member.name));
     return label;
   }
   const money=cents=>currency.format(cents/100);
@@ -10874,12 +10874,14 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
       const siteName = String(raw.identificacao_site ?? '').trim();
       if (!siteName || result.has(normalize(siteName))) throw new Error('O cadastro contém identificação de site ausente ou duplicada.');
       const full = String(raw.nome_completo ?? '').normalize('NFC').replace(/\s+/g, ' ').trim().toLocaleUpperCase('pt-BR');
-      const war = String(raw.nome_guerra ?? '').normalize('NFC').replace(/\s+/g, ' ').trim().toLocaleUpperCase('pt-BR');
+      let war = String(raw.nome_guerra ?? '').normalize('NFC').replace(/\s+/g, ' ').trim().toLocaleUpperCase('pt-BR');
       const rg = String(raw.rg ?? '').trim();
       let grade = String(raw.graduacao ?? '').trim();
       const corps = String(raw.quadro ?? '').trim();
       if (corps && !normalize(grade).includes(normalize(corps))) grade += ` ${corps}`;
       grade=grade.toLocaleUpperCase('pt-BR');
+      // Correction supplied by the user; also applies to older JSON/XLSX imports.
+      if(normalize(grade)==='CAP QOC'&&rg.replace(/\D/g,'').replace(/^0+/,'')==='2413'&&normalize(full)==='FRANCISCO LINS DE SOUSA')war='FRANCISCO LINS';
       const cpf = maskCpf(raw.cpf_mascarado ?? raw.cpf_ocultado ?? raw.cpf);
       const ord = raw.ord === null || raw.ord === undefined || raw.ord === '' ? null : Number(raw.ord);
       if (ord !== null && (!Number.isInteger(ord) || ord <= 0 || ranks.has(ord))) throw new Error('Há um valor ORD inválido ou duplicado no cadastro.');
@@ -10890,8 +10892,9 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     return result;
   }
   function person(name) {
-    const direct=directory.get(normalize(name));if(direct)return direct;
-    const target=normalize(name), matches=[...directory.values()].filter(p=>normalize(p.war)===target||target.endsWith(' '+normalize(p.war)));
+    const target=normalize(name)==='CAP LINS'?'CAP FRANCISCO LINS':normalize(name);
+    const direct=directory.get(target)||directory.get(normalize(name));if(direct)return direct;
+    const matches=[...directory.values()].filter(p=>normalize(p.war)===target||target.endsWith(' '+normalize(p.war)));
     return matches.length===1?matches[0]:undefined;
   }
   function personErrors(name) {

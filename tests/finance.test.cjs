@@ -165,7 +165,7 @@ test('relação pública do ranking contém 27 praças e 3 oficiais sem dados pe
   assert.equal(rankingPersonnel.filter(person=>!person.officer).length,27);
   assert.deepEqual(rankingPersonnel.map(person=>person.ord),Array.from({length:30},(_,i)=>i+1));
   for(const person of rankingPersonnel)assert.deepEqual(Object.keys(person).sort(),['name','officer','ord']);
-  assert.deepEqual(rankingPersonnel.slice(0,3).map(person=>person.name),['CAP LINS','ASP OF BESSA','ASP OF CARVALHO']);
+  assert.deepEqual(rankingPersonnel.slice(0,3).map(person=>person.name),['CAP FRANCISCO LINS','ASP OF BESSA','ASP OF CARVALHO']);
 });
 
 test('ranking mantém efetivo com zero AC4 e aplica antiguidade real ao incluir ou excluir oficiais',()=>{
