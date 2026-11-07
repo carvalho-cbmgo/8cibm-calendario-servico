@@ -521,6 +521,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 .day-head{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
 .day-primary{display:flex;align-items:center;gap:5px;flex:0 0 auto;min-width:0;max-width:100%}
 .day-date{gap:5px}
+.day-stamp{position:relative;display:inline-flex;flex:0 0 auto}
+.day-stamp>.weekday-label{position:absolute;top:calc(100% + 3px);left:50%;transform:translateX(-50%);white-space:nowrap;text-align:center}
 .day-date .ala-badge{font-size:11px;padding:5px 7px;letter-spacing:.035em}
 .day-resources{display:flex;flex:0 0 auto;flex-wrap:nowrap;align-items:center;gap:5px;min-width:0}
 .day-resources .chip{flex:0 0 auto;width:max-content;min-width:0;min-height:20px;font-size:9.5px;line-height:1.2;padding:1px;letter-spacing:0;white-space:nowrap}
@@ -10519,11 +10521,11 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     card.setAttribute('aria-label', `${day.day} de ${periodLabel()}, ala ${day.ala}`);
     const head = element('div', 'day-head');
     const date = element('div', 'day-date');
-    date.append(element('span', 'day-num', String(day.day).padStart(2, '0')), element('span', `ala-badge ${day.ala.toLowerCase()}`, day.ala));
     const [year, month] = period.split('-').map(Number);
+    const stamp=element('span','day-stamp');stamp.append(element('span','day-num',String(day.day).padStart(2,'0')),element('span','weekday-label',weekdays[new Date(Date.UTC(year,month-1,day.day)).getUTCDay()]));
+    date.append(stamp,element('span',`ala-badge ${day.ala.toLowerCase()}`,day.ala));
     const dayState=element('span','day-state');
     if(confirmed){const label=element('span','scale-confirmed-label','Escala confirmada');label.title='Escala confirmada pelo usuário';dayState.append(label);}
-    dayState.append(element('span','weekday-label',weekdays[new Date(Date.UTC(year, month - 1, day.day)).getUTCDay()]));
     const resources=element('div','day-resources');resources.setAttribute('aria-label','Recursos do serviço operacional');
     const total=element('span','resource-total',day.coverage[0]);total.title='Recursos de 24h, conforme a cobertura operacional registrada.';
     const ordinary=element('span','chip ord resource-ordinary',`${counts.ordinary} ORD`);ordinary.title='Militares em serviço ordinário operacional, incluindo TS e TS CIA de pagamento. Dispensas e trocas pendentes não entram nesta contagem.';ordinary.setAttribute('aria-label',`${counts.ordinary} recursos de serviço ordinário`);
