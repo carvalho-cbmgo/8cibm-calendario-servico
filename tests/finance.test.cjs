@@ -156,3 +156,49 @@ test('ranking confere com os acumulados diários de todos os meses cadastrados',
     }
   }
 });
+
+const rankingPersonnel=JSON.parse(scripts.find(([,attrs])=>attrs.includes('id="ranking-personnel"'))[2]);
+
+test('relação pública do ranking contém 27 praças e 3 oficiais sem dados pessoais adicionais',()=>{
+  assert.equal(rankingPersonnel.length,30);
+  assert.equal(rankingPersonnel.filter(person=>person.officer).length,3);
+  assert.equal(rankingPersonnel.filter(person=>!person.officer).length,27);
+  assert.deepEqual(rankingPersonnel.map(person=>person.ord),Array.from({length:30},(_,i)=>i+1));
+  for(const person of rankingPersonnel)assert.deepEqual(Object.keys(person).sort(),['name','officer','ord']);
+  assert.deepEqual(rankingPersonnel.slice(0,3).map(person=>person.name),['CAP LINS','ASP OF BESSA','ASP OF CARVALHO']);
+});
+
+test('ranking mantém efetivo com zero AC4 e aplica antiguidade real ao incluir ou excluir oficiais',()=>{
+  const summary=finance.month({},'2026-12');
+  const options={personnel:rankingPersonnel,includeOfficers:false,sortBySeniority:true};
+  const squares=finance.ranking(summary,'2026-11-06',true,options);
+  assert.equal(squares.rows.length,27);assert.equal(squares.totalCents,0);assert.equal(squares.recordCount,0);
+  assert.deepEqual(plain(squares.rows.map(person=>person.ord)),Array.from({length:27},(_,i)=>i+4));
+  assert(squares.rows.every(person=>person.records.length===0&&person.totalCents===0));
+  const all=finance.ranking(summary,'2026-11-06',true,{...options,includeOfficers:true});
+  assert.equal(all.rows.length,30);assert.deepEqual(plain(all.rows.map(person=>person.ord)),Array.from({length:30},(_,i)=>i+1));
+});
+
+test('ranking filtra valores de oficiais e ordena por antiguidade independentemente do custo',()=>{
+  const data={'2026-11':{days:[{day:3,members:[member([event()],{name:'ST VETERANO'}),member([event({end:'20h00',hours:12})],{name:'SD MODERNO'}),member([event()],{name:'CAP TESTE'})]}]}};
+  const summary=finance.month(data,'2026-11'),personnel=[{name:'CAP TESTE',ord:1,officer:true},{name:'ST VETERANO',ord:4},{name:'SD MODERNO',ord:30}];
+  const money=finance.ranking(summary,'2026-11-03',true,{personnel,includeOfficers:false});
+  assert.deepEqual(plain(money.rows.map(person=>person.member)),['SD MODERNO','ST VETERANO']);assert.equal(money.totalCents,48000);
+  const seniority=finance.ranking(summary,'2026-11-03',true,{personnel,includeOfficers:true,sortBySeniority:true});
+  assert.deepEqual(plain(seniority.rows.map(person=>person.ord)),[1,4,30]);assert.equal(seniority.totalCents,60000);
+  assert.equal(seniority.totalCents,seniority.operationalCents+seniority.satCents);
+});
+
+test('reforço adicional entra somente com AC4 até o corte e fica sem antiguidade inventada',()=>{
+  const data=JSON.parse(scripts.find(([,attrs])=>attrs.includes('id="calendar-data"'))[2]);
+  const summary=finance.month(data,'2026-11'),options={personnel:rankingPersonnel,includeOfficers:false,sortBySeniority:true};
+  const before=finance.ranking(summary,'2026-11-07',false,options),after=finance.ranking(summary,'2026-11-07',true,options);
+  assert.equal(before.rows.length,27);assert.equal(before.totalCents,685100);
+  assert(!before.rows.some(person=>person.member==='1º SGT FERREIRA'));
+  assert.equal(after.rows.length,28);assert.equal(after.totalCents,925100);
+  const extra=after.rows.at(-1);assert.equal(extra.member,'1º SGT FERREIRA');assert.equal(extra.ord,null);assert.equal(extra.totalCents,48000);
+  const officers=finance.ranking(summary,'2026-11-07',true,{...options,includeOfficers:true});
+  assert.equal(officers.rows.length,31);assert.equal(officers.totalCents,973100);
+  const full=finance.ranking(summary,'2026-12-01',true,{...options,includeOfficers:true});
+  assert.equal(full.totalCents,summary.committedCents);assert.equal(full.totalCents,1335700);
+});

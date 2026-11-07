@@ -401,7 +401,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 .ranking-body{padding:12px 16px 18px;color:#38516b;font-size:14px;line-height:1.4}
 .ranking-intro{margin:0 0 8px;color:#62758a}
 .ranking-controls{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;padding:9px 12px;background:#f4f8fd;border:1px solid #dce6f1;border-radius:9px}
-.ranking-day-toggle{display:flex;align-items:center;gap:9px;cursor:pointer;font-weight:650}
+.ranking-day-toggle{display:flex;align-items:center;gap:9px;flex-basis:100%;cursor:pointer;font-weight:650}
 .ranking-day-toggle input{width:19px;height:19px;accent-color:#2563b3;flex:0 0 auto}
 .ranking-register{display:flex;flex-direction:column;gap:5px;max-width:100%;font-size:13px;color:#526b82}
 .ranking-register input{max-width:100%;font:inherit}
@@ -416,13 +416,13 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 .ranking-status-note{margin:0 0 9px;color:#62758a;font-size:13px}
 .ranking-table{width:100%;table-layout:fixed;border-collapse:collapse;font-size:14px;line-height:1.35}
 .ranking-table th,.ranking-table td{padding:7px 6px;border-bottom:1px solid #dfe7f0;vertical-align:middle;text-align:right}
-.ranking-table .ranking-position{width:5%;text-align:center;color:#62758a;font-weight:650;font-variant-numeric:tabular-nums}
-.ranking-table .ranking-member-cell{width:47%;text-align:left}
+.ranking-table .ranking-position{width:64px;text-align:center;color:#62758a;font-weight:650;font-variant-numeric:tabular-nums}
+.ranking-table .ranking-member-cell{width:44%;text-align:left}
 .ranking-table .ranking-total-label{text-align:left}
 .ranking-table thead th{background:#f0f5fa;color:#47617b;font-size:12px;font-weight:750;letter-spacing:.02em}
-.ranking-table .ranking-total{color:#c00000;font-weight:800}
-.ranking-table .ranking-operational{background:#edf5ff;color:#20558d}
-.ranking-table .ranking-sat{background:#f6effc;color:#71318f}
+.ranking-table .ranking-total{color:#c00000;font-weight:800;text-align:center}
+.ranking-table .ranking-operational{background:#edf5ff;color:#20558d;text-align:center}
+.ranking-table .ranking-sat{background:#f6effc;color:#71318f;text-align:center}
 .ranking-person{display:flex;align-items:center;justify-content:space-between;gap:5px;width:100%;padding:2px 0;border:0;border-radius:4px;background:none;color:#234d73;font:inherit;font-weight:400;text-align:left;cursor:pointer}
 .ranking-person:hover{color:#14375a;background:#eef4fb}
 .ranking-person:focus-visible,.ranking-register input:focus-visible,.ranking-day-toggle input:focus-visible{outline:3px solid #94baff;outline-offset:3px}
@@ -432,7 +432,9 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 .ranking-person[aria-expanded="true"] svg{transform:rotate(180deg)}
 .ranking-member-meta{display:block;font-size:12px;font-weight:400;line-height:1.25;color:#728398;margin-top:0}
 .ranking-amount{white-space:nowrap;font-variant-numeric:tabular-nums}
-.ranking-total-row th,.ranking-total-row td{color:#c00000;font-weight:800;border-top:2px solid #cfdcea;background:#f8fafc}
+.ranking-total-row{font-size:calc(1em + 1pt)}
+.ranking-total-row th,.ranking-total-row td{color:#c00000;font-weight:800;border-top:2px solid #cfdcea;background:#f8fafc;vertical-align:middle}
+.ranking-total-row .ranking-amount{font-size:inherit}
 .ranking-services-row>.ranking-service-cell{padding:8px 9px 12px;background:#f7faff;text-align:left}
 .ranking-service-heading{font-size:15px;color:#294d6b;margin:0 0 5px}
 .ranking-service-note{font-size:13px;color:#62758a;margin:0 0 8px;font-weight:400}
@@ -456,6 +458,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
  .ranking-table .ranking-row>.ranking-member-cell{grid-column:2/-1;width:auto;padding:0;border:0}
  .ranking-table .ranking-row>.ranking-total-label{grid-column:1/-1;width:auto;padding:0;border:0}
  .ranking-table .ranking-row>td{padding:0;border:0;min-width:0;text-align:right}
+ .ranking-table .ranking-row>td[data-label]{text-align:center}
  .ranking-table .ranking-row>td::before{content:attr(data-label);display:block;margin-bottom:3px;font-size:clamp(11px,3vw,13px);line-height:1.3;font-weight:650;color:#62758a;overflow-wrap:anywhere}
  .ranking-table .ranking-row>.ranking-position{grid-column:1;grid-row:1;display:flex;align-items:center;justify-content:center;align-self:start;min-height:40px;width:auto;font-size:15px}
  .ranking-table .ranking-row>.ranking-position::before{content:none}
@@ -466,6 +469,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
  .ranking-person{font-size:15px;min-height:40px}.ranking-member-meta{font-size:13px}
  .ranking-amount{font-size:15px;white-space:normal;overflow-wrap:normal}
  .ranking-table .ranking-total-row{background:#f4f8fd}
+ .ranking-table .ranking-total-row>td[data-label]{display:flex;flex-direction:column;align-items:center;justify-content:center;align-self:stretch}
+ .ranking-total-row .ranking-amount{font-size:calc(15px + 1pt)}
  .ranking-services-row,.ranking-services-row>.ranking-service-cell{display:block;width:100%}
  .ranking-services-row>.ranking-service-cell{padding:2px 3px 10px;border:0}
  .ranking-service-heading{font-size:16px}.ranking-service-note,.ranking-service-data,.ranking-service-time{font-size:14px}.ranking-state{font-size:13px}
@@ -492,7 +497,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 .daily-finance-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:3px 6px;align-items:baseline;margin:4px 0}
 .daily-finance-label{min-width:0;white-space:nowrap}
 .daily-finance-value{text-align:right;justify-self:end;font-variant-numeric:tabular-nums;white-space:nowrap}
-.daily-finance-service{color:#c00000;font-weight:400}
+.daily-finance-service{color:#71318f;font-weight:400}
 .daily-finance-total{color:#c00000;font-weight:800}
 .daily-finance-disclosure>.daily-finance-row{align-items:center}
 .daily-finance-toggle{display:inline-flex;align-items:center;gap:4px;min-width:0;min-height:28px;padding:3px 0;border:0;border-radius:4px;background:none;color:inherit;font:inherit;text-align:left;cursor:pointer}
@@ -503,6 +508,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 .daily-finance-toggle:focus-visible{outline:2px solid #2563b3;outline-offset:2px}
 .daily-finance-breakdown{margin:2px 0 6px;padding:1px 0 1px 5px;border-left:2px solid #dce6f1}
 .daily-finance-breakdown[hidden]{display:none}
+.daily-finance-breakdown[data-finance-breakdown="service"]{color:#71318f}
 .daily-finance-breakdown[data-finance-breakdown="cumulative"]{color:#c00000;font-weight:800}
 .daily-finance-breakdown .daily-finance-row{display:flex;flex-wrap:nowrap;justify-content:space-between;gap:1px 4px;margin:6px 0}
 .daily-finance-breakdown .daily-finance-label{flex:0 0 auto}
@@ -543,9 +549,11 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 <dialog id="ac4-ranking-dialog" class="finance-dialog ranking-dialog" aria-labelledby="ac4-ranking-title">
  <div class="dialog-heading"><h2 id="ac4-ranking-title">Ranking mensal AC4</h2><button type="button" class="dialog-close" id="ac4-ranking-close">Fechar</button></div>
  <div class="ranking-body">
-  <p class="ranking-intro">AC4 Operacional + SAT em ordem decrescente pelo total. Clique no militar para consultar os serviços do mês.</p>
+  <p id="ac4-ranking-intro" class="ranking-intro">AC4 Operacional + SAT em ordem decrescente pelo total. Clique no militar para consultar os serviços do mês.</p>
   <div class="ranking-controls">
    <label class="ranking-day-toggle"><input type="checkbox" id="ac4-ranking-today" checked/><span id="ac4-ranking-today-label">Incluir o serviço do dia corrente</span></label>
+   <label class="ranking-day-toggle"><input type="checkbox" id="ac4-ranking-officers"/><span>Incluir os 3 oficiais (CAP e ASP OF)</span></label>
+   <label class="ranking-day-toggle"><input type="checkbox" id="ac4-ranking-seniority"/><span>Ordenar por antiguidade (mais antigo ao mais moderno)</span></label>
    <details class="ranking-register-panel"><summary>Carregar identificações completas</summary>
     <label class="ranking-register" for="ac4-ranking-file">Plano de Chamada ou cadastro ES/OS (.xlsx ou .json)<input type="file" id="ac4-ranking-file" accept=".xlsx,.json,application/json,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"/></label>
     <p id="ac4-ranking-register-status" class="ranking-register-status"></p>
@@ -9746,6 +9754,40 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
   }
 }
 </script>
+<script type="application/json" id="ranking-personnel">
+[
+  {"name": "CAP LINS", "ord": 1, "officer": true},
+  {"name": "ASP OF BESSA", "ord": 2, "officer": true},
+  {"name": "ASP OF CARVALHO", "ord": 3, "officer": true},
+  {"name": "ST OSVALDIR", "ord": 4, "officer": false},
+  {"name": "ST DA SILVA", "ord": 5, "officer": false},
+  {"name": "ST PASSOS", "ord": 6, "officer": false},
+  {"name": "ST TAVARES", "ord": 7, "officer": false},
+  {"name": "ST AISLAN", "ord": 8, "officer": false},
+  {"name": "1º SGT HAMILTON", "ord": 9, "officer": false},
+  {"name": "1º SGT NIKHOLAS", "ord": 10, "officer": false},
+  {"name": "1º SGT HELLYSSON", "ord": 11, "officer": false},
+  {"name": "2º SGT MAURO", "ord": 12, "officer": false},
+  {"name": "2º SGT DIEGO", "ord": 13, "officer": false},
+  {"name": "2º SGT SCHUSSLER", "ord": 14, "officer": false},
+  {"name": "2º SGT GEYDSON", "ord": 15, "officer": false},
+  {"name": "2º SGT LUIZ ANTONIO", "ord": 16, "officer": false},
+  {"name": "2º SGT WANDERSON", "ord": 17, "officer": false},
+  {"name": "2º SGT CÉSAR VIEIRA", "ord": 18, "officer": false},
+  {"name": "3º SGT JORGE", "ord": 19, "officer": false},
+  {"name": "3º SGT BERTONCELLO", "ord": 20, "officer": false},
+  {"name": "3º SGT ROBERTO", "ord": 21, "officer": false},
+  {"name": "3º SGT HENRIQUE", "ord": 22, "officer": false},
+  {"name": "3º SGT LEIDE", "ord": 23, "officer": false},
+  {"name": "3º SGT VALÉRIA", "ord": 24, "officer": false},
+  {"name": "CB RABELO", "ord": 25, "officer": false},
+  {"name": "SD CAVALCANTE", "ord": 26, "officer": false},
+  {"name": "SD PICCINI", "ord": 27, "officer": false},
+  {"name": "SD SANTOS", "ord": 28, "officer": false},
+  {"name": "SD MARTINS", "ord": 29, "officer": false},
+  {"name": "SD HUGO", "ord": 30, "officer": false}
+]
+</script>
 <script type="application/json" id="ac4-financial-config">
 {
   "monthlyQuotaCents": {
@@ -9833,23 +9875,30 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     const committedCents=operationalCents+satCents;
     return {period,quotaCents:quota,committedCents,operationalCents,satCents,forecastCents,executedCents,remainingCents:quota===null?null:quota-committedCents,cancelledCount,invalidCount,duplicateCount,records,daily,byEvent:aliases,warnings};
   }
-  function ranking(summary,today,includeCurrentDay=true){
+  function ranking(summary,today,includeCurrentDay=true,options={}){
     const stamp=civilDate(today);if(stamp===null)throw new Error('Data de corte inválida.');
     const cutoffDate=includeCurrentDay?today:isoDate(stamp-DAY),people=new Map();
     const byDate=(a,b)=>a.startDate.localeCompare(b.startDate)||a.start.localeCompare(b.start)||a.key.localeCompare(b.key);
+    const makePerson=source=>{
+      const ord=source.ord!==null&&source.ord!==undefined&&source.ord!==''?Number(source.ord):null;
+      return {key:normalize(source.name),member:source.name,ord:Number.isInteger(ord)&&ord>0?ord:null,officer:typeof source.officer==='boolean'?source.officer:/^(?:CAP|ASP)\b/i.test(source.name),includeZero:source.includeZero===true,operationalCents:0,satCents:0,totalCents:0,forecastCents:0,executedCents:0,records:[],monthlyRecords:[]};
+    };
+    for(const source of options.personnel||[])if(typeof source.name==='string'&&source.name.trim())people.set(normalize(source.name),makePerson({...source,includeZero:source.includeZero!==false}));
     for(const record of summary.records){
       if(!record.valid||record.status==='cancelled')continue;
       const key=normalize(record.member);
-      if(!people.has(key))people.set(key,{key,member:record.member,operationalCents:0,satCents:0,totalCents:0,forecastCents:0,executedCents:0,records:[],monthlyRecords:[]});
+      if(!people.has(key))people.set(key,makePerson({name:record.member}));
       const person=people.get(key);person.monthlyRecords.push(record);
       if(record.startDate>cutoffDate)continue;
       person.records.push(record);person[record.category==='sat'?'satCents':'operationalCents']+=record.commitmentCents;person.totalCents+=record.commitmentCents;
       person[record.status==='executed'?'executedCents':'forecastCents']+=record.commitmentCents;
     }
-    const rows=[...people.values()].filter(person=>person.records.length);
+    const includeOfficers=options.includeOfficers!==false,sortBySeniority=options.sortBySeniority===true;
+    const rows=[...people.values()].filter(person=>(person.includeZero||person.records.length)&&(includeOfficers||!person.officer));
     for(const person of rows){person.records.sort(byDate);person.monthlyRecords.sort(byDate);}
-    rows.sort((a,b)=>b.totalCents-a.totalCents||a.member.localeCompare(b.member,'pt-BR'));
-    const result={period:summary.period,cutoffDate,includeCurrentDay,rows,recordCount:0,operationalCents:0,satCents:0,totalCents:0,forecastCents:0,executedCents:0};
+    const bySeniority=(a,b)=>(a.ord??Infinity)-(b.ord??Infinity)||a.member.localeCompare(b.member,'pt-BR');
+    rows.sort(sortBySeniority?bySeniority:(a,b)=>b.totalCents-a.totalCents||bySeniority(a,b));
+    const result={period:summary.period,cutoffDate,includeCurrentDay,includeOfficers,sortBySeniority,rows,recordCount:0,operationalCents:0,satCents:0,totalCents:0,forecastCents:0,executedCents:0};
     for(const person of rows){result.recordCount+=person.records.length;for(const key of ['operationalCents','satCents','totalCents','forecastCents','executedCents'])result[key]+=person[key];}
     return result;
   }
@@ -9992,6 +10041,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
   const schedules = window.ServiceCalendar.schedules;
   const finance=window.AC4Finance,currency=new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}),percent=new Intl.NumberFormat('pt-BR',{maximumFractionDigits:2}),dailyPercent=new Intl.NumberFormat('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
   let financialSummary;
+  const rankingPersonnel=JSON.parse(document.getElementById('ranking-personnel').textContent);
   const periods = Object.keys(schedules).sort();
   const accessDateFormat=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Sao_Paulo',year:'numeric',month:'2-digit',day:'2-digit'});
   function accessDate(){
@@ -10015,7 +10065,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
   const empty = document.getElementById('sem-previsao');
   const dialog = document.getElementById('detalhes-servico');
   const dialogBody = document.getElementById('detalhes-conteudo');
-  const rankingDialog=document.getElementById('ac4-ranking-dialog'),rankingToday=document.getElementById('ac4-ranking-today');
+  const rankingDialog=document.getElementById('ac4-ranking-dialog'),rankingToday=document.getElementById('ac4-ranking-today'),rankingOfficers=document.getElementById('ac4-ranking-officers'),rankingSeniority=document.getElementById('ac4-ranking-seniority');
   let rankingPeriod=null,selectedRankingKey=null;
   const mobile = window.matchMedia('(max-width: 760px)');
   const selections = new Map();
@@ -10168,6 +10218,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
   }
   function makeRankingServices(person,data){
     const section=element('section','ranking-services');section.setAttribute('aria-label',`Serviços de AC4 de ${person.member}`);
+    if(!person.monthlyRecords.length){section.append(element('p','ranking-empty',`Nenhum serviço de AC4 cadastrado para este militar em ${periodLabel()}.`));return section;}
     section.append(element('h3','ranking-service-heading',`Serviços registrados · ${periodLabel()}`),element('p','ranking-service-note',`${person.records.length} serviço${person.records.length===1?'':'s'} considerado${person.records.length===1?'':'s'} no ranking: ${money(person.totalCents)}. A lista inclui ${person.monthlyRecords.length} serviço${person.monthlyRecords.length===1?'':'s'} do mês; os posteriores ao corte estão sinalizados.`));
     const list=element('ol','ranking-service-list');
     for(const record of person.monthlyRecords){
@@ -10186,22 +10237,28 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     if(rankingPeriod!==period){rankingPeriod=period;selectedRankingKey=null;}
     const today=accessDate(),todayISO=`${today.year}-${String(today.month).padStart(2,'0')}-${String(today.day).padStart(2,'0')}`;
     rankingToday.disabled=period!==todayISO.slice(0,7);document.getElementById('ac4-ranking-today-label').textContent=`Incluir o serviço do dia corrente (${rankingDate(todayISO)})`;
-    const data=finance.ranking(financialSummary,todayISO,rankingToday.checked),[year,month]=period.split('-').map(Number),lastDate=new Date(Date.UTC(year,month,0)).toISOString().slice(0,10),displayCutoff=data.cutoffDate<lastDate?data.cutoffDate:lastDate;
+    const personnel=rankingPersonnel.map(person=>({...person,...window.ServiceDirectory?.rankingInfo(person.name),includeZero:true}));
+    const known=new Set(personnel.map(person=>person.name.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase()));
+    for(const record of financialSummary.records){const key=record.member.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase();if(!known.has(key)){personnel.push({name:record.member,...window.ServiceDirectory?.rankingInfo(record.member),includeZero:false});known.add(key);}}
+    const data=finance.ranking(financialSummary,todayISO,rankingToday.checked,{personnel,includeOfficers:rankingOfficers.checked,sortBySeniority:rankingSeniority.checked}),[year,month]=period.split('-').map(Number),lastDate=new Date(Date.UTC(year,month,0)).toISOString().slice(0,10),displayCutoff=data.cutoffDate<lastDate?data.cutoffDate:lastDate;
     if(!data.rows.some(person=>person.key===selectedRankingKey))selectedRankingKey=null;
     document.getElementById('ac4-ranking-title').textContent=`Ranking AC4 · ${periodLabel()}`;
+    document.getElementById('ac4-ranking-intro').textContent=`${data.sortBySeniority?'Ordenado por antiguidade, do mais antigo ao mais moderno. A coluna ORDEM mostra a antiguidade informada.':'AC4 Operacional + SAT em ordem decrescente pelo total. A coluna ORDEM mostra a posição no ranking.'} Clique no militar para consultar os serviços do mês.`;
     document.getElementById('ac4-ranking-summary').textContent=`Até ${rankingDate(displayCutoff)} · ${data.rows.length} militar${data.rows.length===1?'':'es'} · ${data.recordCount} serviço${data.recordCount===1?'':'s'} · Total: ${money(data.totalCents)}`;
-    document.getElementById('ac4-ranking-status-note').textContent=`Execução confirmada: ${money(data.executedCents)} · Previstos: ${money(data.forecastCents)}. Inclui os AC4 previstos até o corte; não indica pagamento. PROEBOM integra o Operacional.`;
+    const pending=data.sortBySeniority?data.rows.filter(person=>person.ord===null):[];
+    document.getElementById('ac4-ranking-status-note').textContent=`${data.includeOfficers?'Praças e oficiais.':'Somente praças.'} Execução confirmada: ${money(data.executedCents)} · Previstos: ${money(data.forecastCents)}. Inclui os AC4 previstos até o corte; não indica pagamento. PROEBOM integra o Operacional.${pending.length?` Antiguidade pendente (—): ${pending.map(person=>person.member).join(', ')}.`:''}`;
     const directory=window.ServiceDirectory,missing=data.rows.filter(person=>!directory?.has(person.member)).length;
     document.getElementById('ac4-ranking-register-status').textContent=directory?.count()?`Cadastro local: ${directory.count()} militares.${missing?` ${missing} identificações do ranking a completar.`:' Identificações completas disponíveis.'}`:'Carregue o Plano de Chamada ou cadastro ES/OS para exibir nomes completos e RGs. A leitura é local, somente neste navegador.';
     const content=document.getElementById('ac4-ranking-content');content.replaceChildren();
     if(!data.rows.length){content.append(element('p','ranking-empty',`Nenhum AC4 cadastrado até ${rankingDate(displayCutoff)} para ${periodLabel()}.`));return;}
-    const table=element('table','ranking-table');table.setAttribute('aria-label','Ranking mensal de AC4 em ordem decrescente de valor total');table.setAttribute('role','table');
+    const table=element('table','ranking-table');table.setAttribute('aria-label',`Ranking mensal de AC4 ${data.sortBySeniority?'por antiguidade':'em ordem decrescente de valor total'}`);table.setAttribute('role','table');
     const head=element('thead'),header=element('tr');head.setAttribute('role','rowgroup');header.setAttribute('role','row');
-    for(const label of ['Nº','MILITAR','AC4 OPERACIONAL','AC4 SAT','AC4 TOTAL']){const cell=element('th',label==='Nº'?'ranking-position':label==='MILITAR'?'ranking-member-cell':label==='AC4 OPERACIONAL'?'ranking-operational':label==='AC4 SAT'?'ranking-sat':'ranking-total',label);cell.scope='col';cell.setAttribute('role','columnheader');if(label==='Nº')cell.setAttribute('aria-label','Posição no ranking');header.append(cell);}head.append(header);table.append(head);
+    for(const label of ['ORDEM','MILITAR','AC4 OPERACIONAL','AC4 SAT','AC4 TOTAL']){const cell=element('th',label==='ORDEM'?'ranking-position':label==='MILITAR'?'ranking-member-cell':label==='AC4 OPERACIONAL'?'ranking-operational':label==='AC4 SAT'?'ranking-sat':'ranking-total',label);cell.scope='col';cell.setAttribute('role','columnheader');if(label==='ORDEM')cell.setAttribute('aria-label',data.sortBySeniority?'Antiguidade do militar':'Posição no ranking');header.append(cell);}head.append(header);table.append(head);
     const body=element('tbody');body.setAttribute('role','rowgroup');
     const amountCell=(label,amount,total=false)=>{const cell=element('td',label==='AC4 OPERACIONAL'?'ranking-operational':label==='AC4 SAT'?'ranking-sat':total?'ranking-total':'');cell.dataset.label=label;cell.setAttribute('role','cell');cell.append(element('span','ranking-amount',money(amount).replace(/\s/g,' ')));return cell;};
     data.rows.forEach((person,index)=>{
-      const row=element('tr','ranking-row'),position=element('td','ranking-position',String(index+1)),name=element('th','ranking-member-cell'),button=element('button','ranking-person'),identity=element('span','ranking-identification');row.setAttribute('role','row');row.dataset.rankingMember=person.key;position.setAttribute('role','cell');name.scope='row';name.setAttribute('role','rowheader');button.type='button';button.dataset.rankingMember=person.key;rankingIdentification(identity,person.member);button.append(identity);
+      const order=data.sortBySeniority?(person.ord===null?'—':String(person.ord)):String(index+1);
+      const row=element('tr','ranking-row'),position=element('td','ranking-position',order),name=element('th','ranking-member-cell'),button=element('button','ranking-person'),identity=element('span','ranking-identification');row.setAttribute('role','row');row.dataset.rankingMember=person.key;position.setAttribute('role','cell');if(data.sortBySeniority&&person.ord===null){position.title='Antiguidade pendente';position.setAttribute('aria-label','Antiguidade pendente');}name.scope='row';name.setAttribute('role','rowheader');button.type='button';button.dataset.rankingMember=person.key;rankingIdentification(identity,person.member);button.append(identity);
       button.insertAdjacentHTML('beforeend','<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg>');button.setAttribute('aria-label',`Ver serviços de ${identity.textContent}`);
       const details=element('tr','ranking-services-row'),detailCell=element('td','ranking-service-cell');details.id=`ac4-ranking-person-${index}`;details.hidden=person.key!==selectedRankingKey;details.setAttribute('role','row');detailCell.colSpan=5;detailCell.setAttribute('role','cell');details.append(detailCell);
       button.setAttribute('aria-expanded',String(!details.hidden));button.setAttribute('aria-controls',details.id);
@@ -10214,6 +10271,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
       });
       const confirmed=person.records.filter(record=>record.status==='executed').length,forecast=person.records.length-confirmed,states=[];
       if(confirmed)states.push(`${confirmed} confirmado${confirmed===1?'':'s'}`);if(forecast)states.push(`${forecast} previsto${forecast===1?'':'s'}`);
+      if(!person.records.length)states.push('0 confirmados · 0 previstos');
       name.append(button,element('span','ranking-member-meta',states.join(' · ')));row.append(position,name,amountCell('AC4 OPERACIONAL',person.operationalCents),amountCell('AC4 SAT',person.satCents),amountCell('AC4 TOTAL',person.totalCents,true));body.append(row,details);
     });
     const foot=element('tfoot'),total=element('tr','ranking-row ranking-total-row'),label=element('th','ranking-total-label','TOTAL CONSIDERADO');foot.setAttribute('role','rowgroup');total.setAttribute('role','row');label.scope='row';label.colSpan=2;label.setAttribute('role','rowheader');total.append(label,amountCell('AC4 OPERACIONAL',data.operationalCents),amountCell('AC4 SAT',data.satCents),amountCell('AC4 TOTAL',data.totalCents,true));foot.append(total);table.append(body,foot);content.append(table);
@@ -10657,6 +10715,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
   rankingDialog.addEventListener('close',()=>document.querySelector('[data-ac4-ranking]')?.focus({preventScroll:true}));
   rankingDialog.addEventListener('click',event=>{if(event.target===rankingDialog){const r=rankingDialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)rankingDialog.close();}});
   rankingToday.addEventListener('change',renderRankingDialog);
+  rankingOfficers.addEventListener('change',renderRankingDialog);
+  rankingSeniority.addEventListener('change',renderRankingDialog);
   document.getElementById('ac4-ranking-file').addEventListener('change',async event=>{
     const input=event.target,file=input.files[0];if(!file)return;
     const feedback=document.getElementById('ac4-ranking-import-message');input.disabled=true;feedback.textContent='Lendo cadastro local…';
@@ -11108,7 +11168,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
       ui.registerStatus.textContent=`${directory.size} militares carregados apenas nesta sessão. CPFs não informados permanecerão em branco.`;ui.feedback.textContent='Cadastro local carregado. Confira as tabelas e clique no botão de cópia desejado.';render();
       return directory.size;
   }
-  window.ServiceDirectory={appendIdentification,has:name=>!!person(name)&&!personErrors(name).length,count:()=>directory.size,importFile:importDirectoryFile};
+  window.ServiceDirectory={appendIdentification,has:name=>!!person(name)&&!personErrors(name).length,count:()=>directory.size,importFile:importDirectoryFile,rankingInfo:name=>{const p=person(name);return p?{ord:p.ord,officer:/^(?:CAP|ASP)\b/.test(p.grade)}:null;}};
   ui.file.addEventListener('change',async()=>{
     const file=ui.file.files[0];if(!file)return;
     try{await importDirectoryFile(file);

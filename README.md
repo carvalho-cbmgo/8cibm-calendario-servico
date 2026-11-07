@@ -4,6 +4,8 @@ Calendário HTML responsivo e estático para exibição da previsão de militare
 
 O ícone de troféu, à esquerda do detalhamento da cota, abre o ranking mensal por AC4 Total (Operacional + SAT). O ranking considera os registros até a data de acesso em Brasília e permite incluir ou excluir o serviço do dia corrente. Os previstos são identificados separadamente da execução confirmada; não há presunção de pagamento. Ao clicar no militar, são listados os serviços ativos do mês, sinalizando os que ficaram fora da data de corte. As identificações completas utilizam o mesmo cadastro local do módulo ES/OS, importável também pela janela do ranking.
 
+Os 27 praças do Plano de Chamada aparecem mesmo sem AC4. Os checkboxes permitem incluir os 3 oficiais e ordenar por antiguidade; nessa ordenação, ORDEM mostra a numeração original do plano. Reforços fora da relação, como FERREIRA, aparecem quando há AC4 até o corte, com antiguidade pendente quando não informada. O cadastro público do ranking contém somente identificação abreviada, antiguidade e indicação de oficial.
+
 ## Hospedagem via GitHub Pages
 
 1. A publicação atual acompanha a branch `v-1`, pasta **/(root)**, em **Settings → Pages → Build and deployment → Deploy from a branch**.
