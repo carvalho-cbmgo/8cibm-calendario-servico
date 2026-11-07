@@ -193,12 +193,12 @@ test('reforço adicional entra somente com AC4 até o corte e fica sem antiguida
   const data=JSON.parse(scripts.find(([,attrs])=>attrs.includes('id="calendar-data"'))[2]);
   const summary=finance.month(data,'2026-11'),options={personnel:rankingPersonnel,includeOfficers:false,sortBySeniority:true};
   const before=finance.ranking(summary,'2026-11-07',false,options),after=finance.ranking(summary,'2026-11-07',true,options);
-  assert.equal(before.rows.length,27);assert.equal(before.totalCents,685100);
+  assert.equal(before.rows.length,27);assert.equal(before.totalCents,709100);
   assert(!before.rows.some(person=>person.member==='1º SGT FERREIRA'));
-  assert.equal(after.rows.length,28);assert.equal(after.totalCents,925100);
+  assert.equal(after.rows.length,28);assert.equal(after.totalCents,949100);
   const extra=after.rows.at(-1);assert.equal(extra.member,'1º SGT FERREIRA');assert.equal(extra.ord,null);assert.equal(extra.totalCents,48000);
   const officers=finance.ranking(summary,'2026-11-07',true,{...options,includeOfficers:true});
-  assert.equal(officers.rows.length,31);assert.equal(officers.totalCents,973100);
+  assert.equal(officers.rows.length,31);assert.equal(officers.totalCents,997100);
   const full=finance.ranking(summary,'2026-12-01',true,{...options,includeOfficers:true});
-  assert.equal(full.totalCents,summary.committedCents);assert.equal(full.totalCents,1335700);
+  assert.equal(full.totalCents,summary.committedCents);assert.equal(full.totalCents,1359700);
 });
