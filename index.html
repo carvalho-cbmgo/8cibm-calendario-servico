@@ -397,61 +397,66 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 .finance-week-range,.finance-week-empty,.finance-week-pending{display:block;white-space:normal;font-size:11px;line-height:1.45;font-weight:400;color:#728398;margin-top:2px}
 .finance-week-pending{color:#a15e13}
 .finance-weekly-note{font-size:12px;line-height:1.6;color:#62758a;margin:11px 0 0}
-.ranking-dialog{width:min(1100px,calc(100% - 24px));max-height:92dvh}
-.ranking-body{padding:18px 20px 24px;color:#38516b;font-size:14px;line-height:1.5}
-.ranking-intro{margin:0 0 14px;color:#62758a}
-.ranking-controls{display:flex;flex-wrap:wrap;gap:12px 18px;align-items:center;padding:13px 15px;background:#f4f8fd;border:1px solid #dce6f1;border-radius:10px}
+.ranking-dialog{width:min(960px,calc(100% - 24px));max-height:92dvh}
+.ranking-body{padding:12px 16px 18px;color:#38516b;font-size:14px;line-height:1.4}
+.ranking-intro{margin:0 0 8px;color:#62758a}
+.ranking-controls{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;padding:9px 12px;background:#f4f8fd;border:1px solid #dce6f1;border-radius:9px}
 .ranking-day-toggle{display:flex;align-items:center;gap:9px;cursor:pointer;font-weight:650}
 .ranking-day-toggle input{width:19px;height:19px;accent-color:#2563b3;flex:0 0 auto}
 .ranking-register{display:flex;flex-direction:column;gap:5px;max-width:100%;font-size:13px;color:#526b82}
 .ranking-register input{max-width:100%;font:inherit}
+.ranking-register-panel{max-width:100%;font-size:13px;color:#526b82}
+.ranking-register-panel summary{cursor:pointer;font-weight:650}
+.ranking-register-panel[open]{flex-basis:100%}
+.ranking-register-panel .ranking-register{margin-top:7px}
+.ranking-register-panel .ranking-register-status{margin-top:6px}
 .ranking-register-status,.ranking-import-message{flex-basis:100%;margin:0;font-size:13px;color:#62758a}
 .ranking-import-message:empty{display:none}
-.ranking-summary{margin:16px 0 6px;font-weight:650;color:#294d6b}
-.ranking-status-note{margin:0 0 16px;color:#62758a;font-size:13px}
-.ranking-table{width:100%;table-layout:fixed;border-collapse:collapse;font-size:14px}
-.ranking-table th,.ranking-table td{padding:12px 10px;border-bottom:1px solid #dfe7f0;vertical-align:middle;text-align:right}
+.ranking-summary{margin:10px 0 4px;font-weight:650;color:#294d6b}
+.ranking-status-note{margin:0 0 9px;color:#62758a;font-size:13px}
+.ranking-table{width:100%;table-layout:fixed;border-collapse:collapse;font-size:14px;line-height:1.35}
+.ranking-table th,.ranking-table td{padding:7px 6px;border-bottom:1px solid #dfe7f0;vertical-align:middle;text-align:right}
 .ranking-table th:first-child{width:52%;text-align:left}
 .ranking-table thead th{background:#f0f5fa;color:#47617b;font-size:12px;font-weight:750;letter-spacing:.02em}
 .ranking-table .ranking-total{color:#c00000;font-weight:800}
-.ranking-person{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;padding:6px 0;border:0;border-radius:4px;background:none;color:#234d73;font:inherit;font-weight:400;text-align:left;cursor:pointer}
+.ranking-person{display:flex;align-items:center;justify-content:space-between;gap:5px;width:100%;padding:2px 0;border:0;border-radius:4px;background:none;color:#234d73;font:inherit;font-weight:400;text-align:left;cursor:pointer}
 .ranking-person:hover{color:#14375a;background:#eef4fb}
 .ranking-person:focus-visible,.ranking-register input:focus-visible,.ranking-day-toggle input:focus-visible{outline:3px solid #94baff;outline-offset:3px}
 .ranking-person strong{font-weight:800}
 .ranking-identification{min-width:0;overflow-wrap:anywhere}
 .ranking-person svg{width:18px;height:18px;flex:0 0 auto;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .ranking-person[aria-expanded="true"] svg{transform:rotate(180deg)}
-.ranking-member-meta{display:block;font-size:12px;font-weight:400;color:#728398;margin-top:3px}
+.ranking-member-meta{display:block;font-size:12px;font-weight:400;line-height:1.25;color:#728398;margin-top:0}
 .ranking-amount{white-space:nowrap;font-variant-numeric:tabular-nums}
 .ranking-total-row th,.ranking-total-row td{color:#c00000;font-weight:800;border-top:2px solid #cfdcea;background:#f8fafc}
-.ranking-services-row>.ranking-service-cell{padding:12px 14px 18px;background:#f7faff;text-align:left}
+.ranking-services-row>.ranking-service-cell{padding:8px 9px 12px;background:#f7faff;text-align:left}
 .ranking-service-heading{font-size:15px;color:#294d6b;margin:0 0 5px}
-.ranking-service-note{font-size:13px;color:#62758a;margin:0 0 12px;font-weight:400}
-.ranking-service-list{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:10px}
-.ranking-service-item{padding:11px 12px;background:#fff;border:1px solid #dce6f1;border-radius:9px;min-width:0;font-weight:400}
+.ranking-service-note{font-size:13px;color:#62758a;margin:0 0 8px;font-weight:400}
+.ranking-service-list{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:6px}
+.ranking-service-item{padding:8px 10px;background:#fff;border:1px solid #dce6f1;border-radius:8px;min-width:0;font-weight:400}
 .ranking-service-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px;color:#294d6b}
 .ranking-service-top time{font-weight:700}.ranking-service-cost{color:#c00000;font-weight:800;white-space:nowrap;font-variant-numeric:tabular-nums}
-.ranking-service-data,.ranking-service-time{margin:5px 0 0;font-size:13px;color:#526b82}
-.ranking-service-statuses{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.ranking-service-data,.ranking-service-time{margin:3px 0 0;font-size:13px;color:#526b82}
+.ranking-service-statuses{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px}
 .ranking-state{display:inline-block;padding:3px 6px;border-radius:5px;font-size:12px;line-height:1.4;background:#fff2da;color:#8c5716;font-weight:650}
 .ranking-state-confirmed{background:#e8f5ed;color:#276349}.ranking-state-outside{background:#edf1f7;color:#64748b}
 .ranking-empty{padding:24px 12px;text-align:center;color:#62758a;background:#f7faff;border-radius:9px}
 @media screen and (max-width:760px){
  .ranking-dialog{width:calc(100% - 16px);max-width:calc(100% - 16px);max-height:94dvh}
- .ranking-body{padding:14px 12px 20px;font-size:15px}
- .ranking-controls{padding:12px;gap:14px}.ranking-register,.ranking-register-status,.ranking-import-message{font-size:14px}
+ .ranking-body{padding:10px 10px 16px;font-size:15px}
+ .ranking-controls{padding:8px 10px;gap:8px}.ranking-register-panel,.ranking-register,.ranking-register-status,.ranking-import-message{font-size:14px}
  .ranking-summary{font-size:15px}.ranking-status-note{font-size:14px}
  .ranking-table,.ranking-table tbody,.ranking-table tfoot{display:block}
  .ranking-table thead{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
- .ranking-table .ranking-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px 6px;border:1px solid #dce6f1;border-radius:10px;margin-bottom:12px;padding:11px 10px;background:#fff}
+ .ranking-table .ranking-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px 4px;border:1px solid #dce6f1;border-radius:9px;margin-bottom:8px;padding:8px;background:#fff}
  .ranking-table .ranking-row>th{grid-column:1/-1;width:auto;padding:0;border:0}
  .ranking-table .ranking-row>td{padding:0;border:0;min-width:0;text-align:right}
- .ranking-table .ranking-row>td::before{content:attr(data-label);display:block;margin-bottom:5px;font-size:clamp(11px,3vw,13px);line-height:1.4;font-weight:650;color:#62758a;overflow-wrap:anywhere}
- .ranking-person{font-size:15px}.ranking-member-meta{font-size:13px}
+ .ranking-table .ranking-row>td::before{content:attr(data-label);display:block;margin-bottom:3px;font-size:clamp(11px,3vw,13px);line-height:1.3;font-weight:650;color:#62758a;overflow-wrap:anywhere}
+ .ranking-person{font-size:15px;min-height:40px}.ranking-member-meta{font-size:13px}
  .ranking-amount{font-size:15px;white-space:normal;overflow-wrap:normal}
  .ranking-table .ranking-total-row{background:#f4f8fd}
  .ranking-services-row,.ranking-services-row>.ranking-service-cell{display:block;width:100%}
- .ranking-services-row>.ranking-service-cell{padding:2px 5px 16px;border:0}
+ .ranking-services-row>.ranking-service-cell{padding:2px 3px 10px;border:0}
  .ranking-service-heading{font-size:16px}.ranking-service-note,.ranking-service-data,.ranking-service-time{font-size:14px}.ranking-state{font-size:13px}
 }
 @media screen and (max-width:480px){.finance-weekly-table{font-size:13px}.finance-weekly-table th,.finance-weekly-table td{padding:10px 4px}.finance-weekly-table thead th{padding-inline:2px;letter-spacing:0;overflow-wrap:anywhere}.finance-weekly-table thead th,.finance-week-range,.finance-week-empty,.finance-week-pending{font-size:11px}}
@@ -530,9 +535,11 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
   <p class="ranking-intro">AC4 Operacional + SAT em ordem decrescente pelo total. Clique no militar para consultar os serviços do mês.</p>
   <div class="ranking-controls">
    <label class="ranking-day-toggle"><input type="checkbox" id="ac4-ranking-today" checked/><span id="ac4-ranking-today-label">Incluir o serviço do dia corrente</span></label>
-   <label class="ranking-register" for="ac4-ranking-file">Identificações completas (.xlsx ou .json)<input type="file" id="ac4-ranking-file" accept=".xlsx,.json,application/json,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"/></label>
-   <p id="ac4-ranking-register-status" class="ranking-register-status"></p>
-   <p id="ac4-ranking-import-message" class="ranking-import-message" role="status"></p>
+   <details class="ranking-register-panel"><summary>Carregar identificações completas</summary>
+    <label class="ranking-register" for="ac4-ranking-file">Plano de Chamada ou cadastro ES/OS (.xlsx ou .json)<input type="file" id="ac4-ranking-file" accept=".xlsx,.json,application/json,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"/></label>
+    <p id="ac4-ranking-register-status" class="ranking-register-status"></p>
+    <p id="ac4-ranking-import-message" class="ranking-import-message" role="status"></p>
+   </details>
   </div>
   <p id="ac4-ranking-summary" class="ranking-summary" role="status" aria-live="polite"></p>
   <p id="ac4-ranking-status-note" class="ranking-status-note"></p>
@@ -1454,9 +1461,9 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
               {
                 "mode": "PROEBOM 2026",
                 "start": "08h00",
-                "end": "20h00",
+                "end": "12h00",
                 "nextDay": false,
-                "hours": 12,
+                "hours": 4,
                 "observation": "PROEBOM 2026",
                 "document": "OS a definir (não informada)",
                 "status": "planned",
