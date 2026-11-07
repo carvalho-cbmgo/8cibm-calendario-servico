@@ -246,7 +246,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
  .header-identity{flex:1;container-type:inline-size}
  .header-main h1{font-size:clamp(20px,5.7vw,30px);font-size:clamp(20px,7.6cqi,30px);line-height:1.2;margin-bottom:8px}
  .header-title{white-space:nowrap}
- .month-controls{font-size:clamp(21px,5.5vw,25px);gap:6px;margin:14px 0 0;padding:0}
+ .month-controls{display:grid;font-size:clamp(21px,5.5vw,25px);gap:6px;margin:14px auto 0;padding:0}
  .month-label{padding:0 6px}
  .header-org{white-space:normal;font-size:14px;line-height:1.4;letter-spacing:0;margin:0}
  .filterbar{margin:13px 0}
@@ -523,7 +523,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 .day-date{gap:5px}
 .day-date .ala-badge{font-size:11px;padding:5px 7px;letter-spacing:.035em}
 .day-resources{display:flex;flex:0 0 auto;flex-wrap:nowrap;align-items:center;gap:5px;min-width:0}
-.day-resources .chip{flex:0 0 auto;width:max-content;min-width:0;min-height:18px;font-size:8.5px;line-height:1.2;padding:1px;letter-spacing:0;white-space:nowrap}
+.day-resources .chip{flex:0 0 auto;width:max-content;min-width:0;min-height:20px;font-size:9.5px;line-height:1.2;padding:1px;letter-spacing:0;white-space:nowrap}
 .day-head>.resource-total{flex:0 0 100%;color:#718198;font-size:11px;font-weight:500;line-height:1.4;text-align:right}
 .day-head>.day-state{flex:1 0 auto;flex-direction:row;justify-content:flex-end;align-items:center;gap:6px;white-space:nowrap}
 .day-foot{justify-content:flex-end}
@@ -531,7 +531,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
  .day-head{padding:10px}
  .day-num{font-size:32px}
  .day-date .ala-badge{font-size:12px}
- .day-resources .chip{font-size:9.5px;min-height:20px}
+ .day-resources .chip{font-size:11px;min-height:22px}
  .day-head>.resource-total{font-size:12px}
 }
 @media screen and (max-width:350px){
@@ -539,7 +539,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
  .day-num{font-size:26px}
  .day-date{gap:4px}
  .day-date .ala-badge{font-size:10px;padding-inline:6px}
- .day-resources .chip{font-size:9px;min-height:18px}
+ .day-resources .chip{font-size:9.5px;min-height:20px}
 }
 @media print{
  .day-resources .chip{font-size:8px;min-height:22px;padding:3px}
@@ -10526,7 +10526,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     dayState.append(element('span','weekday-label',weekdays[new Date(Date.UTC(year, month - 1, day.day)).getUTCDay()]));
     const resources=element('div','day-resources');resources.setAttribute('aria-label','Recursos do serviço operacional');
     const total=element('span','resource-total',day.coverage[0]);total.title='Recursos de 24h, conforme a cobertura operacional registrada.';
-    const ordinary=element('span','chip ord resource-ordinary',`${counts.ordinary} ORDINÁRIO`);ordinary.title='Militares em serviço ordinário operacional, incluindo TS e TS CIA de pagamento. Dispensas e trocas pendentes não entram nesta contagem.';
+    const ordinary=element('span','chip ord resource-ordinary',`${counts.ordinary} ORD`);ordinary.title='Militares em serviço ordinário operacional, incluindo TS e TS CIA de pagamento. Dispensas e trocas pendentes não entram nesta contagem.';ordinary.setAttribute('aria-label',`${counts.ordinary} recursos de serviço ordinário`);
     const ac4=element('span','chip ac4 resource-ac4',`${counts.ac4} AC4`);ac4.title='Serviços AC4 ativos do Operacional, incluindo PROEBOM e jornadas parciais. SAT contabilizada separadamente.';
     const primary=element('div','day-primary');resources.append(ordinary,ac4);primary.append(date,resources);head.append(primary,dayState,total);
     const list = element('ul', 'entry-list operational-list');
