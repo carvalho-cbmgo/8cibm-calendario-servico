@@ -4,7 +4,7 @@
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{margin:0;background:var(--page);color:var(--ink);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;-webkit-font-smoothing:antialiased}
-main{max-width:1800px;margin:0 auto;padding:clamp(10px,2.4vw,28px) clamp(10px,2.5vw,34px) 42px}
+main{max-width:2400px;margin:0 auto;padding:clamp(10px,2.4vw,28px) clamp(10px,2.5vw,34px) 42px}
 .page-copyright{margin:0 2px 9px;text-align:right;white-space:nowrap;color:#65758a;font-size:11px;font-weight:550;line-height:1.4}
 .header{position:relative;display:grid;grid-template-columns:minmax(0,1fr) clamp(280px,36vw,420px);grid-template-areas:"main finance";align-items:start;gap:clamp(22px,3vw,42px);overflow:hidden;background:linear-gradient(115deg,#111f30 5%,#192e43 58%,#203f54);border:1px solid #344c60;border-radius:18px;padding:clamp(18px,1.8vw,26px) clamp(17px,2.6vw,31px);color:#fff;box-shadow:0 8px 28px rgba(14,42,74,.12)}
 .header::after{content:"";position:absolute;width:320px;height:320px;right:-125px;top:-210px;border:1px solid #ffffff2b;border-radius:50%;box-shadow:0 0 0 48px #ffffff08,0 0 0 97px #ffffff06;pointer-events:none}
@@ -26,7 +26,7 @@ h1{font-size:clamp(24px,2.7vw,39px);font-weight:850;letter-spacing:-.047em;line-
 .filters button:not([data-filter="TODAS"]){color:#fff;border-color:#ffffff26}
 .filters button:not([data-filter="TODAS"])[aria-pressed="true"]{box-shadow:0 0 0 2px var(--page),0 0 0 4px var(--ink)}
 .filterbar small{color:var(--muted);font-size:12px}
-.calendar{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:11px;align-items:stretch}
+.calendar{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,310px),1fr));gap:11px;align-items:stretch}
 .day{background:var(--white);min-width:0;border-radius:13px;overflow:hidden;box-shadow:var(--shadow);border:1px solid #dce5f0;display:flex;flex-direction:column;min-height:248px;transition:border-color .2s,box-shadow .2s}
 .day:hover{box-shadow:0 8px 26px #234b7817;border-color:#b8cbe1}
 .day-head{padding:11px 11px 9px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:6px;background:#f9fbff}
@@ -62,9 +62,6 @@ h1{font-size:clamp(24px,2.7vw,39px);font-weight:850;letter-spacing:-.047em;line-
 .info{margin-top:22px;background:white;border:1px solid var(--line);border-radius:13px;padding:16px 19px;color:#58687e;font-size:12px;line-height:1.75}
 .info strong{color:#233d59}
 .mobile-nav{display:none}
-@media(max-width:1760px){.calendar{grid-template-columns:repeat(5,minmax(0,1fr))}}
-@media(max-width:1280px){.calendar{grid-template-columns:repeat(4,minmax(0,1fr))}}
-@media(max-width:1024px){.calendar{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media screen and (max-width:760px){
  body{background:#edf3fa}
  main{display:grid;grid-template-rows:auto auto auto 1fr auto;gap:6px;min-height:100vh;min-height:100dvh;padding:6px 8px max(6px,env(safe-area-inset-bottom));max-width:640px}
@@ -240,57 +237,63 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 @media print{.day-actions{display:none!important}}
 
 @media screen and (max-width:760px){
- body{font-size:15px}
- main{display:block;min-height:100dvh;padding:10px 10px max(24px,env(safe-area-inset-bottom))}
- .header{gap:14px;padding:16px 14px;border-radius:14px}
- .page-copyright{font-size:clamp(8px,2.55vw,10px);margin-bottom:8px}
- .header-brand{gap:11px}
- .header-emblem{width:54px;height:46px}
- .header-main h1{font-size:clamp(20px,5.2vw,27px);margin-bottom:7px}
- .header-title{white-space:normal}
- .month-controls{font-size:clamp(18px,4.9vw,21px);gap:4px;margin:12px 0 0;padding:0}
+ body{font-size:16px}
+ main{display:block;min-height:100dvh;padding:10px 8px max(24px,env(safe-area-inset-bottom))}
+ .header{gap:16px;padding:16px 12px;border-radius:14px}
+ .page-copyright{font-size:clamp(10px,2.8vw,12px);margin-bottom:9px}
+ .header-brand{gap:8px;align-items:flex-start}
+ .header-emblem{width:40px;height:34px}
+ .header-identity{flex:1;container-type:inline-size}
+ .header-main h1{font-size:clamp(20px,5.7vw,30px);font-size:clamp(20px,7.6cqi,30px);line-height:1.2;margin-bottom:8px}
+ .header-title{white-space:nowrap}
+ .month-controls{font-size:clamp(21px,5.5vw,25px);gap:6px;margin:14px 0 0;padding:0}
  .month-label{padding:0 6px}
- .header-org{white-space:normal;font-size:12px;line-height:1.4;letter-spacing:0;margin:0}
+ .header-org{white-space:normal;font-size:14px;line-height:1.4;letter-spacing:0;margin:0}
  .filterbar{margin:13px 0}
  .filters{gap:6px}
- .filters button{font-size:12px;min-height:44px;padding:7px 2px;line-height:1.25}
+ .filters button{font-size:13px;min-height:46px;padding:8px 2px;line-height:1.3}
  .mobile-nav{margin:0 0 13px;padding:6px;grid-template-columns:42px minmax(0,1fr) 42px}
- .mobile-nav button{height:42px;font-size:25px}
- .mobile-nav select{font-size:15px;padding:4px}
- .mobile-nav-count{font-size:11px;line-height:1.4}
+ .mobile-nav button{height:44px;font-size:28px}
+ .mobile-nav select{font-size:16px;padding:4px}
+ .mobile-nav-count{font-size:13px;line-height:1.4}
  .day-head{padding:14px}
- .day-num{font-size:32px}
- .weekday-label{font-size:12px}
- .ala-badge{font-size:12px;padding:6px 12px}
+ .day-num{font-size:36px}
+ .weekday-label{font-size:14px}
+ .ala-badge{font-size:14px;padding:6px 12px}
  .entry-list{padding:5px 13px}
- .entry{font-size:clamp(14px,3.85vw,16px);line-height:1.4;padding:10px 0;gap:4px 8px}
- .badges{max-width:150px;gap:4px}
- .chip{font-size:12px;line-height:1.35;white-space:normal;padding:4px 6px}
+ .entry{font-size:clamp(16px,4.2vw,18px);line-height:1.4;padding:11px 0;gap:4px 8px}
+ .badges{max-width:176px;gap:4px}
+ .chip{font-size:13px;line-height:1.35;white-space:normal;padding:4px 6px}
  .chip.ac4,.entry .chip.ac4{padding:4px 6px}
  .ac4-badge-line>.chip.officer{padding:4px 6px}
  .ac4-service{gap:4px}
- .ac4-meta{font-size:12px}
- .ac4-period{font-size:12px}
- .ac4-planned{font-size:11px}
- .day-actions .day-notes-button,.day-documents-button{font-size:12px;line-height:1.35;padding:10px 7px;min-height:44px}
- .day-foot{font-size:12px;line-height:1.4;padding:10px 13px}
- .info{font-size:12.5px;line-height:1.5;margin-top:14px;padding:11px 13px}
+ .ac4-meta{font-size:14px}
+ .ac4-period{font-size:14px}
+ .ac4-planned{font-size:13px}
+ .entry>.badges:has(>:is(.ac4-service,.ordinary-service):only-child),.entry>.badges>:is(.ac4-service,.ordinary-service):only-child{display:contents}
+ .entry>.member-label{grid-column:1;grid-row:1}
+ .entry .ac4-badge-line,.entry .ordinary-service>.chip,.entry .ac4-service>.chip{grid-column:2;grid-row:1;justify-self:end}
+ .entry .ac4-meta,.entry .ordinary-service>.ac4-period,.entry .ac4-service>.ac4-period,.entry .ac4-service>.ac4-state,.entry .ac4-service>.ac4-planned{grid-column:1/-1;justify-self:end}
+ .day-actions .day-notes-button,.day-documents-button{font-size:14px;line-height:1.35;padding:11px 7px;min-height:46px}
+ .day-foot{font-size:14px;line-height:1.4;padding:11px 13px}
+ .info{font-size:14px;line-height:1.5;margin-top:14px;padding:12px 13px}
  .dialog-heading{padding:12px}
- .dialog-heading h2{font-size:16px}
- .dialog-close{font-size:14px;min-height:40px}
+ .dialog-heading h2{font-size:18px}
+ .dialog-close{font-size:15px;min-height:44px}
  .dialog-body{padding:12px 14px}
- .member-heading h3{font-size:15px;line-height:1.4}
- .detail-note{font-size:13px;line-height:1.5}
- .event-detail p,.day-alerts{font-size:14px;line-height:1.5}
- .observation-label{font-size:11px}
- .coverage-note{font-size:12px}
+ .member-heading h3{font-size:17px;line-height:1.4}
+ .detail-note{font-size:15px;line-height:1.5}
+ .event-detail p,.day-alerts{font-size:16px;line-height:1.5}
+ .observation-label{font-size:13px}
+ .coverage-note{font-size:14px}
  .sei-body{padding:12px 10px 20px}
- .sei-register,.sei-register input,.sei-intro,.sei-validation,.sei-scope-label,.sei-scope-status,#sei-order-scope{font-size:14px}
- .sei-section h3{font-size:17px}
- .sei-tools button,.sei-register button{font-size:14px;min-height:44px}
+ .sei-register,.sei-register input,.sei-intro,.sei-validation,.sei-scope-label,.sei-scope-status,#sei-order-scope{font-size:16px}
+ .sei-section h3{font-size:19px}
+ .sei-tools button,.sei-register button{font-size:16px;min-height:46px}
  .sei-table{min-width:1000px}
- .sei-table th,.sei-table td{font-size:11pt!important}
+ .sei-table th,.sei-table td{font-size:12pt!important}
 }
+@media screen and (max-width:360px){main{padding-inline:6px}.header{padding-inline:8px}.header-brand{gap:6px}.header-emblem{width:32px;height:28px}}
 
 
 /* Keep the duty number quiet and the adjunto beside the name, before service badges. */
@@ -300,7 +303,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 .badges.has-adjunto{flex-wrap:nowrap;max-width:164px;gap:4px;align-items:center}
 .has-adjunto>.chief{flex:0 0 auto;white-space:nowrap;padding-left:4px;padding-right:4px}
 .service-badges{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:3px;min-width:0;max-width:90px}
-@media screen and (max-width:760px){.member-count{min-width:18px;height:18px;font-size:10px}.member-label{gap:5px}}
+@media screen and (max-width:760px){.member-count{min-width:20px;height:20px;font-size:11px}.member-label{gap:5px}}
 @media print{.member-count{min-width:12px;height:12px;font-size:7px}.member-label{gap:3px}}
 
 /* SAT has its own list and OS; operational coverage remains above this section. */
@@ -321,7 +324,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 .sat-status.holiday{color:#35536d;font-weight:600;padding-top:5px}
 .sat-activity-note{margin:0;padding:6px 11px 10px;color:#526b82;font-size:11px;line-height:1.5}
 .sat-activity-note strong{display:block;color:#35536d;font-weight:650}
-@media screen and (max-width:760px){.sat-activity-note{font-size:13px;padding:7px 13px 11px}}
+@media screen and (max-width:760px){.sat-activity-note{font-size:15px;padding:8px 13px 12px}}
 .chip.compensation{background:#edf3f8;color:#48647d;border-color:#d9e4ee}
 .chip.ac4-continuation{background:#f1e9f9;color:#692e99;border-color:#dfccef;box-shadow:none;text-shadow:none;letter-spacing:0;font-weight:650}
 /* Give names the first row; long AC4 periods use the full width underneath. */
@@ -340,9 +343,9 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 .exchange-hint:focus-visible{outline:3px solid #94baff;outline-offset:2px}
 .exchange-tooltip{position:fixed;inset:auto;margin:0;width:max-content;max-width:min(440px,calc(100vw - 20px));padding:10px 12px;border:1px solid #cfdae8;border-radius:9px;background:#fff;color:#243c54;box-shadow:0 6px 24px #10283f26;font:12px/1.5 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;text-align:left;overflow-wrap:anywhere;z-index:1000}
 .exchange-tooltip p{margin:0}.exchange-tooltip p+p{margin-top:4px}.exchange-tooltip p:first-child{font-weight:750;color:#1f4f7c}
-@media screen and (max-width:760px){.exchange-tooltip{font-size:13px}}
+@media screen and (max-width:760px){.exchange-tooltip{font-size:15px}}
 @media print{.exchange-tooltip{display:none!important}}
-@media screen and (max-width:760px){.service-area-heading{font-size:12px;padding:10px 13px 4px}.sat-heading{font-size:14px}.sat-status{font-size:12px;padding:4px 13px 9px}.sat-shift-heading{font-size:14px;padding:7px 13px}.sat-shift-heading span,.sat-activity-heading{font-size:12px}.sat-activity-heading{padding:7px 13px 3px}}
+@media screen and (max-width:760px){.service-area-heading{font-size:14px;padding:11px 13px 5px}.sat-heading{font-size:16px}.sat-status{font-size:14px;padding:5px 13px 10px}.sat-shift-heading{font-size:16px;padding:8px 13px}.sat-shift-heading span,.sat-activity-heading{font-size:14px}.sat-activity-heading{padding:8px 13px 4px}}
 @media print{.sat-section{background:#fff}.service-area-heading{font-size:8px}.sat-status{font-size:7px}.sat-shift-heading{font-size:9px}.sat-shift-heading span,.sat-activity-heading{font-size:8px}}
 /* Share desktop rows so roster and SAT content cannot offset the action bars. */
 @media screen and (min-width:761px){
@@ -393,10 +396,10 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 .finance-week-range,.finance-week-empty,.finance-week-pending{display:block;white-space:normal;font-size:11px;line-height:1.45;font-weight:400;color:#728398;margin-top:2px}
 .finance-week-pending{color:#a15e13}
 .finance-weekly-note{font-size:12px;line-height:1.6;color:#62758a;margin:11px 0 0}
-@media screen and (max-width:480px){.finance-weekly-table{font-size:12px}.finance-weekly-table th,.finance-weekly-table td{padding:10px 4px}.finance-weekly-table thead th{padding-inline:2px;letter-spacing:0}.finance-weekly-table thead th,.finance-week-range,.finance-week-empty,.finance-week-pending{font-size:10px}}
+@media screen and (max-width:480px){.finance-weekly-table{font-size:13px}.finance-weekly-table th,.finance-weekly-table td{padding:10px 4px}.finance-weekly-table thead th{padding-inline:2px;letter-spacing:0;overflow-wrap:anywhere}.finance-weekly-table thead th,.finance-week-range,.finance-week-empty,.finance-week-pending{font-size:11px}}
 .over-quota .finance-metric-available .finance-metric-amount{color:#ffd2c6}
 .finance-warning{color:#ae271b;font-weight:700}.header .finance-warning{color:#ffd2c6}
-.daily-finance{border-top:1px solid #dce6f1;background:#f5f9ff;padding:9px 11px;font-size:10px;line-height:1.5;color:#34516d;min-width:0;font-variant-numeric:tabular-nums}
+.daily-finance{border-top:1px solid #dce6f1;background:#f5f9ff;padding:11px;font-size:13px;line-height:1.5;color:#34516d;min-width:0;font-variant-numeric:tabular-nums}
 .daily-finance p{margin:3px 0;overflow-wrap:anywhere}.daily-balance{font-weight:800;color:#17634b;text-transform:uppercase}.days-remaining{color:#61758a}
 .ac4-cost{color:#c00000;font-size:inherit;font-weight:800;font-variant-numeric:tabular-nums}
 .is-cancelled .chip.ac4{background:#eef2f6;color:#64748b;border-color:#cbd5e1;box-shadow:none;text-shadow:none;text-decoration:line-through}
@@ -405,32 +408,31 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 .event-finance{border-top:1px solid #ded6eb;margin-top:8px;padding-top:7px}.event-finance-total{font-weight:800;color:#473573}
 .finance-slices{font-size:12px;line-height:1.5;padding-left:18px}.finance-slices li{margin:5px 0}
 @media screen and (min-width:761px) and (max-width:1100px){.header-emblem{width:70px;height:56px}.header-brand{gap:12px}.month-controls{margin-left:0}}
-@media screen and (max-width:760px){.monthly-finance{font-size:13px;padding:8px 0 0;margin:0;border-left:0;border-top:1px solid #ffffff18}.finance-dialog-body{padding:16px 14px 20px}.daily-finance{font-size:12px;padding:10px 13px}.ac4-cost,.ac4-state{font-size:12px}.finance-slices{font-size:13px}}
+@media screen and (max-width:760px){.monthly-finance{font-size:15px;padding:9px 0 0;margin:0;border-left:0;border-top:1px solid #ffffff18}.finance-toolbar h2{font-size:13px}.finance-metric-label{font-size:14px}.finance-metric-amount{font-size:18px}.finance-metric-share{font-size:13px}.finance-days-remaining{font-size:14px}.finance-breakdown{font-size:16px}.finance-note,.finance-rule,.finance-counts,.finance-weekly-note{font-size:14px}.finance-weekly-table caption{font-size:17px}.finance-dialog-body{padding:16px 14px 20px}.daily-finance{font-size:clamp(13px,3.6vw,15px);padding:12px 10px}.ac4-cost,.ac4-state{font-size:14px}.finance-slices{font-size:15px}.chief-pending,.chief-period{font-size:14px}.dialog-copy-status,.copy-status{font-size:14px}}
 @media screen and (max-width:360px){.finance-dialog{width:calc(100% - 12px);max-width:calc(100% - 12px)}.finance-dialog-body{padding-inline:8px}}
+@media screen and (max-width:360px){.finance-weekly-table thead th{font-size:10.5px;padding-inline:0;letter-spacing:-.01em}}
 @media print{.header{grid-template-columns:minmax(0,1fr);grid-template-areas:"main" "finance"}.header-org{color:#223e57}.monthly-finance{border:0;border-top:1px solid #bfcbd7;padding:10px 0 0;background:white;color:#142c49}.finance-details-button{display:none}.monthly-finance .finance-metric-amount,.monthly-finance .finance-metric-share,.finance-metric-label,.finance-days-remaining,.finance-days-remaining strong{color:#53627a}.daily-finance{font-size:8px}.ac4-meta{font-size:8px}}
 
 .ac4-badge-line{display:flex;align-items:center;justify-content:flex-end;gap:3px;max-width:100%}
 .ac4-badge-line>.chip{flex:0 0 auto;white-space:nowrap}
-.daily-finance-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:3px 8px;align-items:baseline;margin:3px 0}
-.daily-finance-label{min-width:0;overflow-wrap:anywhere}
+.daily-finance-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:3px 6px;align-items:baseline;margin:4px 0}
+.daily-finance-label{min-width:0;white-space:nowrap}
 .daily-finance-value{text-align:right;justify-self:end;font-variant-numeric:tabular-nums;white-space:nowrap}
 .daily-finance-service{color:#c00000;font-weight:400}
 .daily-finance-total{color:#c00000;font-weight:800}
 .daily-finance-disclosure>.daily-finance-row{align-items:center}
 .daily-finance-toggle{display:inline-flex;align-items:center;gap:4px;min-width:0;min-height:28px;padding:3px 0;border:0;border-radius:4px;background:none;color:inherit;font:inherit;text-align:left;cursor:pointer}
-.daily-finance-toggle span{min-width:0;overflow-wrap:anywhere}
+.daily-finance-toggle span{min-width:0;white-space:nowrap}
 .daily-finance-toggle svg{width:13px;height:13px;flex:0 0 auto;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .daily-finance-toggle[aria-expanded="true"] svg{transform:rotate(180deg)}
 .daily-finance-toggle:hover{background:#dce8f36b}
 .daily-finance-toggle:focus-visible{outline:2px solid #2563b3;outline-offset:2px}
-.daily-finance-breakdown{margin:2px 0 6px 3px;padding:1px 0 1px 8px;border-left:2px solid #dce6f1}
+.daily-finance-breakdown{margin:2px 0 6px;padding:1px 0 1px 5px;border-left:2px solid #dce6f1}
 .daily-finance-breakdown[hidden]{display:none}
-.daily-finance-breakdown[data-finance-breakdown="cumulative"]{color:#c00000;font-weight:800;padding-left:6px}
-.daily-finance-breakdown .daily-finance-row{display:flex;flex-wrap:wrap;justify-content:space-between;gap:1px 8px;margin:5px 0}
-.daily-finance-breakdown .daily-finance-label{flex:1 1 115px}
+.daily-finance-breakdown[data-finance-breakdown="cumulative"]{color:#c00000;font-weight:800}
+.daily-finance-breakdown .daily-finance-row{display:flex;flex-wrap:nowrap;justify-content:space-between;gap:1px 4px;margin:6px 0}
+.daily-finance-breakdown .daily-finance-label{flex:0 0 auto}
 .daily-finance-breakdown .daily-finance-value{margin-left:auto}
-.daily-finance-breakdown[data-finance-breakdown="cumulative"] .daily-finance-row{flex-wrap:nowrap;column-gap:4px}
-.daily-finance-breakdown[data-finance-breakdown="cumulative"] .daily-finance-label{flex:0 0 auto;white-space:nowrap}
 @media screen and (max-width:760px){.daily-finance-toggle{min-height:44px}}
 .day-notes-caption{display:block}
 .day-notes-arrow{font-size:1.15em;font-weight:750;line-height:1}
@@ -440,10 +442,10 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 .is-scale-confirmed .day-head{background:#eef7f1}
 .scale-confirmed-label{padding:2px 5px;border:1px solid #c7ddcf;border-radius:5px;background:#f7fcf8;color:#35624a;font-size:9px;font-weight:650;line-height:1.3;white-space:nowrap}
 .scale-confirmation-note{margin:0 0 10px;padding:8px 10px;border-radius:7px;background:#eff8f2;color:#35624a;font-size:12px;line-height:1.45}
-@media screen and (max-width:760px){.scale-confirmed-label{font-size:11px}.scale-confirmation-note{font-size:13px}}
+@media screen and (max-width:760px){.scale-confirmed-label{font-size:13px}.scale-confirmation-note{font-size:15px}}
 @media screen and (max-width:480px){
- .finance-metric-label{font-size:12px}.finance-metric-amount{font-size:14px;text-align:right}
- .finance-metric-share{font-size:11px;min-width:46px}
+ .finance-metric-label{font-size:14px}.finance-metric-amount{font-size:clamp(16px,4.4vw,18px);text-align:right}
+ .finance-metric-share{font-size:13px;min-width:48px}
 }
 </style></head><body><main>
 <p class="page-copyright">© 2026 ASP OF CARVALHO. Todos os direitos reservados.</p>
@@ -10060,7 +10062,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
       group.append(content);section.append(group);
     };
     disclosure('service','AC4 SERVIÇO',data.committedCents,'daily-finance-service',[['AC4 Operacional',data.operationalCents],['AC4 SAT',data.satCents]]);
-    disclosure('cumulative','TOTAL AC4',data.cumulativeCents,'daily-finance-total',[['AC4 Operacional',data.cumulativeOperationalCents],['AC4 SAT',data.cumulativeSatCents]]);
+    disclosure('cumulative','TOTAL AC4',data.cumulativeCents,'daily-finance-total',[['AC4 OPERACIONAL',data.cumulativeOperationalCents],['AC4 SAT',data.cumulativeSatCents]]);
     line(section,'AC4 DISPONÍVEL',data.remainingCents===null?'COTA NÃO INFORMADA':valueWithRatio(data.remainingCents),'daily-balance');
     return section;
   }
