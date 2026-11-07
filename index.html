@@ -521,9 +521,9 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 .day-head{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px;align-items:center}
 .day-date{gap:5px}
 .day-date .ala-badge{font-size:11px;padding:5px 7px;letter-spacing:.035em}
-.day-resources{display:grid;grid-column:1/-1;grid-row:2;grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto;gap:3px;min-width:0}
-.day-resources .chip{min-width:0;min-height:30px;justify-self:stretch;font-size:10.5px;line-height:1.25;padding:4px;letter-spacing:0;white-space:normal}
-.day-resources .resource-total{background:#e8f1fc;color:#28537e;border-color:#cddff2}
+.day-resources{display:flex;grid-column:1/-1;grid-row:2;flex-wrap:wrap;align-items:center;gap:5px;min-width:0}
+.day-resources .chip{flex:0 0 auto;width:max-content;min-width:0;min-height:30px;font-size:10.5px;line-height:1.25;padding:4px;letter-spacing:0;white-space:nowrap}
+.day-resources .resource-total{background:#79503b;color:#fff8ef;border-color:#65402e}
 .day-head>.day-state{grid-column:2;grid-row:1;flex-direction:column;justify-content:center;align-items:flex-end;justify-self:end}
 .day-foot{justify-content:flex-end}
 @media screen and (max-width:760px){
