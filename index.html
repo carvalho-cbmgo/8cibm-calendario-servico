@@ -309,7 +309,18 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 /* SAT has its own list and OS; operational coverage remains above this section. */
 .operational-section{display:flex;flex-direction:column;flex:1;min-width:0}
 .operational-roster{display:flex;flex-direction:column;flex:1;min-width:0}
-.service-area-heading{margin:0;padding:8px 11px 3px;font-size:10px;font-weight:800;letter-spacing:.05em;color:#586f86;line-height:1.4}
+.service-area-heading{display:flex;align-items:center;gap:6px;margin:0;padding:8px 11px 3px;font-size:10px;font-weight:800;letter-spacing:.05em;color:#586f86;line-height:1.4}
+.area-toggle{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;width:28px;height:28px;padding:0;border:1px solid #cbd9e8;border-radius:6px;background:#eef4fb;color:#28537e;cursor:pointer}
+.area-toggle:hover{background:#e1ecf9}
+.area-toggle:focus-visible{outline:3px solid #94baff;outline-offset:2px}
+.area-toggle svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .15s}
+.area-toggle[aria-expanded="true"] svg{transform:rotate(90deg)}
+.service-area-heading>span{min-width:0}
+.operational-section.is-collapsed{display:flex;flex:0 0 auto}
+.sat-content{display:flex;flex-direction:column;flex:1;min-width:0}
+.sat-content>.day-actions{margin-top:auto}
+@media screen and (max-width:760px){.area-toggle{width:40px;height:40px}.area-toggle svg{width:20px;height:20px}}
+@media print{.area-toggle{display:none}.service-area-content[hidden]{display:flex!important}}
 .sat-section{border-top:2px solid #d9e5ef;background:#f8fafc;min-width:0}
 .sat-heading{padding:10px 11px 5px;color:#294d6b}
 .sat-status{margin:0;padding:3px 11px 8px;font-size:10px;line-height:1.45;color:#61758a}
@@ -353,7 +364,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
   .day{display:grid;grid-template-rows:subgrid;grid-row:span 6;row-gap:0}
   .operational-section{display:grid;grid-template-rows:subgrid;grid-row:span 3;row-gap:0}
   .sat-section{display:flex;flex-direction:column}
-  .sat-section>.day-actions{margin-top:auto}
+  .day:not(.is-hidden):has(.operational-section.is-collapsed){display:flex;align-self:start}
  }
 }
 
@@ -10160,6 +10171,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
   const mobile = window.matchMedia('(max-width: 760px)');
   const selections = new Map();
   const dailyFinanceExpanded = new Set();
+  const areaExpanded = new Map();
   let period = initialPeriod;
   let filter = 'TODAS';
   let selected;
@@ -10519,6 +10531,18 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     const ac4=new Set(members.flatMap(member=>member.events).filter(finance.active));
     return {ordinary:ordinary.size,ac4:ac4.size};
   }
+  function areaHeading(day,area,section,targets){
+    const operational=area==='operational',title=operational?'OPERACIONAL':'SEÇÃO ATIVIDADES TÉCNICAS',key=`${period}-${String(day.day).padStart(2,'0')}-${area}`;
+    const heading=element('h3',`service-area-heading${operational?'':' sat-heading'}`),button=element('button','area-toggle');button.type='button';button.dataset.areaToggle=area;
+    button.insertAdjacentHTML('beforeend','<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m9 6 6 6-6 6"/></svg>');
+    targets.forEach((target,index)=>{target.id=`area-${key}-${index}`;});button.setAttribute('aria-controls',targets.map(target=>target.id).join(' '));
+    const apply=expanded=>{
+      areaExpanded.set(key,expanded);section.classList.toggle('is-collapsed',!expanded);button.setAttribute('aria-expanded',String(expanded));
+      button.setAttribute('aria-label',`${expanded?'Recolher':'Expandir'} ${title} do dia ${String(day.day).padStart(2,'0')}/${period.slice(5)}/${period.slice(0,4)}`);button.title=button.getAttribute('aria-label');
+      for(const target of targets)target.hidden=!expanded;
+    };
+    apply(areaExpanded.get(key)??operational);button.addEventListener('click',()=>apply(button.getAttribute('aria-expanded')!=='true'));heading.append(button,element('span','',title));return heading;
+  }
   function makeCard(day) {
     const chief=chiefFor(day);
     const members = orderedDayMembers(day),counts=resourceCounts(members);
@@ -10574,9 +10598,9 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     documents.setAttribute('aria-label', `Gerar Escala e Ordem de Serviço do dia ${day.day} de ${periodLabel()}`);
     actions.append(notes, documents);
     const operational=element('div','operational-section');
-    const roster=element('div','operational-roster');roster.append(list);
+    const roster=element('div','operational-roster service-area-content');roster.append(list);
     if(chief.status==='pending')roster.append(element('p','chief-pending',chief.label));
-    operational.append(element('h3','service-area-heading','OPERACIONAL'),roster);
+    operational.append(areaHeading(day,'operational',operational,[roster,actions]),roster);
     operational.append(actions);
     if (day.alerts.length) operational.append(element('div', 'print-notes day-print-alerts', day.alerts.join(' ')));
     card.append(head,operational,makeSatSection(day),makeDailyFinance(day));
@@ -10584,9 +10608,9 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
   }
   function makeSatSection(day){
     const sat=satFor(day),section=element('section','sat-section');section.setAttribute('aria-label',`SAT do dia ${day.day}`);
-    section.append(element('h3','service-area-heading sat-heading','SEÇÃO ATIVIDADES TÉCNICAS'));
-    if(ordinaryPending(sat))section.append(element('p','sat-status','Expediente ordinário ainda não informado.'));
-    if(sat.expedientStatus==='holiday')section.append(element('p','sat-status holiday','Feriado · Sem expediente'));
+    const content=element('div','sat-content service-area-content');section.append(areaHeading(day,'sat',section,[content]),content);
+    if(ordinaryPending(sat))content.append(element('p','sat-status','Expediente ordinário ainda não informado.'));
+    if(sat.expedientStatus==='holiday')content.append(element('p','sat-status holiday','Feriado · Sem expediente'));
     for(const shift of satGroups(sat)){
       if(!shift.groups.length)continue;
       const block=element('section','sat-shift');block.dataset.shift=shift.key;block.setAttribute('aria-label',`Turno ${shift.label}`);block.append(satShiftHeading(shift));
@@ -10601,13 +10625,13 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
         }
         activity.append(list);block.append(activity);
       }
-      section.append(block);
+      content.append(block);
     }
-    if(!sat.members.length&&!sat.notices?.length&&sat.expedientStatus!=='holiday')section.append(element('p','sat-status','Nenhum serviço SAT informado para este dia.'));
+    if(!sat.members.length&&!sat.notices?.length&&sat.expedientStatus!=='holiday')content.append(element('p','sat-status','Nenhum serviço SAT informado para este dia.'));
     const actions=element('div','day-actions'),details=element('button','day-notes-button','Detalhes do dia'),order=element('button','day-documents-button','Gerar OS');
     details.type='button';details.dataset.details=String(day.day);details.dataset.serviceArea='sat';details.setAttribute('aria-haspopup','dialog');details.setAttribute('aria-label',`Detalhes da SAT do dia ${day.day}`);
     order.type='button';order.dataset.seiDay=String(day.day);order.dataset.serviceArea='sat';order.setAttribute('aria-haspopup','dialog');order.setAttribute('aria-label',`Gerar Ordem de Serviço da SAT do dia ${day.day}`);
-    actions.append(details,order);section.append(actions);return section;
+    actions.append(details,order);content.append(actions);return section;
   }
   function draw() {
     hideExchangeTooltip();
