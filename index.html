@@ -239,7 +239,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 @media screen and (max-width:760px){
  body{font-size:16px}
  main{display:block;min-height:100dvh;padding:10px 8px max(24px,env(safe-area-inset-bottom))}
- .header{gap:16px;padding:16px 12px;border-radius:14px}
+ .header{gap:4px;padding:16px 12px;border-radius:14px}
  .page-copyright{font-size:clamp(10px,2.8vw,12px);margin-bottom:9px}
  .header-brand{gap:8px;align-items:flex-start}
  .header-emblem{width:40px;height:34px}
@@ -499,7 +499,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 .event-finance{border-top:1px solid #ded6eb;margin-top:8px;padding-top:7px}.event-finance-total{font-weight:800;color:#473573}
 .finance-slices{font-size:12px;line-height:1.5;padding-left:18px}.finance-slices li{margin:5px 0}
 @media screen and (min-width:761px) and (max-width:1100px){.header-emblem{width:70px;height:56px}.header-brand{gap:12px}.month-controls{margin-left:0}}
-@media screen and (max-width:760px){.monthly-finance{font-size:15px;padding:9px 0 0;margin:0;border-left:0;border-top:1px solid #ffffff18}.finance-toolbar h2{font-size:13px}.finance-metric-label{font-size:14px}.finance-metric-amount{font-size:18px}.finance-metric-share{font-size:13px}.finance-days-remaining{font-size:14px}.finance-breakdown{font-size:16px}.finance-note,.finance-rule,.finance-counts,.finance-weekly-note{font-size:14px}.finance-weekly-table caption{font-size:17px}.finance-dialog-body{padding:16px 14px 20px}.daily-finance{font-size:clamp(13px,3.6vw,15px);padding:12px 10px}.ac4-cost,.ac4-state{font-size:14px}.finance-slices{font-size:15px}.chief-pending,.chief-period{font-size:14px}.dialog-copy-status,.copy-status{font-size:14px}}
+@media screen and (max-width:760px){.monthly-finance{font-size:15px;padding:0;margin:0;border-left:0;border-top:1px solid #ffffff18}.finance-toolbar h2{font-size:13px}.finance-metric-label{font-size:14px}.finance-metric-amount{font-size:18px}.finance-metric-share{font-size:13px}.finance-days-remaining{font-size:14px}.finance-breakdown{font-size:16px}.finance-note,.finance-rule,.finance-counts,.finance-weekly-note{font-size:14px}.finance-weekly-table caption{font-size:17px}.finance-dialog-body{padding:16px 14px 20px}.daily-finance{font-size:clamp(13px,3.6vw,15px);padding:12px 10px}.ac4-cost,.ac4-state{font-size:14px}.finance-slices{font-size:15px}.chief-pending,.chief-period{font-size:14px}.dialog-copy-status,.copy-status{font-size:14px}}
 @media screen and (max-width:360px){.finance-dialog{width:calc(100% - 12px);max-width:calc(100% - 12px)}.finance-dialog-body{padding-inline:8px}}
 @media screen and (max-width:360px){.finance-weekly-table thead th{font-size:10.5px;padding-inline:0;letter-spacing:-.01em}}
 @media print{.header{grid-template-columns:minmax(0,1fr);grid-template-areas:"main" "finance"}.header-org{color:#223e57}.monthly-finance{border:0;border-top:1px solid #bfcbd7;padding:10px 0 0;background:white;color:#142c49}.finance-details-button{display:none}.monthly-finance .finance-metric-amount,.monthly-finance .finance-metric-share,.finance-metric-label,.finance-days-remaining,.finance-days-remaining strong{color:#53627a}.daily-finance{font-size:8px}.ac4-meta{font-size:8px}}
@@ -10279,6 +10279,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
   const selections = new Map();
   const dailyFinanceExpanded = new Set();
   const areaExpanded = new Map();
+  const mobileAreaExpanded = new Map();
+  const areaControls = new Map();
   let period = initialPeriod;
   let filter = 'TODAS';
   let selected;
@@ -10646,17 +10648,26 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     const ac4=new Set(members.flatMap(member=>member.events).filter(finance.active));
     return {ordinary:ordinary.size,ac4:ac4.size};
   }
+  function syncAreaControls(){
+    for(const [key,{area,apply}] of areaControls)apply((mobile.matches?mobileAreaExpanded.get(area):areaExpanded.get(key))??false);
+  }
   function areaHeading(day,area,section,targets){
     const operational=area==='operational',title=operational?'OPERACIONAL':'SEÇÃO ATIVIDADES TÉCNICAS',key=`${period}-${String(day.day).padStart(2,'0')}-${area}`;
     const heading=element('h3',`service-area-heading${operational?'':' sat-heading'}`),button=element('button','area-toggle');button.type='button';button.dataset.areaToggle=area;
     button.insertAdjacentHTML('beforeend','<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m9 6 6 6-6 6"/></svg>');
     targets.forEach((target,index)=>{target.id=`area-${key}-${index}`;});button.setAttribute('aria-controls',targets.map(target=>target.id).join(' '));
     const apply=expanded=>{
-      areaExpanded.set(key,expanded);section.classList.toggle('is-collapsed',!expanded);button.setAttribute('aria-expanded',String(expanded));
+      section.classList.toggle('is-collapsed',!expanded);button.setAttribute('aria-expanded',String(expanded));
       button.setAttribute('aria-label',`${expanded?'Recolher':'Expandir'} ${title} do dia ${String(day.day).padStart(2,'0')}/${period.slice(5)}/${period.slice(0,4)}`);button.title=button.getAttribute('aria-label');
       for(const target of targets)target.hidden=!expanded;
     };
-    apply(areaExpanded.get(key)??operational);button.addEventListener('click',()=>apply(button.getAttribute('aria-expanded')!=='true'));heading.append(button,element('span','',title));return heading;
+    areaControls.set(key,{area,apply});
+    apply((mobile.matches?mobileAreaExpanded.get(area):areaExpanded.get(key))??false);
+    button.addEventListener('click',()=>{
+      const expanded=button.getAttribute('aria-expanded')!=='true';
+      if(mobile.matches){mobileAreaExpanded.set(area,expanded);syncAreaControls();}
+      else{areaExpanded.set(key,expanded);apply(expanded);}
+    });heading.append(button,element('span','',title));return heading;
   }
   function makeCard(day) {
     const chief=chiefFor(day);
@@ -10781,6 +10792,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     selected = selections.get(period) ?? (year === today.year && month === today.month ? today.day : days[0]?.day);
     financialSummary=finance.month(schedules,period,window.ServiceCalendar.quotas[period]);
     updateFinancialHeader();
+    areaControls.clear();
     cards = days.map(makeCard);
     calendar.replaceChildren(...cards);
     calendar.hidden = !hasData;
@@ -10972,6 +10984,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
   dayPicker.addEventListener('change', () => { selected = Number(dayPicker.value); draw(); });
   previous.addEventListener('click', () => move(-1));
   next.addEventListener('click', () => move(1));
+  mobile.addEventListener('change',syncAreaControls);
   document.getElementById('voltar-competencia').textContent = `Voltar a ${monthNames[Number(initialPeriod.split('-')[1]) - 1]}/${initialPeriod.split('-')[0]}`;
   document.getElementById('voltar-competencia').addEventListener('click', () => { period = initialPeriod; renderPeriod(); });
   calendar.addEventListener('click', event => { const button = event.target.closest('[data-details]'); if (button) openDetails(Number(button.dataset.details),button.dataset.serviceArea||'operational'); });
