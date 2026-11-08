@@ -11228,6 +11228,10 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     const lines=[], notes=member.notes || [], day=isoDate();
     const change=member.badges.find(b=>['ts','review'].includes(b.kind));
     const cia=companyExchange(member);
+    const partialOrdinary=member.badges.some(b=>b.kind==='ord'&&Number(b.hours||member.serviceHours)>0&&Number(b.hours||member.serviceHours)<24);
+    const partialExchange=partialOrdinary?current.day.members.flatMap(m=>m.badges).find(b=>b.kind==='ts'&&b.annotationOnly===true&&normalize(b.troca?.substituido)===normalize(member.name))?.troca:null;
+    // The original member keeps an ordinary shift, but the ES must cite the partial TS too.
+    if(partialExchange)lines.push(`TS nº ${partialExchange.numero || 'não informado'} (SEI ${partialExchange.sei || 'não informado'})`);
     if (change) {
       const source=change.troca||{};
       const ref=references.ts.find(t=>t.data===day&&normalize(t.substituto)===normalize(member.name));
@@ -11258,7 +11262,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     }
     if (member.badges.some(b=>b.kind==='officer')&&!member.events.length) lines.push('Alcançável.');
     const ac4Lines=member.events.flatMap(eventLines);
-    const ordered=change||cia?[...lines,...ac4Lines]:[...ac4Lines,...lines];
+    const ordered=change||cia||partialExchange?[...lines,...ac4Lines]:[...ac4Lines,...lines];
     return ordered.filter((line,i)=>ordered.findIndex(other=>JSON.stringify(other)===JSON.stringify(line))===i);
   }
   function resourceFor() { return '8ª CIBM - CRISTALINA'; }
@@ -11314,7 +11318,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
       if(!hasOfficer){const row=node('tr');row.append(cell(pad(order++),'center'),cell('OFICIAL DE DIA'),cell(),cell('','center'),cell(),cell('','center'),cell());body.append(row);validation.warnings.push('Oficial de Dia não informado: primeira linha reservada, sem inventar designação.');}
       for(const member of members){
         const row=node('tr'),absent=isAbsent(member),cia=companyExchange(member);
-        const role=member.badges.some(b=>b.kind==='officer')?'OFICIAL DE DIA':chief.assignments.some(a=>a.name===member.name)?'Chefe de Ala':/CHEFE DE ALA|\bCOB\b/i.test(member.funcao)?'':member.funcao;
+        const role=member.badges.some(b=>b.kind==='officer')?'OFICIAL DE DIA':chief.assignments.some(a=>a.name===member.name)?'CHEFE DE ALA':/CHEFE DE ALA|\bCOB\b/i.test(member.funcao)?'':member.funcao;
         row.append(cell(pad(order++),'center'),cell(role));
         const name=cell();appendIdentification(name,member);if(absent)name.style.color='#c00000';
         const cpf=cell(person(member.name)?.cpf || '','center'),obs=cell();
