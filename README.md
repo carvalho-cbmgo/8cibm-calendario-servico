@@ -2,6 +2,8 @@
 
 Calendário HTML responsivo e estático para exibição da previsão de militares por ala, dos serviços SAT e do controle financeiro de AC4. Há dados de novembro/2026 a janeiro/2027; meses sem dados mostram essa condição.
 
+A [conferência do consolidado de trocas de 08/11/2026](docs/conferencia-trocas-2026-11-08.md) registra as 13 autorizações verificadas, a inclusão da TS 167 e a preservação da permuta tripla 164.
+
 O cabeçalho diário apresenta a cobertura registrada em recursos de 24h, a quantidade de militares em serviço ordinário operacional (incluindo TS e TS CIA de pagamento, excluindo dispensas e trocas pendentes) e a quantidade de AC4 ativos do Operacional, incluindo PROEBOM e jornadas parciais. A SAT permanece separada. As duas contagens de serviços não equivalem necessariamente à cobertura de 24h.
 
 No computador com mouse, o cartão sob o ponteiro recebe um fundo suave para acompanhar a leitura: azul nas previsões e verde nas escalas confirmadas. As cores dos badges e valores são mantidas. O destaque não se aplica ao celular ou à impressão, e respeita a preferência por movimento reduzido.
@@ -27,7 +29,7 @@ Os 27 praças do Plano de Chamada aparecem mesmo sem AC4. Os checkboxes permitem
 
 ## Verificação local
 
-Execute `node tests/finance.test.cjs` e `node tests/simulation.test.cjs` para conferir tarifas, viradas de dia/mês, revisões, cancelamentos, acumulados, identificação dos documentos, seleção de chefia e simulação por cobertura de 24h. Os testes utilizam dados fictícios separados da escala publicada e conferem invariantes dos dados existentes.
+Execute `node tests/finance.test.cjs`, `node tests/simulation.test.cjs` e `node tests/trocas.test.cjs` para conferir tarifas, viradas de dia/mês, revisões, cancelamentos, acumulados, identificação dos documentos, seleção de chefia, simulação por cobertura de 24h e correspondência das trocas com o consolidado. Os testes utilizam dados fictícios separados da escala publicada e conferem invariantes dos dados existentes.
 
 Para abrir o site localmente, execute `python -m http.server 8000` na raiz do repositório e acesse `http://localhost:8000/`. O cadastro de identificação para ES/OS é importado apenas no navegador; arquivos de cadastro e documentos internos devem permanecer fora do repositório.
 
