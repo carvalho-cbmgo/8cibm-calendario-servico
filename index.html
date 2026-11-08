@@ -373,6 +373,26 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 .finance-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:5px}
 .finance-toolbar h2{margin:0;color:#b7c8d7;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
 .finance-actions{display:flex;align-items:center;gap:4px;flex:0 0 auto}
+.finance-simulation-button[aria-pressed="true"]{background:#f4d18424;color:#ffe2a1;box-shadow:inset 0 0 0 1px #f4d18488}
+.simulation-banner{margin:14px 0;padding:12px 15px;border:1px dashed #c89331;border-radius:12px;background:#fff8e9;color:#704b16;font-size:13px;line-height:1.5}
+.simulation-banner h2{margin:0 0 4px;font-size:14px;letter-spacing:.04em}
+.simulation-banner p{margin:4px 0}
+.simulation-totals{display:flex;flex-wrap:wrap;gap:4px 20px;font-variant-numeric:tabular-nums}
+.simulation-totals strong{white-space:nowrap}
+.simulation-scope{color:#6b5c43;font-size:12px}
+.simulation-scope summary{margin-top:6px;cursor:pointer;font-weight:650}
+.simulation-scope summary:focus-visible{outline:2px solid #9b6c20;outline-offset:3px}
+.simulation-entry{border-left:3px solid #c89331;background:#fff8e9;border-radius:5px;padding-left:7px;padding-right:5px}
+.simulation-entry .name{color:#855816}
+.day.is-simulated{border-style:dashed;border-color:#c89331}
+.simulation-delta{color:#9b5200;font-weight:750;white-space:nowrap}
+.simulation-money,.simulation-share{white-space:nowrap}
+.daily-finance.has-simulation-values .daily-finance-row{display:grid;grid-template-columns:minmax(0,1fr);gap:1px}
+.daily-finance.has-simulation-values .daily-finance-value{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:0 4px;max-width:100%;white-space:normal}
+.finance-weekly-table .simulation-delta{display:block}
+.finance-weekly-table .simulation-money{white-space:normal}
+@media screen and (max-width:360px){.finance-weekly-table .simulation-delta{font-size:12px}}
+@media screen and (max-width:760px){.simulation-banner{font-size:15px;padding:12px}.simulation-banner h2{font-size:15px}.simulation-scope{font-size:14px}.simulation-entry{padding-left:7px}}
 .finance-details-button{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;padding:0;border:0;border-radius:50%;background:none;color:#f4d184;cursor:pointer;flex:0 0 auto}
 .finance-details-button:hover{background:#ffffff0e;color:#fff}
 .finance-details-button:focus-visible{outline:3px solid #f4d184;outline-offset:2px}
@@ -603,9 +623,9 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
  </div>
  <section id="ac4-month-summary" class="monthly-finance" aria-label="Controle mensal da cota AC4" aria-live="polite"></section>
 </header>
-
+<section class="simulation-banner" id="ac4-simulation-status" role="status" aria-live="polite" hidden></section>
 <div class="filterbar"><div aria-label="Filtrar alas" class="filters" role="group"><button aria-pressed="true" data-filter="TODAS" type="button">Todas as alas</button><button aria-pressed="false" data-filter="ALPHA" type="button">Alpha</button><button aria-pressed="false" data-filter="BRAVO" type="button">Bravo</button><button aria-pressed="false" data-filter="CHARLIE" type="button">Charlie</button><button aria-pressed="false" data-filter="DELTA" type="button">Delta</button></div><small>Serviço operacional e previsões PROEBOM · Clique no AC4 com OS definida para copiar o SEI.</small></div>
-<nav aria-label="Navegação entre os dias" class="mobile-nav"><button aria-label="Dia anterior" id="dia-anterior" type="button">‹</button><div class="mobile-nav-center"><select aria-label="Selecionar dia de serviço" id="selecionar-dia"></select><span aria-live="polite" class="mobile-nav-count" id="indicador-dias"></span></div><button aria-label="Próximo dia" id="dia-seguinte" type="button">›</button></nav><div aria-label="Calendário de novembro de 2026" class="calendar"></div>
+<nav aria-label="Navegação entre os dias" class="mobile-nav"><button aria-label="Dia anterior" id="dia-anterior" type="button">‹</button><div class="mobile-nav-center"><select aria-label="Selecionar dia de serviço" id="selecionar-dia"></select><span aria-live="polite" class="mobile-nav-count" id="indicador-dias"></span></div><button aria-label="Próximo dia" id="dia-seguinte" type="button">›</button></nav><div aria-label="Calendário de novembro de 2026" class="calendar" id="calendario"></div>
 <section class="empty-state" id="sem-previsao" role="status" hidden><h2>Sem previsão cadastrada</h2><p>Não há dados de serviço cadastrados para <strong id="competencia-vazia"></strong>.</p><button type="button" id="voltar-competencia">Voltar a Novembro/2026</button></section>
 <noscript>Ative o JavaScript para selecionar o período e visualizar a previsão de serviço.</noscript>
 <div class="info"><strong>Regras e ressalvas:</strong> as informações apresentadas aqui são previsões do planejamento da escala, o que não substitui a Escala de Serviço e Ordem de Serviço homologadas.</div>
@@ -2251,7 +2271,14 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
           "Faltam 1 recurso"
         ],
         "alerts": [],
-        "shiftStart": "08h00"
+        "shiftStart": "08h00",
+        "confirmation": {
+          "status": "confirmed",
+          "date": "2026-11-08",
+          "source": "user",
+          "scope": "calendar",
+          "previousAlerts": []
+        }
       },
       {
         "day": 9,
@@ -2403,6 +2430,13 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
             }
           ],
           "alerts": []
+        },
+        "confirmation": {
+          "status": "confirmed",
+          "date": "2026-11-08",
+          "source": "user",
+          "scope": "calendar",
+          "previousAlerts": []
         }
       },
       {
@@ -2608,6 +2642,13 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
             }
           ],
           "alerts": []
+        },
+        "confirmation": {
+          "status": "confirmed",
+          "date": "2026-11-08",
+          "source": "user",
+          "scope": "calendar",
+          "previousAlerts": []
         }
       },
       {
@@ -2773,6 +2814,13 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
               "description": "Horário e militares participantes não informados."
             }
           ]
+        },
+        "confirmation": {
+          "status": "confirmed",
+          "date": "2026-11-08",
+          "source": "user",
+          "scope": "calendar",
+          "previousAlerts": []
         }
       },
       {
@@ -10254,13 +10302,74 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 
 </script>
 <script>
+(() => {
+  'use strict';
+  const finance=window.AC4Finance,DAY=1440;
+  const normalize=value=>String(value??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().replace(/\s+/g,' ').trim();
+  const clock=value=>{const m=String(value??'').match(/^(\d{1,2})(?:h|:)(\d{2})?$/);return m&&Number(m[1])<24&&Number(m[2]||0)<60?Number(m[1])*60+Number(m[2]||0):null;};
+  const clockText=minute=>`${String(Math.floor(minute/60)).padStart(2,'0')}h${String(minute%60).padStart(2,'0')}`;
+  const dayStamp=date=>Date.parse(`${date}T00:00:00Z`)/60000;
+  const operational=event=>event.integrante_operacional!==false&&!/SAT|INSPEC|ANALIS|PROJETO|PROEBOM|EXTERN/.test(normalize(event.mode))&&(event.integrante_operacional===true||/^(?:OPERACIONAL(?:\/SOP)?|SOP)$/.test(normalize(event.mode)));
+  function coverage(day,date,summary){
+    const anchor=clock(day.shiftStart)??480,people=new Map(),warnings=[];
+    const add=(member,start,end)=>{
+      const a=Math.max(0,start),b=Math.min(DAY,end);if(b<=a)return;
+      const key=normalize(member.rg||member.name);if(!people.has(key))people.set(key,[]);people.get(key).push([a,b]);
+    };
+    for(const member of day.members||[]){
+      if(member.disponivel===false||member.afastado===true||member.integrante_operacional===false)continue;
+      const badges=member.badges||[],absent=badges.some(b=>['disp','review'].includes(b.kind));
+      if(!absent)for(const badge of badges){
+        if(!['ord','ts','pay'].includes(badge.kind)||badge.annotationOnly===true)continue;
+        const hours=Number(badge.hours??member.serviceHours??24),note=hours<24?(member.notes||[]).join(' ').match(/(\d{1,2}h(?:\d{2})?)\s*(?:às|[–-])\s*(\d{1,2}h(?:\d{2})?)/i):null;
+        const start=clock(badge.start||member.serviceStart||badge.troca?.inicio||note?.[1])??(hours===24?anchor:null),end=clock(badge.end||member.serviceEnd||badge.troca?.fim||note?.[2]);
+        const duration=end===null||start===null?null:(end-start+DAY)%DAY||(hours===24?DAY:0);
+        if(start===null||!Number.isFinite(hours)||hours<=0||hours>24||(duration!==null&&duration!==hours*60)){warnings.push(`${member.name}: horário ordinário parcial precisa de conferência.`);continue;}
+        const offset=(member.serviceStartDate?dayStamp(member.serviceStartDate)-dayStamp(date):0)+start-anchor;
+        if(!Number.isFinite(offset)){warnings.push(`${member.name}: data ordinária inválida.`);continue;}
+        add(member,offset,offset+hours*60);
+      }
+      for(const input of member.events||[]){
+        const record=summary?.byEvent.get(input),event=record?.event||input;
+        if(!finance.active(event)||!operational(event))continue;
+        const value=record||finance.price(event,date);
+        if(!value.valid){warnings.push(`${member.name}: AC4 operacional com horário inválido.`);continue;}
+        const start=dayStamp(value.startDate)-dayStamp(date)+clock(value.start)-anchor,end=dayStamp(value.endDate)-dayStamp(date)+clock(value.end)-anchor;
+        add(member,start,end);
+      }
+    }
+    const endpoints=[...new Set([0,DAY,...[...people.values()].flat(2)])].sort((a,b)=>a-b),segments=[];
+    for(let index=0;index<endpoints.length-1;index++){
+      const start=endpoints[index],end=endpoints[index+1];
+      const resources=[...people.values()].filter(ranges=>ranges.some(([a,b])=>a<=start&&b>=end)).length;
+      segments.push({start,end,resources});
+    }
+    return {resources:Math.min(...segments.map(segment=>segment.resources)),anchor,segments,valid:!warnings.length,warnings};
+  }
+  function plan(schedules,period,quotaCents=null,base=finance.month(schedules,period,quotaCents)){
+    const days=new Map(),virtual={days:[]},warnings=[];
+    for(const day of schedules[period]?.days||[]){
+      const date=`${period}-${String(day.day).padStart(2,'0')}`,actual=coverage(day,date,base),members=[];
+      const needed=day.confirmation?.status==='confirmed'||!actual.valid?0:Math.max(0,6-actual.resources);
+      for(let index=0;index<needed;index++)members.push({name:'PREVISTO AC4',badges:[],notes:['Simulação de reforço operacional, sem militar designado.'],events:[{serviceId:`simulation-${date}-${index+1}`,simulation:true,mode:'OPERACIONAL/SOP',start:clockText(actual.anchor),end:clockText(actual.anchor),nextDay:true,hours:24,status:'planned'}]});
+      days.set(day.day,{coverage:actual,members,addedResources:needed});virtual.days.push({day:day.day,members});
+      warnings.push(...actual.warnings.map(message=>`${date}: ${message}`));
+    }
+    const summary=finance.month({[period]:virtual},period,quotaCents);
+    return {days,summary,addedResources:summary.records.length,daysAffected:[...days.values()].filter(day=>day.addedResources>0).length,warnings};
+  }
+  window.ServiceSimulation={coverage,plan};
+})();
+</script>
+<script>
 
 (() => {
   'use strict';
   // Public calendar data only. Add a new YYYY-MM period after its scale is supplied.
   const schedules = window.ServiceCalendar.schedules;
   const finance=window.AC4Finance,currency=new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}),percent=new Intl.NumberFormat('pt-BR',{maximumFractionDigits:2}),dailyPercent=new Intl.NumberFormat('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
-  let financialSummary;
+  let financialSummary,simulationPlan;
+  let simulationActive=false;
   const rankingPersonnel=JSON.parse(document.getElementById('ranking-personnel').textContent);
   const periods = Object.keys(schedules).sort();
   const accessDateFormat=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Sao_Paulo',year:'numeric',month:'2-digit',day:'2-digit'});
@@ -10357,6 +10466,25 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
   const money=cents=>currency.format(cents/100);
   const ratio=(cents,formatter=percent)=>financialSummary.quotaCents>0?`${formatter.format(cents/financialSummary.quotaCents*100)}%`:'—';
   const valueWithRatio=cents=>`${money(cents)} | ${ratio(cents,dailyPercent)}`;
+  function simulatedValue(cents,delta=0,withRatio=true){
+    const amountText=withRatio?money(cents):money(cents).replace(/\s/g,' ');
+    if(!simulationActive||!delta)return document.createTextNode(withRatio?valueWithRatio(cents):amountText);
+    const result=document.createDocumentFragment(),amount=element('span','simulation-money',amountText),sign=delta>0?'+':'−';
+    const extra=element('span','simulation-delta',`(${sign}${dailyPercent.format(Math.abs(delta)/100)})`);
+    extra.title=`Variação da simulação: ${sign}${money(Math.abs(delta))}. Com simulação: ${money(cents+delta)}.`;amount.append(' ',extra);result.append(amount);
+    if(withRatio){const share=element('span','simulation-share',`| ${ratio(cents,dailyPercent)}`);if(financialSummary.quotaCents>0){const percentExtra=element('span','simulation-delta',`(${sign}${ratio(Math.abs(delta),dailyPercent)})`);percentExtra.title='Variação em pontos percentuais da cota mensal.';share.append(' ',percentExtra);}result.append(share);}
+    return result;
+  }
+  function simulationDay(day){return simulationActive?simulationPlan.days.get(day.day):null;}
+  function updateSimulationBanner(){
+    const banner=document.getElementById('ac4-simulation-status');banner.hidden=!simulationActive;banner.replaceChildren();if(!simulationActive)return;
+    const extra=simulationPlan.summary.committedCents,total=financialSummary.committedCents+extra,available=financialSummary.remainingCents===null?null:financialSummary.remainingCents-extra;
+    banner.append(element('h2','','SIMULAÇÃO AC4 ATIVA'),element('p','',`${simulationPlan.addedResources} ${simulationPlan.addedResources===1?'recurso simulado':'recursos simulados'} de 24h em ${simulationPlan.daysAffected} ${simulationPlan.daysAffected===1?'dia não confirmado':'dias não confirmados'} · Meta: 6 recursos de 24h.`));
+    const totals=element('div','simulation-totals');for(const [label,value] of [['Adicional',money(extra)],['Total com simulação',money(total)],['Disponível com simulação',available===null?'Cota não informada':money(available)]]){const item=element('span','',`${label}: `);item.append(element('strong','',value));totals.append(item);}banner.append(totals);
+    const explanation=element('details','simulation-scope');explanation.append(element('summary','','Como ler esta simulação'),element('p','','Expanda OPERACIONAL para ver os reforços. Os valores cadastrados permanecem à vista; os acréscimos e reduções da simulação aparecem entre parênteses. Os reforços simulados não integram o ranking nem os documentos ES/OS.'));banner.append(explanation);
+    if(available!==null&&available<0)banner.append(element('p','finance-warning',`A simulação ultrapassa a cota em ${money(-available)}.`));
+    if(simulationPlan.warnings.length)banner.append(element('p','finance-warning','Há horários operacionais a conferir; os dias com horários inválidos não receberam reforços simulados.'));
+  }
   function financialRecord(event,day){return financialSummary.byEvent.get(event)||finance.price(event,`${period}-${String(day.day).padStart(2,'0')}`);}
   function updateMonthCountdown(){
     const target=document.getElementById('ac4-month-days');if(!target)return;
@@ -10372,7 +10500,9 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     shortcut.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 4v16h16M8 15v-4m5 4V7m5 8v-6"/></svg>';
     const rankingShortcut=element('button','finance-details-button');rankingShortcut.type='button';rankingShortcut.dataset.ac4Ranking='';rankingShortcut.title='Ver ranking mensal de AC4';rankingShortcut.setAttribute('aria-label','Ver ranking mensal de AC4');rankingShortcut.setAttribute('aria-haspopup','dialog');rankingShortcut.setAttribute('aria-controls','ac4-ranking-dialog');
     rankingShortcut.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 3h8v5a4 4 0 0 1-8 0V3ZM8 5H4v2a4 4 0 0 0 4 4m8-6h4v2a4 4 0 0 1-4 4m-4 1v5m-4 4h8m-7-3h6v3"/></svg>';
-    const actions=element('div','finance-actions');actions.setAttribute('role','group');actions.setAttribute('aria-label','Consultas AC4');actions.append(rankingShortcut,shortcut);
+    const simulationShortcut=element('button','finance-details-button finance-simulation-button');simulationShortcut.type='button';simulationShortcut.dataset.ac4Simulation='';simulationShortcut.setAttribute('aria-pressed',String(simulationActive));simulationShortcut.setAttribute('aria-controls','calendario ac4-simulation-status');simulationShortcut.title=simulationActive?'Desativar simulação de reforço AC4':'Simular AC4 para completar 6 recursos de 24h';simulationShortcut.setAttribute('aria-label',simulationShortcut.title);
+    simulationShortcut.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8M8 12h2m-2 4h2m4-4h3m-1.5-1.5v3M14 16h3"/></svg>';
+    const actions=element('div','finance-actions');actions.setAttribute('role','group');actions.setAttribute('aria-label','Consultas e simulação AC4');actions.append(simulationShortcut,rankingShortcut,shortcut);
     toolbar.append(element('h2','','Controle AC4'),actions);target.append(toolbar);
     const metrics=element('div','finance-metrics');
     const metric=(label,amount,share,className='')=>{const item=element('div',`finance-metric ${className}`.trim());item.append(element('span','finance-metric-label',label),element('strong','finance-metric-amount',amount),element('span','finance-metric-share',share));metrics.append(item);};
@@ -10382,13 +10512,14 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     target.append(metrics);target.classList.toggle('over-quota',financialSummary.remainingCents!==null&&financialSummary.remainingCents<0);
     const days=element('p','finance-days-remaining');days.id='ac4-month-days';days.append(element('span','','Dias restantes no mês'),element('strong'));target.append(days);updateMonthCountdown();
     if(financialSummary.invalidCount)target.append(element('p','finance-warning',`${financialSummary.invalidCount} AC4 com dados inconsistentes não incluídos no total. Confira os detalhes dos serviços.`));
-    renderFinanceDialog();
+    updateSimulationBanner();renderFinanceDialog();
   }
   function renderFinanceDialog(){
     document.getElementById('ac4-finance-title').textContent=`Cota AC4 · ${periodLabel()}`;
     const body=document.getElementById('ac4-finance-content'),breakdown=element('dl','finance-breakdown');body.replaceChildren();
     const entries=[['Cota mensal',financialSummary.quotaCents===null?'Não informada':money(financialSummary.quotaCents)],['Comprometido',money(financialSummary.committedCents)],['Disponível',financialSummary.remainingCents===null?'Não informada':money(financialSummary.remainingCents)],['AC4 Operacional (inclui PROEBOM)',money(financialSummary.operationalCents)],['AC4 SAT',money(financialSummary.satCents)],['Previstos, sem execução confirmada',money(financialSummary.forecastCents)],['Execução confirmada',money(financialSummary.executedCents)]];
     for(const [index,[label,amount]] of entries.entries()){const divider=index===3?'finance-breakdown-divider':'';breakdown.append(element('dt',divider,label),element('dd',divider,amount));}
+    if(simulationActive){const extra=simulationPlan.summary.committedCents;for(const [label,amount] of [['Adicional simulado',money(extra)],['Total com simulação',money(financialSummary.committedCents+extra)],['Disponível com simulação',financialSummary.remainingCents===null?'Cota não informada':money(financialSummary.remainingCents-extra)]])breakdown.append(element('dt','finance-breakdown-divider',label),element('dd','simulation-delta',amount));}
     body.append(breakdown,element('p','finance-note','Comprometido no planejamento; não indica pagamento.'),element('p','finance-rule','Saldos diários acumulados até cada data. Competência financeira definida pela data de início do serviço.'),element('p','finance-counts',`${financialSummary.records.filter(r=>r.valid&&r.status!=='cancelled').length} serviços considerados · ${financialSummary.cancelledCount} cancelados · ${financialSummary.duplicateCount} duplicações desconsideradas.`));
     for(const warning of financialSummary.warnings)body.append(element('p','finance-warning',warning));
     body.append(makeWeeklyFinance());
@@ -10401,10 +10532,11 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     for(const label of ['Semana','AC4 SAT','AC4 OPERACIONAL','AC4 SEMANAL']){const cell=element('th',label==='AC4 SEMANAL'?'finance-week-total':'',label);cell.scope='col';headers.append(cell);}head.append(headers);table.append(head);
     const rows=element('tbody'),monthlyTotals={sat:0,operational:0};
     for(let index=0;index<4;index++){
-      const start=index*7+1,end=index===3?length:(index+1)*7,totals={sat:0,operational:0};
+      const start=index*7+1,end=index===3?length:(index+1)*7,totals={sat:0,operational:0};let simulatedCents=0;
       for(let day=start;day<=end;day++){
         const data=financialSummary.daily.get(`${period}-${String(day).padStart(2,'0')}`);
         totals.sat+=data.satCents;totals.operational+=data.operationalCents;
+        if(simulationActive)simulatedCents+=simulationPlan.summary.daily.get(data.date).committedCents;
       }
       const records=financialSummary.records.filter(record=>{
         if(record.status==='cancelled')return false;
@@ -10416,21 +10548,21 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
       label.append(element('span','finance-week-range',`${String(start).padStart(2,'0')}–${String(end).padStart(2,'0')}/${String(month).padStart(2,'0')}`));row.append(label);
       for(const category of ['sat','operational']){
         monthlyTotals[category]+=totals[category];
-        const cell=element('td','',money(totals[category]).replace(/\s/g,' ')),items=records.filter(record=>record.category===category),pending=items.filter(record=>!record.valid).length;
+        const cell=element('td'),items=records.filter(record=>record.category===category),pending=items.filter(record=>!record.valid).length,extra=category==='operational'?simulatedCents:0;cell.append(simulatedValue(totals[category],extra,false));
         cell.dataset.category=category;
         if(pending)cell.append(element('span','finance-week-pending',`${pending} AC4 a conferir`));
-        else if(!items.length)cell.append(element('span','finance-week-empty','Sem registros ativos'));
+        else if(!items.length)cell.append(element('span','finance-week-empty',extra?'Reforços simulados':'Sem registros ativos'));
         row.append(cell);
       }
-      const total=element('td','finance-week-total',money(totals.sat+totals.operational).replace(/\s/g,' '));total.dataset.category='total';row.append(total);
+      const total=element('td','finance-week-total');total.append(simulatedValue(totals.sat+totals.operational,simulatedCents,false));total.dataset.category='total';row.append(total);
       rows.append(row);
     }
     const foot=element('tfoot'),totalRow=element('tr'),totalLabel=element('th','','AC4 TOTAL');totalLabel.scope='row';totalRow.append(totalLabel);
     for(const category of ['sat','operational','total']){
-      const amount=category==='total'?monthlyTotals.sat+monthlyTotals.operational:monthlyTotals[category],cell=element('td','',money(amount).replace(/\s/g,' '));
+      const amount=category==='total'?monthlyTotals.sat+monthlyTotals.operational:monthlyTotals[category],cell=element('td');cell.append(simulatedValue(amount,category==='sat'?0:simulationPlan.summary.committedCents,false));
       cell.dataset.category=category;totalRow.append(cell);
     }
-    foot.append(totalRow);table.append(rows,foot);section.append(table,element('p','finance-weekly-note','Inclui os valores dos AC4 cadastrados, previstos ou com execução confirmada, sem exigir confirmação da escala. PROEBOM integra o Operacional. A 4ª semana inclui os dias finais do mês; valores ainda não definidos ficam a conferir.'));
+    foot.append(totalRow);table.append(rows,foot);section.append(table,element('p','finance-weekly-note',`Inclui os valores dos AC4 cadastrados, previstos ou com execução confirmada, sem exigir confirmação da escala. PROEBOM integra o Operacional. A 4ª semana inclui os dias finais do mês; valores ainda não definidos ficam a conferir.${simulationActive?' Os valores entre parênteses são acréscimos da simulação.':''}`));
     return section;
   }
   const rankingDate=date=>date.split('-').reverse().join('/');
@@ -10500,9 +10632,10 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
   }
   function makeDailyFinance(day){
     const data=financialSummary.daily.get(`${period}-${String(day.day).padStart(2,'0')}`),section=element('section','daily-finance');section.setAttribute('aria-label',`Controle da cota AC4 do dia ${day.day}`);
+    const extra=simulationActive?simulationPlan.summary.daily.get(data.date):null;section.classList.toggle('has-simulation-values',!!extra?.cumulativeCents);
     const remaining=element('p','days-remaining',`Dias restantes: ${data.daysRemaining}`);remaining.title='Dias após esta data até o término do mês.';section.append(remaining);
-    const line=(target,label,value,className='',button=null)=>{const row=element('div',`daily-finance-row ${className}`.trim());row.append(button||element('span','daily-finance-label',`${label}:`),element('span','daily-finance-value',value));target.append(row);};
-    const disclosure=(key,label,amount,className,items)=>{
+    const line=(target,label,value,className='',button=null)=>{const row=element('div',`daily-finance-row ${className}`.trim()),output=element('span','daily-finance-value');output.append(value);row.append(button||element('span','daily-finance-label',`${label}:`),output);target.append(row);};
+    const disclosure=(key,label,amount,delta,className,items)=>{
       const group=element('div','daily-finance-disclosure'),button=element('button','daily-finance-label daily-finance-toggle'),content=element('div','daily-finance-breakdown');
       content.id=`finance-${data.date}-${key}`;content.dataset.financeBreakdown=key;button.type='button';button.dataset.financeToggle=key;
       button.append(element('span','',`${label}:`));button.insertAdjacentHTML('beforeend','<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg>');
@@ -10510,13 +10643,13 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
       const setExpanded=expanded=>{content.hidden=!expanded;button.setAttribute('aria-expanded',String(expanded));button.setAttribute('aria-label',`${expanded?'Recolher':'Expandir'} detalhamento de ${label} do dia ${day.day} de ${periodLabel()}`);};
       setExpanded(dailyFinanceExpanded.has(content.id));
       button.addEventListener('click',()=>{const expanded=content.hidden;if(expanded)dailyFinanceExpanded.add(content.id);else dailyFinanceExpanded.delete(content.id);setExpanded(expanded);});
-      line(group,label,valueWithRatio(amount),className,button);
-      for(const [itemLabel,value] of items)line(content,itemLabel,valueWithRatio(value));
+      line(group,label,simulatedValue(amount,delta),className,button);
+      for(const [itemLabel,value,itemDelta] of items)line(content,itemLabel,simulatedValue(value,itemDelta||0));
       group.append(content);section.append(group);
     };
-    disclosure('service','AC4 SERVIÇO',data.committedCents,'daily-finance-service',[['AC4 Operacional',data.operationalCents],['AC4 SAT',data.satCents]]);
-    disclosure('cumulative','TOTAL AC4',data.cumulativeCents,'daily-finance-total',[['AC4 OPERACIONAL',data.cumulativeOperationalCents],['AC4 SAT',data.cumulativeSatCents]]);
-    line(section,'AC4 DISPONÍVEL',data.remainingCents===null?'COTA NÃO INFORMADA':valueWithRatio(data.remainingCents),'daily-balance');
+    disclosure('service','AC4 SERVIÇO',data.committedCents,extra?.committedCents||0,'daily-finance-service',[['AC4 Operacional',data.operationalCents,extra?.operationalCents],['AC4 SAT',data.satCents,0]]);
+    disclosure('cumulative','TOTAL AC4',data.cumulativeCents,extra?.cumulativeCents||0,'daily-finance-total',[['AC4 OPERACIONAL',data.cumulativeOperationalCents,extra?.cumulativeOperationalCents],['AC4 SAT',data.cumulativeSatCents,0]]);
+    line(section,'AC4 DISPONÍVEL',data.remainingCents===null?'COTA NÃO INFORMADA':simulatedValue(data.remainingCents,-(extra?.cumulativeCents||0)),'daily-balance');
     return section;
   }
   function eventFinanceDetails(event,day){
@@ -10684,11 +10817,13 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
   function makeCard(day) {
     const chief=chiefFor(day);
     const members = orderedDayMembers(day),counts=resourceCounts(members);
+    const simulated=simulationDay(day),added=simulated?.addedResources||0;
     const confirmed=day.confirmation?.status==='confirmed';
     const card = element('section', `day${confirmed?' is-scale-confirmed':''}`);
     card.id = `dia-${String(day.day).padStart(2, '0')}`;
     card.dataset.ala = day.ala;
     card.dataset.day = String(day.day);
+    card.classList.toggle('is-simulated',added>0);
     card.setAttribute('aria-label', `${day.day} de ${periodLabel()}, ala ${day.ala}`);
     const head = element('div', 'day-head');
     const date = element('div', 'day-date');
@@ -10698,11 +10833,11 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     const dayState=element('span','day-state');
     if(confirmed){const label=element('span','scale-confirmed-label','Escala confirmada');label.title='Escala confirmada pelo usuário';dayState.append(label);}
     const resources=element('div','day-resources');resources.setAttribute('aria-label','Recursos do serviço operacional');
-    const total=element('span','resource-total',day.coverage[0]);total.title='Recursos de 24h, conforme a cobertura operacional registrada.';
+    const total=element('span','resource-total',added?`${simulated.coverage.resources+added} recursos de 24h`:day.coverage[0]);total.title=added?`${simulated.coverage.resources} recursos cadastrados + ${added} simulados. Dois períodos complementares de 12h equivalem a um recurso de 24h.`:'Recursos de 24h, conforme a cobertura operacional registrada.';
     const shortage=day.coverage[1].match(/^Faltam?\s+(\d+)\s+recursos?$/i),missing=shortage?Number(shortage[1]):null;
-    const status=element('span','resource-status',missing===null?day.coverage[1]:missing===1?'Falta 1 recurso':`Faltam ${missing} recursos`);
+    const status=element('span','resource-status',added?'Meta de 6 recursos':missing===null?day.coverage[1]:missing===1?'Falta 1 recurso':`Faltam ${missing} recursos`);
     const ordinary=element('span','chip ord resource-ordinary',`${counts.ordinary} ORD`);ordinary.title='Militares em serviço ordinário operacional, incluindo TS e TS CIA de pagamento. Dispensas e trocas pendentes não entram nesta contagem.';ordinary.setAttribute('aria-label',`${counts.ordinary} recursos de serviço ordinário`);
-    const ac4=element('span','chip ac4 resource-ac4',`${counts.ac4} AC4`);ac4.title='Serviços AC4 ativos do Operacional, incluindo PROEBOM e jornadas parciais. SAT contabilizada separadamente.';
+    const ac4=element('span','chip ac4 resource-ac4',`${counts.ac4+added} AC4`);ac4.title=`Serviços AC4 ativos do Operacional, incluindo PROEBOM e jornadas parciais. SAT contabilizada separadamente.${added?` Inclui ${added} reforços simulados.`:''}`;
     const primary=element('div','day-primary');resources.append(ordinary,ac4);primary.append(date,resources);
     const summary=element('div','resource-summary');summary.setAttribute('role','group');summary.setAttribute('aria-label','Resumo dos recursos e confirmação do dia');summary.append(total,status);if(confirmed)summary.append(dayState);head.append(primary,summary);
     const list = element('ul', 'entry-list operational-list');
@@ -10718,7 +10853,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
       }
       list.append(row);
     }
-    const ac4Count = counts.ac4;
+    for(const member of simulated?.members||[]){const row=element('li','entry ac4 simulation-entry');row.dataset.simulated='true';row.title='Simulação de reforço operacional de 24h, sem militar designado. Não integra os documentos ES/OS.';const label=element('span','member-label');label.append(element('span','name',member.name));row.append(label,badgeNodes(member,{assignments:[]},day));list.append(row);}
+    const ac4Count = counts.ac4+added;
     const notes = element('button', `day-notes-button${day.alerts.length ? ' pending' : ''}`);
     const caption=element('span','day-notes-caption');caption.append(document.createTextNode('Detalhes do dia'));
     if(ac4Count){const arrow=element('span','day-notes-arrow','→');arrow.setAttribute('aria-hidden','true');caption.append(document.createTextNode(' '),arrow,document.createTextNode(` ${ac4Count} AC4`));}
@@ -10803,6 +10939,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     const today = accessDate();
     selected = selections.get(period) ?? (year === today.year && month === today.month ? today.day : days[0]?.day);
     financialSummary=finance.month(schedules,period,window.ServiceCalendar.quotas[period]);
+    simulationPlan=window.ServiceSimulation.plan(schedules,period,window.ServiceCalendar.quotas[period],financialSummary);
     updateFinancialHeader();
     areaControls.clear();
     cards = days.map(makeCard);
@@ -10892,6 +11029,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
       }
     }else{
       const members=orderedDayMembers(day);for(const [index,member] of members.entries())appendMember(dialogBody,member,index,members.length);
+      for(const member of simulationDay(day)?.members||[]){const section=element('section','member-details simulation-entry'),heading=element('div','member-heading');heading.append(element('h3','name','PREVISTO AC4'),badgeNodes(member,{assignments:[]},day));section.append(heading,element('p','detail-note','Simulação de reforço de 24h, sem militar designado; não integra os documentos ES/OS.'),eventFinanceDetails(member.events[0],day));dialogBody.append(section);}
     }
     dialogBody.append(element('p', 'coverage-note', sat?'Serviços da SAT apresentados separadamente do efetivo operacional. A OS contém somente os períodos de AC4 informados.':'Exibição do serviço operacional e das previsões PROEBOM informadas. PROEBOM e jornadas parciais não completam automaticamente recursos operacionais de 24h. Este calendário não comprova execução ou pagamento.'));
     dialog.showModal();
@@ -10973,6 +11111,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
   window.addEventListener('resize',hideExchangeTooltip);dialog.addEventListener('close',hideExchangeTooltip);
   const financeDialog=document.getElementById('ac4-finance-dialog');
   document.addEventListener('click',event=>{if(event.target.closest('[data-ac4-ranking]')){hideExchangeTooltip();renderRankingDialog();rankingDialog.showModal();rankingDialog.scrollTop=0;}});
+  document.addEventListener('click',event=>{if(event.target.closest('[data-ac4-simulation]')){hideExchangeTooltip();simulationActive=!simulationActive;renderPeriod();document.querySelector('[data-ac4-simulation]')?.focus({preventScroll:true});}});
   document.getElementById('ac4-ranking-close').addEventListener('click',()=>rankingDialog.close());
   rankingDialog.addEventListener('close',()=>document.querySelector('[data-ac4-ranking]')?.focus({preventScroll:true}));
   rankingDialog.addEventListener('click',event=>{if(event.target===rankingDialog){const r=rankingDialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)rankingDialog.close();}});
