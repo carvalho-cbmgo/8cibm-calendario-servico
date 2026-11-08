@@ -272,7 +272,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
  .ac4-planned{font-size:13px}
  .entry>.badges:has(>:is(.ac4-service,.ordinary-service):only-child),.entry>.badges>:is(.ac4-service,.ordinary-service):only-child{display:contents}
  .entry>.member-label{grid-column:1;grid-row:1}
- .entry .ac4-badge-line,.entry .ordinary-service>.chip,.entry .ac4-service>.chip{grid-column:2;grid-row:1;justify-self:end}
+ .entry .ac4-badge-line,.entry .ordinary-badge-line,.entry .ordinary-service>.chip,.entry .ac4-service>.chip{grid-column:2;grid-row:1;justify-self:end}
  .entry .ac4-meta,.entry .ordinary-service>.ac4-period,.entry .ac4-service>.ac4-period,.entry .ac4-service>.ac4-state,.entry .ac4-service>.ac4-planned{grid-column:1/-1;justify-self:end}
  .day-actions .day-notes-button,.day-documents-button{font-size:14px;line-height:1.35;padding:11px 7px;min-height:46px}
  .day-foot{font-size:14px;line-height:1.4;padding:11px 13px}
@@ -347,6 +347,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
  .sat-list .chip.ac4-continuation{font-size:9px;padding:3px 5px}
 }
 .ordinary-service{display:flex;flex-direction:column;align-items:flex-end;gap:3px}
+.ordinary-badge-line{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:3px;min-width:0;max-width:100%}
 .entry.pay .name,.member-details.pay .name{color:var(--payment)}
 .company-sei{cursor:pointer}
 .company-sei:focus-visible{outline:3px solid #94baff;outline-offset:2px}
@@ -2132,18 +2133,70 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
             "ord": 10
           },
           {
+            "name": "2º SGT WANDERSON",
+            "ord": 17,
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO",
+                "hours": 12,
+                "start": "20h00",
+                "end": "08h00",
+                "nextDay": true
+              },
+              {
+                "kind": "ts",
+                "text": "TS",
+                "hours": 12,
+                "annotationOnly": true,
+                "troca": {
+                  "numero": "168",
+                  "sei": "98135195",
+                  "data": "2026-11-08",
+                  "substituido": "3º SGT HENRIQUE",
+                  "data_servico_substituido": "2026-11-29",
+                  "horas": 12,
+                  "inicio": "20h00",
+                  "fim": "08h00",
+                  "termino_no_dia_seguinte": true
+                }
+              }
+            ],
+            "notes": [
+              "TS nº 168 (SEI 98135195). Substitui 3º SGT HENRIQUE.",
+              "Serviço Ordinário de 20h às 8h"
+            ],
+            "events": [],
+            "serviceHours": 12,
+            "serviceStart": "20h00",
+            "serviceEnd": "08h00",
+            "serviceNextDay": true,
+            "serviceStartDate": "2026-11-08",
+            "serviceEndDate": "2026-11-09"
+          },
+          {
             "name": "3º SGT HENRIQUE",
             "badges": [
               {
                 "kind": "ord",
-                "text": "ORDINÁRIO"
+                "text": "ORDINÁRIO",
+                "hours": 12,
+                "start": "08h00",
+                "end": "20h00",
+                "nextDay": false
               }
             ],
             "notes": [
-              "Ordinário"
+              "Serviço Ordinário de 8h às 20h."
             ],
             "events": [],
-            "ord": 22
+            "ord": 22,
+            "serviceHours": 12,
+            "serviceStart": "08h00",
+            "serviceEnd": "20h00",
+            "serviceNextDay": false,
+            "serviceStartDate": "2026-11-08",
+            "serviceEndDate": "2026-11-08"
           },
           {
             "name": "SD SANTOS",
@@ -2185,7 +2238,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
           "5 recursos de 24h",
           "Faltam 1 recurso"
         ],
-        "alerts": []
+        "alerts": [],
+        "shiftStart": "08h00"
       },
       {
         "day": 9,
@@ -4415,14 +4469,66 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
             "badges": [
               {
                 "kind": "ord",
-                "text": "ORDINÁRIO"
+                "text": "ORDINÁRIO",
+                "hours": 12,
+                "start": "20h00",
+                "end": "08h00",
+                "nextDay": true
               }
             ],
             "notes": [
-              "Ordinário"
+              "Serviço Ordinário de 20h às 8h."
             ],
             "events": [],
-            "ord": 17
+            "ord": 17,
+            "serviceHours": 12,
+            "serviceStart": "20h00",
+            "serviceEnd": "08h00",
+            "serviceNextDay": true,
+            "serviceStartDate": "2026-11-29",
+            "serviceEndDate": "2026-11-30"
+          },
+          {
+            "name": "3º SGT HENRIQUE",
+            "ord": 22,
+            "badges": [
+              {
+                "kind": "ord",
+                "text": "ORDINÁRIO",
+                "hours": 12,
+                "start": "08h00",
+                "end": "20h00",
+                "nextDay": false
+              },
+              {
+                "kind": "ts",
+                "text": "TS",
+                "hours": 12,
+                "annotationOnly": true,
+                "troca": {
+                  "numero": "168",
+                  "sei": "98135195",
+                  "data": "2026-11-29",
+                  "substituido": "2º SGT WANDERSON",
+                  "data_servico_substituido": "2026-11-08",
+                  "horas": 12,
+                  "inicio": "08h00",
+                  "fim": "20h00",
+                  "termino_no_dia_seguinte": false
+                }
+              }
+            ],
+            "notes": [
+              "TS nº 168 (SEI 98135195). Substitui 2º SGT WANDERSON.",
+              "Serviço Ordinário de 8h às 20h"
+            ],
+            "events": [],
+            "serviceHours": 12,
+            "serviceStart": "08h00",
+            "serviceEnd": "20h00",
+            "serviceNextDay": false,
+            "serviceStartDate": "2026-11-29",
+            "serviceEndDate": "2026-11-29"
           },
           {
             "name": "SD SANTOS",
@@ -4443,7 +4549,8 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
           "5 recursos de 24h",
           "Faltam 1 recurso"
         ],
-        "alerts": []
+        "alerts": [],
+        "shiftStart": "08h00"
       },
       {
         "day": 30,
@@ -10053,7 +10160,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
       if(m.badges?.some(b=>b.kind==='review')){uncertainChanges.push(m);continue;}
       let intervals=[],unknown=false,blockedUnknown=false;
       for(const badge of m.badges||[]){
-        if(!['ord','ts','pay'].includes(badge.kind))continue;
+        if(!['ord','ts','pay'].includes(badge.kind)||badge.annotationOnly===true)continue;
         const hours=Number(badge.hours||m.serviceHours||24);
         if(hours===24)intervals.push([0,1440]);
         else{
@@ -10481,6 +10588,9 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
     const badges = element('span', `badges${oddWithAc4 ? ' has-odd-ac4' : ''}${assignments.length ? ' has-adjunto' : ''}`);
     const services = assignments.length ? element('span', 'service-badges') : badges;
     let officerChip=null;
+    const timedOrdinary=member.badges.find(badge=>badge.kind==='ord'&&badge.start&&badge.end),annotationNodes=[];
+    const exchangeAnnotations=member.badges.filter(badge=>badge.kind==='ts'&&badge.annotationOnly===true);
+    let ordinaryBadgeLine=null;
     if (assignments.length) {
       const chip = element('span', 'chip chief', 'ACA');
       chip.title = 'Chefe de Ala / COB · Previsão por antiguidade (ORD do Plano de Chamada)';
@@ -10497,10 +10607,15 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
       if(canCopy){chip.type='button';chip.dataset.copySei=sei;chip.dataset.companySei=sei;chip.title=`Botão direito: copiar SEI ${sei} da TS Cia`;chip.setAttribute('aria-label',`${label}. Copiar SEI ${sei} da TS Cia`);}
       const hint=exchangeHint(member,badge);
       if(hint){chip.classList.add('exchange-hint');chip.dataset.exchangeTooltip=hint.join('\n');chip.tabIndex=0;chip.title='';}
+      if(timedOrdinary&&exchangeAnnotations.includes(badge)){annotationNodes.push(chip);continue;}
       if(['ord','compensation'].includes(badge.kind)&&badge.start&&badge.end){
-        const service=element('span','ordinary-service');service.append(chip,element('span','ac4-period',`${shortHour(badge.start)} às ${shortHour(badge.end)}`));services.append(service);
+        const service=element('span','ordinary-service'),hours=element('span','ac4-period',`${shortHour(badge.start)} às ${shortHour(badge.end)}`);
+        if(badge.nextDay)hours.title=`Término no dia seguinte às ${shortHour(badge.end)}`;
+        if(badge===timedOrdinary&&exchangeAnnotations.length){ordinaryBadgeLine=element('span','ordinary-badge-line');ordinaryBadgeLine.append(chip);service.append(ordinaryBadgeLine);}else service.append(chip);
+        service.append(hours);services.append(service);
       }else services.append(chip);
     }
+    if(ordinaryBadgeLine)ordinaryBadgeLine.append(...annotationNodes);
     for (const event of member.events){const paired=officerChip&&finance.active(event)?officerChip:null;services.append(satShift?satAc4Badge(event,member.name,day,satShift):ac4Badge(event,member.name,day,paired));if(paired)officerChip=null;}
     for(const assigned of assignments){
       if(assigned.start!==0||assigned.end!==1440)services.append(element('span','chief-period',window.ServiceChief.period(day,assigned)));
@@ -11120,6 +11235,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
       const number=source.numero || match?.[1]?.trim() || ref?.ts || (change.kind==='review'?current.day.alerts.join(' ').match(/TS\s*n[º°o.]?\s*(\d+)/i)?.[1]:'');
       const sei=source.sei || match?.[2] || text.match(/\bSEI\s+(\d{8})\b/)?.[1] || ref?.sei;
       if (number || sei) lines.push(`TS nº ${number || 'não informado'} (SEI ${sei || 'não informado'})`);
+      const ordinaryPeriod=notes.find(note=>/^Serviço Ordinário de /i.test(note));if(ordinaryPeriod)lines.push(ordinaryPeriod);
       const sourceTarget=notes.join(' ').match(/Substitui\s+([^.;]+)[.;]?/i)?.[1];
       const target=source.substituido || ref?.substituido || sourceTarget || change.text.replace(/^TS\s*·\s*/,'').replace(/\s*\(A CONFERIR\)/,'');
       if (target) lines.push({kind:'identity',prefix:'Militar substituído: ',name:target});

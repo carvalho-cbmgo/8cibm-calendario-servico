@@ -105,6 +105,20 @@ test('chefia respeita antiguidade, ausência, ODD e pendências de períodos par
   assert.equal(chief.select({...day,members:[member([event({end:'20h00',hours:12})],{name:'ST PARCIAL',ord:2}),ordinary('ST TESTE',3)]}).status,'pending');
 });
 
+test('chefia não conta a anotação de TS como um segundo período ordinário',()=>{
+  const ordinary=(name,ord,badges,extra={})=>member([],{name,ord,badges,...extra});
+  const partial=ordinary('2º SGT TESTE',17,[{kind:'ord',hours:12,start:'20h00',end:'08h00',nextDay:true},{kind:'ts',hours:12,annotationOnly:true}],{serviceHours:12,serviceStart:'20h00'});
+  const day={shiftStart:'08h00',members:[ordinary('ST TESTE',6,[{kind:'ord'}]),partial]};
+  const result=chief.select(day);assert.equal(result.status,'selected');assert.equal(result.assignments[0].name,'ST TESTE');assert(!result.warnings.some(message=>/sobreposição/.test(message)));
+  const data=JSON.parse(scripts.find(([,attrs])=>attrs.includes('id="calendar-data"'))[2]);
+  for(const [number,name] of [[8,'ST PASSOS'],[29,'ST DA SILVA']]){
+    const day=data['2026-11'].days.find(day=>day.day===number),result=chief.select(day);
+    assert.equal(result.status,'selected');assert.equal(result.assignments[0].name,name);assert(!result.warnings.some(message=>/sobreposição/.test(message)));
+    const partials=day.members.filter(m=>m.serviceHours===12);assert.equal(partials.length,2);
+    assert.deepEqual(partials.map(m=>m.serviceHours),[12,12]);assert.equal(partials.reduce((sum,m)=>sum+m.serviceHours,0),24);
+  }
+});
+
 test('ranking soma Operacional e SAT, inclui previstos e ordena pelo total numérico',()=>{
   const data={'2026-11':{days:[
     {day:3,members:[member([event({executionConfirmed:true})]),member([event({end:'20h00',hours:12})],{name:'2º SGT OUTRO'})],sat:{members:[member([event({mode:'SAT',start:'13h00',end:'18h00',hours:5})])]}},
