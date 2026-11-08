@@ -76,3 +76,18 @@ test('tarifa acompanha cada data e o mês financeiro usa o início do reforço',
   assert.equal(plan.summary.daily.get('2026-11-13').committedCents,99500);assert.equal(plan.summary.daily.get('2026-11-30').committedCents,74100);
   const last=plan.summary.records.find(record=>record.startDate==='2026-11-30');assert.equal(last.endDate,'2026-12-01');assert.equal(last.financialMonth,'2026-11');assert.equal(plan.summary.quotaCents,null);
 });
+
+test('meta de 4 a 10 altera somente os reforços necessários, sem remover recursos existentes',()=>{
+  const source=data(),before=JSON.stringify(source),real=finance.month(source,'2026-11',4560000);
+  const four=simulation.plan(source,'2026-11',4560000,real,4),five=simulation.plan(source,'2026-11',4560000,real,5),ten=simulation.plan(source,'2026-11',4560000,real,10);
+  assert.equal(four.addedResources,0);assert.equal(four.summary.committedCents,0);assert.equal(four.days.get(12).coverage.resources,5);
+  assert.equal(five.addedResources,7);assert.equal(five.summary.committedCents,617300);
+  assert.equal(ten.addedResources,101);assert.equal(ten.daysAffected,19);assert.equal(ten.targetResources,10);
+  for(const day of source['2026-11'].days){const planned=ten.days.get(day.day);assert.equal(planned.addedResources,day.confirmation?.status==='confirmed'?0:10-planned.coverage.resources);}
+  assert.equal(ten.summary.quotaCents,4560000);assert(real.remainingCents-ten.summary.committedCents<0);assert.equal(JSON.stringify(source),before);
+});
+
+test('meta inválida é rejeitada e a meta padrão continua sendo 6',()=>{
+  const source=input([member('ST TESTE')]);assert.equal(simulation.plan(source,'2026-11').targetResources,6);
+  for(const target of[3,11,4.5,'6',null,NaN])assert.throws(()=>simulation.plan(source,'2026-11',null,undefined,target),/meta deve ser um número inteiro de 4 a 10/);
+});
