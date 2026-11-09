@@ -10734,6 +10734,9 @@ dialog.simulation-dialog{width:min(420px,calc(100% - 24px));max-height:calc(100d
   function makeDailyFinance(day){
     const data=financialSummary.daily.get(`${period}-${String(day.day).padStart(2,'0')}`),section=element('section','daily-finance');section.setAttribute('aria-label',`Controle da cota AC4 do dia ${day.day}`);
     const extra=simulationActive?simulationPlan.summary.daily.get(data.date):null;section.classList.toggle('has-simulation-values',!!extra?.cumulativeCents);
+    const cumulativeCents=data.cumulativeCents,additionalCumulativeCents=extra?.cumulativeCents||0;
+    // O saldo de cada dia usa o mesmo acumulado de TOTAL AC4, nunca o compromisso do mês inteiro.
+    const availableCents=financialSummary.quotaCents===null?null:financialSummary.quotaCents-cumulativeCents;
     const remaining=element('p','days-remaining',`Dias restantes: ${data.daysRemaining}`);remaining.title='Dias após esta data até o término do mês.';section.append(remaining);
     const scroll=element('div','daily-finance-scroll'),lines=element('div','daily-finance-lines');scroll.append(lines);if(extra?.cumulativeCents){const hint=element('p','simulation-scroll-hint','↔ Deslize para ver todos os valores');hint.id=`simulation-scroll-hint-${data.date}`;hint.hidden=true;section.append(hint);scroll.dataset.simulationScroll=hint.id;scroll.tabIndex=0;scroll.setAttribute('role','group');scroll.setAttribute('aria-describedby',hint.id);scroll.setAttribute('aria-label',`Valores financeiros do dia ${day.day}. Use a rolagem horizontal se necessário.`);}section.append(scroll);
     const line=(target,label,value,className='',button=null)=>{const row=element('div',`daily-finance-row ${className}`.trim()),output=element('span','daily-finance-value');output.append(value);row.append(button||element('span','daily-finance-label',`${label}:`),output);target.append(row);};
@@ -10750,8 +10753,8 @@ dialog.simulation-dialog{width:min(420px,calc(100% - 24px));max-height:calc(100d
       group.append(content);lines.append(group);
     };
     disclosure('service','AC4 SERVIÇO',data.committedCents,extra?.committedCents||0,'daily-finance-service',[['AC4 Operacional',data.operationalCents,extra?.operationalCents],['AC4 SAT',data.satCents,0]]);
-    disclosure('cumulative','TOTAL AC4',data.cumulativeCents,extra?.cumulativeCents||0,'daily-finance-total',[['AC4 OPERACIONAL',data.cumulativeOperationalCents,extra?.cumulativeOperationalCents],['AC4 SAT',data.cumulativeSatCents,0]]);
-    line(lines,'AC4 DISPONÍVEL',data.remainingCents===null?'COTA NÃO INFORMADA':simulatedValue(data.remainingCents,-(extra?.cumulativeCents||0)),'daily-balance');
+    disclosure('cumulative','TOTAL AC4',cumulativeCents,additionalCumulativeCents,'daily-finance-total',[['AC4 OPERACIONAL',data.cumulativeOperationalCents,extra?.cumulativeOperationalCents],['AC4 SAT',data.cumulativeSatCents,0]]);
+    line(lines,'AC4 DISPONÍVEL',availableCents===null?'COTA NÃO INFORMADA':simulatedValue(availableCents,-additionalCumulativeCents),'daily-balance');
     return section;
   }
   function eventFinanceDetails(event,day){
