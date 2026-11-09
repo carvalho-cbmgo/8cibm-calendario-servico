@@ -37,8 +37,8 @@ test('OSVALDIR fica dispensado em 28/11 e paga em 05/12, com cobertura e chefia 
 
 test('a nova troca preserva os AC4 reais e recalcula apenas a necessidade simulada nas duas competências',()=>{
  const {AC4Finance:finance,ServiceSimulation:simulation}=context.window,real=finance.month(data,'2026-11',4560000),november=simulation.plan(data,'2026-11',4560000),december=simulation.plan(data,'2026-12'),january=simulation.plan(data,'2027-01');
- assert.equal(real.records.length,40);assert.equal(real.committedCents,1459200);assert.equal(real.executedCents,1096600);assert.equal(real.remainingCents,3100800);
- assert.equal(november.addedResources,26);assert.equal(november.summary.committedCents,2253800);assert.equal(november.days.get(28).addedResources,2);assert.equal(real.committedCents+november.summary.committedCents,3713000);
+ assert.equal(real.records.length,45);assert.equal(real.committedCents,1658700);assert.equal(real.executedCents,1096600);assert.equal(real.remainingCents,2901300);
+ assert.equal(november.addedResources,26);assert.equal(november.summary.committedCents,2253800);assert.equal(november.days.get(28).addedResources,2);assert.equal(real.committedCents+november.summary.committedCents,3912500);
  assert.equal(december.addedResources,31);assert.equal(december.summary.committedCents,2582500);assert.equal(december.days.get(5).addedResources,0);assert.equal(december.summary.quotaCents,null);
  assert.equal(january.addedResources,24);assert.equal(january.summary.committedCents,2080200);assert.equal(data['2026-11'].days.filter(day=>day.confirmation?.status==='confirmed').length,11);
 });

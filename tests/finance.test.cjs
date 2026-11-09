@@ -97,6 +97,23 @@ test('todos os meses cadastrados mantêm totais e acumulados consistentes',()=>{
   }
 });
 
+test('cinco AC4 noturnos de LUIZ ANTONIO são previstos de 12h, sem duplicação ou execução presumida',()=>{
+  const data=JSON.parse(scripts.find(([,attrs])=>attrs.includes('id="calendar-data"'))[2]);
+  const summary=finance.month(data,'2026-11',4560000),dates=[12,17,19,24,26];
+  const records=summary.records.filter(record=>record.event.serviceId?.startsWith('ac4-operacional-luiz-antonio-'));
+  assert.equal(records.length,5);assert.equal(new Set(records.map(record=>record.key)).size,5);
+  assert.deepEqual(plain(records.map(record=>[record.startDate,record.endDate,record.costCents])),[
+    ['2026-11-12','2026-11-13',41100],['2026-11-17','2026-11-18',38100],['2026-11-19','2026-11-20',41100],['2026-11-24','2026-11-25',38100],['2026-11-26','2026-11-27',41100]
+  ]);
+  for(const record of records){
+    assert.equal(record.member,'2º SGT LUIZ ANTONIO');assert.equal(record.minutes,720);assert.equal(record.start,'20h00');assert.equal(record.end,'08h00');assert.equal(record.financialMonth,'2026-11');
+    assert.equal(record.category,'operational');assert.equal(record.status,'forecast');assert.equal(record.event.executionConfirmed,undefined);assert.deepEqual(plain(finance.documentInfo(record.event)),{number:'',sei:''});
+  }
+  for(const date of dates){const members=data['2026-11'].days.find(day=>day.day===date).members.filter(member=>member.name==='2º SGT LUIZ ANTONIO');assert.equal(members.length,1);assert.equal(members[0].ord,16);assert.equal(members[0].events.length,1);assert.equal(members[0].badges.length,0);}
+  assert.equal(records.reduce((total,record)=>total+record.costCents,0),199500);
+  assert.equal(summary.operationalCents,1340700);assert.equal(summary.satCents,318000);assert.equal(summary.committedCents,1658700);assert.equal(summary.forecastCents,562100);assert.equal(summary.executedCents,1096600);assert.equal(summary.remainingCents,2901300);
+});
+
 test('chefia respeita antiguidade, ausência, ODD e pendências de períodos parciais',()=>{
   const ordinary=(name,ord,badges=[{kind:'ord'}])=>member([],{name,ord,badges});
   const day={shiftStart:'08h00',members:[ordinary('ASP OF TESTE',1,[{kind:'officer'}]),ordinary('ST AUSENTE',2,[{kind:'disp'}]),ordinary('ST TESTE',3),ordinary('1º SGT TESTE',4)]};
@@ -214,5 +231,5 @@ test('reforço adicional entra somente com AC4 até o corte e fica sem antiguida
   const officers=finance.ranking(summary,'2026-11-07',true,{...options,includeOfficers:true});
   assert.equal(officers.rows.length,31);assert.equal(officers.totalCents,1096600);
   const full=finance.ranking(summary,'2026-12-01',true,{...options,includeOfficers:true});
-  assert.equal(full.totalCents,summary.committedCents);assert.equal(full.totalCents,1459200);
+  assert.equal(full.totalCents,summary.committedCents);assert.equal(full.totalCents,1658700);
 });

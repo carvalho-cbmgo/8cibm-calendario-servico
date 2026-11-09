@@ -67,8 +67,8 @@ test('novembro simula 26 recursos em 18 dias, cobra cada reforço uma vez e pres
   assert.equal(plan.addedResources,26);assert.equal(plan.daysAffected,18);assert.equal(plan.summary.committedCents,2253800);
   assert.equal(new Set(plan.summary.records.map(record=>record.key)).size,26);assert.equal(plan.summary.executedCents,0);assert.equal(plan.summary.satCents,0);
   assert.equal(plan.summary.daily.get('2026-11-30').cumulativeCents,2253800);
-  assert.equal(real.records.length,40);assert.equal(real.committedCents,1459200);assert.equal(real.executedCents,1096600);
-  assert.equal(real.committedCents+plan.summary.committedCents,3713000);assert.equal(real.remainingCents-plan.summary.committedCents,847000);
+  assert.equal(real.records.length,45);assert.equal(real.committedCents,1658700);assert.equal(real.executedCents,1096600);
+  assert.equal(real.committedCents+plan.summary.committedCents,3912500);assert.equal(real.remainingCents-plan.summary.committedCents,647500);
 });
 
 test('tarifa acompanha cada data e o mês financeiro usa o início do reforço',()=>{
