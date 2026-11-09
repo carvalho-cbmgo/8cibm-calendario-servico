@@ -387,11 +387,11 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 .day.is-simulated{border-style:dashed;border-color:var(--simulation)}
 .simulation-delta{color:var(--simulation);font-weight:750;white-space:nowrap}
 .simulation-money,.simulation-share{white-space:nowrap}
-.daily-finance.has-simulation-values .daily-finance-scroll,.monthly-finance.is-simulation .finance-metrics{overflow-x:auto;scrollbar-width:thin;scrollbar-color:var(--simulation) #eddbe6;padding-bottom:4px}
-.daily-finance.has-simulation-values .daily-finance-lines{width:max-content;min-width:100%}
-.daily-finance.has-simulation-values .daily-finance-row{display:flex;flex-wrap:nowrap;justify-content:space-between;align-items:center;gap:8px}
-.daily-finance.has-simulation-values .daily-finance-label{flex:0 0 auto;white-space:nowrap}
-.daily-finance.has-simulation-values .daily-finance-value{display:inline-flex;flex:0 0 auto;flex-wrap:nowrap;justify-content:flex-end;gap:0 4px;margin-left:auto;white-space:nowrap}
+.daily-finance.is-simulation .daily-finance-scroll,.monthly-finance.is-simulation .finance-metrics{overflow-x:auto;scrollbar-width:thin;scrollbar-color:var(--simulation) #eddbe6;padding-bottom:4px}
+.daily-finance.is-simulation .daily-finance-lines{width:max-content;min-width:100%}
+.daily-finance.is-simulation .daily-finance-row{display:flex;flex-wrap:nowrap;justify-content:space-between;align-items:center;gap:8px}
+.daily-finance.is-simulation .daily-finance-label{flex:0 0 auto;white-space:nowrap}
+.daily-finance.is-simulation .daily-finance-value{display:inline-flex;flex:0 0 auto;flex-wrap:nowrap;justify-content:flex-end;gap:0 4px;margin-left:auto;white-space:nowrap}
 .daily-finance-scroll:focus-visible,.monthly-finance.is-simulation .finance-metrics:focus-visible{outline:2px solid var(--simulation);outline-offset:2px}
 .monthly-finance.is-simulation .finance-metrics{grid-template-columns:max-content max-content max-content;justify-content:space-between;align-items:center;column-gap:10px;row-gap:8px}
 .monthly-finance.is-simulation .finance-metric{display:contents}
@@ -421,7 +421,7 @@ dialog.simulation-dialog{width:min(420px,calc(100% - 24px));max-height:calc(100d
 @media screen and (min-width:761px){.calendar.is-simulation{grid-template-columns:repeat(auto-fit,minmax(min(100%,600px),1fr))}}
 @media screen and (min-width:1101px){.header.is-simulation{grid-template-columns:minmax(0,1fr) clamp(440px,46vw,650px);gap:24px}}
 @media screen and (min-width:761px) and (max-width:1100px){.header.is-simulation{grid-template-columns:minmax(0,1fr);grid-template-areas:"main" "finance";gap:12px}.header.is-simulation .monthly-finance{border-left:0;border-top:1px solid #ffffff18;padding:9px 0 0}}
-@media print{.calendar.is-simulation{grid-template-columns:repeat(2,minmax(0,1fr))!important}.daily-finance.has-simulation-values .daily-finance-scroll,.monthly-finance.is-simulation .finance-metrics{overflow:visible}.simulation-scroll-hint,dialog.simulation-dialog{display:none!important}}
+@media print{.calendar.is-simulation{grid-template-columns:repeat(2,minmax(0,1fr))!important}.daily-finance.is-simulation .daily-finance-scroll,.monthly-finance.is-simulation .finance-metrics{overflow:visible}.simulation-scroll-hint,dialog.simulation-dialog{display:none!important}}
 .finance-details-button{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;padding:0;border:0;border-radius:50%;background:none;color:#f4d184;cursor:pointer;flex:0 0 auto}
 .finance-details-button:hover{background:#ffffff0e;color:#fff}
 .finance-details-button:focus-visible{outline:3px solid #f4d184;outline-offset:2px}
@@ -569,10 +569,17 @@ dialog.simulation-dialog{width:min(420px,calc(100% - 24px));max-height:calc(100d
 .daily-finance-breakdown{margin:2px 0 6px;padding:1px 0 1px 5px;border-left:2px solid #dce6f1}
 .daily-finance-breakdown[hidden]{display:none}
 .daily-finance-breakdown[data-finance-breakdown="service"]{color:#71318f}
-.daily-finance-breakdown[data-finance-breakdown="cumulative"]{color:#c00000;font-weight:800}
+.daily-finance-breakdown[data-finance-breakdown="cumulative"]{color:#c00000;font-weight:400}
+.daily-finance-breakdown[data-finance-breakdown="cumulative"] .simulation-delta{font-weight:inherit}
 .daily-finance-breakdown .daily-finance-row{display:flex;flex-wrap:nowrap;justify-content:space-between;gap:1px 4px;margin:6px 0}
 .daily-finance-breakdown .daily-finance-label{flex:0 0 auto}
 .daily-finance-breakdown .daily-finance-value{margin-left:auto}
+/* Shared columns keep currency, separators and percentages aligned within each breakdown. */
+.daily-finance.is-simulation .daily-finance-breakdown{display:grid;grid-template-columns:minmax(max-content,1fr) max-content max-content;align-items:baseline;gap:6px 8px}
+.daily-finance.is-simulation .daily-finance-breakdown :is(.daily-finance-row,.daily-finance-value){display:contents}
+.daily-finance.is-simulation .daily-finance-breakdown .daily-finance-label{grid-column:1}
+.daily-finance.is-simulation .daily-finance-breakdown .simulation-money{grid-column:2;justify-self:start;text-align:left}
+.daily-finance.is-simulation .daily-finance-breakdown .simulation-share{grid-column:3;justify-self:start;text-align:left}
 @media screen and (max-width:760px){.daily-finance-toggle{min-height:44px}}
 .day-notes-caption{display:block}
 .day-notes-arrow{font-size:1.15em;font-weight:750;line-height:1}
@@ -10562,10 +10569,13 @@ dialog.simulation-dialog{width:min(420px,calc(100% - 24px));max-height:calc(100d
   }
   function simulatedValue(cents,delta=0,withRatio=true,forceDelta=false){
     const total=cents+(simulationActive?delta:0),amountText=withRatio?money(total):money(total).replace(/\s/g,' ');
-    if(!simulationActive||(!delta&&!forceDelta))return document.createTextNode(withRatio?valueWithRatio(total):amountText);
+    if(!simulationActive||(!delta&&!forceDelta&&!withRatio))return document.createTextNode(withRatio?valueWithRatio(total):amountText);
     const result=document.createDocumentFragment(),amount=element('span','simulation-money',amountText),sign=delta<0?'−':'+';
-    const extra=element('span','simulation-delta',`(${sign}${dailyPercent.format(Math.abs(delta)/100)})`);
-    extra.title=`Cadastrado: ${money(cents)}. Variação da simulação: ${sign}${money(Math.abs(delta))}. Total: ${money(total)}.`;amount.append(' ',extra);result.append(amount);
+    if(delta||forceDelta){
+      const extra=element('span','simulation-delta',`(${sign}${dailyPercent.format(Math.abs(delta)/100)})`);
+      extra.title=`Cadastrado: ${money(cents)}. Variação da simulação: ${sign}${money(Math.abs(delta))}. Total: ${money(total)}.`;amount.append(' ',extra);
+    }
+    result.append(amount);
     if(withRatio){const share=element('span','simulation-share',' | ');share.append(simulatedRatio(cents,delta,forceDelta));result.append(share);}
     return result;
   }
@@ -10733,12 +10743,12 @@ dialog.simulation-dialog{width:min(420px,calc(100% - 24px));max-height:calc(100d
   }
   function makeDailyFinance(day){
     const data=financialSummary.daily.get(`${period}-${String(day.day).padStart(2,'0')}`),section=element('section','daily-finance');section.setAttribute('aria-label',`Controle da cota AC4 do dia ${day.day}`);
-    const extra=simulationActive?simulationPlan.summary.daily.get(data.date):null;section.classList.toggle('has-simulation-values',!!extra?.cumulativeCents);
+    const extra=simulationActive?simulationPlan.summary.daily.get(data.date):null;section.classList.toggle('is-simulation',simulationActive);
     const cumulativeCents=data.cumulativeCents,additionalCumulativeCents=extra?.cumulativeCents||0;
     // O saldo de cada dia usa o mesmo acumulado de TOTAL AC4, nunca o compromisso do mês inteiro.
     const availableCents=financialSummary.quotaCents===null?null:financialSummary.quotaCents-cumulativeCents;
     const remaining=element('p','days-remaining',`Dias restantes: ${data.daysRemaining}`);remaining.title='Dias após esta data até o término do mês.';section.append(remaining);
-    const scroll=element('div','daily-finance-scroll'),lines=element('div','daily-finance-lines');scroll.append(lines);if(extra?.cumulativeCents){const hint=element('p','simulation-scroll-hint','↔ Deslize para ver todos os valores');hint.id=`simulation-scroll-hint-${data.date}`;hint.hidden=true;section.append(hint);scroll.dataset.simulationScroll=hint.id;scroll.tabIndex=0;scroll.setAttribute('role','group');scroll.setAttribute('aria-describedby',hint.id);scroll.setAttribute('aria-label',`Valores financeiros do dia ${day.day}. Use a rolagem horizontal se necessário.`);}section.append(scroll);
+    const scroll=element('div','daily-finance-scroll'),lines=element('div','daily-finance-lines');scroll.append(lines);if(simulationActive){const hint=element('p','simulation-scroll-hint','↔ Deslize para ver todos os valores');hint.id=`simulation-scroll-hint-${data.date}`;hint.hidden=true;section.append(hint);scroll.dataset.simulationScroll=hint.id;scroll.tabIndex=0;scroll.setAttribute('role','group');scroll.setAttribute('aria-describedby',hint.id);scroll.setAttribute('aria-label',`Valores financeiros do dia ${day.day}. Use a rolagem horizontal se necessário.`);}section.append(scroll);
     const line=(target,label,value,className='',button=null)=>{const row=element('div',`daily-finance-row ${className}`.trim()),output=element('span','daily-finance-value');output.append(value);row.append(button||element('span','daily-finance-label',`${label}:`),output);target.append(row);};
     const disclosure=(key,label,amount,delta,className,items)=>{
       const group=element('div','daily-finance-disclosure'),button=element('button','daily-finance-label daily-finance-toggle'),content=element('div','daily-finance-breakdown');
