@@ -10511,7 +10511,7 @@ dialog.simulation-dialog{width:min(420px,calc(100% - 24px));max-height:calc(100d
     const anchor=clock(day.shiftStart)??480,people=new Map(),warnings=[];
     const add=(member,start,end)=>{
       const a=Math.max(0,start),b=Math.min(DAY,end);if(b<=a)return;
-      const key=normalize(member.rg||member.name);if(!people.has(key))people.set(key,[]);people.get(key).push([a,b]);
+      const key=normalize(member.simulationId||member.rg||member.name);if(!people.has(key))people.set(key,[]);people.get(key).push([a,b]);
     };
     for(const member of day.members||[]){
       if(member.disponivel===false||member.afastado===true||member.integrante_operacional===false)continue;
@@ -10549,12 +10549,25 @@ dialog.simulation-dialog{width:min(420px,calc(100% - 24px));max-height:calc(100d
     for(const day of schedules[period]?.days||[]){
       const date=`${period}-${String(day.day).padStart(2,'0')}`,actual=coverage(day,date,base),members=[];
       const needed=day.confirmation?.status==='confirmed'||!actual.valid?0:Math.max(0,targetResources-actual.resources);
-      for(let index=0;index<needed;index++)members.push({name:'PREVISTO AC4',badges:[],notes:['Simulação de reforço operacional, sem militar designado.'],events:[{serviceId:`simulation-${date}-${index+1}`,simulation:true,mode:'OPERACIONAL/SOP',start:clockText(actual.anchor),end:clockText(actual.anchor),nextDay:true,hours:24,status:'planned'}]});
-      days.set(day.day,{coverage:actual,members,addedResources:needed});virtual.days.push({day:day.day,members});
+      // Each layer fills only its uncovered intervals, merging adjacent intervals into one service.
+      const ranges=[];
+      for(let level=1;level<=needed;level++){
+        let current=null;
+        for(const segment of actual.segments){
+          if(targetResources-segment.resources<level){current=null;continue;}
+          if(current&&current.end===segment.start)current.end=segment.end;
+          else{current={start:segment.start,end:segment.end};ranges.push(current);}
+        }
+      }
+      for(const [index,range] of ranges.entries()){
+        const start=actual.anchor+range.start,end=actual.anchor+range.end,startDate=new Date((dayStamp(date)+start)*60000).toISOString().slice(0,10),endDate=new Date((dayStamp(date)+end)*60000).toISOString().slice(0,10),id=`simulation-${date}-${index+1}`;
+        members.push({name:'PREVISTO AC4',simulationId:id,badges:[],notes:['Simulação de reforço operacional, sem militar designado.'],events:[{serviceId:id,simulation:true,mode:'OPERACIONAL/SOP',start:clockText(start%DAY),end:clockText(end%DAY),startDate,endDate,nextDay:endDate!==startDate,hours:(range.end-range.start)/60,status:'planned'}]});
+      }
+      days.set(day.day,{coverage:actual,members,addedResources:needed,addedServices:members.length});virtual.days.push({day:day.day,members});
       warnings.push(...actual.warnings.map(message=>`${date}: ${message}`));
     }
     const summary=finance.month({[period]:virtual},period,quotaCents);
-    return {days,summary,targetResources,addedResources:summary.records.length,daysAffected:[...days.values()].filter(day=>day.addedResources>0).length,warnings};
+    return {days,summary,targetResources,addedResources:[...days.values()].reduce((total,day)=>total+day.addedResources,0),addedServices:[...days.values()].reduce((total,day)=>total+day.addedServices,0),daysAffected:[...days.values()].filter(day=>day.addedServices>0).length,warnings};
   }
   window.ServiceSimulation={coverage,plan};
 })();
@@ -10689,9 +10702,9 @@ dialog.simulation-dialog{width:min(420px,calc(100% - 24px));max-height:calc(100d
   function updateSimulationBanner(){
     const banner=document.getElementById('ac4-simulation-status');banner.hidden=!simulationActive;banner.replaceChildren();if(!simulationActive)return;
     const extra=simulationPlan.summary.committedCents,total=financialSummary.committedCents+extra,available=financialSummary.remainingCents===null?null:financialSummary.remainingCents-extra;
-    banner.append(element('h2','','SIMULAÇÃO AC4 ATIVA'),element('p','',`${simulationPlan.addedResources} ${simulationPlan.addedResources===1?'recurso simulado':'recursos simulados'} de 24h em ${simulationPlan.daysAffected} ${simulationPlan.daysAffected===1?'dia não confirmado':'dias não confirmados'} · Meta: ${simulationTarget} recursos de 24h.`));
+    banner.append(element('h2','','SIMULAÇÃO AC4 ATIVA'),element('p','',`${simulationPlan.addedServices} ${simulationPlan.addedServices===1?'serviço simulado':'serviços simulados'} em ${simulationPlan.daysAffected} ${simulationPlan.daysAffected===1?'dia não confirmado':'dias não confirmados'} · Meta: ${simulationTarget} recursos de 24h.`));
     const totals=element('div','simulation-totals');for(const [label,value] of [['Adicional',money(extra)],['Total com simulação',money(total)],['Disponível com simulação',available===null?'Cota não informada':money(available)]]){const item=element('span','',`${label}: `);item.append(element('strong','',value));totals.append(item);}banner.append(totals);
-    const explanation=element('details','simulation-scope');explanation.append(element('summary','','Como ler esta simulação'),element('p','','Expanda OPERACIONAL para ver os reforços. Os valores e percentuais já incluem a simulação; entre parênteses aparece somente a variação sobre o cadastro. A cota mensal não é ampliada. Os reforços simulados não integram o ranking nem os documentos ES/OS.'));banner.append(explanation);
+    const explanation=element('details','simulation-scope');explanation.append(element('summary','','Como ler esta simulação'),element('p','','Expanda OPERACIONAL para ver os reforços. A simulação completa os horários com efetivo abaixo da meta: um AC4 de 12h diurno e outro noturno formam juntos um recurso de 24h. Os valores e percentuais já incluem a simulação; entre parênteses aparece somente a variação sobre o cadastro. A cota mensal não é ampliada. Os reforços simulados não integram o ranking nem os documentos ES/OS.'));banner.append(explanation);
     if(available!==null&&available<0)banner.append(element('p','finance-warning',`A simulação ultrapassa a cota em ${money(-available)}.`));
     if(simulationPlan.warnings.length)banner.append(element('p','finance-warning','Há horários operacionais a conferir; os dias com horários inválidos não receberam reforços simulados.'));
   }
@@ -11034,7 +11047,7 @@ dialog.simulation-dialog{width:min(420px,calc(100% - 24px));max-height:calc(100d
   function makeCard(day) {
     const chief=chiefFor(day);
     const members = orderedDayMembers(day),counts=resourceCounts(members);
-    const simulated=simulationDay(day),added=simulated?.addedResources||0;
+    const simulated=simulationDay(day),added=simulated?.addedResources||0,addedServices=simulated?.addedServices||0;
     const confirmed=day.confirmation?.status==='confirmed';
     const card = element('section', `day${confirmed?' is-scale-confirmed':''}`);
     card.id = `dia-${String(day.day).padStart(2, '0')}`;
@@ -11053,7 +11066,7 @@ dialog.simulation-dialog{width:min(420px,calc(100% - 24px));max-height:calc(100d
     const simulatedCoverage=simulationActive&&!confirmed&&simulated.coverage.valid;
     const total=element('span','resource-total',simulatedCoverage?`${simulated.coverage.resources+added} recursos de 24h`:day.coverage[0]);total.title=simulatedCoverage?`${simulated.coverage.resources} recursos cadastrados + ${added} simulados. Dois períodos complementares de 12h equivalem a um recurso de 24h.`:'Recursos de 24h, conforme a cobertura operacional registrada.';
     const ordinary=element('span','chip ord resource-ordinary',`${counts.ordinary} ORD`);ordinary.title='Militares em serviço ordinário operacional, incluindo TS e TS CIA de pagamento. Dispensas e trocas pendentes não entram nesta contagem.';ordinary.setAttribute('aria-label',`${counts.ordinary} recursos de serviço ordinário`);
-    const ac4=element('span','chip ac4 resource-ac4',`${counts.ac4+added} AC4`);ac4.title=`Serviços AC4 ativos do Operacional, incluindo PROEBOM e jornadas parciais. SAT contabilizada separadamente.${added?` Inclui ${added} reforços simulados.`:''}`;
+    const ac4=element('span','chip ac4 resource-ac4',`${counts.ac4+addedServices} AC4`);ac4.title=`Serviços AC4 ativos do Operacional, incluindo PROEBOM e jornadas parciais. SAT contabilizada separadamente.${addedServices?` Inclui ${addedServices} reforços simulados.`:''}`;
     const primary=element('div','day-primary');resources.append(ordinary,ac4);primary.append(date,resources);
     const summary=element('div','resource-summary');summary.setAttribute('role','group');summary.setAttribute('aria-label','Confirmação da escala do dia');if(confirmed)summary.append(dayState);head.append(primary,summary);
     const list = element('ul', 'entry-list operational-list');
@@ -11069,8 +11082,8 @@ dialog.simulation-dialog{width:min(420px,calc(100% - 24px));max-height:calc(100d
       }
       list.append(row);
     }
-    for(const member of simulated?.members||[]){const row=element('li','entry ac4 simulation-entry');row.dataset.simulated='true';row.title='Simulação de reforço operacional de 24h, sem militar designado. Não integra os documentos ES/OS.';const label=element('span','member-label');label.append(element('span','name',member.name));row.append(label,badgeNodes(member,{assignments:[]},day));list.append(row);}
-    const ac4Count = counts.ac4+added;
+    for(const member of simulated?.members||[]){const row=element('li','entry ac4 simulation-entry');row.dataset.simulated='true';row.title=`Simulação de reforço operacional de ${member.events[0].hours}h, sem militar designado. Não integra os documentos ES/OS.`;const label=element('span','member-label');label.append(element('span','name',member.name));row.append(label,badgeNodes(member,{assignments:[]},day));list.append(row);}
+    const ac4Count = counts.ac4+addedServices;
     const notes = element('button', `day-notes-button${day.alerts.length ? ' pending' : ''}`);
     const caption=element('span','day-notes-caption');caption.append(document.createTextNode('Detalhes do dia'));
     if(ac4Count){const arrow=element('span','day-notes-arrow','→');arrow.setAttribute('aria-hidden','true');caption.append(document.createTextNode(' '),arrow,document.createTextNode(` ${ac4Count} AC4`));}
@@ -11247,7 +11260,7 @@ dialog.simulation-dialog{width:min(420px,calc(100% - 24px));max-height:calc(100d
       }
     }else{
       const members=orderedDayMembers(day);for(const [index,member] of members.entries())appendMember(dialogBody,member,index,members.length);
-      for(const member of simulationDay(day)?.members||[]){const section=element('section','member-details simulation-entry'),heading=element('div','member-heading');heading.append(element('h3','name','PREVISTO AC4'),badgeNodes(member,{assignments:[]},day));section.append(heading,element('p','detail-note','Simulação de reforço de 24h, sem militar designado; não integra os documentos ES/OS.'),eventFinanceDetails(member.events[0],day));dialogBody.append(section);}
+      for(const member of simulationDay(day)?.members||[]){const section=element('section','member-details simulation-entry'),heading=element('div','member-heading');heading.append(element('h3','name','PREVISTO AC4'),badgeNodes(member,{assignments:[]},day));section.append(heading,element('p','detail-note',`Simulação de reforço de ${member.events[0].hours}h, sem militar designado; não integra os documentos ES/OS.`),eventFinanceDetails(member.events[0],day));dialogBody.append(section);}
     }
     dialogBody.append(element('p', 'coverage-note', sat?'Serviços da SAT apresentados separadamente do efetivo operacional. A OS contém somente os períodos de AC4 informados.':'Exibição do serviço operacional e das previsões PROEBOM informadas. PROEBOM e jornadas parciais não completam automaticamente recursos operacionais de 24h. Este calendário não comprova execução ou pagamento.'));
     dialog.showModal();
