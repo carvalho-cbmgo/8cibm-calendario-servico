@@ -650,6 +650,54 @@ dialog.simulation-dialog{width:min(420px,calc(100% - 24px));max-height:calc(100d
  .finance-metric-label{font-size:14px}.finance-metric-amount{font-size:clamp(16px,4.4vw,18px);text-align:right}
  .finance-metric-share{font-size:13px;min-width:48px}
 }
+.current-finance{grid-area:current;position:relative;z-index:1;min-width:0;max-width:100%;font-size:12px;line-height:1.45}
+.current-finance h2{display:flex;align-items:center;gap:4px;min-height:44px;margin:0 0 5px;color:#b7c8d7;font-size:11px;font-weight:700;letter-spacing:.07em;white-space:nowrap}
+.current-finance time{color:#e2edf5;letter-spacing:0}
+.current-finance-scroll{overflow-x:auto;scrollbar-width:thin;scrollbar-color:#6f8a9f #203b50;padding-bottom:4px}
+.current-finance-scroll:focus-visible{outline:2px solid #94baff;outline-offset:2px}
+.current-finance-lines{display:grid;grid-template-columns:max-content max-content max-content;justify-content:start;align-items:baseline;gap:6px 10px;width:max-content;min-width:100%;font-variant-numeric:tabular-nums}
+.current-finance-row{display:contents}
+.current-finance-label{color:#c9dfeb;white-space:nowrap}
+.current-finance-subtotal .current-finance-label{padding-left:12px}
+.current-finance-amount{font-size:16px;font-weight:600;line-height:1.4;white-space:nowrap;color:#d7f1ff}
+.current-finance-share{font-size:11px;line-height:1.4;white-space:nowrap;color:#c1d0dd}
+.current-finance-total .current-finance-label,.current-finance-total .current-finance-amount{color:#ffd49c;font-weight:700}
+.current-finance-sat .current-finance-amount{color:#dec9f3}
+.current-finance-available .current-finance-label,.current-finance-available .current-finance-amount,.current-finance-available .current-finance-share{color:#9be8d3;font-weight:650}
+.current-finance .simulation-scroll-hint{color:#bfd8e5}
+.finance-days-remaining{grid-column:1/-1}
+@media screen and (min-width:761px){
+ .monthly-finance .finance-toolbar{justify-content:flex-start;gap:12px}
+ .monthly-finance .finance-metrics,.monthly-finance.is-simulation .finance-metrics{grid-template-columns:max-content max-content max-content;justify-content:start;align-items:baseline;column-gap:10px;row-gap:6px;overflow-x:auto;scrollbar-width:thin}
+ .monthly-finance .finance-metric,.monthly-finance .finance-days-remaining{display:contents}
+ .monthly-finance .finance-metric-label{white-space:nowrap}
+ .monthly-finance .finance-metric-amount,.monthly-finance .finance-metric-share{justify-self:start;text-align:left;min-width:0}
+ .monthly-finance .finance-days-remaining>span{grid-column:1}
+ .monthly-finance .finance-days-remaining>strong{grid-column:2;justify-self:start}
+}
+@media screen and (min-width:1101px){
+ .header,.header.is-simulation{grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:"main main" "current finance";gap:16px 24px}
+ .header .monthly-finance,.header.is-simulation .monthly-finance{border-top:0;border-left:1px solid #c6d6e324;padding:0 0 0 24px}
+}
+@media screen and (min-width:1800px){
+ .header,.header.is-simulation{grid-template-columns:minmax(0,1fr) max-content max-content;grid-template-areas:"main current finance";gap:24px}
+}
+@media screen and (min-width:761px) and (max-width:1100px){
+ .header,.header.is-simulation{grid-template-columns:minmax(0,1fr);grid-template-areas:"main" "current" "finance";gap:12px}
+ .header .monthly-finance,.header.is-simulation .monthly-finance{border-left:0;border-top:1px solid #ffffff18;padding:8px 0 0}
+}
+@media screen and (max-width:760px){
+ .header,.header.is-simulation{grid-template-areas:"main" "current" "finance"}
+ .current-finance{border-top:1px solid #ffffff18;padding-top:5px;font-size:clamp(12px,3.4vw,14px)}
+ .current-finance h2{font-size:12px;min-height:32px}
+ .current-finance-lines{column-gap:7px}
+ .current-finance-share{font-size:12px}
+}
+@media print{
+ .header{grid-template-areas:"main" "current" "finance"}
+ .current-finance h2,.current-finance time,.current-finance-label,.current-finance-amount,.current-finance-share{color:#38516b!important}
+ .current-finance-scroll{overflow:visible}
+}
 </style></head><body><main>
 <p class="page-copyright">© 2026 ASP OF CARVALHO. Todos os direitos reservados.</p>
 <header class="header">
@@ -660,6 +708,7 @@ dialog.simulation-dialog{width:min(420px,calc(100% - 24px));max-height:calc(100d
   </div>
   <nav class="header-month month-controls" aria-label="Navegação entre os meses"><button id="mes-anterior" type="button" aria-label="Mês anterior"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m14 6-6 6 6 6"/></svg></button><span id="competencia-selecionada" class="month-label" aria-live="polite" aria-atomic="true">Novembro/2026</span><button id="mes-seguinte" type="button" aria-label="Mês seguinte"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m10 6 6 6-6 6"/></svg></button></nav>
  </div>
+ <section id="ac4-current-summary" class="current-finance" aria-label="Acumulado AC4 até a data corrente" aria-live="polite"></section>
  <section id="ac4-month-summary" class="monthly-finance" aria-label="Controle mensal da cota AC4" aria-live="polite"></section>
 </header>
 <section class="simulation-banner" id="ac4-simulation-status" role="status" aria-live="polite" hidden></section>
@@ -10349,6 +10398,12 @@ dialog.simulation-dialog{width:min(420px,calc(100% - 24px));max-height:calc(100d
     const committedCents=operationalCents+satCents;
     return {period,quotaCents:quota,committedCents,operationalCents,satCents,forecastCents,executedCents,remainingCents:quota===null?null:quota-committedCents,cancelledCount,invalidCount,duplicateCount,records,daily,byEvent:aliases,warnings};
   }
+  function asOf(summary,date){
+    if(civilDate(date)===null)throw new RangeError('Data do acumulado AC4 inválida.');
+    const [year,month]=summary.period.split('-').map(Number),lastDate=new Date(Date.UTC(year,month,0)).toISOString().slice(0,10),cutoffDate=date<lastDate?date:lastDate,day=summary.daily.get(cutoffDate);
+    const committedCents=day?.cumulativeCents||0;
+    return {period:summary.period,date,cutoffDate,quotaCents:summary.quotaCents,operationalCents:day?.cumulativeOperationalCents||0,satCents:day?.cumulativeSatCents||0,committedCents,remainingCents:summary.quotaCents===null?null:summary.quotaCents-committedCents};
+  }
   function ranking(summary,today,includeCurrentDay=true,options={}){
     const stamp=civilDate(today);if(stamp===null)throw new Error('Data de corte inválida.');
     const startDate=options.startDate??`${summary.period}-01`,cutoffDate=options.endDate??(includeCurrentDay?today:isoDate(stamp-DAY)),people=new Map();
@@ -10379,7 +10434,7 @@ dialog.simulation-dialog{width:min(420px,calc(100% - 24px));max-height:calc(100d
     for(const person of rows){result.recordCount+=person.records.length;for(const key of ['operationalCents','satCents','totalCents','forecastCents','executedCents'])result[key]+=person[key];}
     return result;
   }
-  window.AC4Finance={price,month,status,active,documentInfo,ranking};
+  window.AC4Finance={price,month,asOf,status,active,documentInfo,ranking};
   if(typeof document!=='undefined'){
     const schedules=JSON.parse(document.getElementById('calendar-data').textContent),quotas=JSON.parse(document.getElementById('ac4-financial-config').textContent).monthlyQuotaCents;
     const refresh=()=>document.dispatchEvent(new CustomEvent('calendar-schedule-change'));
@@ -10729,6 +10784,24 @@ dialog.simulation-dialog{width:min(420px,calc(100% - 24px));max-height:calc(100d
     target.querySelector('strong').textContent=`${remaining} ${remaining===1?'dia':'dias'}`;
     target.title=`Data de acesso: ${String(today.day).padStart(2,'0')}/${String(today.month).padStart(2,'0')}/${today.year}, horário de Brasília. Não inclui o dia atual; meses futuros mantêm todos os dias.`;
   }
+  function updateCurrentFinance(){
+    if(!financialSummary)return;
+    const target=document.getElementById('ac4-current-summary'),today=accessDate(),date=`${today.year}-${String(today.month).padStart(2,'0')}-${String(today.day).padStart(2,'0')}`,data=finance.asOf(financialSummary,date),extra=simulationActive?finance.asOf(simulationPlan.summary,date):null;
+    const signature=JSON.stringify([period,date,simulationActive,data.quotaCents,data.operationalCents,data.satCents,extra?.operationalCents||0,extra?.satCents||0]);
+    if(target.dataset.signature===signature)return;target.dataset.signature=signature;target.replaceChildren();target.classList.toggle('is-simulation',simulationActive);
+    const heading=element('h2','','AC4 CORRENTE - '),stamp=element('time','',date.split('-').reverse().join('/'));stamp.dateTime=date;heading.append(stamp);target.append(heading);
+    const scroll=element('div','current-finance-scroll'),lines=element('div','current-finance-lines'),hint=element('p','simulation-scroll-hint','↔ Deslize para ver todos os valores');hint.id='current-finance-scroll-hint';hint.hidden=true;
+    scroll.tabIndex=0;scroll.setAttribute('role','group');scroll.setAttribute('aria-label','Valores acumulados até hoje. Use a rolagem horizontal se necessário.');scroll.setAttribute('aria-describedby',hint.id);scroll.dataset.simulationScroll=hint.id;
+    const row=(label,cents,delta,className)=>{
+      const item=element('div',`current-finance-row ${className}`),amount=element('strong','current-finance-amount'),share=element('span','current-finance-share');
+      amount.append(cents===null?'Não informada':simulatedValue(cents,delta,false));share.append('| ',cents===null?'—':simulatedRatio(cents,delta));item.append(element('span','current-finance-label',label),amount,share);lines.append(item);
+    };
+    row('TOTAL AC4:',data.committedCents,extra?.committedCents||0,'current-finance-total');
+    row('Total AC4 Operacional:',data.operationalCents,extra?.operationalCents||0,'current-finance-subtotal current-finance-operational');
+    row('Total AC4 SAT:',data.satCents,extra?.satCents||0,'current-finance-subtotal current-finance-sat');
+    row('AC4 Disponível:',data.remainingCents,-(extra?.committedCents||0),'current-finance-available');
+    scroll.append(lines);target.append(hint,scroll);refreshSimulationScrollHints();
+  }
   function updateFinancialHeader(){
     const target=document.getElementById('ac4-month-summary');target.replaceChildren();
     target.classList.toggle('is-simulation',simulationActive);document.querySelector('.header').classList.toggle('is-simulation',simulationActive);calendar.classList.toggle('is-simulation',simulationActive);
@@ -10749,7 +10822,7 @@ dialog.simulation-dialog{width:min(420px,calc(100% - 24px));max-height:calc(100d
     metric('Comprometido',simulatedValue(financialSummary.committedCents,extra,false,true),simulatedRatio(financialSummary.committedCents,extra,true,headerPercent),'finance-metric-committed');
     metric('Disponível',financialSummary.remainingCents===null?'Não informada':simulatedValue(financialSummary.remainingCents,-extra,false,true),financialSummary.remainingCents===null?'—':simulatedRatio(financialSummary.remainingCents,-extra,true,headerPercent),'finance-metric-available');
     target.append(metrics);if(simulationActive){const hint=element('p','simulation-scroll-hint','↔ Deslize para ver todos os valores');hint.id='simulation-summary-scroll-hint';hint.hidden=true;metrics.dataset.simulationScroll=hint.id;metrics.setAttribute('aria-describedby',hint.id);target.append(hint);}target.classList.toggle('over-quota',financialSummary.remainingCents!==null&&financialSummary.remainingCents<0);
-    const days=element('p','finance-days-remaining');days.id='ac4-month-days';days.append(element('span','','Dias restantes no mês'),element('strong'));target.append(days);updateMonthCountdown();
+    const days=element('p','finance-days-remaining');days.id='ac4-month-days';days.append(element('span','','Dias restantes no mês'),element('strong'));metrics.append(days);updateMonthCountdown();updateCurrentFinance();
     if(financialSummary.invalidCount)target.append(element('p','finance-warning',`${financialSummary.invalidCount} AC4 com dados inconsistentes não incluídos no total. Confira os detalhes dos serviços.`));
     updateSimulationBanner();renderFinanceDialog();
   }
@@ -11417,8 +11490,9 @@ dialog.simulation-dialog{width:min(420px,calc(100% - 24px));max-height:calc(100d
   calendar.addEventListener('touchend', event => { if (!mobile.matches) return; const dx = event.changedTouches[0].screenX - startX, dy = event.changedTouches[0].screenY - startY; if (Math.abs(dx) > 65 && Math.abs(dx) > Math.abs(dy) * 1.4) move(dx < 0 ? 1 : -1); }, {passive: true});
   document.addEventListener('service-directory-change',event=>{ordOverrides=new Map(event.detail.map(p=>[p.name,p.ord]));renderPeriod();if(dialog.open){dialog.close();openDetails(detailDay,detailArea);}});
   document.addEventListener('calendar-schedule-change',()=>{renderPeriod();if(dialog.open){dialog.close();openDetails(detailDay,detailArea);}});
-  window.addEventListener('pageshow',()=>{updateMonthCountdown();if(rankingDialog.open)renderRankingDialog();});
-  document.addEventListener('visibilitychange',()=>{if(!document.hidden){updateMonthCountdown();if(rankingDialog.open)renderRankingDialog();}});
+  window.addEventListener('pageshow',()=>{updateMonthCountdown();updateCurrentFinance();if(rankingDialog.open)renderRankingDialog();});
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden){updateMonthCountdown();updateCurrentFinance();if(rankingDialog.open)renderRankingDialog();}});
+  window.setInterval(()=>{updateMonthCountdown();updateCurrentFinance();},60000);
   renderPeriod();
 })();
 

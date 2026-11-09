@@ -97,6 +97,27 @@ test('todos os meses cadastrados mantêm totais e acumulados consistentes',()=>{
   }
 });
 
+test('AC4 corrente inclui o dia de acesso, Operacional e SAT, sem incluir serviços posteriores',()=>{
+  const data=JSON.parse(scripts.find(([,attrs])=>attrs.includes('id="calendar-data"'))[2]),summary=finance.month(data,'2026-11',4560000);
+  const current=finance.asOf(summary,'2026-11-09');assert.equal(current.date,'2026-11-09');assert.equal(current.committedCents,1197700);assert.equal(current.operationalCents,1017700);assert.equal(current.satCents,180000);assert.equal(current.remainingCents,3362300);
+  assert.equal(current.committedCents,current.operationalCents+current.satCents);assert.equal(current.committedCents+current.remainingCents,summary.quotaCents);assert(current.committedCents<summary.committedCents);
+  assert.equal(finance.asOf(summary,'2026-11-12').committedCents,1364800);assert.equal(finance.asOf(summary,'2026-11-08').committedCents,1096600);
+});
+
+test('AC4 corrente respeita meses anteriores/futuros e não inventa cota',()=>{
+  const data=schedule([event()]),summary=finance.month(data,'2026-11',4560000);
+  assert.equal(finance.asOf(summary,'2026-10-31').committedCents,0);assert.equal(finance.asOf(summary,'2026-10-31').remainingCents,4560000);
+  assert.equal(finance.asOf(summary,'2026-12-05').committedCents,12000);assert.equal(finance.asOf(summary,'2026-12-05').cutoffDate,'2026-11-30');
+  assert.equal(finance.asOf(finance.month(data,'2026-11'),'2026-11-30').remainingCents,null);assert.throws(()=>finance.asOf(summary,'2026-11-31'),/inválida/);
+});
+
+test('acumulados correntes acompanham revisão/cancelamento e usam a data inicial dos noturnos',()=>{
+  const original=event({serviceId:'asof-night-test',start:'20h00',end:'08h00',nextDay:true,hours:12}),revised={...original,revision:2,end:'00h00',hours:4};
+  const data=schedule([original,revised],5),summary=finance.month(data,'2026-11',4560000);
+  assert.equal(finance.asOf(summary,'2026-11-04').committedCents,0);assert.equal(finance.asOf(summary,'2026-11-05').committedCents,12600);assert.equal(finance.asOf(summary,'2026-11-06').committedCents,12600);
+  revised.cancelled=true;assert.equal(finance.asOf(finance.month(data,'2026-11',4560000),'2026-11-05').committedCents,0);
+});
+
 test('cinco AC4 noturnos de LUIZ ANTONIO são previstos de 12h, sem duplicação ou execução presumida',()=>{
   const data=JSON.parse(scripts.find(([,attrs])=>attrs.includes('id="calendar-data"'))[2]);
   const summary=finance.month(data,'2026-11',4560000),dates=[12,17,19,24,26];

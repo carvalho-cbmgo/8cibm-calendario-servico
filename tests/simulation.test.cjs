@@ -149,3 +149,10 @@ test('meta inválida é rejeitada e a meta padrão continua sendo 6',()=>{
   const source=input([member('ST TESTE')]);assert.equal(simulation.plan(source,'2026-11').targetResources,6);
   for(const target of[3,11,4.5,'6',null,NaN])assert.throws(()=>simulation.plan(source,'2026-11',null,undefined,target),/meta deve ser um número inteiro de 4 a 10/);
 });
+
+test('AC4 corrente em simulação inclui apenas os acréscimos até o acesso, sem alterar o cadastro',()=>{
+  const source=data(),before=JSON.stringify(source),real=finance.month(source,'2026-11',4560000),plan=simulation.plan(source,'2026-11',4560000);
+  assert.equal(finance.asOf(plan.summary,'2026-11-09').committedCents,0);
+  const current=finance.asOf(real,'2026-11-12'),extra=finance.asOf(plan.summary,'2026-11-12');
+  assert.equal(extra.committedCents,36000);assert.equal(current.committedCents+extra.committedCents,1400800);assert.equal(current.remainingCents-extra.committedCents,3159200);assert(extra.committedCents<plan.summary.committedCents);assert.equal(JSON.stringify(source),before);
+});
