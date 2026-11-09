@@ -59,16 +59,16 @@ test('dados atuais respeitam as coberturas registradas e a TS 168, sem modificar
   assert.equal(JSON.stringify(source),before);
 });
 
-test('novembro simula 25 recursos em 18 dias, cobra cada reforço uma vez e preserva execuções',()=>{
+test('novembro simula 26 recursos em 18 dias, cobra cada reforço uma vez e preserva execuções',()=>{
   const source=data(),plan=simulation.plan(source,'2026-11',4560000),real=finance.month(source,'2026-11',4560000);
   assert.equal(source['2026-11'].days.filter(day=>day.confirmation?.status==='confirmed').length,11);
   for(let day=1;day<=11;day++)assert.equal(plan.days.get(day).addedResources,0);
   assert.equal(plan.days.get(27).addedResources,0);assert.equal(plan.days.get(13).addedResources,2);assert.equal(plan.days.get(29).addedResources,1);
-  assert.equal(plan.addedResources,25);assert.equal(plan.daysAffected,18);assert.equal(plan.summary.committedCents,2154300);
-  assert.equal(new Set(plan.summary.records.map(record=>record.key)).size,25);assert.equal(plan.summary.executedCents,0);assert.equal(plan.summary.satCents,0);
-  assert.equal(plan.summary.daily.get('2026-11-30').cumulativeCents,2154300);
+  assert.equal(plan.addedResources,26);assert.equal(plan.daysAffected,18);assert.equal(plan.summary.committedCents,2253800);
+  assert.equal(new Set(plan.summary.records.map(record=>record.key)).size,26);assert.equal(plan.summary.executedCents,0);assert.equal(plan.summary.satCents,0);
+  assert.equal(plan.summary.daily.get('2026-11-30').cumulativeCents,2253800);
   assert.equal(real.records.length,40);assert.equal(real.committedCents,1459200);assert.equal(real.executedCents,1096600);
-  assert.equal(real.committedCents+plan.summary.committedCents,3613500);assert.equal(real.remainingCents-plan.summary.committedCents,946500);
+  assert.equal(real.committedCents+plan.summary.committedCents,3713000);assert.equal(real.remainingCents-plan.summary.committedCents,847000);
 });
 
 test('tarifa acompanha cada data e o mês financeiro usa o início do reforço',()=>{
@@ -81,8 +81,8 @@ test('meta de 4 a 10 altera somente os reforços necessários, sem remover recur
   const source=data(),before=JSON.stringify(source),real=finance.month(source,'2026-11',4560000);
   const four=simulation.plan(source,'2026-11',4560000,real,4),five=simulation.plan(source,'2026-11',4560000,real,5),ten=simulation.plan(source,'2026-11',4560000,real,10);
   assert.equal(four.addedResources,0);assert.equal(four.summary.committedCents,0);assert.equal(four.days.get(12).coverage.resources,5);
-  assert.equal(five.addedResources,7);assert.equal(five.summary.committedCents,617300);
-  assert.equal(ten.addedResources,101);assert.equal(ten.daysAffected,19);assert.equal(ten.targetResources,10);
+  assert.equal(five.addedResources,8);assert.equal(five.summary.committedCents,716800);
+  assert.equal(ten.addedResources,102);assert.equal(ten.daysAffected,19);assert.equal(ten.targetResources,10);
   for(const day of source['2026-11'].days){const planned=ten.days.get(day.day);assert.equal(planned.addedResources,day.confirmation?.status==='confirmed'?0:10-planned.coverage.resources);}
   assert.equal(ten.summary.quotaCents,4560000);assert(real.remainingCents-ten.summary.committedCents<0);assert.equal(JSON.stringify(source),before);
 });

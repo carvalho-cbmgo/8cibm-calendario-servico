@@ -4431,12 +4431,19 @@ dialog.simulation-dialog{width:min(420px,calc(100% - 24px));max-height:calc(100d
             "name": "ST OSVALDIR",
             "badges": [
               {
-                "kind": "ord",
-                "text": "ORDINÁRIO"
+                "kind": "disp",
+                "text": "TS CIA · Dispensado",
+                "hours": 24,
+                "troca": {
+                  "numero": null,
+                  "sei": "97939827",
+                  "dispensa": "2026-11-28",
+                  "pagamento": "2026-12-05"
+                }
               }
             ],
             "notes": [
-              "Ordinário"
+              "TS CIA — Dispensado em 28/11; pagamento em 05/12. SEI 97939827"
             ],
             "events": [],
             "ord": 4
@@ -4506,8 +4513,8 @@ dialog.simulation-dialog{width:min(420px,calc(100% - 24px));max-height:calc(100d
           }
         ],
         "coverage": [
-          "5 recursos de 24h",
-          "Faltam 1 recurso"
+          "4 recursos de 24h",
+          "Faltam 2 recursos"
         ],
         "alerts": []
       },
@@ -5121,6 +5128,27 @@ dialog.simulation-dialog{width:min(420px,calc(100% - 24px));max-height:calc(100d
         "ala": "BRAVO",
         "members": [
           {
+            "name": "ST OSVALDIR",
+            "badges": [
+              {
+                "kind": "pay",
+                "text": "TS CIA · Pagando",
+                "hours": 24,
+                "troca": {
+                  "numero": null,
+                  "sei": "97939827",
+                  "dispensa": "2026-11-28",
+                  "pagamento": "2026-12-05"
+                }
+              }
+            ],
+            "notes": [
+              "TS CIA — Pagando serviço em 05/12, referente à dispensa de 28/11. SEI 97939827"
+            ],
+            "events": [],
+            "ord": 4
+          },
+          {
             "name": "ST TAVARES",
             "badges": [
               {
@@ -5192,8 +5220,8 @@ dialog.simulation-dialog{width:min(420px,calc(100% - 24px));max-height:calc(100d
           }
         ],
         "coverage": [
-          "5 recursos de 24h",
-          "Faltam 1 recurso"
+          "6 recursos de 24h",
+          "Meta de 6 recursos"
         ],
         "alerts": []
       },
