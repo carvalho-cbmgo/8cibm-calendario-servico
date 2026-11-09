@@ -6,7 +6,7 @@ A [conferência do consolidado de trocas de 08/11/2026](docs/conferencia-trocas-
 
 A [conferência das trocas com a companhia](docs/conferencia-trocas-companhia-2026-11-08.md) registra as 7 autorizações aplicáveis ao período do calendário e a inclusão da dispensa de OSVALDIR em 28/11 com pagamento em 05/12. O histórico de janeiro/2026 do PDF não é transferido para janeiro/2027.
 
-O cabeçalho diário apresenta a cobertura registrada em recursos de 24h, a quantidade de militares em serviço ordinário operacional (incluindo TS e TS CIA de pagamento, excluindo dispensas e trocas pendentes) e a quantidade de AC4 ativos do Operacional, incluindo PROEBOM e jornadas parciais. A SAT permanece separada. As duas contagens de serviços não equivalem necessariamente à cobertura de 24h.
+A linha OPERACIONAL apresenta a cobertura registrada em recursos de 24h, alinhada à direita. O cabeçalho diário apresenta a confirmação da escala no canto superior direito, a quantidade de militares em serviço ordinário operacional (incluindo TS e TS CIA de pagamento, excluindo dispensas e trocas pendentes) e a quantidade de AC4 ativos do Operacional, incluindo PROEBOM e jornadas parciais. A SAT permanece separada. As duas contagens de serviços não equivalem necessariamente à cobertura de 24h.
 
 No computador com mouse, o cartão sob o ponteiro recebe um fundo suave para acompanhar a leitura: azul nas previsões e verde nas escalas confirmadas. As cores dos badges e valores são mantidas. O destaque não se aplica ao celular ou à impressão, e respeita a preferência por movimento reduzido.
 
