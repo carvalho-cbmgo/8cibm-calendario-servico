@@ -596,7 +596,6 @@ dialog.simulation-dialog{width:min(420px,calc(100% - 24px));max-height:calc(100d
 .day-resources .chip{flex:0 0 auto;width:max-content;min-width:0;min-height:var(--resource-row-height);font-size:10.5px;line-height:1.2;padding:2px 4px;letter-spacing:0;white-space:nowrap}
 .resource-summary{display:flex;grid-column:2;grid-row:1/span 2;align-self:stretch;flex-direction:column;align-items:flex-end;gap:3px;min-width:0;min-height:0;font-size:11px;line-height:1.25;text-align:right}
 .resource-summary>.resource-total{color:#0000FF;font-weight:500}
-.resource-summary>.resource-status{color:#617086;font-weight:400}
 .resource-summary>.day-state{flex:0 0 auto;flex-direction:row;justify-content:flex-end;align-items:center;align-self:flex-end;margin-top:auto;white-space:nowrap}
 .resource-summary .scale-confirmed-label{font-size:9px;line-height:1.25;padding:1px 5px}
 @media screen and (max-width:760px){
@@ -10947,13 +10946,11 @@ dialog.simulation-dialog{width:min(420px,calc(100% - 24px));max-height:calc(100d
     if(confirmed){const label=element('span','scale-confirmed-label','Escala confirmada');label.title='Escala confirmada pelo usuário';dayState.append(label);}
     const resources=element('div','day-resources');resources.setAttribute('aria-label','Recursos do serviço operacional');
     const simulatedCoverage=simulationActive&&!confirmed&&simulated.coverage.valid;
-    const total=element('span','resource-total',simulatedCoverage?`${simulated.coverage.resources+added} recursos de 24h`:day.coverage[0]);total.title=simulatedCoverage?`${simulated.coverage.resources} recursos cadastrados + ${added} simulados. Meta de ${simulationTarget} recursos de 24h. Dois períodos complementares de 12h equivalem a um recurso de 24h.`:'Recursos de 24h, conforme a cobertura operacional registrada.';
-    const shortage=day.coverage[1].match(/^Faltam?\s+(\d+)\s+recursos?$/i),missing=shortage?Number(shortage[1]):null;
-    const status=element('span','resource-status',simulatedCoverage?`Meta de ${simulationTarget} recursos`:missing===null?day.coverage[1]:missing===1?'Falta 1 recurso':`Faltam ${missing} recursos`);
+    const total=element('span','resource-total',simulatedCoverage?`${simulated.coverage.resources+added} recursos de 24h`:day.coverage[0]);total.title=simulatedCoverage?`${simulated.coverage.resources} recursos cadastrados + ${added} simulados. Dois períodos complementares de 12h equivalem a um recurso de 24h.`:'Recursos de 24h, conforme a cobertura operacional registrada.';
     const ordinary=element('span','chip ord resource-ordinary',`${counts.ordinary} ORD`);ordinary.title='Militares em serviço ordinário operacional, incluindo TS e TS CIA de pagamento. Dispensas e trocas pendentes não entram nesta contagem.';ordinary.setAttribute('aria-label',`${counts.ordinary} recursos de serviço ordinário`);
     const ac4=element('span','chip ac4 resource-ac4',`${counts.ac4+added} AC4`);ac4.title=`Serviços AC4 ativos do Operacional, incluindo PROEBOM e jornadas parciais. SAT contabilizada separadamente.${added?` Inclui ${added} reforços simulados.`:''}`;
     const primary=element('div','day-primary');resources.append(ordinary,ac4);primary.append(date,resources);
-    const summary=element('div','resource-summary');summary.setAttribute('role','group');summary.setAttribute('aria-label','Resumo dos recursos e confirmação do dia');summary.append(total,status);if(confirmed)summary.append(dayState);head.append(primary,summary);
+    const summary=element('div','resource-summary');summary.setAttribute('role','group');summary.setAttribute('aria-label','Resumo dos recursos e confirmação do dia');summary.append(total);if(confirmed)summary.append(dayState);head.append(primary,summary);
     const list = element('ul', 'entry-list operational-list');
     for (const [index, member] of members.entries()) {
       const row = element('li', `entry ${memberClasses(member)}`);
