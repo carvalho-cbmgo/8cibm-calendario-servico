@@ -233,3 +233,36 @@ test('reforço adicional entra somente com AC4 até o corte e fica sem antiguida
   const full=finance.ranking(summary,'2026-12-01',true,{...options,includeOfficers:true});
   assert.equal(full.totalCents,summary.committedCents);assert.equal(full.totalCents,1658700);
 });
+
+test('ranking filtra início e fim inclusivos, somando Operacional e SAT pela data inicial do AC4',()=>{
+  const data=JSON.parse(scripts.find(([,attrs])=>attrs.includes('id="calendar-data"'))[2]),summary=finance.month(data,'2026-11');
+  const range=(startDate,endDate)=>finance.ranking(summary,'2026-11-09',true,{startDate,endDate});
+  const result=range('2026-11-12','2026-11-26');assert.equal(result.startDate,'2026-11-12');assert.equal(result.cutoffDate,'2026-11-26');assert.equal(result.recordCount,10);assert.equal(result.totalCents,377000);assert.equal(result.executedCents,0);assert.equal(result.forecastCents,377000);
+  const luiz=result.rows.find(person=>person.member==='2º SGT LUIZ ANTONIO');assert.equal(luiz.records.length,5);assert.equal(luiz.monthlyRecords.length,8);assert.equal(luiz.totalCents,199500);assert.equal(result.rows[0].member,'2º SGT LUIZ ANTONIO');
+  const twelfth=range('2026-11-12','2026-11-12');assert.equal(twelfth.operationalCents,41100);assert.equal(twelfth.satCents,42000);assert.equal(twelfth.totalCents,83100);
+  const thirteenth=range('2026-11-13','2026-11-13');assert.equal(thirteenth.totalCents,135500);assert(!thirteenth.rows.some(person=>person.member==='2º SGT LUIZ ANTONIO'));
+  assert.equal(range('2026-11-01','2026-11-30').totalCents,summary.committedCents);
+});
+
+test('intervalos sem AC4 mantêm os 27 praças, e filtros de oficiais e antiguidade usam os valores do período',()=>{
+  const data=JSON.parse(scripts.find(([,attrs])=>attrs.includes('id="calendar-data"'))[2]),summary=finance.month(data,'2026-11'),options={startDate:'2026-11-20',endDate:'2026-11-23',personnel:rankingPersonnel,includeOfficers:false};
+  const empty=finance.ranking(summary,'2026-11-09',true,options);assert.equal(empty.rows.length,27);assert.equal(empty.totalCents,0);assert.equal(empty.recordCount,0);assert(!empty.rows.some(person=>person.member==='1º SGT FERREIRA'));
+  const all=finance.ranking(summary,'2026-11-09',true,{...options,startDate:'2026-11-12',endDate:'2026-11-26',includeOfficers:true,sortBySeniority:true});assert.equal(all.rows.length,30);assert.deepEqual(plain(all.rows.map(person=>person.ord)),Array.from({length:30},(_,index)=>index+1));assert.equal(all.totalCents,377000);
+});
+
+test('ranking rejeita datas inválidas, fora do mês e intervalos invertidos',()=>{
+  const summary=finance.month(schedule([event()]),'2026-11');
+  for(const [startDate,endDate] of [['2026-11-31','2026-11-31'],['2026-10-31','2026-11-05'],['2026-11-01','2026-12-01'],['2026-11-05','2026-11-04'],['','2026-11-04'],[null,'2026-11-04']])assert.throws(()=>finance.ranking(summary,'2026-11-09',true,{startDate,endDate}),/ranking|selecionado/);
+});
+
+test('todos os intervalos dos meses cadastrados conferem com a diferença dos acumulados financeiros',()=>{
+  const data=JSON.parse(scripts.find(([,attrs])=>attrs.includes('id="calendar-data"'))[2]);
+  for(const period of Object.keys(data)){
+    const summary=finance.month(data,period),days=[...summary.daily.values()].sort((a,b)=>a.date.localeCompare(b.date));
+    for(let start=0;start<days.length;start++)for(let end=start;end<days.length;end++){
+      const result=finance.ranking(summary,'2026-11-09',true,{startDate:days[start].date,endDate:days[end].date});
+      assert.equal(result.totalCents,days[end].cumulativeCents-(days[start-1]?.cumulativeCents||0));assert.equal(result.operationalCents,days[end].cumulativeOperationalCents-(days[start-1]?.cumulativeOperationalCents||0));assert.equal(result.satCents,days[end].cumulativeSatCents-(days[start-1]?.cumulativeSatCents||0));
+      assert.equal(result.totalCents,result.executedCents+result.forecastCents);assert(result.rows.every((person,index)=>!index||result.rows[index-1].totalCents>=person.totalCents));
+    }
+  }
+});
