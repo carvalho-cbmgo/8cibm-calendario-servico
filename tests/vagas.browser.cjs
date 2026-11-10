@@ -1,0 +1,81 @@
+const assert=require('node:assert/strict');
+const fs=require('node:fs'),http=require('node:http'),path=require('node:path');
+const {chromium}=require('playwright');
+const root=path.join(__dirname,'..');
+(async()=>{
+ const server=http.createServer((req,res)=>{
+  const file={'/':'index.html','/index.html':'index.html','/assets/cbmgo-emblema.png':'assets/cbmgo-emblema.png','/assets/whatsapp.svg':'assets/whatsapp.svg'}[req.url];
+  if(!file){res.writeHead(404);res.end();return;}
+  res.setHeader('Content-Type',file.endsWith('.png')?'image/png':file.endsWith('.svg')?'image/svg+xml':'text/html; charset=utf-8');res.end(fs.readFileSync(path.join(root,file)));
+ });let browser;
+ try{
+  await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
+  browser=await chromium.launch({executablePath:process.env.CHROMIUM_EXECUTABLE_PATH||(fs.existsSync('/usr/bin/chromium')?'/usr/bin/chromium':undefined),headless:true,args:['--no-sandbox']});
+  const page=await browser.newPage({viewport:{width:1280,height:1000},timezoneId:'America/Sao_Paulo'}),errors=[];page.on('pageerror',error=>errors.push(error.message));
+  await page.clock.setFixedTime(new Date('2026-11-10T15:00:00Z'));
+  await page.addInitScript(()=>{
+   window.copiedText=null;window.copiedHTML=null;window.failTextCopy=false;window.fallbackCopies=0;
+   Object.defineProperty(navigator,'clipboard',{configurable:true,value:{
+    writeText:async text=>{if(window.failTextCopy)throw new Error('Teste da alternativa de cópia');window.copiedText=text;},
+    write:async items=>{window.copiedHTML=await (await items[0].getType('text/html')).text();}
+   }});
+   document.execCommand=command=>{if(command==='copy'){window.copiedText=document.activeElement.value;window.fallbackCopies++;return true;}return false;};
+  });
+  await page.goto(`http://127.0.0.1:${server.address().port}/`);
+  const source=await page.evaluate(()=>JSON.stringify(window.ServiceCalendar.schedules));
+  const icon=page.locator('#whatsapp-vacancies-button'),dialog=page.locator('#vacancy-dialog'),tooltip=page.locator('#exchange-tooltip');
+  assert.equal(await icon.evaluate(el=>el.previousElementSibling.dataset.filter),'DELTA');assert(await icon.locator('img').evaluate(el=>el.complete&&el.naturalWidth>0));
+  const hint=async(ala,text)=>{await page.locator(`[data-filter="${ala}"]`).hover();await tooltip.waitFor({state:'visible'});assert((await tooltip.textContent()).includes(text));};
+  await hint('ALPHA','ST DA SILVA');assert.equal(await tooltip.locator('p').count(),7);assert((await tooltip.textContent()).includes('2º SGT CÉSAR VIEIRA (Férias: 02/11/2026 a 01/12/2026)'));assert(!(await tooltip.textContent()).includes('DA SILVA ('));
+  await hint('DELTA','1º SGT HAMILTON (Férias: 05/11/2026 a 04/12/2026)');assert((await tooltip.textContent()).includes('SD SANTOS (Dispensa recompensa: 13/11/2026)'));
+  await page.locator('[data-filter="BRAVO"]').focus();assert((await tooltip.textContent()).includes('1º SGT HELLYSSON'));await page.keyboard.press('Escape');assert(await tooltip.isHidden());
+  await page.locator('[data-filter="CHARLIE"]').click();assert.equal(await page.locator('.day:not(.is-hidden)').count(),7);await page.locator('[data-filter="TODAS"]').click();
+  await icon.click();assert(await dialog.evaluate(el=>el.open));assert(await page.evaluate(()=>document.documentElement.classList.contains('vacancy-dialog-open')));
+  assert.equal(await page.locator('#vacancy-start').inputValue(),'2026-11-10');assert.equal(await page.locator('#vacancy-end').inputValue(),'2026-11-30');assert.equal(await page.locator('#vacancy-end option').count(),30);
+  const range=async(start,end)=>{await page.locator('#vacancy-start').selectOption(start);await page.locator('#vacancy-end').selectOption(end);};
+  await range('2026-11-12','2026-11-14');
+  const expected=await page.evaluate(()=>{const {schedules,period,quotas}=window.ServiceCalendar,plan=window.ServiceSimulation.plan(schedules,period,quotas[period]);return window.ServiceVacancies.build(schedules,period,plan,'2026-11-12','2026-11-14').message;});
+  assert.equal(await page.locator('#vacancy-message').inputValue(),expected);assert(expected.includes('AC4 12h (08h às 20h)'));assert(expected.includes('Voluntários (02 vagas)'));
+  await page.locator('#vacancy-copy').click();assert.equal(await page.evaluate(()=>window.copiedText),expected);assert((await page.locator('#vacancy-copy-status').textContent()).includes('Mensagem copiada'));
+  await page.evaluate(()=>window.failTextCopy=true);await page.locator('#vacancy-copy').click();assert.equal(await page.evaluate(()=>window.fallbackCopies),1);assert.equal(await page.evaluate(()=>window.copiedText),expected);await page.evaluate(()=>window.failTextCopy=false);
+  await range('2026-11-10','2026-11-11');assert((await page.locator('#vacancy-message').inputValue()).includes('Sem vagas de AC4 na simulação.'));assert.equal((await page.locator('#vacancy-message').inputValue()).match(/Sem vagas/g).length,2);
+  await page.locator('#vacancy-start').selectOption('2026-11-17');assert.equal(await page.locator('#vacancy-end').inputValue(),'2026-11-17');assert.equal((await page.locator('#vacancy-message').inputValue()).match(/\*17\/11/g).length,2);
+  await page.locator('#vacancy-end').selectOption('2026-11-12');assert.equal(await page.locator('#vacancy-start').inputValue(),'2026-11-12');
+  await page.keyboard.press('Escape');assert(await dialog.isHidden());assert(!(await page.evaluate(()=>document.documentElement.classList.contains('vacancy-dialog-open'))));
+  const configure=async target=>{await page.locator('[data-ac4-simulation]').click();await page.locator('#ac4-simulation-target').selectOption(String(target));await page.locator('#ac4-simulation-confirm').click();};
+  await configure(10);await icon.click();await range('2026-11-13','2026-11-13');assert((await page.locator('#vacancy-message').inputValue()).includes('Voluntários (06 vagas)'));assert((await page.locator('#vacancy-summary').textContent()).includes('10 recursos'));
+  await page.locator('#vacancy-close').click();await configure(6);
+  // Only fictitious identification data are imported to exercise the SEI clipboard.
+  await page.evaluate(async()=>{
+   const roster=JSON.parse(document.getElementById('ranking-personnel').textContent),members=Object.values(window.ServiceCalendar.schedules).flatMap(month=>month.days.flatMap(day=>[...day.members,...(day.sat?.members||[])])),names=[...new Set(members.map(member=>member.name))];
+   const people=names.map(name=>{const match=name.match(/^(CAP|ASP OF|ST|[123]º SGT|CB|SD(?: [12]ª CL)?) (.+)$/),war=match[2];return {identificacao_site:name,graduacao:`${match[1]} ${match[1]==='CAP'?'QOC':'QP/COMBATENTE'}`,rg:'9999',nome_completo:`${war} MILITAR DE TESTE`,nome_guerra:war,cpf_mascarado:'***.123.456-**',ord:roster.find(person=>person.name===name)?.ord??null};});
+   await window.ServiceDirectory.importFile(new File([JSON.stringify({pessoal_referencia:people})],'cadastro-ficticio.json',{type:'application/json'}));
+  });
+  const expand=async day=>{const card=page.locator(`.day[data-day="${day}"]`),button=card.locator('[data-area-toggle="operational"]');if(await button.getAttribute('aria-expanded')==='false')await button.click();return card;};
+  for(const [day,pay,related] of [[3,false,'10/11/2026'],[10,true,'03/11/2026']]){
+   const card=await expand(day),badge=card.locator('[data-company-sei="97766395"]');await badge.hover();assert.equal(await tooltip.locator('p').first().textContent(),'TS CIA (SEI 97766395)');assert((await tooltip.textContent()).includes(related));await badge.click({button:'right'});assert.equal(await page.evaluate(()=>window.copiedText),'97766395');await page.keyboard.press('Escape');
+   await card.locator('.operational-section [data-sei-day]').click();
+   const row=page.locator('#sei-scale-table tbody tr').filter({hasText:'CAVALCANTE'}),obs=row.locator('td').nth(4);
+   assert.equal(await obs.locator('strong').nth(0).textContent(),'TS Cia Operacional (SEI 97766395)');assert.equal(await obs.locator('strong').nth(1).textContent(),pay?'Pagando serviço':'Dispensado do serviço');assert((await obs.textContent()).includes(related));assert.equal(await obs.locator('strong').count(),2);
+   assert.equal(await row.evaluate(el=>getComputedStyle(el).color),pay?'rgb(37, 99, 179)':'rgb(192, 0, 0)');assert(!(await page.locator('#sei-validation').textContent()).includes('numeração própria'));
+   await page.locator('#sei-copy-scale').click();await page.waitForFunction(()=>window.copiedHTML!==null);
+   const payload=await page.evaluate(()=>{const node=document.createElement('div');node.innerHTML=window.copiedHTML;const row=[...node.querySelectorAll('tr')].find(row=>row.textContent.includes('CAVALCANTE'));return {header:!!node.querySelector('thead,th'),colors:[...row.cells].map(cell=>cell.style.color),obs:row.cells[4].innerHTML};});
+   assert(!payload.header);assert(payload.colors.every(color=>color===(pay?'rgb(37, 99, 179)':'rgb(192, 0, 0)')));assert(payload.obs.startsWith('<strong>TS Cia Operacional (SEI 97766395)</strong><br><strong>'));await page.evaluate(()=>window.copiedHTML=null);await page.locator('#sei-close').click();
+  }
+  await page.locator('#mes-seguinte').click();await hint('ALPHA','ST DA SILVA');assert(!(await tooltip.textContent()).includes('DA SILVA ('));assert((await tooltip.textContent()).includes('CÉSAR VIEIRA (Férias:'));await hint('DELTA','HAMILTON (Férias:');assert(!(await tooltip.textContent()).includes('SANTOS ('));
+  let card=await expand(4),silva=card.locator('.operational-roster .entry').filter({hasText:'ST DA SILVA'});assert((await silva.textContent()).includes('ORDINÁRIO'));assert((await silva.textContent()).includes('ACA'));assert(!(await silva.textContent()).includes('FÉRIAS'));assert.equal(await card.locator('.simulation-entry').count(),0);
+  await page.locator('#mes-seguinte').click();await hint('ALPHA','ST DA SILVA');assert(!(await tooltip.textContent()).includes('Férias'));await hint('DELTA','1º SGT HAMILTON');assert(!(await tooltip.textContent()).includes('Férias'));card=await expand(1);assert((await card.locator('.operational-roster .entry').filter({hasText:'ST DA SILVA'}).textContent()).includes('ORDINÁRIO'));
+  await page.locator('#mes-anterior').click();await page.locator('#mes-anterior').click();
+  for(const width of [320,390,760,761,1280,1800]){
+   await page.setViewportSize({width,height:900});await icon.click();await range('2026-11-12','2026-11-14');
+   const geometry=await page.evaluate(()=>{const dialog=document.getElementById('vacancy-dialog'),r=dialog.getBoundingClientRect();return {overflow:document.documentElement.scrollWidth>innerWidth,dialogOverflow:dialog.scrollWidth>dialog.clientWidth,left:r.left,right:r.right,top:r.top,bottom:r.bottom};});
+   assert(!geometry.overflow,`página ${width}`);assert(!geometry.dialogOverflow,`janela ${width}`);assert(geometry.left>=0&&geometry.right<=width&&geometry.top>=0&&geometry.bottom<=900,`janela cabe na tela ${width}`);
+   if([320,390,1280].includes(width))await dialog.screenshot({path:`/tmp/vagas-whatsapp-${width}.png`});await page.locator('#vacancy-close').click();
+   const filters=await page.locator('.filters button').evaluateAll(buttons=>buttons.map(button=>{const r=button.getBoundingClientRect(),range=document.createRange();range.selectNodeContents(button);return {width:button.clientWidth,scroll:button.scrollWidth,top:r.top,bottom:r.bottom,textRight:range.getBoundingClientRect().right,right:r.right};}));
+   assert(filters.every(button=>button.scroll<=button.width),`filtro cortado ${width}`);assert(filters.every(button=>Math.abs(button.top-filters[0].top)<1),`filtros mesma linha ${width}`);
+   await hint('ALPHA','ST DA SILVA');const box=await tooltip.boundingBox();assert(box.x>=0&&box.x+box.width<=width,`dica ${width}`);await page.keyboard.press('Escape');
+  }
+  assert.equal(await page.evaluate(()=>JSON.stringify(window.ServiceCalendar.schedules)),source);assert.deepEqual(errors,[]);
+  console.log('PASS: TS CIA somente SEI, observações/negritos/cores na ES e na cópia, cancelamento de férias, dicas por ala/mês, vagas agrupadas com horários complementares, todos os dias, seletores, meta, cópia e alternativa; 320–1800px sem conteúdo cortado.');
+ }finally{if(browser)await browser.close();await new Promise(resolve=>server.close(resolve));}
+})().catch(error=>{console.error(error);process.exitCode=1;});

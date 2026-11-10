@@ -698,6 +698,23 @@ dialog.simulation-dialog{width:min(420px,calc(100% - 24px));max-height:calc(100d
  .current-finance h2,.current-finance time,.current-finance-label,.current-finance-amount,.current-finance-share{color:#38516b!important}
  .current-finance-scroll{overflow:visible}
 }
+
+/* The WhatsApp shortcut uses the same row as the wing filters. */
+.filters #whatsapp-vacancies-button{display:inline-flex;align-items:center;justify-content:center;padding:4px 7px;min-width:38px;background:#fff;border-color:#bddcc8}
+.whatsapp-button img{display:block;width:24px;height:24px}
+.vacancy-dialog{width:min(540px,calc(100% - 24px));max-height:90dvh}
+.vacancy-body{padding:14px 16px 18px;font-size:14px;color:#38516b}
+.vacancy-summary,.vacancy-help{margin:10px 0;font-size:13px;line-height:1.45;color:#62758a}
+.vacancy-message-label{display:block;margin-bottom:5px;font-weight:650}
+#vacancy-message{display:block;width:100%;max-height:38dvh;min-height:190px;resize:vertical;padding:10px;border:1px solid #c8d7e7;border-radius:8px;background:#f8fafc;color:#243e56;font:14px/1.45 ui-monospace,SFMono-Regular,Consolas,monospace}
+#vacancy-message:focus-visible{outline:3px solid #94baff;outline-offset:2px}
+#vacancy-copy{min-height:44px;padding:9px 16px;border:1px solid #128541;border-radius:8px;background:#128541;color:white;font:inherit;font-weight:700;cursor:pointer}
+#vacancy-copy:disabled{opacity:.5;cursor:default}
+.vacancy-copy-status{min-height:1.4em;font-size:13px;color:#17634b}
+html.vacancy-dialog-open,html.vacancy-dialog-open body{overflow:hidden;overscroll-behavior:none}
+@media screen and (max-width:760px){.filters{grid-template-columns:repeat(5,minmax(0,1fr)) 44px}.filters #whatsapp-vacancies-button{padding:4px}.whatsapp-button img{width:30px;height:30px}.vacancy-body{padding:12px;font-size:15px}}
+@media screen and (max-width:350px){.filters{column-gap:4px}}
+@media print{.vacancy-dialog,.whatsapp-button{display:none!important}}
 </style></head><body><main>
 <p class="page-copyright">© 2026 ASP OF CARVALHO. Todos os direitos reservados.</p>
 <header class="header">
@@ -712,12 +729,24 @@ dialog.simulation-dialog{width:min(420px,calc(100% - 24px));max-height:calc(100d
  <section id="ac4-month-summary" class="monthly-finance" aria-label="Controle mensal da cota AC4" aria-live="polite"></section>
 </header>
 <section class="simulation-banner" id="ac4-simulation-status" role="status" aria-live="polite" hidden></section>
-<div class="filterbar"><div aria-label="Filtrar alas" class="filters" role="group"><button aria-pressed="true" data-filter="TODAS" type="button">Todas as alas</button><button aria-pressed="false" data-filter="ALPHA" type="button">Alpha</button><button aria-pressed="false" data-filter="BRAVO" type="button">Bravo</button><button aria-pressed="false" data-filter="CHARLIE" type="button">Charlie</button><button aria-pressed="false" data-filter="DELTA" type="button">Delta</button></div><small>Serviço operacional e previsões PROEBOM · Clique no AC4 com OS definida para copiar o SEI.</small></div>
+<div class="filterbar"><div aria-label="Filtrar alas" class="filters" role="group"><button aria-pressed="true" data-filter="TODAS" type="button">Todas as alas</button><button aria-pressed="false" data-filter="ALPHA" type="button">Alpha</button><button aria-pressed="false" data-filter="BRAVO" type="button">Bravo</button><button aria-pressed="false" data-filter="CHARLIE" type="button">Charlie</button><button aria-pressed="false" data-filter="DELTA" type="button">Delta</button><button type="button" id="whatsapp-vacancies-button" class="whatsapp-button" aria-label="Gerar mensagem de vagas de AC4 para WhatsApp" aria-haspopup="dialog" aria-controls="vacancy-dialog" title="Vagas de AC4 para WhatsApp"><img src="assets/whatsapp.svg" width="24" height="24" alt=""/></button></div><small>Serviço operacional e previsões PROEBOM · Clique no AC4 com OS definida para copiar o SEI.</small></div>
 <nav aria-label="Navegação entre os dias" class="mobile-nav"><button aria-label="Dia anterior" id="dia-anterior" type="button">‹</button><div class="mobile-nav-center"><select aria-label="Selecionar dia de serviço" id="selecionar-dia"></select><span aria-live="polite" class="mobile-nav-count" id="indicador-dias"></span></div><button aria-label="Próximo dia" id="dia-seguinte" type="button">›</button></nav><div aria-label="Calendário de novembro de 2026" class="calendar" id="calendario"></div>
 <section class="empty-state" id="sem-previsao" role="status" hidden><h2>Sem previsão cadastrada</h2><p>Não há dados de serviço cadastrados para <strong id="competencia-vazia"></strong>.</p><button type="button" id="voltar-competencia">Voltar a Novembro/2026</button></section>
 <noscript>Ative o JavaScript para selecionar o período e visualizar a previsão de serviço.</noscript>
 <div class="info"><strong>Regras e ressalvas:</strong> as informações apresentadas aqui são previsões do planejamento da escala, o que não substitui a Escala de Serviço e Ordem de Serviço homologadas.</div>
 </main>
+<dialog id="vacancy-dialog" class="vacancy-dialog" aria-labelledby="vacancy-title" aria-modal="true">
+ <div class="dialog-heading"><h2 id="vacancy-title">Vagas de AC4 para WhatsApp</h2><button type="button" class="dialog-close" id="vacancy-close">Fechar</button></div>
+ <div class="vacancy-body">
+  <div class="ranking-range"><label for="vacancy-start">Início<select id="vacancy-start"></select></label><label for="vacancy-end">Fim<select id="vacancy-end"></select></label></div>
+  <p id="vacancy-summary" class="vacancy-summary" role="status"></p>
+  <label class="vacancy-message-label" for="vacancy-message">Mensagem para copiar</label>
+  <textarea id="vacancy-message" rows="10" readonly spellcheck="false" aria-describedby="vacancy-help"></textarea>
+  <p id="vacancy-help" class="vacancy-help">Os títulos ficarão em negrito ao colar no WhatsApp. As linhas de voluntários ficam em branco para preenchimento.</p>
+  <p id="vacancy-copy-status" class="vacancy-copy-status" role="status" aria-live="polite"></p>
+  <button type="button" id="vacancy-copy">Copiar mensagem</button>
+ </div>
+</dialog>
 <dialog id="ac4-simulation-config" class="simulation-dialog" aria-labelledby="ac4-simulation-config-title" aria-describedby="ac4-simulation-config-description" aria-modal="true">
  <form id="ac4-simulation-form">
   <h2 id="ac4-simulation-config-title">Simulação de reforço AC4</h2>
@@ -5197,22 +5226,15 @@ dialog.simulation-dialog{width:min(420px,calc(100% - 24px));max-height:calc(100d
             "name": "ST DA SILVA",
             "badges": [
               {
-                "kind": "disp",
-                "text": "FÉRIAS"
+                "kind": "ord",
+                "text": "ORDINÁRIO"
               }
             ],
             "notes": [
-              "Férias de 04/12/2026 a 02/01/2027 (30 dias). Documento SEI a informar. Não integra o efetivo disponível."
+              "Ordinário"
             ],
             "events": [],
-            "ord": 5,
-            "afastamento": {
-              "tipo": "ferias",
-              "inicio": "2026-12-04",
-              "termino": "2027-01-02",
-              "dias": 30,
-              "sei": null
-            }
+            "ord": 5
           },
           {
             "name": "ST AISLAN",
@@ -5286,8 +5308,8 @@ dialog.simulation-dialog{width:min(420px,calc(100% - 24px));max-height:calc(100d
           }
         ],
         "coverage": [
-          "5 recursos de 24h",
-          "Faltam 1 recurso"
+          "6 recursos de 24h",
+          "Meta de 6 recursos"
         ],
         "alerts": []
       },
@@ -5570,22 +5592,15 @@ dialog.simulation-dialog{width:min(420px,calc(100% - 24px));max-height:calc(100d
             "name": "ST DA SILVA",
             "badges": [
               {
-                "kind": "disp",
-                "text": "FÉRIAS"
+                "kind": "ord",
+                "text": "ORDINÁRIO"
               }
             ],
             "notes": [
-              "Férias de 04/12/2026 a 02/01/2027 (30 dias). Documento SEI a informar. Não integra o efetivo disponível."
+              "Ordinário"
             ],
             "events": [],
-            "ord": 5,
-            "afastamento": {
-              "tipo": "ferias",
-              "inicio": "2026-12-04",
-              "termino": "2027-01-02",
-              "dias": 30,
-              "sei": null
-            }
+            "ord": 5
           },
           {
             "name": "ST AISLAN",
@@ -5659,8 +5674,8 @@ dialog.simulation-dialog{width:min(420px,calc(100% - 24px));max-height:calc(100d
           }
         ],
         "coverage": [
-          "5 recursos de 24h",
-          "Faltam 1 recurso"
+          "6 recursos de 24h",
+          "Meta de 6 recursos"
         ],
         "alerts": []
       },
@@ -5922,22 +5937,15 @@ dialog.simulation-dialog{width:min(420px,calc(100% - 24px));max-height:calc(100d
             "name": "ST DA SILVA",
             "badges": [
               {
-                "kind": "disp",
-                "text": "FÉRIAS"
+                "kind": "ord",
+                "text": "ORDINÁRIO"
               }
             ],
             "notes": [
-              "Férias de 04/12/2026 a 02/01/2027 (30 dias). Documento SEI a informar. Não integra o efetivo disponível."
+              "Ordinário"
             ],
             "events": [],
-            "ord": 5,
-            "afastamento": {
-              "tipo": "ferias",
-              "inicio": "2026-12-04",
-              "termino": "2027-01-02",
-              "dias": 30,
-              "sei": null
-            }
+            "ord": 5
           },
           {
             "name": "ST AISLAN",
@@ -6011,8 +6019,8 @@ dialog.simulation-dialog{width:min(420px,calc(100% - 24px));max-height:calc(100d
           }
         ],
         "coverage": [
-          "5 recursos de 24h",
-          "Faltam 1 recurso"
+          "6 recursos de 24h",
+          "Meta de 6 recursos"
         ],
         "alerts": []
       },
@@ -6267,22 +6275,15 @@ dialog.simulation-dialog{width:min(420px,calc(100% - 24px));max-height:calc(100d
             "name": "ST DA SILVA",
             "badges": [
               {
-                "kind": "disp",
-                "text": "FÉRIAS"
+                "kind": "ord",
+                "text": "ORDINÁRIO"
               }
             ],
             "notes": [
-              "Férias de 04/12/2026 a 02/01/2027 (30 dias). Documento SEI a informar. Não integra o efetivo disponível."
+              "Ordinário"
             ],
             "events": [],
-            "ord": 5,
-            "afastamento": {
-              "tipo": "ferias",
-              "inicio": "2026-12-04",
-              "termino": "2027-01-02",
-              "dias": 30,
-              "sei": null
-            }
+            "ord": 5
           },
           {
             "name": "ST AISLAN",
@@ -6356,8 +6357,8 @@ dialog.simulation-dialog{width:min(420px,calc(100% - 24px));max-height:calc(100d
           }
         ],
         "coverage": [
-          "5 recursos de 24h",
-          "Faltam 1 recurso"
+          "6 recursos de 24h",
+          "Meta de 6 recursos"
         ],
         "alerts": []
       },
@@ -6612,22 +6613,15 @@ dialog.simulation-dialog{width:min(420px,calc(100% - 24px));max-height:calc(100d
             "name": "ST DA SILVA",
             "badges": [
               {
-                "kind": "disp",
-                "text": "FÉRIAS"
+                "kind": "ord",
+                "text": "ORDINÁRIO"
               }
             ],
             "notes": [
-              "Férias de 04/12/2026 a 02/01/2027 (30 dias). Documento SEI a informar. Não integra o efetivo disponível."
+              "Ordinário"
             ],
             "events": [],
-            "ord": 5,
-            "afastamento": {
-              "tipo": "ferias",
-              "inicio": "2026-12-04",
-              "termino": "2027-01-02",
-              "dias": 30,
-              "sei": null
-            }
+            "ord": 5
           },
           {
             "name": "ST AISLAN",
@@ -6701,8 +6695,8 @@ dialog.simulation-dialog{width:min(420px,calc(100% - 24px));max-height:calc(100d
           }
         ],
         "coverage": [
-          "5 recursos de 24h",
-          "Faltam 1 recurso"
+          "6 recursos de 24h",
+          "Meta de 6 recursos"
         ],
         "alerts": []
       },
@@ -6957,22 +6951,15 @@ dialog.simulation-dialog{width:min(420px,calc(100% - 24px));max-height:calc(100d
             "name": "ST DA SILVA",
             "badges": [
               {
-                "kind": "disp",
-                "text": "FÉRIAS"
+                "kind": "ord",
+                "text": "ORDINÁRIO"
               }
             ],
             "notes": [
-              "Férias de 04/12/2026 a 02/01/2027 (30 dias). Documento SEI a informar. Não integra o efetivo disponível."
+              "Ordinário"
             ],
             "events": [],
-            "ord": 5,
-            "afastamento": {
-              "tipo": "ferias",
-              "inicio": "2026-12-04",
-              "termino": "2027-01-02",
-              "dias": 30,
-              "sei": null
-            }
+            "ord": 5
           },
           {
             "name": "ST AISLAN",
@@ -7046,8 +7033,8 @@ dialog.simulation-dialog{width:min(420px,calc(100% - 24px));max-height:calc(100d
           }
         ],
         "coverage": [
-          "5 recursos de 24h",
-          "Faltam 1 recurso"
+          "6 recursos de 24h",
+          "Meta de 6 recursos"
         ],
         "alerts": []
       },
@@ -7302,22 +7289,15 @@ dialog.simulation-dialog{width:min(420px,calc(100% - 24px));max-height:calc(100d
             "name": "ST DA SILVA",
             "badges": [
               {
-                "kind": "disp",
-                "text": "FÉRIAS"
+                "kind": "ord",
+                "text": "ORDINÁRIO"
               }
             ],
             "notes": [
-              "Férias de 04/12/2026 a 02/01/2027 (30 dias). Documento SEI a informar. Não integra o efetivo disponível."
+              "Ordinário"
             ],
             "events": [],
-            "ord": 5,
-            "afastamento": {
-              "tipo": "ferias",
-              "inicio": "2026-12-04",
-              "termino": "2027-01-02",
-              "dias": 30,
-              "sei": null
-            }
+            "ord": 5
           },
           {
             "name": "ST AISLAN",
@@ -7391,8 +7371,8 @@ dialog.simulation-dialog{width:min(420px,calc(100% - 24px));max-height:calc(100d
           }
         ],
         "coverage": [
-          "5 recursos de 24h",
-          "Faltam 1 recurso"
+          "6 recursos de 24h",
+          "Meta de 6 recursos"
         ],
         "alerts": []
       },
@@ -7651,22 +7631,15 @@ dialog.simulation-dialog{width:min(420px,calc(100% - 24px));max-height:calc(100d
             "name": "ST DA SILVA",
             "badges": [
               {
-                "kind": "disp",
-                "text": "FÉRIAS"
+                "kind": "ord",
+                "text": "ORDINÁRIO"
               }
             ],
             "notes": [
-              "Férias de 04/12/2026 a 02/01/2027 (30 dias). Documento SEI a informar. Não integra o efetivo disponível."
+              "Ordinário"
             ],
             "events": [],
-            "ord": 5,
-            "afastamento": {
-              "tipo": "ferias",
-              "inicio": "2026-12-04",
-              "termino": "2027-01-02",
-              "dias": 30,
-              "sei": null
-            }
+            "ord": 5
           },
           {
             "name": "ST AISLAN",
@@ -7740,8 +7713,8 @@ dialog.simulation-dialog{width:min(420px,calc(100% - 24px));max-height:calc(100d
           }
         ],
         "coverage": [
-          "5 recursos de 24h",
-          "Faltam 1 recurso"
+          "6 recursos de 24h",
+          "Meta de 6 recursos"
         ],
         "alerts": []
       },
@@ -10277,6 +10250,61 @@ dialog.simulation-dialog{width:min(420px,calc(100% - 24px));max-height:calc(100d
   }
 }
 </script>
+<script type="application/json" id="ala-rosters">
+{
+  "members": {
+    "ALPHA": [
+      "ST DA SILVA",
+      "ST AISLAN",
+      "2º SGT DIEGO",
+      "2º SGT CÉSAR VIEIRA",
+      "CB RABELO",
+      "SD MARTINS"
+    ],
+    "BRAVO": [
+      "ST TAVARES",
+      "1º SGT HELLYSSON",
+      "2º SGT SCHUSSLER",
+      "3º SGT JORGE",
+      "SD CAVALCANTE"
+    ],
+    "CHARLIE": [
+      "ST OSVALDIR",
+      "1º SGT NIKHOLAS",
+      "3º SGT HENRIQUE",
+      "SD HUGO",
+      "SD PICCINI"
+    ],
+    "DELTA": [
+      "ST PASSOS",
+      "1º SGT HAMILTON",
+      "2º SGT WANDERSON",
+      "2º SGT GEYDSON",
+      "SD SANTOS"
+    ]
+  },
+  "absences": [
+    {
+      "name": "1º SGT HAMILTON",
+      "type": "Férias",
+      "start": "2026-11-05",
+      "end": "2026-12-04"
+    },
+    {
+      "name": "SD SANTOS",
+      "type": "Dispensa recompensa",
+      "start": "2026-11-13",
+      "end": "2026-11-13"
+    },
+    {
+      "name": "2º SGT CÉSAR VIEIRA",
+      "type": "Férias",
+      "start": "2026-11-02",
+      "end": "2026-12-01"
+    }
+  ]
+}
+</script>
 <script type="application/json" id="ranking-personnel">
 [
   {"name": "CAP FRANCISCO LINS", "ord": 1, "officer": true},
@@ -10640,11 +10668,43 @@ dialog.simulation-dialog{width:min(420px,calc(100% - 24px));max-height:calc(100d
 })();
 </script>
 <script>
+(() => {
+  'use strict';
+  const validDate=value=>/^\d{4}-\d{2}-\d{2}$/.test(value)&&Number.isFinite(Date.parse(`${value}T12:00:00Z`))&&new Date(`${value}T12:00:00Z`).toISOString().slice(0,10)===value;
+  const hour=value=>{const match=String(value).match(/^(\d{1,2})(?:h|:)(\d{2})?$/);if(!match||Number(match[1])>23||Number(match[2]||0)>59)throw new RangeError('Horário da vaga inválido.');return `${match[1].padStart(2,'0')}h${match[2]&&match[2]!=='00'?match[2]:''}`;};
+  function build(schedules,period,plan,start,end){
+    if(!validDate(start)||!validDate(end)||start.slice(0,7)!==period||end.slice(0,7)!==period||start>end)throw new RangeError('Selecione um intervalo válido dentro do mês exibido.');
+    const blocks=[];let vacancies=0,daysWithVacancies=0;
+    for(let number=Number(start.slice(8));number<=Number(end.slice(8));number++){
+      const day=schedules[period]?.days.find(day=>day.day===number),date=`${period}-${String(number).padStart(2,'0')}`;
+      if(!day||!['ALPHA','BRAVO','CHARLIE','DELTA'].includes(day.ala))throw new RangeError(`Não há previsão cadastrada para ${date.split('-').reverse().join('/')}.`);
+      const weekday=new Intl.DateTimeFormat('pt-BR',{weekday:'long',timeZone:'UTC'}).format(new Date(`${date}T12:00:00Z`)),heading=`*${String(number).padStart(2,'0')}/${period.slice(5)} (${weekday[0].toUpperCase()+weekday.slice(1)}) - ${day.ala}*`,groups=new Map();
+      for(const member of plan.days.get(number)?.members||[]){
+        if(member.name!=='PREVISTO AC4')continue;
+        for(const event of member.events||[]){
+          if(event.simulation!==true||!window.AC4Finance.active(event))continue;
+          const startTime=hour(event.start),endTime=hour(event.end),key=JSON.stringify([event.startDate,event.endDate,startTime,endTime,event.hours]);
+          if(!groups.has(key))groups.set(key,{start:startTime,end:endTime,hours:event.hours,count:0});groups.get(key).count++;
+        }
+      }
+      if(!groups.size){blocks.push(`${heading}\nSem vagas de AC4 na simulação.`);continue;}
+      daysWithVacancies++;
+      for(const group of [...groups.values()].sort((a,b)=>a.start.localeCompare(b.start)||b.hours-a.hours)){
+        vacancies+=group.count;blocks.push(`${heading}\nAC4 ${group.hours}h (${group.start} às ${group.end})\nVoluntários (${String(group.count).padStart(2,'0')} ${group.count===1?'vaga':'vagas'})\n\n1.\n2.`);
+      }
+    }
+    return {message:blocks.join('\n\n'),vacancies,daysWithVacancies,days:Number(end.slice(8))-Number(start.slice(8))+1};
+  }
+  window.ServiceVacancies={build};
+})();
+</script>
+<script>
 
 (() => {
   'use strict';
   // Public calendar data only. Add a new YYYY-MM period after its scale is supplied.
   const schedules = window.ServiceCalendar.schedules;
+  const alaRosters=JSON.parse(document.getElementById('ala-rosters').textContent);
   const finance=window.AC4Finance,currency=new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}),percent=new Intl.NumberFormat('pt-BR',{maximumFractionDigits:2}),dailyPercent=new Intl.NumberFormat('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
   let financialSummary,simulationPlan;
   let simulationActive=false;
@@ -10676,6 +10736,8 @@ dialog.simulation-dialog{width:min(420px,calc(100% - 24px));max-height:calc(100d
   const dialogBody = document.getElementById('detalhes-conteudo');
   const rankingDialog=document.getElementById('ac4-ranking-dialog'),rankingStart=document.getElementById('ac4-ranking-start'),rankingEnd=document.getElementById('ac4-ranking-end'),rankingOfficers=document.getElementById('ac4-ranking-officers'),rankingSeniority=document.getElementById('ac4-ranking-seniority');
   const rankingRanges=new Map();
+  const vacancyDialog=document.getElementById('vacancy-dialog'),vacancyStart=document.getElementById('vacancy-start'),vacancyEnd=document.getElementById('vacancy-end'),vacancyMessage=document.getElementById('vacancy-message'),vacancyButton=document.getElementById('whatsapp-vacancies-button'),vacancyRanges=new Map();
+  let vacancyPeriod=null;
   let rankingPeriod=null,selectedRankingKey=null;
   const mobile = window.matchMedia('(max-width: 760px)');
   const selections = new Map();
@@ -11040,7 +11102,7 @@ dialog.simulation-dialog{width:min(420px,calc(100% - 24px));max-height:calc(100d
       const sei=source.sei||notes.match(/\bSEI\s+(\d{6,12})\b/)?.[1]||'não informado';
       // Show the related date: the day being compensated, or the day used to compensate it.
       const paying=badge.kind==='pay',related=paying?source.dispensa:source.pagamento;
-      return [`TS CIA nº ${source.numero||'não informado'} (SEI ${sei})`,`Data ${paying?'dispensa':'pagamento'} serviço ${format(related)}`];
+      return [`TS CIA (SEI ${sei})`,`Data ${paying?'dispensa':'pagamento'} serviço ${format(related)}`];
     }
     if(['ts','review'].includes(badge.kind)){
       const doc=notes.match(/TS\s*n[º°o.]?\s*([\d/\s]+)\s*\(SEI\s*([^)]+)\)/i),number=source.numero||doc?.[1]?.trim()||'não informado',sei=source.sei||doc?.[2]||notes.match(/\bSEI\s+(\d{6,12})\b/)?.[1]||'não informado';
@@ -11252,10 +11314,35 @@ dialog.simulation-dialog{width:min(420px,calc(100% - 24px));max-height:calc(100d
     if (selected !== undefined) selections.set(period, selected);
     refreshSimulationScrollHints();
   }
+  function refreshAlaHints(){
+    const [year,month]=period.split('-').map(Number),first=`${period}-01`,last=new Date(Date.UTC(year,month,0)).toISOString().slice(0,10),orders=new Map(rankingPersonnel.map(person=>[person.name,person.ord]));
+    const format=date=>date.split('-').reverse().join('/');
+    for(const button of filterButtons){
+      const names=alaRosters.members[button.dataset.filter];if(!names)continue;
+      const lines=[...names].sort((a,b)=>(orders.get(a)??Infinity)-(orders.get(b)??Infinity)).map(name=>{
+        const away=alaRosters.absences.filter(item=>item.name===name&&item.start<=last&&item.end>=first).map(item=>`${item.type}: ${format(item.start)}${item.end===item.start?'':` a ${format(item.end)}`}`);
+        return `${name}${away.length?` (${away.join('; ')})`:''}`;
+      });
+      button.dataset.exchangeTooltip=[`ALA ${button.dataset.filter} · ${periodLabel()}`,...lines].join('\n');
+    }
+  }
+  function renderVacancyDialog(){
+    const [year,month]=period.split('-').map(Number),lastDay=new Date(Date.UTC(year,month,0)).getUTCDate(),first=`${period}-01`,last=`${period}-${String(lastDay).padStart(2,'0')}`,today=accessDate(),date=`${today.year}-${String(today.month).padStart(2,'0')}-${String(today.day).padStart(2,'0')}`;
+    if(vacancyPeriod!==period){
+      vacancyPeriod=period;
+      for(const select of [vacancyStart,vacancyEnd]){select.replaceChildren();for(let day=1;day<=lastDay;day++){const value=`${period}-${String(day).padStart(2,'0')}`,option=element('option','',value.split('-').reverse().join('/'));option.value=value;select.append(option);}}
+    }
+    const range=vacancyRanges.get(period)||{start:date<first?first:date>last?last:date,end:last};vacancyStart.value=range.start;vacancyEnd.value=range.end;
+    const status=document.getElementById('vacancy-summary'),copy=document.getElementById('vacancy-copy');document.getElementById('vacancy-copy-status').textContent='';
+    try{
+      const result=window.ServiceVacancies.build(schedules,period,simulationPlan,range.start,range.end);vacancyMessage.value=result.message;copy.disabled=false;
+      status.textContent=`${periodLabel()} · Meta da simulação: ${simulationTarget} recursos de 24h. ${result.vacancies} ${result.vacancies===1?'vaga':'vagas'} em ${result.daysWithVacancies} ${result.daysWithVacancies===1?'dia':'dias'}. Todos os ${result.days} dias do intervalo estão incluídos.`;
+    }catch(error){vacancyMessage.value='';copy.disabled=true;status.textContent=error.message;}
+  }
   function renderPeriod() {
     const [year, month] = period.split('-').map(Number);
     window.ServiceCalendar.period=period;
-    monthLabel.textContent=periodLabel();
+    monthLabel.textContent=periodLabel();refreshAlaHints();
     const days = periodDays();
     const hasData = days.length > 0;
     const today = accessDate();
@@ -11275,7 +11362,7 @@ dialog.simulation-dialog{width:min(420px,calc(100% - 24px));max-height:calc(100d
     document.title = `Previsão Escalas de Serviço · ${periodLabel()} | 8ª CIBM`;
     document.querySelector('meta[name="description"]').content = `Previsão de serviço da 8ª CIBM — ${periodLabel()}.`;
     draw();
-    if(rankingDialog.open)renderRankingDialog();
+    if(rankingDialog.open)renderRankingDialog();if(vacancyDialog.open)renderVacancyDialog();
   }
   function moveMonth(direction) {
     const [year,month]=period.split('-').map(Number),target=new Date(Date.UTC(year,month-1+direction,1));
@@ -11469,7 +11556,17 @@ dialog.simulation-dialog{width:min(420px,calc(100% - 24px));max-height:calc(100d
   financeDialog.addEventListener('click',event=>{if(event.target===financeDialog){const r=financeDialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)financeDialog.close();}});
   previousMonth.addEventListener('click',()=>moveMonth(-1));
   nextMonth.addEventListener('click',()=>moveMonth(1));
-  filterButtons.forEach(button => button.addEventListener('click', () => { filter = button.dataset.filter; draw(); }));
+  filterButtons.forEach(button => button.addEventListener('click', () => { filter = button.dataset.filter; draw();if(button.dataset.exchangeTooltip&&(button.matches(':hover')||document.activeElement===button)){hoveredBadge=button.matches(':hover')?button:null;focusedBadge=document.activeElement===button?button:null;showExchangeTooltip(button);} }));
+  vacancyButton.addEventListener('click',()=>{hideExchangeTooltip();renderVacancyDialog();document.documentElement.classList.add('vacancy-dialog-open');vacancyDialog.showModal();});
+  document.getElementById('vacancy-close').addEventListener('click',()=>vacancyDialog.close());
+  vacancyDialog.addEventListener('close',()=>{document.documentElement.classList.remove('vacancy-dialog-open');vacancyButton.focus({preventScroll:true});});
+  const changeVacancyRange=event=>{let start=vacancyStart.value,end=vacancyEnd.value;if(start>end){if(event.target===vacancyStart)end=start;else start=end;}vacancyRanges.set(period,{start,end});renderVacancyDialog();};
+  vacancyStart.addEventListener('change',changeVacancyRange);vacancyEnd.addEventListener('change',changeVacancyRange);
+  document.getElementById('vacancy-copy').addEventListener('click',async()=>{
+    const text=vacancyMessage.value,feedback=document.getElementById('vacancy-copy-status');if(!text)return;
+    let copied=false;try{await navigator.clipboard.writeText(text);copied=true;}catch{vacancyMessage.focus();vacancyMessage.select();try{copied=document.execCommand('copy');}catch{copied=false;}}
+    feedback.textContent=copied?'Mensagem copiada. Cole no WhatsApp.':'Selecione a mensagem e use a opção Copiar do seu dispositivo.';
+  });
   dayPicker.addEventListener('change', () => { selected = Number(dayPicker.value); draw(); });
   previous.addEventListener('click', () => move(-1));
   next.addEventListener('click', () => move(1));
@@ -11709,8 +11806,7 @@ dialog.simulation-dialog{width:min(420px,calc(100% - 24px));max-height:calc(100d
     const direction=badge.kind==='pay'?'pagamento':'dispensa';
     const matches=references.cia.filter(t=>t[direction]===isoDate()&&normalize(t.militar)===normalize(member.name)&&(!sei||String(t.sei)===String(sei)));
     const ref=matches.length===1?matches[0]:{};
-    const number=String(source.numero ?? ref.numero ?? ref.numero_ts_cia ?? ref.numero_ts ?? ref.ts ?? '').trim();
-    return {badge,sei:sei||ref.sei,number:/^\d+(?:\/\d{4})?$/.test(number)&&Number(number.split('/')[0])>0?number:null,dispensa:source.dispensa||ref.dispensa,pagamento:source.pagamento||ref.pagamento};
+    return {badge,sei:sei||ref.sei,dispensa:source.dispensa||ref.dispensa,pagamento:source.pagamento||ref.pagamento};
   }
   function exchangeDate(value) {
     const match=String(value||'').match(/^(\d{4})-(\d{2})-(\d{2})$/);if(!match)return null;
@@ -11753,7 +11849,7 @@ dialog.simulation-dialog{width:min(420px,calc(100% - 24px));max-height:calc(100d
         if (!note.startsWith('TS nº') || /duplicad|inconsisten|conferir/i.test(note)) lines.push(note);
       }
     } else if (cia) {
-      lines.push({kind:'strong',text:`TS Cia Operacional nº ${cia.number || 'não informado'} (SEI ${cia.sei || 'não informado'})`});
+      lines.push({kind:'strong',text:`TS Cia Operacional (SEI ${cia.sei || 'não informado'})`});
       const paying=cia.badge.kind==='pay',date=exchangeDate(paying?cia.dispensa:cia.pagamento)||'data não informada';
       lines.push({kind:'prefix',prefix:paying?'Pagando serviço':'Dispensado do serviço',suffix:paying?` em função da dispensa do dia ${date}`:` por estar de serviço no dia ${date}`});
       for (const note of notes) if (!/^TS CIA\s*[—:-]/i.test(note)||/confer|inconsisten|diverg|pendente/i.test(note)) lines.push(note);
@@ -11783,7 +11879,6 @@ dialog.simulation-dialog{width:min(420px,calc(100% - 24px));max-height:calc(100d
     for(const m of members){const errors=personErrors(m.name);if(errors.length)hard.push(`${m.name}: ${errors.join(', ')}.`);const p=person(m.name);if(p){if(!p.cpf)warnings.push(`${m.name}: CPF ${p.cpf===null?'inválido':'não informado'}; campo em branco.`);if(p.ord===null)warnings.push(`${m.name}: ORD não informado; mantido após a antiguidade conhecida.`);}for(const line of checkReplacements?observations(m):[])if(line?.kind==='identity'&&personErrors(line.name).length)hard.push(`${line.name}: identificação do militar substituído não disponível no cadastro.`);for(const e of m.events)if(!interval(e).valid)hard.push(`${m.name}: conferir data, horários e duração do AC4.`);}
     for(const member of members){
       const cia=companyExchange(member);if(!cia)continue;
-      if(!cia.number)warnings.push('TS Cia Operacional: numeração própria não informada nas autorizações; conferir pelo SEI.');
       if(!exchangeDate(cia.dispensa)||!exchangeDate(cia.pagamento))warnings.push(`${member.name}: data de dispensa ou pagamento da TS Cia não informada; conferir a autorização.`);
     }
     return {hard,warnings};

@@ -7,7 +7,7 @@ O período do calendário é **novembro/2026, dezembro/2026 e janeiro/2027**. Se
 - **28/11/2026, ala Charlie:** dispensa de 24h.
 - **05/12/2026, ala Bravo:** pagamento do serviço de 24h para compensar a dispensa de 28/11.
 
-São serviços ordinários de troca com a companhia; não são AC4. O documento não informa número próprio da troca. A identificação permanece “TS Cia Operacional nº não informado (SEI 97939827)”.
+São serviços ordinários de troca com a companhia; não são AC4. A identificação, retificada pelo usuário em 10/11, utiliza somente o documento: “TS CIA (SEI 97939827)” nas dicas e “TS Cia Operacional (SEI 97939827)” na ES.
 
 | Documento SEI | Militar | Dispensa | Pagamento do serviço | Páginas | Resultado |
 |---|---|---|---|---|---|

@@ -9,9 +9,9 @@ const money=cents=>normalize(currency.format(cents/100));
 
 (async()=>{
  const server=http.createServer((req,res)=>{
-  const file={'/':'index.html','/index.html':'index.html','/assets/cbmgo-emblema.png':'assets/cbmgo-emblema.png'}[req.url];
+  const file={'/':'index.html','/index.html':'index.html','/assets/cbmgo-emblema.png':'assets/cbmgo-emblema.png','/assets/whatsapp.svg':'assets/whatsapp.svg'}[req.url];
   if(!file){res.writeHead(404);res.end();return;}
-  res.setHeader('Content-Type',file.endsWith('.png')?'image/png':'text/html; charset=utf-8');
+  res.setHeader('Content-Type',file.endsWith('.png')?'image/png':file.endsWith('.svg')?'image/svg+xml':'text/html; charset=utf-8');
   res.end(fs.readFileSync(path.join(root,file)));
  });
  let browser;

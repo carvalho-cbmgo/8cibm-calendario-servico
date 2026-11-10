@@ -6,8 +6,8 @@ const money=cents=>normalize(new Intl.NumberFormat('pt-BR',{style:'currency',cur
 
 (async()=>{
  const server=http.createServer((req,res)=>{
-  const file={'/':'index.html','/index.html':'index.html','/assets/cbmgo-emblema.png':'assets/cbmgo-emblema.png'}[req.url];
-  if(!file){res.writeHead(404);res.end();return;}res.setHeader('Content-Type',file.endsWith('.png')?'image/png':'text/html; charset=utf-8');res.end(fs.readFileSync(path.join(root,file)));
+  const file={'/':'index.html','/index.html':'index.html','/assets/cbmgo-emblema.png':'assets/cbmgo-emblema.png','/assets/whatsapp.svg':'assets/whatsapp.svg'}[req.url];
+  if(!file){res.writeHead(404);res.end();return;}res.setHeader('Content-Type',file.endsWith('.png')?'image/png':file.endsWith('.svg')?'image/svg+xml':'text/html; charset=utf-8');res.end(fs.readFileSync(path.join(root,file)));
  });
  let browser;
  try{
@@ -46,7 +46,7 @@ const money=cents=>normalize(new Intl.NumberFormat('pt-BR',{style:'currency',cur
   const order=await page.locator('.ranking-table tbody>.ranking-row .ranking-position').allTextContents();assert.deepEqual(order,[...Array.from({length:30},(_,index)=>String(index+1)),'—']);
   for(const width of [320,390,760,761,1280]){
    await page.setViewportSize({width,height:1000});assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
-   assert(await page.locator('.ranking-range').evaluate(group=>{const r=group.getBoundingClientRect();return [...group.querySelectorAll('select')].every(select=>{const s=select.getBoundingClientRect();return s.width>0&&s.right<=r.right+1&&s.left>=r.left&&s.height>=44;});}));
+   assert(await page.locator('#ac4-ranking-dialog .ranking-range').evaluate(group=>{const r=group.getBoundingClientRect();return [...group.querySelectorAll('select')].every(select=>{const s=select.getBoundingClientRect();return s.width>0&&s.right<=r.right+1&&s.left>=r.left&&s.height>=44;});}));
    await page.locator('#ac4-ranking-dialog').evaluate(dialog=>dialog.scrollTop=0);if([390,1280].includes(width))await page.locator('#ac4-ranking-dialog').screenshot({path:`/tmp/ranking-range-${width}.png`,animations:'disabled'});
   }
   await close();await open();assert.equal(await start.inputValue(),'2026-11-01');assert.equal(await end.inputValue(),'2026-11-30');await verify();
