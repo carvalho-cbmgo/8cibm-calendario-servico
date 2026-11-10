@@ -2643,7 +2643,7 @@ html.vacancy-dialog-open,html.vacancy-dialog-open body{overflow:hidden;overscrol
                 "nextDay": false,
                 "hours": 4,
                 "observation": "PROEBOM 2026",
-                "document": "OS a definir (não informada)",
+                "document": "Errata à OS nº 356/2026 (SEI 98274343); OS original SEI 98070695; Processo 202500011045608",
                 "status": "planned"
               }
             ],
@@ -2676,7 +2676,7 @@ html.vacancy-dialog-open,html.vacancy-dialog-open body{overflow:hidden;overscrol
                 "nextDay": true,
                 "hours": 12,
                 "observation": "REFORÇO OPERACIONAL",
-                "document": "OS a definir (não informada)",
+                "document": "Errata à OS nº 356/2026 (SEI 98274343); OS original SEI 98070695; Processo 202500011045608",
                 "status": "planned",
                 "startDate": "2026-11-10",
                 "endDate": "2026-11-11"
@@ -2696,7 +2696,7 @@ html.vacancy-dialog-open,html.vacancy-dialog-open body{overflow:hidden;overscrol
                 "nextDay": false,
                 "hours": 4,
                 "observation": "PROEBOM 2026",
-                "document": "OS a definir (não informada)",
+                "document": "Errata à OS nº 356/2026 (SEI 98274343); OS original SEI 98070695; Processo 202500011045608",
                 "status": "planned"
               }
             ],
@@ -12001,7 +12001,7 @@ html.vacancy-dialog-open,html.vacancy-dialog-open body{overflow:hidden;overscrol
     const osValidation=renderOrder();
     const pending=[...current.day.alerts,...validation.hard,...validation.warnings,...osValidation.hard];
     if(!directory.size)pending.unshift('Importe o Plano de Chamada (.xlsx) ou o cadastro local (.json) para preencher as identificações completas antes de copiar.');
-    if(groups.some(g=>g.rows.some(r=>r.event.status==='planned')))pending.push('Há AC4 com OS a definir. O SEI de processo não é tratado como número do documento da OS.');
+    if(groups.some(g=>g.rows.some(r=>r.event.status==='planned'&&!window.AC4Finance.documentInfo(r.event).number)))pending.push('Há AC4 com OS a definir. O SEI de processo não é tratado como número do documento da OS.');
     showValidation(pending);
   }
   const dataRows = table => [...table.tBodies].flatMap(body=>[...body.rows]);

@@ -79,10 +79,13 @@ const root=path.join(__dirname,'..');
   for(const [day,pay,related,sei,name] of [[3,false,'10/11/2026','97766395','CAVALCANTE'],[10,true,'03/11/2026','97766395','CAVALCANTE'],[13,true,'20/11/2026','98254182','HENRIQUE'],[20,false,'13/11/2026','98254182','HENRIQUE']]){
    const card=await expand(day),badge=card.locator(`[data-company-sei="${sei}"]`);await badge.hover();assert.equal(await tooltip.locator('p').first().textContent(),`TS CIA (SEI ${sei})`);assert((await tooltip.textContent()).includes(related));await badge.click({button:'right'});assert.equal(await page.evaluate(()=>window.copiedText),sei);await page.keyboard.press('Escape');
    if(sei==='98254182'){assert.equal(await card.locator('.resource-ordinary').textContent(),'4 ORD');assert.equal(await card.locator('.entry').filter({has:page.locator('.name',{hasText:name})}).count(),1);}
+   if(day===10){const chips=card.locator('button[data-copy-sei="98274343"]');assert.equal(await chips.count(),3);await chips.first().click();assert.equal(await page.evaluate(()=>window.copiedText),'98274343');}
    await card.locator('.operational-section [data-sei-day]').click();
    if(day===10){
     const calendarRow=card.locator('.entry').filter({has:page.locator('.name',{hasText:'LUIZ ANTONIO'})});assert.equal(await calendarRow.locator('.chip.ac4').textContent(),'AC4 12h');assert.equal(await calendarRow.locator('.ac4-period').textContent(),'20h às 8h');assert((await calendarRow.locator('.ac4-cost').textContent()).includes('381,00'));
     const orderRow=page.locator('#sei-order-table tbody tr').filter({hasText:'LUIZ ANTONIO'});assert.equal(await orderRow.count(),1);assert.deepEqual(await orderRow.locator('td').evaluateAll(cells=>[...cells].map(cell=>cell.textContent).filter((_,index)=>[0,1,2,3,6].includes(index))),['10/11/2026','20h00','11/11/2026','08h00','12h']);
+    for(const name of ['HELLYSSON','LUIZ ANTONIO','HENRIQUE']){const row=page.locator('#sei-scale-table tbody tr').filter({has:page.locator('td:nth-child(3)',{hasText:name})});assert((await row.locator('td').nth(4).textContent()).includes('Errata à OS nº 356/2026 (SEI 98274343)'));}
+    assert.equal(await page.locator('#sei-order-table tbody tr').count(),3);assert(!(await page.locator('#sei-validation').textContent()).includes('Há AC4 com OS a definir'));
    }
    const row=page.locator('#sei-scale-table tbody tr').filter({hasText:name}),obs=row.locator('td').nth(4);
    assert.equal(await obs.locator('strong').nth(0).textContent(),`TS Cia Operacional (SEI ${sei})`);assert.equal(await obs.locator('strong').nth(1).textContent(),pay?'Pagando serviço':'Dispensado do serviço');assert((await obs.textContent()).includes(related));assert.equal(await obs.locator('strong').count(),2);

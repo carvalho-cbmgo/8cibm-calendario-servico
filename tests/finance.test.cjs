@@ -128,11 +128,23 @@ test('seis AC4 noturnos de LUIZ ANTONIO são previstos de 12h, sem duplicação 
   ]);
   for(const record of records){
     assert.equal(record.member,'2º SGT LUIZ ANTONIO');assert.equal(record.minutes,720);assert.equal(record.start,'20h00');assert.equal(record.end,'08h00');assert.equal(record.financialMonth,'2026-11');
-    assert.equal(record.category,'operational');assert.equal(record.status,'forecast');assert.equal(record.event.executionConfirmed,undefined);assert.deepEqual(plain(finance.documentInfo(record.event)),{number:'',sei:''});
+    assert.equal(record.category,'operational');assert.equal(record.status,'forecast');assert.equal(record.event.executionConfirmed,undefined);assert.deepEqual(plain(finance.documentInfo(record.event)),record.startDate==='2026-11-10'?{number:'356/2026',sei:'98274343'}:{number:'',sei:''});
   }
   for(const date of dates){const members=data['2026-11'].days.find(day=>day.day===date).members.filter(member=>member.name==='2º SGT LUIZ ANTONIO');assert.equal(members.length,1);assert.equal(members[0].ord,16);assert.equal(members[0].events.length,1);assert.equal(members[0].badges.length,0);}
   assert.equal(records.reduce((total,record)=>total+record.costCents,0),237600);
   assert.equal(summary.operationalCents,1378800);assert.equal(summary.satCents,318000);assert.equal(summary.committedCents,1696800);assert.equal(summary.forecastCents,600200);assert.equal(summary.executedCents,1096600);assert.equal(summary.remainingCents,2863200);
+});
+
+test('errata da OS 356 vincula os três AC4 de 10/11 sem duplicar serviços ou confirmar execução',()=>{
+  const data=JSON.parse(scripts.find(([,attrs])=>attrs.includes('id="calendar-data"'))[2]),summary=finance.month(data,'2026-11',4560000),records=summary.records.filter(record=>record.event.document?.includes('98274343'));
+  assert.deepEqual(plain(records.map(record=>[record.member,record.startDate,record.start,record.endDate,record.end,record.costCents])),[
+    ['1º SGT HELLYSSON','2026-11-10','08h00','2026-11-10','12h00',12000],
+    ['2º SGT LUIZ ANTONIO','2026-11-10','20h00','2026-11-11','08h00',38100],
+    ['3º SGT HENRIQUE','2026-11-10','08h00','2026-11-10','12h00',12000]
+  ]);
+  for(const record of records){assert.deepEqual(plain(finance.documentInfo(record.event)),{number:'356/2026',sei:'98274343'});assert(record.event.document.includes('OS original SEI 98070695'));assert(record.event.document.includes('202500011045608'));assert.equal(record.status,'forecast');assert.equal(record.event.executionConfirmed,undefined);}
+  assert.equal(summary.records.length,46);assert.equal(summary.committedCents,1696800);assert.equal(summary.executedCents,1096600);assert.equal(summary.daily.get('2026-11-10').operationalCents,62100);assert.equal(summary.daily.get('2026-11-10').committedCents,107100);
+  assert(records.filter(record=>record.member!=='2º SGT LUIZ ANTONIO').every(record=>record.event.mode==='PROEBOM 2026'));assert.equal(data['2026-11'].days[9].confirmation.status,'confirmed');
 });
 
 test('chefia respeita antiguidade, ausência, ODD e pendências de períodos parciais',()=>{
