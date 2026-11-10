@@ -5,7 +5,7 @@ const html=fs.readFileSync(path.join(__dirname,'..','index.html'),'utf8'),script
 const data=JSON.parse(scripts.find(([,attrs])=>attrs.includes('id="calendar-data"'))[2]),context=vm.createContext({window:{}});
 for(const name of ['window.AC4Finance=','window.ServiceChief=','window.ServiceSimulation='])vm.runInContext(scripts.find(([,attrs,source])=>!attrs.includes('application/json')&&source.includes(name))[2],context);
 const day=date=>data[date.slice(0,7)]?.days.find(day=>day.day===Number(date.slice(8)));
-// Seven authorizations touching Nov/2026–Jan/2027, PDF pages 143–156.
+// Seven authorizations from the consolidated PDF, plus SEI 98254182 supplied on 10/11.
 const documents=[
  ['97586670','2º SGT DIEGO','2026-11-02','2026-11-05'],
  ['97587098','2º SGT DIEGO','2026-11-18','2026-11-11'],
@@ -13,17 +13,28 @@ const documents=[
  ['97654793','3º SGT JORGE','2026-10-30','2026-11-06'],
  ['97766395','SD CAVALCANTE','2026-11-03','2026-11-10'],
  ['97922344','2º SGT DIEGO','2026-11-22','2026-11-29'],
- ['97939827','ST OSVALDIR','2026-11-28','2026-12-05']
+ ['97939827','ST OSVALDIR','2026-11-28','2026-12-05'],
+ ['98254182','3º SGT HENRIQUE','2026-11-20','2026-11-13']
 ];
 
-test('sete autorizações da companhia têm suas 13 movimentações publicadas, sem duplicação',()=>{
+test('oito autorizações da companhia têm suas 15 movimentações publicadas, sem duplicação',()=>{
  let count=0;
  for(const [sei,name,dispensa,pagamento] of documents)for(const [date,kind] of [[dispensa,'disp'],[pagamento,'pay']]){
   const input=day(date);if(!input)continue;
   const matches=input.members.filter(member=>member.name===name&&member.badges.some(badge=>badge.kind===kind&&badge.troca?.sei===sei));assert.equal(matches.length,1,`${sei} ${date}`);
   const badge=matches[0].badges.find(badge=>badge.kind===kind&&badge.troca?.sei===sei);assert.equal(badge.hours,24);assert.equal(badge.troca.dispensa,dispensa);assert.equal(badge.troca.pagamento,pagamento);assert.equal(badge.troca.numero,null);assert(badge.text.startsWith('TS CIA'));count++;
  }
- assert.equal(count,13);
+ assert.equal(count,15);
+});
+
+test('HENRIQUE paga 24h na Delta em 13/11 e fica dispensado na Charlie em 20/11',()=>{
+ const {ServiceChief:chief,ServiceSimulation:simulation}=context.window,plan=simulation.plan(data,'2026-11',4560000);
+ for(const [date,kind,ala,resources,reinforcements] of [['2026-11-13','pay','DELTA',5,1],['2026-11-20','disp','CHARLIE',4,2]]){
+  const input=day(date),members=input.members.filter(member=>member.name==='3º SGT HENRIQUE');assert.equal(members.length,1);assert.equal(input.ala,ala);assert(!input.confirmation);assert.equal(members[0].ord,22);
+  assert.equal(members[0].badges.length,1);assert.equal(members[0].badges[0].kind,kind);assert.equal(members[0].events.length,0);assert.equal(simulation.coverage(input,date).resources,resources);assert.equal(parseInt(input.coverage[0]),resources);
+  assert.equal(plan.days.get(Number(date.slice(8))).addedServices,reinforcements);assert.equal(chief.select(input).assignments[0].name,'ST OSVALDIR');
+ }
+ assert.equal(day('2026-11-13').members.find(member=>member.name==='SD SANTOS').badges[0].text,'DISP. RECOMPENSA');assert.equal(day('2026-11-13').members.find(member=>member.name==='SD PICCINI').events[0].hours,24);
 });
 
 test('OSVALDIR fica dispensado em 28/11 e paga em 05/12, com cobertura e chefia coerentes',()=>{

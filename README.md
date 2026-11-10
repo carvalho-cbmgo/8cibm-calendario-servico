@@ -6,6 +6,8 @@ A [conferência do consolidado de trocas de 08/11/2026](docs/conferencia-trocas-
 
 A [conferência das trocas com a companhia](docs/conferencia-trocas-companhia-2026-11-08.md) registra as 7 autorizações aplicáveis ao período do calendário e a inclusão da dispensa de OSVALDIR em 28/11 com pagamento em 05/12. O histórico de janeiro/2026 do PDF não é transferido para janeiro/2027.
 
+A [TS CIA do 3º SGT HENRIQUE, SEI 98254182](docs/ts-cia-henrique-sei98254182.md), recebida em 10/11, acrescenta pagamento de 24h em 13/11 na Delta e dispensa de 24h em 20/11 na Charlie. São oito autorizações da companhia e quinze movimentações no calendário; cobertura, vagas simuladas e observações da ES acompanham a alteração.
+
 As trocas com a companhia são identificadas somente pelo documento: **TS CIA (SEI …)** nas dicas e **TS Cia Operacional (SEI …)** na primeira linha das observações da ES, toda em negrito. A segunda linha informa a data relacionada: **Pagando serviço** em função da dispensa do dia …, ou **Dispensado do serviço** por estar de serviço no dia …. Somente esses prefixos da segunda linha ficam em negrito; a linha inteira da tabela permanece azul para pagamento e vermelha para dispensa, inclusive na cópia para o SEI.
 
 As férias de ST DA SILVA previstas para 04/12/2026 a 02/01/2027 foram canceladas por solicitação do usuário. Seus oito plantões afetados voltam ao serviço ordinário da Alpha, com a cobertura e a chefia recalculadas. Os serviços reais de AC4 permanecem preservados.

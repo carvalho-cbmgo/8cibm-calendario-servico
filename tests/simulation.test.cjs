@@ -119,7 +119,7 @@ test('novembro simula 26 recursos em 18 dias, cobra cada reforço uma vez e pres
   const source=data(),plan=simulation.plan(source,'2026-11',4560000),real=finance.month(source,'2026-11',4560000);
   assert.equal(source['2026-11'].days.filter(day=>day.confirmation?.status==='confirmed').length,11);
   for(let day=1;day<=11;day++)assert.equal(plan.days.get(day).addedResources,0);
-  assert.equal(plan.days.get(27).addedResources,0);assert.equal(plan.days.get(13).addedResources,2);assert.equal(plan.days.get(29).addedResources,1);
+  assert.equal(plan.days.get(27).addedResources,0);assert.equal(plan.days.get(13).addedResources,1);assert.equal(plan.days.get(20).addedResources,2);assert.equal(plan.days.get(29).addedResources,1);
   assert.equal(plan.addedResources,26);assert.equal(plan.addedServices,26);assert.equal(plan.daysAffected,18);assert.equal(plan.summary.committedCents,2054300);
   assert.equal(new Set(plan.summary.records.map(record=>record.key)).size,26);assert.equal(plan.summary.executedCents,0);assert.equal(plan.summary.satCents,0);
   assert.equal(plan.summary.daily.get('2026-11-30').cumulativeCents,2054300);

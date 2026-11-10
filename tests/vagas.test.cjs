@@ -10,12 +10,12 @@ const plan=simulation.plan(schedules,'2026-11',4560000);
 const build=(start,end=start)=>vacancies.build(schedules,'2026-11',plan,`2026-11-${start}`,`2026-11-${end}`);
 
 test('mensagem inclui todos os dias do intervalo, agrupa vagas iguais e usa a previsão real da simulação',()=>{
- const result=build('10','14');assert.equal(result.days,5);assert.equal(result.daysWithVacancies,3);assert.equal(result.vacancies,5);
+ const result=build('10','14');assert.equal(result.days,5);assert.equal(result.daysWithVacancies,3);assert.equal(result.vacancies,4);
  assert.equal(result.message,[
   '*10/11 (Terça-feira) - ALPHA*\nSem vagas de AC4 na simulação.',
   '*11/11 (Quarta-feira) - BRAVO*\nSem vagas de AC4 na simulação.',
   '*12/11 (Quinta-feira) - CHARLIE*\nAC4 12h (08h às 20h)\nVoluntários (01 vaga)\n\n1.\n2.',
-  '*13/11 (Sexta-feira) - DELTA*\nAC4 24h (08h às 08h)\nVoluntários (02 vagas)\n\n1.\n2.',
+  '*13/11 (Sexta-feira) - DELTA*\nAC4 24h (08h às 08h)\nVoluntários (01 vaga)\n\n1.\n2.',
   '*14/11 (Sábado) - ALPHA*\nAC4 24h (08h às 08h)\nVoluntários (02 vagas)\n\n1.\n2.'
  ].join('\n\n'));
  assert(!/R\$|LUIZ|WANDERSON|HENRIQUE/.test(result.message));
@@ -43,7 +43,7 @@ test('intervalo inclusivo rejeita inversão, outro mês, dia inválido e previs�
 
 test('meta configurada altera a mensagem sem modificar os serviços cadastrados',()=>{
  const before=JSON.stringify(schedules),higher=simulation.plan(schedules,'2026-11',4560000,undefined,10),result=vacancies.build(schedules,'2026-11',higher,'2026-11-13','2026-11-13');
- assert.equal(result.vacancies,6);assert(result.message.includes('Voluntários (06 vagas)'));assert.equal(JSON.stringify(schedules),before);
+ assert.equal(result.vacancies,5);assert(result.message.includes('Voluntários (05 vagas)'));assert.equal(JSON.stringify(schedules),before);
  assert.equal(finance.month(schedules,'2026-11',4560000).committedCents,1658700);
 });
 
