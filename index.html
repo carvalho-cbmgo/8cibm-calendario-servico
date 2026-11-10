@@ -711,6 +711,8 @@ dialog.simulation-dialog{width:min(420px,calc(100% - 24px));max-height:calc(100d
 #vacancy-copy{min-height:44px;padding:9px 16px;border:1px solid #128541;border-radius:8px;background:#128541;color:white;font:inherit;font-weight:700;cursor:pointer}
 #vacancy-copy:disabled{opacity:.5;cursor:default}
 .vacancy-copy-status{min-height:1.4em;font-size:13px;color:#17634b}
+.vacancy-actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+#vacancy-configure{min-height:44px;padding:9px 12px;border:1px solid #c8d7e7;border-radius:8px;background:#f4f8fc;color:#28537e;font:inherit;font-weight:650;cursor:pointer}
 html.vacancy-dialog-open,html.vacancy-dialog-open body{overflow:hidden;overscroll-behavior:none}
 @media screen and (max-width:760px){.filters{grid-template-columns:repeat(5,minmax(0,1fr)) 44px}.filters #whatsapp-vacancies-button{padding:4px}.whatsapp-button img{width:30px;height:30px}.vacancy-body{padding:12px;font-size:15px}}
 @media screen and (max-width:350px){.filters{column-gap:4px}}
@@ -740,11 +742,13 @@ html.vacancy-dialog-open,html.vacancy-dialog-open body{overflow:hidden;overscrol
  <div class="vacancy-body">
   <div class="ranking-range"><label for="vacancy-start">Início<select id="vacancy-start"></select></label><label for="vacancy-end">Fim<select id="vacancy-end"></select></label></div>
   <p id="vacancy-summary" class="vacancy-summary" role="status"></p>
-  <label class="vacancy-message-label" for="vacancy-message">Mensagem para copiar</label>
-  <textarea id="vacancy-message" rows="10" readonly spellcheck="false" aria-describedby="vacancy-help"></textarea>
-  <p id="vacancy-help" class="vacancy-help">Os títulos ficarão em negrito ao colar no WhatsApp. As linhas de voluntários ficam em branco para preenchimento.</p>
+  <div id="vacancy-output" hidden>
+   <label class="vacancy-message-label" for="vacancy-message">Mensagem para copiar</label>
+   <textarea id="vacancy-message" rows="10" readonly spellcheck="false" aria-describedby="vacancy-help"></textarea>
+   <p id="vacancy-help" class="vacancy-help">Os títulos ficarão em negrito ao colar no WhatsApp. As linhas de voluntários ficam em branco para preenchimento.</p>
+  </div>
   <p id="vacancy-copy-status" class="vacancy-copy-status" role="status" aria-live="polite"></p>
-  <button type="button" id="vacancy-copy">Copiar mensagem</button>
+  <div class="vacancy-actions"><button type="button" id="vacancy-copy" disabled>Copiar mensagem</button><button type="button" id="vacancy-configure">Configurar simulação AC4</button></div>
  </div>
 </dialog>
 <dialog id="ac4-simulation-config" class="simulation-dialog" aria-labelledby="ac4-simulation-config-title" aria-describedby="ac4-simulation-config-description" aria-modal="true">
@@ -11334,9 +11338,12 @@ html.vacancy-dialog-open,html.vacancy-dialog-open body{overflow:hidden;overscrol
     }
     const range=vacancyRanges.get(period)||{start:date<first?first:date>last?last:date,end:last};vacancyStart.value=range.start;vacancyEnd.value=range.end;
     const status=document.getElementById('vacancy-summary'),copy=document.getElementById('vacancy-copy');document.getElementById('vacancy-copy-status').textContent='';
+    vacancyMessage.value='';copy.disabled=true;vacancyStart.disabled=vacancyEnd.disabled=!simulationActive;document.getElementById('vacancy-output').hidden=!simulationActive;
+    document.getElementById('vacancy-configure').textContent=simulationActive?'Alterar meta da simulação':'Configurar simulação AC4';
+    if(!simulationActive){status.textContent='Ative a Simulação de reforço AC4 e confirme a quantidade de recursos de 24h por serviço para gerar a mensagem com as vagas PREVISTO AC4 do calendário.';return;}
     try{
       const result=window.ServiceVacancies.build(schedules,period,simulationPlan,range.start,range.end);vacancyMessage.value=result.message;copy.disabled=false;
-      status.textContent=`${periodLabel()} · Meta da simulação: ${simulationTarget} recursos de 24h. ${result.vacancies} ${result.vacancies===1?'vaga':'vagas'} em ${result.daysWithVacancies} ${result.daysWithVacancies===1?'dia':'dias'}. Todos os ${result.days} dias do intervalo estão incluídos.`;
+      status.textContent=`${periodLabel()} · Simulação ativa: ${simulationTarget} recursos de 24h. ${result.vacancies} ${result.vacancies===1?'vaga':'vagas'} PREVISTO AC4 em ${result.daysWithVacancies} ${result.daysWithVacancies===1?'dia':'dias'}. Todos os ${result.days} dias do intervalo estão incluídos.`;
     }catch(error){vacancyMessage.value='';copy.disabled=true;status.textContent=error.message;}
   }
   function renderPeriod() {
@@ -11521,10 +11528,11 @@ html.vacancy-dialog-open,html.vacancy-dialog-open body{overflow:hidden;overscrol
   const financeDialog=document.getElementById('ac4-finance-dialog');
   document.addEventListener('click',event=>{if(event.target.closest('[data-ac4-ranking]')){hideExchangeTooltip();renderRankingDialog();rankingDialog.showModal();rankingDialog.scrollTop=0;}});
   const simulationConfig=document.getElementById('ac4-simulation-config'),simulationTargetInput=document.getElementById('ac4-simulation-target'),simulationEnabledInput=document.getElementById('ac4-simulation-enabled');
-  document.addEventListener('click',event=>{if(event.target.closest('[data-ac4-simulation]')){hideExchangeTooltip();simulationTargetInput.value=String(simulationTarget);simulationTargetInput.setCustomValidity('');simulationEnabledInput.checked=true;document.documentElement.classList.add('simulation-config-open');simulationConfig.showModal();}});
+  function openSimulationConfig(){hideExchangeTooltip();simulationTargetInput.value=String(simulationTarget);simulationTargetInput.setCustomValidity('');simulationEnabledInput.checked=true;document.documentElement.classList.add('simulation-config-open');simulationConfig.showModal();}
+  document.addEventListener('click',event=>{if(event.target.closest('[data-ac4-simulation]'))openSimulationConfig();});
   simulationConfig.addEventListener('cancel',event=>event.preventDefault());
   simulationConfig.addEventListener('keydown',event=>{if(event.key!=='Tab')return;const controls=[...simulationConfig.querySelectorAll('select:not([disabled]),input:not([disabled]),button:not([disabled])')],first=controls[0],last=controls.at(-1),active=document.activeElement;const next=event.shiftKey?(active===first||active===simulationConfig?last:null):(active===last||active===simulationConfig?first:null);if(next){event.preventDefault();next.focus({preventScroll:true});}});
-  simulationConfig.addEventListener('close',()=>{document.documentElement.classList.remove('simulation-config-open');document.querySelector('[data-ac4-simulation]')?.focus({preventScroll:true});refreshSimulationScrollHints();});
+  simulationConfig.addEventListener('close',()=>{document.documentElement.classList.remove('simulation-config-open');(vacancyDialog.open?(simulationActive?vacancyStart:document.getElementById('vacancy-configure')):document.querySelector('[data-ac4-simulation]'))?.focus({preventScroll:true});refreshSimulationScrollHints();});
   simulationTargetInput.addEventListener('change',()=>simulationTargetInput.setCustomValidity(''));
   document.getElementById('ac4-simulation-cancel').addEventListener('click',()=>simulationConfig.close('cancel'));
   document.getElementById('ac4-simulation-form').addEventListener('submit',event=>{
@@ -11558,11 +11566,13 @@ html.vacancy-dialog-open,html.vacancy-dialog-open body{overflow:hidden;overscrol
   nextMonth.addEventListener('click',()=>moveMonth(1));
   filterButtons.forEach(button => button.addEventListener('click', () => { filter = button.dataset.filter; draw();if(button.dataset.exchangeTooltip&&(button.matches(':hover')||document.activeElement===button)){hoveredBadge=button.matches(':hover')?button:null;focusedBadge=document.activeElement===button?button:null;showExchangeTooltip(button);} }));
   vacancyButton.addEventListener('click',()=>{hideExchangeTooltip();renderVacancyDialog();document.documentElement.classList.add('vacancy-dialog-open');vacancyDialog.showModal();});
+  document.getElementById('vacancy-configure').addEventListener('click',openSimulationConfig);
   document.getElementById('vacancy-close').addEventListener('click',()=>vacancyDialog.close());
   vacancyDialog.addEventListener('close',()=>{document.documentElement.classList.remove('vacancy-dialog-open');vacancyButton.focus({preventScroll:true});});
   const changeVacancyRange=event=>{let start=vacancyStart.value,end=vacancyEnd.value;if(start>end){if(event.target===vacancyStart)end=start;else start=end;}vacancyRanges.set(period,{start,end});renderVacancyDialog();};
   vacancyStart.addEventListener('change',changeVacancyRange);vacancyEnd.addEventListener('change',changeVacancyRange);
   document.getElementById('vacancy-copy').addEventListener('click',async()=>{
+    if(!simulationActive){renderVacancyDialog();return;}
     const text=vacancyMessage.value,feedback=document.getElementById('vacancy-copy-status');if(!text)return;
     let copied=false;try{await navigator.clipboard.writeText(text);copied=true;}catch{vacancyMessage.focus();vacancyMessage.select();try{copied=document.execCommand('copy');}catch{copied=false;}}
     feedback.textContent=copied?'Mensagem copiada. Cole no WhatsApp.':'Selecione a mensagem e use a opção Copiar do seu dispositivo.';

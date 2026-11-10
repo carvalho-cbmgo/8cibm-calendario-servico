@@ -23,6 +23,7 @@ const root=path.join(__dirname,'..');
   });
   await page.goto(`http://127.0.0.1:${server.address().port}/`);
   const source=await page.evaluate(()=>JSON.stringify(window.ServiceCalendar.schedules));
+  await page.evaluate(()=>{window.vacancyBuildCalls=0;const build=window.ServiceVacancies.build;window.ServiceVacancies.build=(...args)=>{window.vacancyBuildCalls++;return build(...args);};});
   const icon=page.locator('#whatsapp-vacancies-button'),dialog=page.locator('#vacancy-dialog'),tooltip=page.locator('#exchange-tooltip');
   assert.equal(await icon.evaluate(el=>el.previousElementSibling.dataset.filter),'DELTA');assert(await icon.locator('img').evaluate(el=>el.complete&&el.naturalWidth>0));
   const hint=async(ala,text)=>{await page.locator(`[data-filter="${ala}"]`).hover();await tooltip.waitFor({state:'visible'});assert((await tooltip.textContent()).includes(text));};
@@ -31,11 +32,25 @@ const root=path.join(__dirname,'..');
   await page.locator('[data-filter="BRAVO"]').focus();assert((await tooltip.textContent()).includes('1º SGT HELLYSSON'));await page.keyboard.press('Escape');assert(await tooltip.isHidden());
   await page.locator('[data-filter="CHARLIE"]').click();assert.equal(await page.locator('.day:not(.is-hidden)').count(),7);await page.locator('[data-filter="TODAS"]').click();
   await icon.click();assert(await dialog.evaluate(el=>el.open));assert(await page.evaluate(()=>document.documentElement.classList.contains('vacancy-dialog-open')));
+  const inactive=async()=>{assert.equal(await page.locator('#vacancy-message').inputValue(),'');assert(await page.locator('#vacancy-output').isHidden());assert(await page.locator('#vacancy-copy').isDisabled());assert(await page.locator('#vacancy-start').isDisabled());assert(await page.locator('#vacancy-end').isDisabled());assert.equal(await page.locator('.simulation-entry').count(),0);assert((await page.locator('#vacancy-summary').textContent()).includes('Ative a Simulação'));};
+  await inactive();assert.equal(await page.evaluate(()=>window.vacancyBuildCalls),0);
+  await page.locator('#vacancy-copy').dispatchEvent('click');assert.equal(await page.evaluate(()=>window.copiedText),null);assert.equal(await page.evaluate(()=>window.vacancyBuildCalls),0);
+  await page.locator('#vacancy-configure').click();await page.locator('#ac4-simulation-target').selectOption('10');await page.locator('#ac4-simulation-cancel').click();await inactive();assert.equal(await page.evaluate(()=>window.vacancyBuildCalls),0);
+  await page.locator('#vacancy-configure').click();assert.equal(await page.locator('#ac4-simulation-target').inputValue(),'6');await page.locator('#ac4-simulation-confirm').click();assert(!(await page.locator('#vacancy-start').isDisabled()));assert(await page.locator('#vacancy-start').evaluate(el=>document.activeElement===el));
   assert.equal(await page.locator('#vacancy-start').inputValue(),'2026-11-10');assert.equal(await page.locator('#vacancy-end').inputValue(),'2026-11-30');assert.equal(await page.locator('#vacancy-end option').count(),30);
   const range=async(start,end)=>{await page.locator('#vacancy-start').selectOption(start);await page.locator('#vacancy-end').selectOption(end);};
+  const matchesCalendar=async()=>{
+   const values=await page.evaluate(()=>{
+    const normalize=time=>time.replace(/\b0(?=\d)/g,''),start=Number(document.getElementById('vacancy-start').value.slice(8)),end=Number(document.getElementById('vacancy-end').value.slice(8)),actual={},exported={};
+    for(const card of document.querySelectorAll('.day')){const day=Number(card.dataset.day);if(day<start||day>end)continue;for(const row of card.querySelectorAll('.simulation-entry')){const key=[day,row.querySelector('.chip.ac4').textContent,normalize(row.querySelector('.ac4-period').textContent)].join('|');actual[key]=(actual[key]||0)+1;}}
+    for(const match of document.getElementById('vacancy-message').value.matchAll(/^\*(\d{2})\/\d{2}.*\*\n(AC4 [\d.]+h) \(([^)\n]+)\)\nVoluntários \((\d+) vagas?\)/gm)){const key=[Number(match[1]),match[2],normalize(match[3])].join('|');exported[key]=(exported[key]||0)+Number(match[4]);}
+    return {actual,exported};
+   });assert.deepEqual(values.exported,values.actual,'Vagas e horários da mensagem correspondem às linhas PREVISTO AC4 do calendário');
+  };
   await range('2026-11-12','2026-11-14');
   const expected=await page.evaluate(()=>{const {schedules,period,quotas}=window.ServiceCalendar,plan=window.ServiceSimulation.plan(schedules,period,quotas[period]);return window.ServiceVacancies.build(schedules,period,plan,'2026-11-12','2026-11-14').message;});
   assert.equal(await page.locator('#vacancy-message').inputValue(),expected);assert(expected.includes('AC4 12h (08h às 20h)'));assert(expected.includes('Voluntários (02 vagas)'));
+  await matchesCalendar();
   await page.locator('#vacancy-copy').click();assert.equal(await page.evaluate(()=>window.copiedText),expected);assert((await page.locator('#vacancy-copy-status').textContent()).includes('Mensagem copiada'));
   await page.evaluate(()=>window.failTextCopy=true);await page.locator('#vacancy-copy').click();assert.equal(await page.evaluate(()=>window.fallbackCopies),1);assert.equal(await page.evaluate(()=>window.copiedText),expected);await page.evaluate(()=>window.failTextCopy=false);
   await range('2026-11-10','2026-11-11');assert((await page.locator('#vacancy-message').inputValue()).includes('Sem vagas de AC4 na simulação.'));assert.equal((await page.locator('#vacancy-message').inputValue()).match(/Sem vagas/g).length,2);
@@ -44,6 +59,15 @@ const root=path.join(__dirname,'..');
   await page.keyboard.press('Escape');assert(await dialog.isHidden());assert(!(await page.evaluate(()=>document.documentElement.classList.contains('vacancy-dialog-open'))));
   const configure=async target=>{await page.locator('[data-ac4-simulation]').click();await page.locator('#ac4-simulation-target').selectOption(String(target));await page.locator('#ac4-simulation-confirm').click();};
   await configure(10);await icon.click();await range('2026-11-13','2026-11-13');assert((await page.locator('#vacancy-message').inputValue()).includes('Voluntários (06 vagas)'));assert((await page.locator('#vacancy-summary').textContent()).includes('10 recursos'));
+  await matchesCalendar();
+  for(const target of [4,5,7,8,9,10,6]){await page.locator('#vacancy-configure').click();await page.locator('#ac4-simulation-target').selectOption(String(target));await page.locator('#ac4-simulation-confirm').click();await range('2026-11-01','2026-11-30');await matchesCalendar();assert((await page.locator('#vacancy-summary').textContent()).includes(`${target} recursos`));}
+  await range('2026-11-12','2026-11-12');assert((await page.locator('#vacancy-message').inputValue()).includes('AC4 12h (08h às 20h)'));
+  await page.evaluate(()=>window.ServiceCalendar.updateAC4({period:'2026-11',day:12,member:'2º SGT LUIZ ANTONIO'},{cancelled:true}));assert((await page.locator('#vacancy-message').inputValue()).includes('AC4 24h (08h às 08h)'));await matchesCalendar();
+  await page.evaluate(source=>{Object.assign(window.ServiceCalendar.schedules,JSON.parse(source));window.ServiceCalendar.refresh();},source);await matchesCalendar();assert((await page.locator('#vacancy-message').inputValue()).includes('AC4 12h (08h às 20h)'));
+  await page.locator('#vacancy-configure').click();await page.locator('#ac4-simulation-enabled').uncheck();await page.locator('#ac4-simulation-confirm').click();await inactive();
+  const calls=await page.evaluate(()=>window.vacancyBuildCalls);await page.locator('#vacancy-copy').dispatchEvent('click');assert.equal(await page.evaluate(()=>window.vacancyBuildCalls),calls);
+  await page.locator('#vacancy-close').click();await icon.click();await inactive();
+  await page.locator('#vacancy-configure').click();await page.locator('#ac4-simulation-confirm').click();await matchesCalendar();
   await page.locator('#vacancy-close').click();await configure(6);
   // Only fictitious identification data are imported to exercise the SEI clipboard.
   await page.evaluate(async()=>{
@@ -75,7 +99,9 @@ const root=path.join(__dirname,'..');
    assert(filters.every(button=>button.scroll<=button.width),`filtro cortado ${width}`);assert(filters.every(button=>Math.abs(button.top-filters[0].top)<1),`filtros mesma linha ${width}`);
    await hint('ALPHA','ST DA SILVA');const box=await tooltip.boundingBox();assert(box.x>=0&&box.x+box.width<=width,`dica ${width}`);await page.keyboard.press('Escape');
   }
+  await page.setViewportSize({width:320,height:640});await icon.click();await page.locator('#vacancy-configure').click();await page.locator('#ac4-simulation-enabled').uncheck();await page.locator('#ac4-simulation-confirm').click();await inactive();await dialog.screenshot({path:'/tmp/vagas-inativa-320.png'});
+  await page.locator('#vacancy-configure').click();await page.locator('#ac4-simulation-target').selectOption('8');await page.locator('#ac4-simulation-confirm').click();await matchesCalendar();assert((await page.locator('#vacancy-summary').textContent()).includes('8 recursos'));await page.locator('#vacancy-close').click();
   assert.equal(await page.evaluate(()=>JSON.stringify(window.ServiceCalendar.schedules)),source);assert.deepEqual(errors,[]);
-  console.log('PASS: TS CIA somente SEI, observações/negritos/cores na ES e na cópia, cancelamento de férias, dicas por ala/mês, vagas agrupadas com horários complementares, todos os dias, seletores, meta, cópia e alternativa; 320–1800px sem conteúdo cortado.');
+  console.log('PASS: geração e cópia bloqueadas com simulação desligada; ativação/cancelamento, todas as metas 4–10, atualização/cancelamento de AC4 e reativação; vagas/horários idênticos ao PREVISTO AC4 do calendário; TS CIA, cópia, alas e layout de 320–1800px preservados.');
  }finally{if(browser)await browser.close();await new Promise(resolve=>server.close(resolve));}
 })().catch(error=>{console.error(error);process.exitCode=1;});
