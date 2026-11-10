@@ -61,13 +61,13 @@ const money=cents=>normalize(currency.format(cents/100));
    }
   }
   await page.clock.setFixedTime(new Date('2026-11-12T15:00:00Z'));await page.evaluate(()=>window.dispatchEvent(new Event('pageshow')));expected=await verify('2026-11-12',true,10);assert(expected.extra.total>0);
-  await configure(6);expected=await verify('2026-11-12',true,6);assert.equal(expected.real.total+expected.extra.total,1400800);
+  await configure(6);expected=await verify('2026-11-12',true,6);assert.equal(expected.real.total+expected.extra.total,1438900);
   await page.locator('#mes-seguinte').click();await verify('2026-11-12',true);assert.equal(await page.locator('.current-finance-available .current-finance-amount').textContent(),'Não informada');
   await page.locator('#mes-anterior').click();await configure(6,false);
   await page.clock.setFixedTime(new Date('2026-11-09T15:00:00Z'));await page.evaluate(()=>document.dispatchEvent(new Event('visibilitychange')));await verify('2026-11-09');
   await page.evaluate(()=>window.ServiceCalendar.updateAC4({period:'2026-11',day:9,member:'SD PICCINI'},{end:'20h00',endDate:'2026-11-09',nextDay:false,hours:12}));expected=await verify('2026-11-09');assert.equal(expected.real.total,1159600);
   await page.evaluate(source=>{Object.assign(window.ServiceCalendar.schedules,JSON.parse(source));window.ServiceCalendar.refresh();},source);await verify('2026-11-09');
-  await page.clock.setFixedTime(new Date('2026-12-05T15:00:00Z'));await page.evaluate(()=>window.dispatchEvent(new Event('pageshow')));expected=await verify('2026-12-05');assert.equal(expected.real.total,1658700);
+  await page.clock.setFixedTime(new Date('2026-12-05T15:00:00Z'));await page.evaluate(()=>window.dispatchEvent(new Event('pageshow')));expected=await verify('2026-12-05');assert.equal(expected.real.total,1696800);
   assert.equal(await page.evaluate(()=>JSON.stringify(window.ServiceCalendar.schedules)),source);assert.deepEqual(errors,[]);
   console.log('PASS: AC4 CORRENTE inclusivo e por modalidade, valores/percentuais e recuos alinhados; controle mensal compacto; hoje, passado/futuro, simulação, atualização de AC4 e data de Brasília; 320–2400px sem overflow e título móvel preservado.');
  }finally{if(browser)await browser.close();await new Promise(resolve=>server.close(resolve));}

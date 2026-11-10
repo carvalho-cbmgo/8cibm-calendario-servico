@@ -56,7 +56,7 @@ const root=path.join(__dirname,'..');
   await range('2026-11-10','2026-11-11');assert((await page.locator('#vacancy-message').inputValue()).includes('Sem vagas de AC4 na simulação.'));assert.equal((await page.locator('#vacancy-message').inputValue()).match(/Sem vagas/g).length,2);
   await page.locator('#vacancy-start').selectOption('2026-11-17');assert.equal(await page.locator('#vacancy-end').inputValue(),'2026-11-17');assert.equal((await page.locator('#vacancy-message').inputValue()).match(/\*17\/11/g).length,2);
   await page.locator('#vacancy-end').selectOption('2026-11-12');assert.equal(await page.locator('#vacancy-start').inputValue(),'2026-11-12');
-  await page.keyboard.press('Escape');assert(await dialog.isHidden());assert(!(await page.evaluate(()=>document.documentElement.classList.contains('vacancy-dialog-open'))));
+  await page.keyboard.press('Escape');assert(await dialog.isHidden());await page.waitForFunction(()=>!document.documentElement.classList.contains('vacancy-dialog-open'));
   const configure=async target=>{await page.locator('[data-ac4-simulation]').click();await page.locator('#ac4-simulation-target').selectOption(String(target));await page.locator('#ac4-simulation-confirm').click();};
   await configure(10);await icon.click();await range('2026-11-13','2026-11-13');assert((await page.locator('#vacancy-message').inputValue()).includes('Voluntários (05 vagas)'));assert((await page.locator('#vacancy-summary').textContent()).includes('10 recursos'));
   await matchesCalendar();
@@ -80,6 +80,10 @@ const root=path.join(__dirname,'..');
    const card=await expand(day),badge=card.locator(`[data-company-sei="${sei}"]`);await badge.hover();assert.equal(await tooltip.locator('p').first().textContent(),`TS CIA (SEI ${sei})`);assert((await tooltip.textContent()).includes(related));await badge.click({button:'right'});assert.equal(await page.evaluate(()=>window.copiedText),sei);await page.keyboard.press('Escape');
    if(sei==='98254182'){assert.equal(await card.locator('.resource-ordinary').textContent(),'4 ORD');assert.equal(await card.locator('.entry').filter({has:page.locator('.name',{hasText:name})}).count(),1);}
    await card.locator('.operational-section [data-sei-day]').click();
+   if(day===10){
+    const calendarRow=card.locator('.entry').filter({has:page.locator('.name',{hasText:'LUIZ ANTONIO'})});assert.equal(await calendarRow.locator('.chip.ac4').textContent(),'AC4 12h');assert.equal(await calendarRow.locator('.ac4-period').textContent(),'20h às 8h');assert((await calendarRow.locator('.ac4-cost').textContent()).includes('381,00'));
+    const orderRow=page.locator('#sei-order-table tbody tr').filter({hasText:'LUIZ ANTONIO'});assert.equal(await orderRow.count(),1);assert.deepEqual(await orderRow.locator('td').evaluateAll(cells=>[...cells].map(cell=>cell.textContent).filter((_,index)=>[0,1,2,3,6].includes(index))),['10/11/2026','20h00','11/11/2026','08h00','12h']);
+   }
    const row=page.locator('#sei-scale-table tbody tr').filter({hasText:name}),obs=row.locator('td').nth(4);
    assert.equal(await obs.locator('strong').nth(0).textContent(),`TS Cia Operacional (SEI ${sei})`);assert.equal(await obs.locator('strong').nth(1).textContent(),pay?'Pagando serviço':'Dispensado do serviço');assert((await obs.textContent()).includes(related));assert.equal(await obs.locator('strong').count(),2);
    assert.equal(await row.evaluate(el=>getComputedStyle(el).color),pay?'rgb(37, 99, 179)':'rgb(192, 0, 0)');assert(!(await page.locator('#sei-validation').textContent()).includes('numeração própria'));

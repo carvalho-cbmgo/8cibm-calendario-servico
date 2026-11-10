@@ -123,8 +123,8 @@ test('novembro simula 26 recursos em 18 dias, cobra cada reforço uma vez e pres
   assert.equal(plan.addedResources,26);assert.equal(plan.addedServices,26);assert.equal(plan.daysAffected,18);assert.equal(plan.summary.committedCents,2054300);
   assert.equal(new Set(plan.summary.records.map(record=>record.key)).size,26);assert.equal(plan.summary.executedCents,0);assert.equal(plan.summary.satCents,0);
   assert.equal(plan.summary.daily.get('2026-11-30').cumulativeCents,2054300);
-  assert.equal(real.records.length,45);assert.equal(real.committedCents,1658700);assert.equal(real.executedCents,1096600);
-  assert.equal(real.committedCents+plan.summary.committedCents,3713000);assert.equal(real.remainingCents-plan.summary.committedCents,847000);
+  assert.equal(real.records.length,46);assert.equal(real.committedCents,1696800);assert.equal(real.executedCents,1096600);
+  assert.equal(real.committedCents+plan.summary.committedCents,3751100);assert.equal(real.remainingCents-plan.summary.committedCents,808900);
   assert.equal(plan.summary.records.filter(record=>record.minutes===720).length,5);assert.equal(plan.summary.records.reduce((total,record)=>total+record.minutes/60,0),564);
   for(const number of [12,17,19,24,26]){const complements=plan.days.get(number).members.filter(member=>member.events[0].hours===12);assert.equal(complements.length,1);assert.deepEqual([complements[0].events[0].start,complements[0].events[0].end],['08h00','20h00']);}
 });
@@ -154,5 +154,5 @@ test('AC4 corrente em simulação inclui apenas os acréscimos até o acesso, se
   const source=data(),before=JSON.stringify(source),real=finance.month(source,'2026-11',4560000),plan=simulation.plan(source,'2026-11',4560000);
   assert.equal(finance.asOf(plan.summary,'2026-11-09').committedCents,0);
   const current=finance.asOf(real,'2026-11-12'),extra=finance.asOf(plan.summary,'2026-11-12');
-  assert.equal(extra.committedCents,36000);assert.equal(current.committedCents+extra.committedCents,1400800);assert.equal(current.remainingCents-extra.committedCents,3159200);assert(extra.committedCents<plan.summary.committedCents);assert.equal(JSON.stringify(source),before);
+  assert.equal(extra.committedCents,36000);assert.equal(current.committedCents+extra.committedCents,1438900);assert.equal(current.remainingCents-extra.committedCents,3121100);assert(extra.committedCents<plan.summary.committedCents);assert.equal(JSON.stringify(source),before);
 });
