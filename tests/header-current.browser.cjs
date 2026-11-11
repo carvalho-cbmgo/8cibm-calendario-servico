@@ -60,7 +60,7 @@ const money=cents=>normalize(currency.format(cents/100));
     if([390,1280,1800].includes(width))await page.locator('.header').screenshot({path:`/tmp/header-current-${active?'simulation':'normal'}-${width}.png`,animations:'disabled'});
    }
   }
-  await page.clock.setFixedTime(new Date('2026-11-12T15:00:00Z'));await page.evaluate(()=>window.dispatchEvent(new Event('pageshow')));expected=await verify('2026-11-12',true,10);assert(expected.extra.total>0);
+  await page.clock.setFixedTime(new Date('2026-11-12T15:00:00Z'));await page.evaluate(()=>window.dispatchEvent(new Event('pageshow')));expected=await verify('2026-11-12',true,10);assert.equal(expected.extra.total,0);
   await configure(6);expected=await verify('2026-11-12',true,6);assert.equal(expected.real.total+expected.extra.total,1438900);
   await page.locator('#mes-seguinte').click();await verify('2026-11-12',true);assert.equal(await page.locator('.current-finance-available .current-finance-amount').textContent(),'Não informada');
   await page.locator('#mes-anterior').click();await configure(6,false);

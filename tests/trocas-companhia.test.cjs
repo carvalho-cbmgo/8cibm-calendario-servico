@@ -30,7 +30,7 @@ test('oito autorizações da companhia têm suas 15 movimentações publicadas, 
 test('HENRIQUE paga 24h na Delta em 13/11 e fica dispensado na Charlie em 20/11',()=>{
  const {ServiceChief:chief,ServiceSimulation:simulation}=context.window,plan=simulation.plan(data,'2026-11',4560000);
  for(const [date,kind,ala,resources,reinforcements] of [['2026-11-13','pay','DELTA',6,0],['2026-11-20','disp','CHARLIE',4,2]]){
-  const input=day(date),members=input.members.filter(member=>member.name==='3º SGT HENRIQUE');assert.equal(members.length,1);assert.equal(input.ala,ala);assert(!input.confirmation);assert.equal(members[0].ord,22);
+  const input=day(date),members=input.members.filter(member=>member.name==='3º SGT HENRIQUE');assert.equal(members.length,1);assert.equal(input.ala,ala);assert.equal(input.confirmation?.status??null,date==='2026-11-13'?'confirmed':null);assert.equal(members[0].ord,22);
   assert.equal(members[0].badges.length,1);assert.equal(members[0].badges[0].kind,kind);assert.equal(members[0].events.length,0);assert.equal(simulation.coverage(input,date).resources,resources);assert.equal(parseInt(input.coverage[0]),resources);
   assert.equal(plan.days.get(Number(date.slice(8))).addedServices,reinforcements);assert.equal(chief.select(input).assignments[0].name,'ST OSVALDIR');
  }
@@ -51,7 +51,7 @@ test('trocas e férias canceladas preservam os AC4 reais e atualizam a necessida
  assert.equal(real.records.length,56);assert.equal(real.committedCents,2460200);assert.equal(real.executedCents,1096600);assert.equal(real.remainingCents,2099800);
  assert.equal(november.addedResources,16);assert.equal(november.summary.committedCents,1290900);assert.equal(november.days.get(28).addedResources,2);assert.equal(real.committedCents+november.summary.committedCents,3751100);
  assert.equal(december.addedResources,24);assert.equal(december.summary.committedCents,1987600);assert.equal(december.days.get(5).addedResources,0);assert.equal(december.summary.quotaCents,null);
- assert.equal(january.addedResources,23);assert.equal(january.summary.committedCents,1980700);assert.equal(data['2026-11'].days.filter(day=>day.confirmation?.status==='confirmed').length,11);
+ assert.equal(january.addedResources,23);assert.equal(january.summary.committedCents,1980700);assert.equal(data['2026-11'].days.filter(day=>day.confirmation?.status==='confirmed').length,18);
 });
 
 test('as datas históricas não migram para outro ano e o pagamento de DIEGO não aparece em 19/11',()=>{

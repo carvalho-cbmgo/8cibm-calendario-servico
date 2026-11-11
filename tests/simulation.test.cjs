@@ -117,8 +117,8 @@ test('todas as metas completam somente o déficit por horário nos três meses c
 
 test('novembro simula 16 recursos em 11 dias, cobra cada reforço uma vez e preserva execuções',()=>{
   const source=data(),plan=simulation.plan(source,'2026-11',4560000),real=finance.month(source,'2026-11',4560000);
-  assert.equal(source['2026-11'].days.filter(day=>day.confirmation?.status==='confirmed').length,11);
-  for(let day=1;day<=11;day++)assert.equal(plan.days.get(day).addedResources,0);
+  assert.equal(source['2026-11'].days.filter(day=>day.confirmation?.status==='confirmed').length,18);
+  for(let day=1;day<=18;day++)assert.equal(plan.days.get(day).addedResources,0);
   assert.equal(plan.days.get(27).addedResources,0);assert.equal(plan.days.get(13).addedResources,0);assert.equal(plan.days.get(20).addedResources,2);assert.equal(plan.days.get(29).addedResources,1);
   assert.equal(plan.addedResources,16);assert.equal(plan.addedServices,16);assert.equal(plan.daysAffected,11);assert.equal(plan.summary.committedCents,1290900);
   assert.equal(new Set(plan.summary.records.map(record=>record.key)).size,16);assert.equal(plan.summary.executedCents,0);assert.equal(plan.summary.satCents,0);
@@ -140,7 +140,7 @@ test('meta de 4 a 10 altera somente os reforços necessários, sem remover recur
   const four=simulation.plan(source,'2026-11',4560000,real,4),five=simulation.plan(source,'2026-11',4560000,real,5),ten=simulation.plan(source,'2026-11',4560000,real,10);
   assert.equal(four.addedResources,0);assert.equal(four.summary.committedCents,0);assert.equal(four.days.get(12).coverage.resources,6);
   assert.equal(five.addedResources,5);assert.equal(five.summary.committedCents,469100);
-  assert.equal(ten.addedResources,92);assert.equal(ten.daysAffected,19);assert.equal(ten.targetResources,10);
+  assert.equal(ten.addedResources,64);assert.equal(ten.daysAffected,12);assert.equal(ten.targetResources,10);
   for(const day of source['2026-11'].days){const planned=ten.days.get(day.day);assert.equal(planned.addedResources,day.confirmation?.status==='confirmed'?0:10-planned.coverage.resources);}
   assert.equal(ten.summary.quotaCents,4560000);assert(real.remainingCents-ten.summary.committedCents<0);assert.equal(JSON.stringify(source),before);
 });

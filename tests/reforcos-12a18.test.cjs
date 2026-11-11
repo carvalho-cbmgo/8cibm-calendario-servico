@@ -19,7 +19,7 @@ test('dez reforços informados em 11/11 são operacionais previstos, únicos, co
 test('plantões de 12 a 18 atingem seis recursos e não oferecem novamente as vagas preenchidas',()=>{
  const plan=simulation.plan(data,'2026-11',4560000);
  for(let number=12;number<=18;number++){
-  const day=data['2026-11'].days.find(day=>day.day===number),result=plan.days.get(number);assert.equal(result.coverage.resources,6);assert(result.coverage.segments.every(segment=>segment.resources===6));assert.equal(parseInt(day.coverage[0]),6);assert.equal(result.addedServices,0);assert(!day.confirmation);
+  const day=data['2026-11'].days.find(day=>day.day===number),result=plan.days.get(number);assert.equal(result.coverage.resources,6);assert(result.coverage.segments.every(segment=>segment.resources===6));assert.equal(parseInt(day.coverage[0]),6);assert.equal(result.addedServices,0);assert.equal(day.confirmation.status,'confirmed');assert.equal(day.confirmation.scope,'calendar');assert.equal(day.confirmation.date,'2026-11-11');
  }
  const message=vacancies.build(data,'2026-11',plan,'2026-11-12','2026-11-18');assert.equal(message.vacancies,0);assert.equal(message.days,7);assert.equal(message.message.match(/Sem vagas/g).length,7);
  assert.equal(plan.addedServices,16);assert.equal(plan.summary.committedCents,1290900);
