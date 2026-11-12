@@ -1,5 +1,7 @@
 # Reforços operacionais de 12 a 18/11 — OS nº 367
 
+**Registro histórico:** a [atualização individualizada das OS de 13 a 18/11](os-operacionais-13a18nov-2026.md) substituiu as referências de 11 serviços pela numeração específica e acrescentou o AC4 de 6h do ST DA SILVA em 13/11. A OS 367 permanece nos dois serviços de 12/11. Os valores abaixo descrevem a inclusão original de 11/11.
+
 Serviços solicitados pelo usuário em 11/11/2026. A referência informada na sequência é **OS nº 367 (SEI 98339864)**, aplicada a todos os AC4 operacionais com início de 12 a 18/11, inclusive aos três anteriormente cadastrados.
 
 | Data inicial | Militar | AC4 | Período | Custo previsto |
