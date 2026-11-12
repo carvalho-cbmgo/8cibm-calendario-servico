@@ -406,15 +406,29 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 @media screen and (max-width:360px){.finance-weekly-table .simulation-delta{font-size:12px}}
 @media screen and (max-width:760px){.simulation-banner{font-size:15px;padding:12px}.simulation-banner h2{font-size:15px}.simulation-scope{font-size:14px}.simulation-entry{padding-left:7px}}
 html.simulation-config-open,html.simulation-config-open body{overflow:hidden;overscroll-behavior:none}
-dialog.simulation-dialog{width:min(420px,calc(100% - 24px));max-height:calc(100dvh - 32px);padding:22px;margin:auto;overflow:auto;border:1px solid #ead1e1;border-radius:16px;background:#fff;box-shadow:0 18px 70px #10283f55;font-size:16px}
+dialog.simulation-dialog{width:min(700px,calc(100% - 24px));max-height:calc(100dvh - 32px);padding:22px;margin:auto;overflow:auto;border:1px solid #ead1e1;border-radius:16px;background:#fff;box-shadow:0 18px 70px #10283f55;font-size:16px}
 .simulation-dialog h2{margin:0 0 9px;color:var(--simulation);font-size:21px;line-height:1.25}
 .simulation-dialog p{font-size:14px;line-height:1.5;color:#53677b;margin:0 0 16px}
-.simulation-config-label{display:grid;gap:7px;font-size:15px;font-weight:650}
-.simulation-config-label select{width:100%;min-height:46px;padding:8px 12px;border:1px solid #c6d4e2;border-radius:8px;background:#f8fafc;color:var(--ink);font:inherit;font-size:18px}
+.simulation-config-label{display:grid;grid-template-columns:max-content 64px;align-items:center;justify-content:start;gap:12px;font-size:15px;font-weight:650}
+.simulation-config-label>span{white-space:nowrap}
+.simulation-config-label select{width:100%;min-height:46px;padding:8px;border:1px solid #c6d4e2;border-radius:8px;background:#f8fafc;color:var(--ink);font:inherit;font-size:18px}
+.simulation-custom-rules{min-width:0;margin:18px 0 0;padding:12px 10px;border:1px solid #dfcede;border-radius:10px;background:#fff}
+.simulation-custom-rules legend{padding:0 6px;color:#763859;font-weight:700}
+.simulation-rules-scroll{max-width:100%;overflow-x:auto;padding:3px 3px 7px;scroll-padding-left:145px}
+.simulation-rules-grid{display:grid;grid-template-columns:145px repeat(7,minmax(44px,1fr));grid-template-rows:repeat(3,46px);align-items:center;gap:7px;min-width:512px}
+.simulation-rule-label{position:sticky;left:0;z-index:1;align-self:stretch;display:flex;align-items:center;background:#fff;font-size:13px;font-weight:650;white-space:nowrap}
+.simulation-weekday{width:100%;min-height:44px;padding:6px 2px;border:1px solid #cbd8e5;border-radius:7px;background:#f4f8fc;color:#3c5268;font:inherit;font-size:12px;font-weight:750;cursor:pointer}
+.simulation-weekday[aria-pressed="true"]{color:#fff;background:var(--simulation);border-color:var(--simulation)}
+.simulation-rule-cell{min-width:0}
+.simulation-rule-cell select{width:100%;min-height:44px;padding:6px 2px;border:1px solid #c6d4e2;border-radius:7px;background:#fff;color:var(--ink);font:inherit;font-size:15px}
+.simulation-dialog .simulation-rules-help{margin:7px 0 0;font-size:12px}
+.simulation-dialog .simulation-config-error{color:#ae153b;margin-top:10px}
+.simulation-rule-label:first-child{grid-column:1;grid-row:1}
+@media screen and (max-width:760px){dialog.simulation-dialog{padding:16px}.simulation-config-label{gap:8px;font-size:clamp(13px,3.5vw,15px);grid-template-columns:max-content 56px}.simulation-custom-rules{padding:10px 6px}.simulation-rules-grid{grid-template-columns:120px repeat(7,minmax(44px,1fr));min-width:487px}.simulation-rules-scroll{scroll-padding-left:120px}.simulation-rule-label{font-size:12px}.simulation-rules-help::after{content:' Deslize para acessar todos os dias.'}}
 .simulation-config-enabled{display:flex;align-items:center;gap:9px;margin:16px 0 5px;font-size:15px;font-weight:650;cursor:pointer}
 .simulation-config-enabled input{width:19px;height:19px;margin:0;accent-color:var(--simulation)}
 .simulation-dialog .simulation-config-hint{font-size:13px;margin-bottom:18px}
-.simulation-config-actions{display:flex;justify-content:flex-end;gap:9px}
+.simulation-config-actions{display:flex;justify-content:center;gap:9px}
 .simulation-config-actions button{min-height:44px;padding:9px 17px;border:1px solid #cad6e3;border-radius:8px;background:#fff;color:#3c5268;font:inherit;font-weight:700;cursor:pointer}
 .simulation-config-actions #ac4-simulation-confirm{background:var(--simulation);border-color:var(--simulation);color:#fff}
 .simulation-dialog :is(button,select,input):focus-visible{outline:3px solid #eaa3d0;outline-offset:3px}
@@ -755,11 +769,12 @@ html.vacancy-dialog-open,html.vacancy-dialog-open body{overflow:hidden;overscrol
  <form id="ac4-simulation-form">
   <h2 id="ac4-simulation-config-title">Simulação de reforço AC4</h2>
   <p id="ac4-simulation-config-description">Escolha a meta de recursos de 24h para cada serviço ainda não confirmado.</p>
-  <label class="simulation-config-label" for="ac4-simulation-target">Recursos de 24h por serviço
-   <select id="ac4-simulation-target" name="target" required autofocus><option value="4">4</option><option value="5">5</option><option value="6" selected>6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select>
+  <label class="simulation-config-label" for="ac4-simulation-target"><span>Recursos de 24h por serviço</span>
+   <select id="ac4-simulation-target" name="target" required autofocus><option value="4">4</option><option value="5">5</option><option value="6" selected>6</option><option value="7">7</option><option value="8">8</option></select>
   </label>
-  <label class="simulation-config-enabled"><input type="checkbox" id="ac4-simulation-enabled" checked> Aplicar simulação</label>
-  <p class="simulation-config-hint">Para desativar, desmarque “Aplicar simulação” e confirme.</p>
+  <fieldset class="simulation-custom-rules"><legend>Regras Personalizadas</legend><div class="simulation-rules-scroll" role="region" aria-label="Metas por dia da semana" tabindex="0"><div id="ac4-simulation-rules" class="simulation-rules-grid"></div></div><p class="simulation-rules-help">Dias desmarcados usam a regra geral. O noturno pertence ao dia em que o serviço começa.</p></fieldset>
+  <p id="ac4-simulation-error" class="simulation-config-error" role="alert" hidden></p>
+  <label class="simulation-config-enabled"><input type="checkbox" id="ac4-simulation-enabled" checked> Aplicar Simulação</label>
   <div class="simulation-config-actions"><button type="button" id="ac4-simulation-cancel">Cancelar</button><button type="submit" id="ac4-simulation-confirm">Confirmar</button></div>
  </form>
 </dialog>
@@ -10952,18 +10967,32 @@ html.vacancy-dialog-open,html.vacancy-dialog-open body{overflow:hidden;overscrol
     }
     return {resources:Math.min(...segments.map(segment=>segment.resources)),anchor,segments,valid:!warnings.length,warnings};
   }
-  function plan(schedules,period,quotaCents=null,base=finance.month(schedules,period,quotaCents),targetResources=6){
-    if(!Number.isInteger(targetResources)||targetResources<4||targetResources>10)throw new RangeError('A meta deve ser um número inteiro de 4 a 10 recursos de 24h.');
+  function validateOptions(targetResources,customRules={}){
+    const valid=value=>Number.isInteger(value)&&value>=4&&value<=8;
+    if(!valid(targetResources))throw new RangeError('A meta deve ser um número inteiro de 4 a 8 recursos de 24h.');
+    if(!customRules||typeof customRules!=='object'||Array.isArray(customRules))throw new RangeError('Regras personalizadas inválidas.');
+    const rules={};
+    for(const [weekday,rule] of Object.entries(customRules)){
+      if(!/^[0-6]$/.test(weekday)||!rule||typeof rule!=='object'||!valid(rule.day)||!valid(rule.night))throw new RangeError('Cada dia personalizado deve ter metas diurna e noturna de 4 a 8.');
+      rules[weekday]={day:rule.day,night:rule.night};
+    }
+    return {targetResources,rules};
+  }
+  function plan(schedules,period,quotaCents=null,base=finance.month(schedules,period,quotaCents),targetResources=6,customRules={}){
+    const {rules}=validateOptions(targetResources,customRules);
     const days=new Map(),virtual={days:[]},warnings=[];
     for(const day of schedules[period]?.days||[]){
       const date=`${period}-${String(day.day).padStart(2,'0')}`,actual=coverage(day,date,base),members=[];
-      const needed=day.confirmation?.status==='confirmed'||!actual.valid?0:Math.max(0,targetResources-actual.resources);
+      const weekday=new Date(`${date}T12:00:00Z`).getUTCDay(),targets={...(rules[weekday]||{day:targetResources,night:targetResources})};
+      const edges=[...new Set([...actual.segments.flatMap(segment=>[segment.start,segment.end]),(480-actual.anchor+DAY)%DAY,(1200-actual.anchor+DAY)%DAY])].sort((a,b)=>a-b);
+      const segments=edges.slice(0,-1).map((start,index)=>{const end=edges[index+1],part=actual.segments.find(segment=>segment.start<=start&&segment.end>=end),minute=(actual.anchor+start)%DAY,shift=minute>=480&&minute<1200?'day':'night';return {start,end,resources:part.resources,shift,target:targets[shift]};});
+      const needed=day.confirmation?.status==='confirmed'||!actual.valid?0:Math.max(0,...segments.map(segment=>segment.target-segment.resources));
       // Each layer fills only its uncovered intervals, merging adjacent intervals into one service.
       const ranges=[];
       for(let level=1;level<=needed;level++){
         let current=null;
-        for(const segment of actual.segments){
-          if(targetResources-segment.resources<level){current=null;continue;}
+        for(const segment of segments){
+          if(segment.target-segment.resources<level){current=null;continue;}
           if(current&&current.end===segment.start)current.end=segment.end;
           else{current={start:segment.start,end:segment.end};ranges.push(current);}
         }
@@ -10972,13 +11001,15 @@ html.vacancy-dialog-open,html.vacancy-dialog-open body{overflow:hidden;overscrol
         const start=actual.anchor+range.start,end=actual.anchor+range.end,startDate=new Date((dayStamp(date)+start)*60000).toISOString().slice(0,10),endDate=new Date((dayStamp(date)+end)*60000).toISOString().slice(0,10),id=`simulation-${date}-${index+1}`;
         members.push({name:'PREVISTO AC4',simulationId:id,badges:[],notes:['Simulação de reforço operacional, sem militar designado.'],events:[{serviceId:id,simulation:true,mode:'OPERACIONAL/SOP',start:clockText(start%DAY),end:clockText(end%DAY),startDate,endDate,nextDay:endDate!==startDate,hours:(range.end-range.start)/60,status:'planned'}]});
       }
-      days.set(day.day,{coverage:actual,members,addedResources:needed,addedServices:members.length});virtual.days.push({day:day.day,members});
+      const resulting=segments.map(segment=>({...segment,resources:segment.resources+ranges.filter(range=>range.start<=segment.start&&range.end>=segment.end).length})),resourcesAfter=Math.min(...resulting.map(segment=>segment.resources));
+      const shiftResources=shift=>Math.min(...resulting.filter(segment=>segment.shift===shift).map(segment=>segment.resources));
+      days.set(day.day,{coverage:actual,targets,members,addedResources:resourcesAfter-actual.resources,addedServices:members.length,dayResources:shiftResources('day'),nightResources:shiftResources('night')});virtual.days.push({day:day.day,members});
       warnings.push(...actual.warnings.map(message=>`${date}: ${message}`));
     }
     const summary=finance.month({[period]:virtual},period,quotaCents);
-    return {days,summary,targetResources,addedResources:[...days.values()].reduce((total,day)=>total+day.addedResources,0),addedServices:[...days.values()].reduce((total,day)=>total+day.addedServices,0),daysAffected:[...days.values()].filter(day=>day.addedServices>0).length,warnings};
+    return {days,summary,targetResources,rules,addedResources:[...days.values()].reduce((total,day)=>total+day.addedResources,0),addedServices:[...days.values()].reduce((total,day)=>total+day.addedServices,0),daysAffected:[...days.values()].filter(day=>day.addedServices>0).length,warnings};
   }
-  window.ServiceSimulation={coverage,plan};
+  window.ServiceSimulation={coverage,plan,validateOptions};
 })();
 </script>
 <script>
@@ -11023,6 +11054,8 @@ html.vacancy-dialog-open,html.vacancy-dialog-open body{overflow:hidden;overscrol
   let financialSummary,simulationPlan;
   let simulationActive=false;
   let simulationTarget=6;
+  let simulationRules={};
+  const simulationWeekdays=[{key:1,label:'SEG',name:'Segunda-feira'},{key:2,label:'TER',name:'Terça-feira'},{key:3,label:'QUA',name:'Quarta-feira'},{key:4,label:'QUI',name:'Quinta-feira'},{key:5,label:'SEX',name:'Sexta-feira'},{key:6,label:'SAB',name:'Sábado'},{key:0,label:'DOM',name:'Domingo'}];
   let simulationScrollFrame=0;
   const rankingPersonnel=JSON.parse(document.getElementById('ranking-personnel').textContent);
   const periods = Object.keys(schedules).sort();
@@ -11139,6 +11172,10 @@ html.vacancy-dialog-open,html.vacancy-dialog-open body{overflow:hidden;overscrol
     return result;
   }
   function simulationDay(day){return simulationActive?simulationPlan.days.get(day.day):null;}
+  function simulationDescription(){
+    const rules=simulationWeekdays.filter(day=>Object.hasOwn(simulationRules,day.key)).map(day=>`${day.label}: ${simulationRules[day.key].day} diurno / ${simulationRules[day.key].night} noturno`);
+    return `Regra geral: ${simulationTarget} recursos de 24h.${rules.length?` Personalizadas — ${rules.join('; ')}.`:''}`;
+  }
   function refreshSimulationScrollHints(){
     if(simulationScrollFrame)return;
     simulationScrollFrame=requestAnimationFrame(()=>{simulationScrollFrame=0;const states=[...document.querySelectorAll('[data-simulation-scroll]')].map(scroll=>({hint:document.getElementById(scroll.dataset.simulationScroll),overflow:scroll.scrollWidth>scroll.clientWidth+1}));for(const {hint,overflow} of states)if(hint)hint.hidden=!overflow;});
@@ -11146,7 +11183,7 @@ html.vacancy-dialog-open,html.vacancy-dialog-open body{overflow:hidden;overscrol
   function updateSimulationBanner(){
     const banner=document.getElementById('ac4-simulation-status');banner.hidden=!simulationActive;banner.replaceChildren();if(!simulationActive)return;
     const extra=simulationPlan.summary.committedCents,total=financialSummary.committedCents+extra,available=financialSummary.remainingCents===null?null:financialSummary.remainingCents-extra;
-    banner.append(element('h2','','SIMULAÇÃO AC4 ATIVA'),element('p','',`${simulationPlan.addedServices} ${simulationPlan.addedServices===1?'serviço simulado':'serviços simulados'} em ${simulationPlan.daysAffected} ${simulationPlan.daysAffected===1?'dia não confirmado':'dias não confirmados'} · Meta: ${simulationTarget} recursos de 24h.`));
+    banner.append(element('h2','','SIMULAÇÃO AC4 ATIVA'),element('p','',`${simulationPlan.addedServices} ${simulationPlan.addedServices===1?'serviço simulado':'serviços simulados'} em ${simulationPlan.daysAffected} ${simulationPlan.daysAffected===1?'dia não confirmado':'dias não confirmados'} · ${simulationDescription()}`));
     const totals=element('div','simulation-totals');for(const [label,value] of [['Adicional',money(extra)],['Total com simulação',money(total)],['Disponível com simulação',available===null?'Cota não informada':money(available)]]){const item=element('span','',`${label}: `);item.append(element('strong','',value));totals.append(item);}banner.append(totals);
     const explanation=element('details','simulation-scope');explanation.append(element('summary','','Como ler esta simulação'),element('p','','Expanda OPERACIONAL para ver os reforços. A simulação completa os horários com efetivo abaixo da meta: um AC4 de 12h diurno e outro noturno formam juntos um recurso de 24h. Os valores e percentuais já incluem a simulação; entre parênteses aparece somente a variação sobre o cadastro. A cota mensal não é ampliada. Os reforços simulados não integram o ranking nem os documentos ES/OS.'));banner.append(explanation);
     if(available!==null&&available<0)banner.append(element('p','finance-warning',`A simulação ultrapassa a cota em ${money(-available)}.`));
@@ -11186,7 +11223,7 @@ html.vacancy-dialog-open,html.vacancy-dialog-open body{overflow:hidden;overscrol
     shortcut.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 4v16h16M8 15v-4m5 4V7m5 8v-6"/></svg>';
     const rankingShortcut=element('button','finance-details-button');rankingShortcut.type='button';rankingShortcut.dataset.ac4Ranking='';rankingShortcut.title='Ver ranking mensal de AC4';rankingShortcut.setAttribute('aria-label','Ver ranking mensal de AC4');rankingShortcut.setAttribute('aria-haspopup','dialog');rankingShortcut.setAttribute('aria-controls','ac4-ranking-dialog');
     rankingShortcut.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 3h8v5a4 4 0 0 1-8 0V3ZM8 5H4v2a4 4 0 0 0 4 4m8-6h4v2a4 4 0 0 1-4 4m-4 1v5m-4 4h8m-7-3h6v3"/></svg>';
-    const simulationShortcut=element('button','finance-details-button finance-simulation-button');simulationShortcut.type='button';simulationShortcut.dataset.ac4Simulation='';simulationShortcut.setAttribute('aria-pressed',String(simulationActive));simulationShortcut.setAttribute('aria-controls','ac4-simulation-config');simulationShortcut.setAttribute('aria-haspopup','dialog');simulationShortcut.title=simulationActive?`Configurar simulação AC4 · meta de ${simulationTarget} recursos de 24h`:'Configurar simulação de reforço AC4';simulationShortcut.setAttribute('aria-label',simulationShortcut.title);
+    const simulationShortcut=element('button','finance-details-button finance-simulation-button');simulationShortcut.type='button';simulationShortcut.dataset.ac4Simulation='';simulationShortcut.setAttribute('aria-pressed',String(simulationActive));simulationShortcut.setAttribute('aria-controls','ac4-simulation-config');simulationShortcut.setAttribute('aria-haspopup','dialog');simulationShortcut.title=simulationActive?`Configurar simulação AC4 · regra geral de ${simulationTarget} recursos de 24h${Object.keys(simulationRules).length?' e regras personalizadas':''}`:'Configurar simulação de reforço AC4';simulationShortcut.setAttribute('aria-label',simulationShortcut.title);
     simulationShortcut.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8M8 12h2m-2 4h2m4-4h3m-1.5-1.5v3M14 16h3"/></svg>';
     const actions=element('div','finance-actions');actions.setAttribute('role','group');actions.setAttribute('aria-label','Consultas e simulação AC4');actions.append(simulationShortcut,rankingShortcut,shortcut);
     toolbar.append(element('h2','','Controle AC4'),actions);target.append(toolbar);
@@ -11520,7 +11557,7 @@ html.vacancy-dialog-open,html.vacancy-dialog-open body{overflow:hidden;overscrol
     card.id = `dia-${String(day.day).padStart(2, '0')}`;
     card.dataset.ala = day.ala;
     card.dataset.day = String(day.day);
-    card.classList.toggle('is-simulated',added>0);
+    card.classList.toggle('is-simulated',addedServices>0);
     card.setAttribute('aria-label', `${day.day} de ${periodLabel()}, ala ${day.ala}`);
     const head = element('div', 'day-head');
     const date = element('div', 'day-date');
@@ -11531,7 +11568,7 @@ html.vacancy-dialog-open,html.vacancy-dialog-open body{overflow:hidden;overscrol
     if(confirmed){const label=element('span','scale-confirmed-label','Escala confirmada');label.title='Escala confirmada pelo usuário';dayState.append(label);}
     const resources=element('div','day-resources');resources.setAttribute('aria-label','Recursos do serviço operacional');
     const simulatedCoverage=simulationActive&&!confirmed&&simulated.coverage.valid;
-    const total=element('span','resource-total',simulatedCoverage?`${simulated.coverage.resources+added} recursos de 24h`:day.coverage[0]);total.title=simulatedCoverage?`${simulated.coverage.resources} recursos cadastrados + ${added} simulados. Dois períodos complementares de 12h equivalem a um recurso de 24h.`:'Recursos de 24h, conforme a cobertura operacional registrada.';
+    const total=element('span','resource-total',simulatedCoverage?`${simulated.coverage.resources+added} recursos de 24h`:day.coverage[0]);total.title=simulatedCoverage?`Diurno: ${simulated.dayResources} militares (meta ${simulated.targets.day}). Noturno: ${simulated.nightResources} militares (meta ${simulated.targets.night}). Dois períodos complementares de 12h equivalem a um recurso de 24h.`:'Recursos de 24h, conforme a cobertura operacional registrada.';
     const ordinary=element('span','chip ord resource-ordinary',`${counts.ordinary} ORD`);ordinary.title='Militares em serviço ordinário operacional, incluindo TS e TS CIA de pagamento. Dispensas e trocas pendentes não entram nesta contagem.';ordinary.setAttribute('aria-label',`${counts.ordinary} recursos de serviço ordinário`);
     const ac4=element('span','chip ac4 resource-ac4',`${counts.ac4+addedServices} AC4`);ac4.title=`Serviços AC4 ativos do Operacional, incluindo PROEBOM e jornadas parciais. SAT contabilizada separadamente.${addedServices?` Inclui ${addedServices} reforços simulados.`:''}`;
     const primary=element('div','day-primary');resources.append(ordinary,ac4);primary.append(date,resources);
@@ -11653,7 +11690,7 @@ html.vacancy-dialog-open,html.vacancy-dialog-open body{overflow:hidden;overscrol
     if(!simulationActive){status.textContent='Ative a Simulação de reforço AC4 e confirme a quantidade de recursos de 24h por serviço para gerar a mensagem com as vagas PREVISTO AC4 do calendário.';return;}
     try{
       const result=window.ServiceVacancies.build(schedules,period,simulationPlan,range.start,range.end);vacancyMessage.value=result.message;copy.disabled=false;
-      status.textContent=`${periodLabel()} · Simulação ativa: ${simulationTarget} recursos de 24h. ${result.vacancies} ${result.vacancies===1?'vaga':'vagas'} PREVISTO AC4 em ${result.daysWithVacancies} ${result.daysWithVacancies===1?'dia':'dias'}. Todos os ${result.days} dias do intervalo estão incluídos.`;
+      status.textContent=`${periodLabel()} · ${simulationDescription()} ${result.vacancies} ${result.vacancies===1?'vaga':'vagas'} PREVISTO AC4 em ${result.daysWithVacancies} ${result.daysWithVacancies===1?'dia':'dias'}. Todos os ${result.days} dias do intervalo estão incluídos.`;
     }catch(error){vacancyMessage.value='';copy.disabled=true;status.textContent=error.message;}
   }
   function renderPeriod() {
@@ -11665,7 +11702,7 @@ html.vacancy-dialog-open,html.vacancy-dialog-open body{overflow:hidden;overscrol
     const today = accessDate();
     selected = selections.get(period) ?? (year === today.year && month === today.month ? today.day : days[0]?.day);
     financialSummary=finance.month(schedules,period,window.ServiceCalendar.quotas[period]);
-    simulationPlan=window.ServiceSimulation.plan(schedules,period,window.ServiceCalendar.quotas[period],financialSummary,simulationTarget);
+    simulationPlan=window.ServiceSimulation.plan(schedules,period,window.ServiceCalendar.quotas[period],financialSummary,simulationTarget,simulationRules);
     updateFinancialHeader();
     areaControls.clear();
     cards = days.map(makeCard);
@@ -11837,18 +11874,36 @@ html.vacancy-dialog-open,html.vacancy-dialog-open body{overflow:hidden;overscrol
   window.addEventListener('resize',hideExchangeTooltip);dialog.addEventListener('close',hideExchangeTooltip);
   const financeDialog=document.getElementById('ac4-finance-dialog');
   document.addEventListener('click',event=>{if(event.target.closest('[data-ac4-ranking]')){hideExchangeTooltip();renderRankingDialog();rankingDialog.showModal();rankingDialog.scrollTop=0;}});
-  const simulationConfig=document.getElementById('ac4-simulation-config'),simulationTargetInput=document.getElementById('ac4-simulation-target'),simulationEnabledInput=document.getElementById('ac4-simulation-enabled');
-  function openSimulationConfig(){hideExchangeTooltip();simulationTargetInput.value=String(simulationTarget);simulationTargetInput.setCustomValidity('');simulationEnabledInput.checked=true;document.documentElement.classList.add('simulation-config-open');simulationConfig.showModal();}
+  const simulationConfig=document.getElementById('ac4-simulation-config'),simulationTargetInput=document.getElementById('ac4-simulation-target'),simulationEnabledInput=document.getElementById('ac4-simulation-enabled'),simulationConfigError=document.getElementById('ac4-simulation-error'),simulationRulesGrid=document.getElementById('ac4-simulation-rules');
+  const ruleInputs=weekday=>[...simulationRulesGrid.querySelectorAll(`select[data-weekday="${weekday}"]`)];
+  simulationRulesGrid.append(element('span','simulation-rule-label'));
+  for(const [index,day] of simulationWeekdays.entries()){
+    const button=element('button','simulation-weekday',day.label);button.type='button';button.dataset.weekday=day.key;button.setAttribute('aria-label',`Personalizar ${day.name}`);button.setAttribute('aria-pressed','false');button.style.gridColumn=String(index+2);button.style.gridRow='1';
+    button.addEventListener('click',()=>{const selected=button.getAttribute('aria-pressed')!=='true';button.setAttribute('aria-pressed',String(selected));for(const input of ruleInputs(day.key)){input.hidden=!selected;input.disabled=!selected;}simulationConfigError.hidden=true;});simulationRulesGrid.append(button);
+  }
+  for(const [row,shift,label] of [[2,'day','Diurno (8h às 20h)'],[3,'night','Noturno (20h às 8h):']]){
+    const heading=element('span','simulation-rule-label',label);heading.style.gridColumn='1';heading.style.gridRow=String(row);simulationRulesGrid.append(heading);
+    for(const [index,day] of simulationWeekdays.entries()){
+      const cell=element('div','simulation-rule-cell'),select=element('select');cell.style.gridColumn=String(index+2);cell.style.gridRow=String(row);select.dataset.weekday=day.key;select.dataset.shift=shift;select.id=`simulation-rule-${day.key}-${shift}`;select.setAttribute('aria-label',`${day.name} · ${shift==='day'?'Diurno (8h às 20h)':'Noturno (20h às 8h)'}`);select.hidden=true;select.disabled=true;select.required=true;
+      for(let value=4;value<=8;value++){const option=element('option','',String(value));option.value=String(value);select.append(option);}cell.append(select);simulationRulesGrid.append(cell);
+    }
+  }
+  function openSimulationConfig(){
+    hideExchangeTooltip();simulationTargetInput.value=String(simulationTarget);simulationTargetInput.setCustomValidity('');simulationEnabledInput.checked=true;simulationConfigError.hidden=true;
+    for(const button of simulationRulesGrid.querySelectorAll('button')){const rule=simulationRules[button.dataset.weekday],selected=!!rule;button.setAttribute('aria-pressed',String(selected));for(const input of ruleInputs(button.dataset.weekday)){input.value=String(rule?.[input.dataset.shift]??simulationTarget);input.hidden=!selected;input.disabled=!selected;}}
+    document.documentElement.classList.add('simulation-config-open');simulationConfig.showModal();
+  }
   document.addEventListener('click',event=>{if(event.target.closest('[data-ac4-simulation]'))openSimulationConfig();});
   simulationConfig.addEventListener('cancel',event=>event.preventDefault());
   simulationConfig.addEventListener('keydown',event=>{if(event.key!=='Tab')return;const controls=[...simulationConfig.querySelectorAll('select:not([disabled]),input:not([disabled]),button:not([disabled])')],first=controls[0],last=controls.at(-1),active=document.activeElement;const next=event.shiftKey?(active===first||active===simulationConfig?last:null):(active===last||active===simulationConfig?first:null);if(next){event.preventDefault();next.focus({preventScroll:true});}});
   simulationConfig.addEventListener('close',()=>{document.documentElement.classList.remove('simulation-config-open');(vacancyDialog.open?(simulationActive?vacancyStart:document.getElementById('vacancy-configure')):document.querySelector('[data-ac4-simulation]'))?.focus({preventScroll:true});refreshSimulationScrollHints();});
-  simulationTargetInput.addEventListener('change',()=>simulationTargetInput.setCustomValidity(''));
+  simulationTargetInput.addEventListener('change',()=>{simulationTargetInput.setCustomValidity('');for(const input of simulationRulesGrid.querySelectorAll('select:disabled'))input.value=simulationTargetInput.value;simulationConfigError.hidden=true;});
   document.getElementById('ac4-simulation-cancel').addEventListener('click',()=>simulationConfig.close('cancel'));
   document.getElementById('ac4-simulation-form').addEventListener('submit',event=>{
-    event.preventDefault();const target=Number(simulationTargetInput.value);
-    if(!Number.isInteger(target)||target<4||target>10){simulationTargetInput.setCustomValidity('Selecione uma meta de 4 a 10 recursos.');simulationTargetInput.reportValidity();return;}
-    simulationTarget=target;simulationActive=simulationEnabledInput.checked;renderPeriod();simulationConfig.close('confirm');
+    event.preventDefault();const target=Number(simulationTargetInput.value),rules={};
+    for(const button of simulationRulesGrid.querySelectorAll('button[aria-pressed="true"]')){rules[button.dataset.weekday]={};for(const input of ruleInputs(button.dataset.weekday))rules[button.dataset.weekday][input.dataset.shift]=Number(input.value);}
+    let options;try{options=window.ServiceSimulation.validateOptions(target,rules);}catch(error){simulationConfigError.textContent=error.message;simulationConfigError.hidden=false;return;}
+    simulationTarget=options.targetResources;simulationRules=options.rules;simulationActive=simulationEnabledInput.checked;renderPeriod();simulationConfig.close('confirm');
   });
   document.getElementById('ac4-ranking-close').addEventListener('click',()=>rankingDialog.close());
   rankingDialog.addEventListener('close',()=>document.querySelector('[data-ac4-ranking]')?.focus({preventScroll:true}));

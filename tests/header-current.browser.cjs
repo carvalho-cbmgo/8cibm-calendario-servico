@@ -37,9 +37,9 @@ const money=cents=>normalize(currency.format(cents/100));
   };
   let expected=await verify('2026-11-09');assert.equal(expected.real.total,1197700);assert.equal(expected.real.op,1017700);assert.equal(expected.real.sat,180000);
   for(const active of [false,true]){
-   if(active)await configure(10);
+   if(active)await configure(8);
    for(const width of [320,390,760,761,1000,1100,1101,1280,1800,2400]){
-    await page.setViewportSize({width,height:1000});await verify('2026-11-09',active,10);
+    await page.setViewportSize({width,height:1000});await verify('2026-11-09',active,8);
     const layout=await page.evaluate(()=>{
      const box=element=>{const r=element.getBoundingClientRect();return {x:r.left,y:r.top,right:r.right,bottom:r.bottom,width:r.width,height:r.height};};
      const text=element=>{const walker=document.createTreeWalker(element,NodeFilter.SHOW_TEXT),node=walker.nextNode(),range=document.createRange();range.selectNodeContents(node);return box({getBoundingClientRect:()=>range.getBoundingClientRect()});};
@@ -60,7 +60,7 @@ const money=cents=>normalize(currency.format(cents/100));
     if([390,1280,1800].includes(width))await page.locator('.header').screenshot({path:`/tmp/header-current-${active?'simulation':'normal'}-${width}.png`,animations:'disabled'});
    }
   }
-  await page.clock.setFixedTime(new Date('2026-11-12T15:00:00Z'));await page.evaluate(()=>window.dispatchEvent(new Event('pageshow')));expected=await verify('2026-11-12',true,10);assert.equal(expected.extra.total,0);
+  await page.clock.setFixedTime(new Date('2026-11-12T15:00:00Z'));await page.evaluate(()=>window.dispatchEvent(new Event('pageshow')));expected=await verify('2026-11-12',true,8);assert.equal(expected.extra.total,0);
   await configure(6);expected=await verify('2026-11-12',true,6);assert.equal(expected.real.total+expected.extra.total,1438900);
   await page.locator('#mes-seguinte').click();await verify('2026-11-12',true);assert.equal(await page.locator('.current-finance-available .current-finance-amount').textContent(),'Não informada');
   await page.locator('#mes-anterior').click();await configure(6,false);

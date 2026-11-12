@@ -68,7 +68,7 @@ const money=cents=>normalize(currency.format(cents/100));
   assert.deepEqual(six.days.filter(d=>[12,13,14,30].includes(Number(d.date.slice(8)))).map(d=>six.quota-d.actualCumulative-d.extraCumulative),[3121100,2886100,2687100,808900]);
   assert.equal(six.days[26].extra,0);assert.equal(six.days[26].extraCumulative,six.days[25].extraCumulative);
   await configure(4);await verify(true,4);
-  await configure(10);const ten=await verify(true,10);assert(ten.quota-ten.days.at(-1).actualCumulative-ten.days.at(-1).extraCumulative<0);
+  await configure(8);const ten=await verify(true,8);assert(ten.quota-ten.days.at(-1).actualCumulative-ten.days.at(-1).extraCumulative<0);
   await configure(6);
   const location=await page.evaluate(()=>{
    const day=window.ServiceCalendar.schedules['2026-11'].days.find(d=>d.day===12),member=day.sat.members.find(m=>m.events.some(event=>event.hours===4));
@@ -100,7 +100,7 @@ const money=cents=>normalize(currency.format(cents/100));
   await configure(6,false);await verify(false);assert.equal(await page.locator('.simulation-delta').count(),0);
   assert.equal(await page.evaluate(()=>JSON.stringify(window.ServiceCalendar.schedules)),original);
   assert.deepEqual(errors,[]);
-  console.log('PASS: saldo diário = saldo anterior − AC4 real/simulado do serviço; valores, percentuais e deltas em todos os dias; metas 4/6/10, saldo negativo, alteração/cancelamento, dias sem gasto, meses sem cota, celular e desativação.');
+  console.log('PASS: saldo diário = saldo anterior − AC4 real/simulado do serviço; valores, percentuais e deltas em todos os dias; metas 4/6/8, saldo negativo, alteração/cancelamento, dias sem gasto, meses sem cota, celular e desativação.');
  }finally{
   if(browser)await browser.close();
   await new Promise(resolve=>server.close(resolve));

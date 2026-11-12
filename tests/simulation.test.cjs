@@ -104,7 +104,7 @@ test('dados atuais respeitam as coberturas registradas e a TS 168, sem modificar
 
 test('todas as metas completam somente o déficit por horário nos três meses cadastrados',()=>{
   const source=data(),before=JSON.stringify(source);
-  for(const period of Object.keys(source))for(let target=4;target<=10;target++){
+  for(const period of Object.keys(source))for(let target=4;target<=8;target++){
     const plan=simulation.plan(source,period,null,undefined,target);
     assert.equal(plan.addedServices,[...plan.days.values()].reduce((total,day)=>total+day.members.length,0));
     for(const day of source[period].days){
@@ -135,19 +135,19 @@ test('tarifa acompanha cada data e o mês financeiro usa o início do reforço',
   const last=plan.summary.records.find(record=>record.startDate==='2026-11-30');assert.equal(last.endDate,'2026-12-01');assert.equal(last.financialMonth,'2026-11');assert.equal(plan.summary.quotaCents,null);
 });
 
-test('meta de 4 a 10 altera somente os reforços necessários, sem remover recursos existentes',()=>{
+test('meta de 4 a 8 altera somente os reforços necessários, sem remover recursos existentes',()=>{
   const source=data(),before=JSON.stringify(source),real=finance.month(source,'2026-11',4560000);
-  const four=simulation.plan(source,'2026-11',4560000,real,4),five=simulation.plan(source,'2026-11',4560000,real,5),ten=simulation.plan(source,'2026-11',4560000,real,10);
+  const four=simulation.plan(source,'2026-11',4560000,real,4),five=simulation.plan(source,'2026-11',4560000,real,5),eight=simulation.plan(source,'2026-11',4560000,real,8);
   assert.equal(four.addedResources,0);assert.equal(four.summary.committedCents,0);assert.equal(four.days.get(12).coverage.resources,6);
   assert.equal(five.addedResources,5);assert.equal(five.summary.committedCents,469100);
-  assert.equal(ten.addedResources,64);assert.equal(ten.daysAffected,12);assert.equal(ten.targetResources,10);
-  for(const day of source['2026-11'].days){const planned=ten.days.get(day.day);assert.equal(planned.addedResources,day.confirmation?.status==='confirmed'?0:10-planned.coverage.resources);}
-  assert.equal(ten.summary.quotaCents,4560000);assert(real.remainingCents-ten.summary.committedCents<0);assert.equal(JSON.stringify(source),before);
+  assert.equal(eight.addedResources,40);assert.equal(eight.daysAffected,12);assert.equal(eight.targetResources,8);
+  for(const day of source['2026-11'].days){const planned=eight.days.get(day.day);assert.equal(planned.addedResources,day.confirmation?.status==='confirmed'?0:8-planned.coverage.resources);}
+  assert.equal(eight.summary.quotaCents,4560000);assert(real.remainingCents-eight.summary.committedCents<0);assert.equal(JSON.stringify(source),before);
 });
 
 test('meta inválida é rejeitada e a meta padrão continua sendo 6',()=>{
   const source=input([member('ST TESTE')]);assert.equal(simulation.plan(source,'2026-11').targetResources,6);
-  for(const target of[3,11,4.5,'6',null,NaN])assert.throws(()=>simulation.plan(source,'2026-11',null,undefined,target),/meta deve ser um número inteiro de 4 a 10/);
+  for(const target of[3,9,10,11,4.5,'6',null,NaN])assert.throws(()=>simulation.plan(source,'2026-11',null,undefined,target),/meta deve ser um número inteiro de 4 a 8/);
 });
 
 test('AC4 corrente em simulação inclui apenas os acréscimos até o acesso, sem alterar o cadastro',()=>{

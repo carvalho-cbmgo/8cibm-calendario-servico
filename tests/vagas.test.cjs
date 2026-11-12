@@ -42,8 +42,8 @@ test('intervalo inclusivo rejeita inversão, outro mês, dia inválido e previs�
 });
 
 test('meta configurada altera a mensagem sem modificar os serviços cadastrados',()=>{
- const before=JSON.stringify(schedules),higher=simulation.plan(schedules,'2026-11',4560000,undefined,10),result=vacancies.build(schedules,'2026-11',higher,'2026-11-20','2026-11-20');
- assert.equal(result.vacancies,6);assert(result.message.includes('Voluntários (06 vagas)'));assert.equal(JSON.stringify(schedules),before);
+ const before=JSON.stringify(schedules),higher=simulation.plan(schedules,'2026-11',4560000,undefined,8),result=vacancies.build(schedules,'2026-11',higher,'2026-11-20','2026-11-20');
+ assert.equal(result.vacancies,4);assert(result.message.includes('Voluntários (04 vagas)'));assert.equal(JSON.stringify(schedules),before);
  assert.equal(finance.month(schedules,'2026-11',4560000).committedCents,2460200);
 });
 
