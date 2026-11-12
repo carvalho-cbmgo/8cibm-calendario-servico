@@ -26,7 +26,7 @@ test('horários diferentes no mesmo dia geram blocos separados, preservando minu
  const event=(start,end)=>({simulation:true,status:'planned',start,end,hours:12,startDate:'2026-11-14',endDate:end==='08h00'?'2026-11-15':'2026-11-14'});
  const virtual={days:new Map([[14,{members:[{name:'PREVISTO AC4',events:[event('20h00','08h00')]},{name:'PREVISTO AC4',events:[event('08h00','20h00')]},{name:'PREVISTO AC4',events:[{...event('08h30','20h30'),hours:12}]}]}]])};
  const message=vacancies.build(schedules,'2026-11',virtual,'2026-11-14','2026-11-14').message;
- assert(message.indexOf('(08h às 20h)')<message.indexOf('(20h às 08h)'));assert(message.includes('(08h30 às 20h30)'));assert.equal(message.match(/Voluntários/g).length,3);
+ assert(message.indexOf('(08h às 20h)')<message.indexOf('(20h às 08h)'));assert(message.includes('(08h30 às 20h30)'));assert.equal(message.match(/Voluntários/g).length,3);assert.equal(message.match(/Voluntários \(01 vaga\)\n- \n- /g).length,3);assert(!/\n\n- |^\d+\./m.test(message));
 });
 
 test('somente PREVISTO AC4 virtual ativo pode virar vaga; escala cadastrada não é exportada',()=>{

@@ -27,8 +27,7 @@ const money=cents=>normalize(currency.format(cents/100));
   const configure=async(target,enabled=true)=>{
    await page.locator('[data-ac4-simulation]').click();
    await page.locator('#ac4-simulation-target').selectOption(String(target));
-   await page.locator('#ac4-simulation-enabled').setChecked(enabled);
-   await page.locator('#ac4-simulation-confirm').click();
+   await page.locator(enabled?'#ac4-simulation-confirm':'#ac4-simulation-disregard').click();
   };
   const verify=async(active,target=6)=>{
    const result=await page.evaluate(({active,target})=>{

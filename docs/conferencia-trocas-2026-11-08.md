@@ -1,5 +1,7 @@
 # Conferência das trocas de serviço — 08/11/2026
 
+**Registro histórico:** as datas das TS 159, 166 e 167 foram atualizadas na [conferência de 12/11/2026](conferencia-trocas-2026-11-12.md), que também incluiu a TS 169. Para o estado atual do calendário, consulte essa revisão.
+
 Fonte: `TROCAS-ENTRE-MILITARES-até-dia8-11-26.pdf`, com 26 páginas, processo SEI 202600011035726.
 
 Foram conferidas **13 autorizações**: 12 já estavam representadas e a **TS nº 167** estava ausente do calendário. Foram registrados seus dois serviços ordinários de 24h:

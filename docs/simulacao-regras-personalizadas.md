@@ -18,8 +18,10 @@ Exemplo ilustrativo, com cinco militares de 24h já disponíveis:
 
 Assim, a quantidade de serviços simulados é distinguida da quantidade de recursos completos que eles compõem. O indicador de recursos conserva essa contabilização, e sua dica informa o efetivo e a meta de cada turno.
 
-Confirmar aplica a regra geral, os dias selecionados, suas metas e o checkbox Aplicar Simulação em conjunto. Cancelar preserva a configuração anterior. Desligar a simulação mantém as configurações guardadas durante a sessão para reativação. As regras acompanham a navegação entre meses, mas não são gravadas no cadastro operacional; recarregar a página restaura os padrões.
+Confirmar aplica a regra geral, os dias selecionados e suas metas, ativando a simulação. Cancelar preserva a configuração anterior, inclusive se a simulação estiver ativa. O botão Desconsiderar Simulação, à esquerda de Cancelar, guarda as escolhas e desliga o modo imediatamente, sem uma segunda confirmação. Os valores cadastrados voltam a ser exibidos e a mensagem de vagas é apagada e desabilitada. Reabrir a janela e confirmar reativa as regras guardadas. Não há checkbox de ativação. As regras acompanham a navegação entre meses, mas não são gravadas no cadastro operacional; recarregar a página restaura os padrões.
 
 As tarifas existentes calculam cada intervalo, inclusive as viradas de faixa e dia tarifário. Totais diários, acumulados, saldo, cabeçalho e contabilização semanal usam o mesmo plano. A janela de WhatsApp usa somente suas vagas PREVISTO AC4, agrupando horários iguais e separando períodos diferentes. O ranking e os documentos ES/OS continuam utilizando somente serviços cadastrados.
 
 Na API local, `ServiceSimulation.plan(schedules, period, quota, base, target, rules)` recebe a regra geral em `target` e um objeto opcional `rules`, cujas chaves são os dias da semana (0 = domingo a 6 = sábado), com `{day, night}` para cada dia personalizado. Metas devem ser números inteiros de 4 a 8. `validateOptions` valida e copia os valores; omitir `rules` preserva a regra uniforme.
+
+A janela utiliza uma grade compacta com colunas alinhadas entre os dias e os dois turnos. No celular, a rolagem fica restrita às regras, com os rótulos dos turnos fixos à esquerda; os três botões permanecem na mesma linha.

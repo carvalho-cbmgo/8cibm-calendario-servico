@@ -17,7 +17,7 @@ const money=cents=>normalize(currency.format(cents/100));
   const page=await browser.newPage({viewport:{width:1280,height:1000},timezoneId:'America/Sao_Paulo'}),errors=[];page.on('pageerror',error=>errors.push(error.message));
   await page.clock.setFixedTime(new Date('2026-11-09T15:00:00Z'));await page.goto(`http://127.0.0.1:${server.address().port}/`);
   const source=await page.evaluate(()=>JSON.stringify(window.ServiceCalendar.schedules));
-  const configure=async(target=6,active=true)=>{await page.locator('[data-ac4-simulation]').click();await page.locator('#ac4-simulation-target').selectOption(String(target));await page.locator('#ac4-simulation-enabled').setChecked(active);await page.locator('#ac4-simulation-confirm').click();};
+  const configure=async(target=6,active=true)=>{await page.locator('[data-ac4-simulation]').click();await page.locator('#ac4-simulation-target').selectOption(String(target));await page.locator(active?'#ac4-simulation-confirm':'#ac4-simulation-disregard').click();};
   const verify=async(date,active=false,target=6)=>{
    const expected=await page.evaluate(({date,active,target})=>{
     const {schedules,period,quotas}=window.ServiceCalendar,summary=window.AC4Finance.month(schedules,period,quotas[period]),extra=active?window.ServiceSimulation.plan(schedules,period,quotas[period],summary,target).summary.records:[];

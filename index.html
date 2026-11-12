@@ -406,31 +406,31 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 @media screen and (max-width:360px){.finance-weekly-table .simulation-delta{font-size:12px}}
 @media screen and (max-width:760px){.simulation-banner{font-size:15px;padding:12px}.simulation-banner h2{font-size:15px}.simulation-scope{font-size:14px}.simulation-entry{padding-left:7px}}
 html.simulation-config-open,html.simulation-config-open body{overflow:hidden;overscroll-behavior:none}
-dialog.simulation-dialog{width:min(700px,calc(100% - 24px));max-height:calc(100dvh - 32px);padding:22px;margin:auto;overflow:auto;border:1px solid #ead1e1;border-radius:16px;background:#fff;box-shadow:0 18px 70px #10283f55;font-size:16px}
+dialog.simulation-dialog{width:min(620px,calc(100% - 24px));max-height:calc(100dvh - 32px);padding:20px;margin:auto;overflow:auto;border:1px solid #ead1e1;border-radius:16px;background:#fff;box-shadow:0 18px 70px #10283f55;font-size:16px}
 .simulation-dialog h2{margin:0 0 9px;color:var(--simulation);font-size:21px;line-height:1.25}
 .simulation-dialog p{font-size:14px;line-height:1.5;color:#53677b;margin:0 0 16px}
 .simulation-config-label{display:grid;grid-template-columns:max-content 64px;align-items:center;justify-content:start;gap:12px;font-size:15px;font-weight:650}
 .simulation-config-label>span{white-space:nowrap}
 .simulation-config-label select{width:100%;min-height:46px;padding:8px;border:1px solid #c6d4e2;border-radius:8px;background:#f8fafc;color:var(--ink);font:inherit;font-size:18px}
-.simulation-custom-rules{min-width:0;margin:18px 0 0;padding:12px 10px;border:1px solid #dfcede;border-radius:10px;background:#fff}
-.simulation-custom-rules legend{padding:0 6px;color:#763859;font-weight:700}
-.simulation-rules-scroll{max-width:100%;overflow-x:auto;padding:3px 3px 7px;scroll-padding-left:145px}
-.simulation-rules-grid{display:grid;grid-template-columns:145px repeat(7,minmax(44px,1fr));grid-template-rows:repeat(3,46px);align-items:center;gap:7px;min-width:512px}
-.simulation-rule-label{position:sticky;left:0;z-index:1;align-self:stretch;display:flex;align-items:center;background:#fff;font-size:13px;font-weight:650;white-space:nowrap}
-.simulation-weekday{width:100%;min-height:44px;padding:6px 2px;border:1px solid #cbd8e5;border-radius:7px;background:#f4f8fc;color:#3c5268;font:inherit;font-size:12px;font-weight:750;cursor:pointer}
+.simulation-custom-rules{min-width:0;margin:16px 0 0;padding:9px 8px;border:1px solid #dfcede;border-radius:10px;background:#fff}
+.simulation-custom-rules legend{padding:0 6px;color:#763859;font-size:14px;font-weight:700}
+.simulation-rules-scroll{max-width:100%;overflow-x:auto;padding:2px 3px 5px;scroll-padding-left:130px}
+.simulation-rules-grid{display:grid;grid-template-columns:130px repeat(7,minmax(38px,1fr));grid-template-rows:repeat(3,36px);align-items:center;gap:5px;min-width:432px}
+.simulation-rule-label{position:sticky;left:0;z-index:1;align-self:stretch;display:flex;align-items:center;background:#fff;box-shadow:5px 0 #fff,-3px 0 #fff;font-size:12px;font-weight:650;white-space:nowrap}
+.simulation-weekday{width:100%;min-height:34px;padding:4px 2px;border:1px solid #cbd8e5;border-radius:6px;background:#f4f8fc;color:#3c5268;font:inherit;font-size:12px;font-weight:750;cursor:pointer}
 .simulation-weekday[aria-pressed="true"]{color:#fff;background:var(--simulation);border-color:var(--simulation)}
 .simulation-rule-cell{min-width:0}
-.simulation-rule-cell select{width:100%;min-height:44px;padding:6px 2px;border:1px solid #c6d4e2;border-radius:7px;background:#fff;color:var(--ink);font:inherit;font-size:15px}
+.simulation-rule-cell select{width:100%;min-height:34px;padding:4px 2px;border:1px solid #c6d4e2;border-radius:6px;background:#fff;color:var(--ink);font:inherit;font-size:14px}
 .simulation-dialog .simulation-rules-help{margin:7px 0 0;font-size:12px}
 .simulation-dialog .simulation-config-error{color:#ae153b;margin-top:10px}
 .simulation-rule-label:first-child{grid-column:1;grid-row:1}
-@media screen and (max-width:760px){dialog.simulation-dialog{padding:16px}.simulation-config-label{gap:8px;font-size:clamp(13px,3.5vw,15px);grid-template-columns:max-content 56px}.simulation-custom-rules{padding:10px 6px}.simulation-rules-grid{grid-template-columns:120px repeat(7,minmax(44px,1fr));min-width:487px}.simulation-rules-scroll{scroll-padding-left:120px}.simulation-rule-label{font-size:12px}.simulation-rules-help::after{content:' Deslize para acessar todos os dias.'}}
-.simulation-config-enabled{display:flex;align-items:center;gap:9px;margin:16px 0 5px;font-size:15px;font-weight:650;cursor:pointer}
-.simulation-config-enabled input{width:19px;height:19px;margin:0;accent-color:var(--simulation)}
+@media screen and (max-width:760px){dialog.simulation-dialog{padding:14px}.simulation-config-label{gap:8px;font-size:clamp(13px,3.5vw,15px);grid-template-columns:max-content 56px}.simulation-custom-rules{padding:8px 5px}.simulation-rules-grid{grid-template-columns:120px repeat(7,minmax(38px,1fr));grid-template-rows:repeat(3,40px);min-width:414px;gap:4px}.simulation-weekday,.simulation-rule-cell select{min-height:40px}.simulation-rules-scroll{scroll-padding-left:120px}.simulation-rules-help::after{content:' Deslize para acessar todos os dias.'}}
 .simulation-dialog .simulation-config-hint{font-size:13px;margin-bottom:18px}
-.simulation-config-actions{display:flex;justify-content:center;gap:9px}
-.simulation-config-actions button{min-height:44px;padding:9px 17px;border:1px solid #cad6e3;border-radius:8px;background:#fff;color:#3c5268;font:inherit;font-weight:700;cursor:pointer}
+.simulation-config-actions{display:grid;grid-template-columns:minmax(0,1.8fr) repeat(2,minmax(0,1fr));gap:8px;max-width:450px;margin:18px auto 0}
+.simulation-config-actions button{min-width:0;min-height:44px;padding:9px 10px;border:1px solid #cad6e3;border-radius:8px;background:#fff;color:#3c5268;font:inherit;font-size:14px;line-height:1.25;font-weight:700;cursor:pointer}
+.simulation-config-actions #ac4-simulation-disregard{background:#fff5fb;border-color:#e4b4d0;color:var(--simulation)}
 .simulation-config-actions #ac4-simulation-confirm{background:var(--simulation);border-color:var(--simulation);color:#fff}
+@media screen and (max-width:480px){.simulation-config-actions{grid-template-columns:minmax(0,1fr) 64px 76px;gap:6px}.simulation-config-actions button{padding:8px 5px;font-size:12px}}
 .simulation-dialog :is(button,select,input):focus-visible{outline:3px solid #eaa3d0;outline-offset:3px}
 @media screen and (min-width:761px){.calendar.is-simulation{grid-template-columns:repeat(auto-fit,minmax(min(100%,600px),1fr))}}
 @media screen and (min-width:1101px){.header.is-simulation{grid-template-columns:minmax(0,1fr) clamp(440px,46vw,650px);gap:24px}}
@@ -774,8 +774,7 @@ html.vacancy-dialog-open,html.vacancy-dialog-open body{overflow:hidden;overscrol
   </label>
   <fieldset class="simulation-custom-rules"><legend>Regras Personalizadas</legend><div class="simulation-rules-scroll" role="region" aria-label="Metas por dia da semana" tabindex="0"><div id="ac4-simulation-rules" class="simulation-rules-grid"></div></div><p class="simulation-rules-help">Dias desmarcados usam a regra geral. O noturno pertence ao dia em que o serviço começa.</p></fieldset>
   <p id="ac4-simulation-error" class="simulation-config-error" role="alert" hidden></p>
-  <label class="simulation-config-enabled"><input type="checkbox" id="ac4-simulation-enabled" checked> Aplicar Simulação</label>
-  <div class="simulation-config-actions"><button type="button" id="ac4-simulation-cancel">Cancelar</button><button type="submit" id="ac4-simulation-confirm">Confirmar</button></div>
+  <div class="simulation-config-actions"><button type="button" id="ac4-simulation-disregard">Desconsiderar Simulação</button><button type="button" id="ac4-simulation-cancel">Cancelar</button><button type="submit" id="ac4-simulation-confirm">Confirmar</button></div>
  </form>
 </dialog>
 <dialog id="ac4-ranking-dialog" class="finance-dialog ranking-dialog" aria-labelledby="ac4-ranking-title">
@@ -1163,7 +1162,7 @@ html.vacancy-dialog-open,html.vacancy-dialog-open body{overflow:hidden;overscrol
                   "sei": "97832330",
                   "data": "2026-11-03",
                   "substituido": "2º SGT SCHUSSLER",
-                  "data_servico_substituido": "2026-11-26"
+                  "data_servico_substituido": "2026-11-30"
                 }
               }
             ],
@@ -2102,13 +2101,15 @@ html.vacancy-dialog-open,html.vacancy-dialog-open body{overflow:hidden;overscrol
                   "sei": "97933840",
                   "data": "2026-11-07",
                   "substituido": "2º SGT SCHUSSLER",
-                  "data_servico_substituido": "2026-11-30",
-                  "horas": 24
+                  "data_servico_substituido": "2027-01-15",
+                  "horas": 24,
+                  "contrapartida_pendente": true
                 }
               }
             ],
             "notes": [
-              "TS nº 167 (SEI 97933840). Substitui 2º SGT SCHUSSLER. 24h."
+              "TS nº 167 (SEI 97933840). Substitui 2º SGT SCHUSSLER. 24h.",
+              "Contrapartida de 15/01/2027 pendente de conferência com a previsão de janeiro, conforme orientação do usuário."
             ],
             "events": [],
             "ord": 8
@@ -3603,6 +3604,31 @@ html.vacancy-dialog-open,html.vacancy-dialog-open body{overflow:hidden;overscrol
             "ord": 7
           },
           {
+            "name": "ST AISLAN",
+            "ord": 8,
+            "badges": [
+              {
+                "kind": "ts",
+                "text": "TS · SCHUSSLER",
+                "hours": 24,
+                "troca": {
+                  "numero": "169",
+                  "sei": "98279694",
+                  "data": "2026-11-15",
+                  "substituido": "2º SGT SCHUSSLER",
+                  "data_servico_substituido": "2027-01-20",
+                  "horas": 24,
+                  "contrapartida_pendente": true
+                }
+              }
+            ],
+            "notes": [
+              "TS nº 169 (SEI 98279694). Substitui 2º SGT SCHUSSLER.",
+              "Contrapartida de 20/01/2027 pendente de conferência com a previsão de janeiro, conforme orientação do usuário."
+            ],
+            "events": []
+          },
+          {
             "name": "1º SGT HELLYSSON",
             "badges": [
               {
@@ -3615,20 +3641,6 @@ html.vacancy-dialog-open,html.vacancy-dialog-open body{overflow:hidden;overscrol
             ],
             "events": [],
             "ord": 11
-          },
-          {
-            "name": "2º SGT SCHUSSLER",
-            "badges": [
-              {
-                "kind": "ord",
-                "text": "ORDINÁRIO"
-              }
-            ],
-            "notes": [
-              "Ordinário"
-            ],
-            "events": [],
-            "ord": 14
           },
           {
             "name": "3º SGT JORGE",
@@ -3898,27 +3910,6 @@ html.vacancy-dialog-open,html.vacancy-dialog-open body{overflow:hidden;overscrol
             "ord": 17
           },
           {
-            "name": "3º SGT HENRIQUE",
-            "badges": [
-              {
-                "kind": "review",
-                "text": "TS · AISLAN (A CONFERIR)",
-                "troca": {
-                  "numero": "159",
-                  "sei": "97553091",
-                  "data": "2026-11-17",
-                  "substituido": "ST AISLAN",
-                  "data_servico_substituido": "2026-10-31"
-                }
-              }
-            ],
-            "notes": [
-              "DOCUMENTO INCONSISTENTE: o militar substituído não pertence à Ala Delta em 17/11; confirmar antes da escala definitiva · SEI 97553091"
-            ],
-            "events": [],
-            "ord": 22
-          },
-          {
             "name": "SD PICCINI",
             "badges": [
               {
@@ -3965,9 +3956,7 @@ html.vacancy-dialog-open,html.vacancy-dialog-open body{overflow:hidden;overscrol
           "6 recursos de 24h",
           "Meta de 6 recursos"
         ],
-        "alerts": [
-          "TS nº 159: substituição a conferir. O registro pendente não integra o efetivo disponível."
-        ],
+        "alerts": [],
         "confirmation": {
           "status": "confirmed",
           "date": "2026-11-11",
@@ -4771,27 +4760,6 @@ html.vacancy-dialog-open,html.vacancy-dialog-open body{overflow:hidden;overscrol
             "ord": 13
           },
           {
-            "name": "2º SGT SCHUSSLER",
-            "badges": [
-              {
-                "kind": "ts",
-                "text": "TS · AISLAN",
-                "troca": {
-                  "numero": "166",
-                  "sei": "97832330",
-                  "data": "2026-11-26",
-                  "substituido": "ST AISLAN",
-                  "data_servico_substituido": "2026-11-03"
-                }
-              }
-            ],
-            "notes": [
-              "TS nº 166 (SEI 97832330). Substitui ST AISLAN."
-            ],
-            "events": [],
-            "ord": 14
-          },
-          {
             "name": "2º SGT LUIZ ANTONIO",
             "badges": [],
             "notes": [],
@@ -4811,6 +4779,29 @@ html.vacancy-dialog-open,html.vacancy-dialog-open body{overflow:hidden;overscrol
               }
             ],
             "ord": 16
+          },
+          {
+            "name": "3º SGT HENRIQUE",
+            "ord": 22,
+            "badges": [
+              {
+                "kind": "ts",
+                "text": "TS · AISLAN",
+                "hours": 24,
+                "troca": {
+                  "numero": "159",
+                  "sei": "97553091",
+                  "data": "2026-11-26",
+                  "substituido": "ST AISLAN",
+                  "data_servico_substituido": "2026-10-31",
+                  "horas": 24
+                }
+              }
+            ],
+            "notes": [
+              "TS nº 159 (SEI 97553091). Substitui ST AISLAN."
+            ],
+            "events": []
           },
           {
             "name": "CB RABELO",
@@ -5229,26 +5220,26 @@ html.vacancy-dialog-open,html.vacancy-dialog-open body{overflow:hidden;overscrol
           },
           {
             "name": "2º SGT SCHUSSLER",
+            "ord": 14,
             "badges": [
               {
                 "kind": "ts",
                 "text": "TS · AISLAN",
                 "hours": 24,
                 "troca": {
-                  "numero": "167",
-                  "sei": "97933840",
+                  "numero": "166",
+                  "sei": "97832330",
                   "data": "2026-11-30",
                   "substituido": "ST AISLAN",
-                  "data_servico_substituido": "2026-11-07",
+                  "data_servico_substituido": "2026-11-03",
                   "horas": 24
                 }
               }
             ],
             "notes": [
-              "TS nº 167 (SEI 97933840). Substitui ST AISLAN. 24h."
+              "TS nº 166 (SEI 97832330). Substitui ST AISLAN."
             ],
-            "events": [],
-            "ord": 14
+            "events": []
           },
           {
             "name": "CB RABELO",
@@ -9175,6 +9166,30 @@ html.vacancy-dialog-open,html.vacancy-dialog-open body{overflow:hidden;overscrol
             "ord": 10
           },
           {
+            "name": "2º SGT SCHUSSLER",
+            "ord": 14,
+            "badges": [
+              {
+                "kind": "review",
+                "text": "TS · AISLAN (A CONFERIR)",
+                "hours": 24,
+                "troca": {
+                  "numero": "167",
+                  "sei": "97933840",
+                  "data": "2027-01-15",
+                  "substituido": "ST AISLAN",
+                  "data_servico_substituido": "2026-11-07",
+                  "horas": 24
+                }
+              }
+            ],
+            "notes": [
+              "TS nº 167 (SEI 97933840). Substitui ST AISLAN.",
+              "PENDENTE DE CONFIRMAÇÃO: a data 15/01/2027 consta do documento, mas o ST AISLAN não integra a composição prevista da ala CHARLIE. Data e lotação a conferir; não integra o efetivo disponível."
+            ],
+            "events": []
+          },
+          {
             "name": "3º SGT HENRIQUE",
             "badges": [
               {
@@ -9221,7 +9236,9 @@ html.vacancy-dialog-open,html.vacancy-dialog-open body{overflow:hidden;overscrol
           "5 recursos de 24h",
           "Faltam 1 recurso"
         ],
-        "alerts": []
+        "alerts": [
+          "TS nº 167 (SEI 97933840): contrapartida em 15/01/2027 a conferir. O ST AISLAN não consta na ala CHARLIE; o registro pendente não integra o efetivo disponível."
+        ]
       },
       {
         "day": 16,
@@ -9594,6 +9611,30 @@ html.vacancy-dialog-open,html.vacancy-dialog-open body{overflow:hidden;overscrol
             "ord": 9
           },
           {
+            "name": "2º SGT SCHUSSLER",
+            "ord": 14,
+            "badges": [
+              {
+                "kind": "review",
+                "text": "TS · AISLAN (A CONFERIR)",
+                "hours": 24,
+                "troca": {
+                  "numero": "169",
+                  "sei": "98279694",
+                  "data": "2027-01-20",
+                  "substituido": "ST AISLAN",
+                  "data_servico_substituido": "2026-11-15",
+                  "horas": 24
+                }
+              }
+            ],
+            "notes": [
+              "TS nº 169 (SEI 98279694). Substitui ST AISLAN.",
+              "PENDENTE DE CONFIRMAÇÃO: a data 20/01/2027 consta do documento, mas o ST AISLAN não integra a composição prevista da ala DELTA. Data e lotação a conferir; não integra o efetivo disponível."
+            ],
+            "events": []
+          },
+          {
             "name": "2º SGT GEYDSON",
             "badges": [
               {
@@ -9640,7 +9681,9 @@ html.vacancy-dialog-open,html.vacancy-dialog-open body{overflow:hidden;overscrol
           "5 recursos de 24h",
           "Faltam 1 recurso"
         ],
-        "alerts": []
+        "alerts": [
+          "TS nº 169 (SEI 98279694): contrapartida em 20/01/2027 a conferir. O ST AISLAN não consta na ala DELTA; o registro pendente não integra o efetivo disponível."
+        ]
       },
       {
         "day": 21,
@@ -11035,7 +11078,7 @@ html.vacancy-dialog-open,html.vacancy-dialog-open body{overflow:hidden;overscrol
       if(!groups.size){blocks.push(`${heading}\nSem vagas de AC4 na simulação.`);continue;}
       daysWithVacancies++;
       for(const group of [...groups.values()].sort((a,b)=>a.start.localeCompare(b.start)||b.hours-a.hours)){
-        vacancies+=group.count;blocks.push(`${heading}\nAC4 ${group.hours}h (${group.start} às ${group.end})\nVoluntários (${String(group.count).padStart(2,'0')} ${group.count===1?'vaga':'vagas'})\n\n1.\n2.`);
+        vacancies+=group.count;blocks.push(`${heading}\nAC4 ${group.hours}h (${group.start} às ${group.end})\nVoluntários (${String(group.count).padStart(2,'0')} ${group.count===1?'vaga':'vagas'})\n- \n- `);
       }
     }
     return {message:blocks.join('\n\n'),vacancies,daysWithVacancies,days:Number(end.slice(8))-Number(start.slice(8))+1};
@@ -11459,7 +11502,7 @@ html.vacancy-dialog-open,html.vacancy-dialog-open body{overflow:hidden;overscrol
       const doc=notes.match(/TS\s*n[º°o.]?\s*([\d/\s]+)\s*\(SEI\s*([^)]+)\)/i),number=source.numero||doc?.[1]?.trim()||'não informado',sei=source.sei||doc?.[2]||notes.match(/\bSEI\s+(\d{6,12})\b/)?.[1]||'não informado';
       const target=source.substituido||notes.match(/Substitui\s+([^.;]+)/i)?.[1]||badge.text.replace(/^TS\s*·\s*/,'').replace(/\s*\(A CONFERIR\)/,'');
       const workDate=source.data_servico_substituido;
-      return [`TS nº ${number} (SEI ${sei})`,`Militar Substituído: ${target} de serviço ${workDate?`dia ${format(workDate)}`:'em data a confirmar'}`];
+      return [`TS nº ${number} (SEI ${sei})`,`Militar Substituído: ${target} de serviço ${workDate?`dia ${format(workDate)}${source.contrapartida_pendente?' (contrapartida a conferir)':''}`:'em data a confirmar'}`];
     }
     return null;
   }
@@ -11874,7 +11917,7 @@ html.vacancy-dialog-open,html.vacancy-dialog-open body{overflow:hidden;overscrol
   window.addEventListener('resize',hideExchangeTooltip);dialog.addEventListener('close',hideExchangeTooltip);
   const financeDialog=document.getElementById('ac4-finance-dialog');
   document.addEventListener('click',event=>{if(event.target.closest('[data-ac4-ranking]')){hideExchangeTooltip();renderRankingDialog();rankingDialog.showModal();rankingDialog.scrollTop=0;}});
-  const simulationConfig=document.getElementById('ac4-simulation-config'),simulationTargetInput=document.getElementById('ac4-simulation-target'),simulationEnabledInput=document.getElementById('ac4-simulation-enabled'),simulationConfigError=document.getElementById('ac4-simulation-error'),simulationRulesGrid=document.getElementById('ac4-simulation-rules');
+  const simulationConfig=document.getElementById('ac4-simulation-config'),simulationTargetInput=document.getElementById('ac4-simulation-target'),simulationConfigError=document.getElementById('ac4-simulation-error'),simulationRulesGrid=document.getElementById('ac4-simulation-rules');
   const ruleInputs=weekday=>[...simulationRulesGrid.querySelectorAll(`select[data-weekday="${weekday}"]`)];
   simulationRulesGrid.append(element('span','simulation-rule-label'));
   for(const [index,day] of simulationWeekdays.entries()){
@@ -11889,7 +11932,7 @@ html.vacancy-dialog-open,html.vacancy-dialog-open body{overflow:hidden;overscrol
     }
   }
   function openSimulationConfig(){
-    hideExchangeTooltip();simulationTargetInput.value=String(simulationTarget);simulationTargetInput.setCustomValidity('');simulationEnabledInput.checked=true;simulationConfigError.hidden=true;
+    hideExchangeTooltip();simulationTargetInput.value=String(simulationTarget);simulationTargetInput.setCustomValidity('');simulationConfigError.hidden=true;
     for(const button of simulationRulesGrid.querySelectorAll('button')){const rule=simulationRules[button.dataset.weekday],selected=!!rule;button.setAttribute('aria-pressed',String(selected));for(const input of ruleInputs(button.dataset.weekday)){input.value=String(rule?.[input.dataset.shift]??simulationTarget);input.hidden=!selected;input.disabled=!selected;}}
     document.documentElement.classList.add('simulation-config-open');simulationConfig.showModal();
   }
@@ -11899,12 +11942,14 @@ html.vacancy-dialog-open,html.vacancy-dialog-open body{overflow:hidden;overscrol
   simulationConfig.addEventListener('close',()=>{document.documentElement.classList.remove('simulation-config-open');(vacancyDialog.open?(simulationActive?vacancyStart:document.getElementById('vacancy-configure')):document.querySelector('[data-ac4-simulation]'))?.focus({preventScroll:true});refreshSimulationScrollHints();});
   simulationTargetInput.addEventListener('change',()=>{simulationTargetInput.setCustomValidity('');for(const input of simulationRulesGrid.querySelectorAll('select:disabled'))input.value=simulationTargetInput.value;simulationConfigError.hidden=true;});
   document.getElementById('ac4-simulation-cancel').addEventListener('click',()=>simulationConfig.close('cancel'));
-  document.getElementById('ac4-simulation-form').addEventListener('submit',event=>{
-    event.preventDefault();const target=Number(simulationTargetInput.value),rules={};
+  function applySimulationConfig(enabled){
+    const target=Number(simulationTargetInput.value),rules={};
     for(const button of simulationRulesGrid.querySelectorAll('button[aria-pressed="true"]')){rules[button.dataset.weekday]={};for(const input of ruleInputs(button.dataset.weekday))rules[button.dataset.weekday][input.dataset.shift]=Number(input.value);}
     let options;try{options=window.ServiceSimulation.validateOptions(target,rules);}catch(error){simulationConfigError.textContent=error.message;simulationConfigError.hidden=false;return;}
-    simulationTarget=options.targetResources;simulationRules=options.rules;simulationActive=simulationEnabledInput.checked;renderPeriod();simulationConfig.close('confirm');
-  });
+    simulationTarget=options.targetResources;simulationRules=options.rules;simulationActive=enabled;renderPeriod();simulationConfig.close(enabled?'confirm':'disregard');
+  }
+  document.getElementById('ac4-simulation-disregard').addEventListener('click',()=>applySimulationConfig(false));
+  document.getElementById('ac4-simulation-form').addEventListener('submit',event=>{event.preventDefault();applySimulationConfig(true);});
   document.getElementById('ac4-ranking-close').addEventListener('click',()=>rankingDialog.close());
   rankingDialog.addEventListener('close',()=>document.querySelector('[data-ac4-ranking]')?.focus({preventScroll:true}));
   rankingDialog.addEventListener('click',event=>{if(event.target===rankingDialog){const r=rankingDialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)rankingDialog.close();}});
