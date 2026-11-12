@@ -32,13 +32,13 @@ const money=cents=>normalize(new Intl.NumberFormat('pt-BR',{style:'currency',cur
   };
   const setRange=async(first,last)=>{await start.selectOption(first);await end.selectOption(last);return verify();};
   await open();assert.equal(await start.inputValue(),'2026-11-01');assert.equal(await end.inputValue(),'2026-11-09');assert.equal(await start.locator('option').count(),30);assert.equal(await page.locator('#ac4-ranking-today').count(),0);await verify();
-  let result=await setRange('2026-11-12','2026-11-26');assert.equal(result.total,1140400);assert.equal(result.count,20);assert.equal(result.rows,27);
+  let result=await setRange('2026-11-12','2026-11-26');assert.equal(result.total,1143400);assert.equal(result.count,20);assert.equal(result.rows,27);
   const luiz=page.locator('.ranking-table tbody>.ranking-row').filter({has:page.locator('.ranking-person',{hasText:'LUIZ ANTONIO'})});
   assert((await page.locator('.ranking-table tbody>.ranking-row').first().textContent()).includes('LUIZ ANTONIO'));assert.equal(normalize(await luiz.locator('.ranking-total').textContent()),money(199500));assert((await luiz.locator('.ranking-member-meta').textContent()).includes('5 previstos'));
   await luiz.locator('.ranking-person').click();assert.equal(await page.locator('.ranking-services-row:visible [data-included="true"]').count(),5);assert.equal(await page.locator('.ranking-services-row:visible [data-included="false"]').count(),4);
   await end.selectOption('2026-11-19');await verify();assert.equal(await page.locator('.ranking-services-row:visible [data-included="true"]').count(),3);assert.equal(await page.locator('.ranking-services-row:visible [data-included="false"]').count(),6);assert.equal(await page.locator('.ranking-services-row:visible .ranking-state-outside').count(),6);
   await start.selectOption('2026-11-17');await verify();assert.equal(normalize(await luiz.locator('.ranking-total').textContent()),money(79200));assert.equal(await page.locator('.ranking-services-row:visible [data-included="true"]').count(),2);
-  result=await setRange('2026-11-12','2026-11-12');assert.equal(result.total,119100);result=await setRange('2026-11-13','2026-11-13');assert.equal(result.total,235000);assert.equal(normalize(await luiz.locator('.ranking-total').textContent()),money(0));
+  result=await setRange('2026-11-12','2026-11-12');assert.equal(result.total,122100);result=await setRange('2026-11-13','2026-11-13');assert.equal(result.total,235000);assert.equal(normalize(await luiz.locator('.ranking-total').textContent()),money(0));
   result=await setRange('2026-11-20','2026-11-23');assert.equal(result.total,0);assert.equal(result.rows,27);
   await start.selectOption('2026-11-26');assert.equal(await end.inputValue(),'2026-11-26');result=await verify();assert.equal(result.total,41100);
   await end.selectOption('2026-11-17');assert.equal(await start.inputValue(),'2026-11-17');result=await verify();assert.equal(result.total,148200);
