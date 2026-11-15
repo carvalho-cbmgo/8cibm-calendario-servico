@@ -11416,6 +11416,65 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
   {"name":"SD HUGO","rg":"4664"}
 ]
 </script>
+<script type="application/json" id="odd-alcancavel-config">
+{
+  "anchorMonday": "2026-11-16",
+  "officers": [
+    {"name": "ASP OF CARVALHO", "ord": 3},
+    {"name": "ASP OF BESSA", "ord": 2}
+  ]
+}
+</script>
+<script>
+(() => {
+  'use strict';
+  const DAY=86400000,baseNote='Oficial de Dia — escala ordinária não contabilizada no efetivo da Ala',substitutionPrefix='ODD Alcançável — cobertura de afastamento:',pendingPrefix='ODD Alcançável: ambos os aspirantes estão afastados';
+  const normalize=value=>String(value??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().replace(/\s+/g,' ').trim();
+  function stamp(value){
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(String(value)))throw new RangeError('Data inválida na regra de ODD Alcançável.');
+    const result=Date.parse(`${value}T00:00:00Z`);if(!Number.isFinite(result)||new Date(result).toISOString().slice(0,10)!==value)throw new RangeError('Data inválida na regra de ODD Alcançável.');return result;
+  }
+  const iso=value=>new Date(value).toISOString().slice(0,10),display=value=>value.split('-').reverse().join('/');
+  function resolve(date,config,absences=[]){
+    const day=stamp(date),anchor=stamp(config.anchorMonday),officers=config.officers;
+    if(new Date(anchor).getUTCDay()!==1||!Array.isArray(officers)||officers.length!==2||officers.some(p=>!p.name||!Number.isInteger(p.ord)||p.ord<1)||normalize(officers[0].name)===normalize(officers[1].name))throw new RangeError('A alternância exige uma segunda-feira de referência e dois oficiais distintos.');
+    if(!Array.isArray(absences))throw new RangeError('Os afastamentos devem ser uma lista.');
+    const week=Math.floor((day-anchor)/(7*DAY)),index=((week%2)+2)%2,nominal=officers[index],other=officers[1-index];
+    const away=new Map(officers.map(p=>[normalize(p.name),[]]));
+    for(const item of absences){
+      const entries=away.get(normalize(item.name));if(!entries||item.active===false||item.cancelled===true)continue;
+      const start=stamp(item.start),end=stamp(item.end);if(end<start)throw new RangeError('O término do afastamento deve ser igual ou posterior ao início.');
+      if(start<=day&&day<=end)entries.push(item);
+    }
+    const nominalAway=away.get(normalize(nominal.name)),otherAway=away.get(normalize(other.name)),assigned=!nominalAway.length?nominal:!otherAway.length?other:null;
+    return {date,weekStart:iso(anchor+week*7*DAY),weekEnd:iso(anchor+(week*7+6)*DAY),nominal:nominal.name,assigned:assigned?.name||null,status:!assigned?'pending':assigned===nominal?'assigned':'substitute',absences:nominalAway};
+  }
+  function apply(schedules,config,absences=[]){
+    const names=new Set(config.officers.map(p=>normalize(p.name))),resolutions=[];
+    // Resolve every date first so an invalid absence cannot leave a partially updated calendar.
+    for(const [period,schedule] of Object.entries(schedules))for(const day of schedule.days||[]){const date=`${period}-${String(day.day).padStart(2,'0')}`;resolutions.push({day,duty:resolve(date,config,absences)});}
+    for(const {day,duty} of resolutions){
+      const retained=[];let chosen=null;
+      for(const member of day.members||[]){
+        if(!names.has(normalize(member.name))){retained.push(member);continue;}
+        const hadOfficer=member.badges.some(b=>b.kind==='officer'),assigned=normalize(member.name)===normalize(duty.assigned);
+        if(!hadOfficer&&!assigned){retained.push(member);continue;}
+        member.badges=member.badges.filter(b=>b.kind!=='officer');member.notes=member.notes.filter(note=>note!==baseNote&&!note.startsWith(substitutionPrefix));
+        if(assigned){chosen=member;retained.push(member);}else if(member.badges.length||member.events.length||member.notes.length)retained.push(member);
+      }
+      if(duty.assigned){
+        if(!chosen){const officer=config.officers.find(p=>p.name===duty.assigned);chosen={name:officer.name,badges:[],notes:[],events:[],ord:officer.ord};retained.unshift(chosen);}
+        chosen.badges.unshift({kind:'officer',text:'OFICIAL DE DIA'});chosen.notes.push(baseNote);
+        if(duty.status==='substitute')chosen.notes.push(`${substitutionPrefix} ${duty.nominal} · ${duty.absences.map(item=>`${item.type||'Afastamento'} de ${display(item.start)} a ${display(item.end)}`).join('; ')}.`);
+      }
+      day.members=retained;day.alerts=(day.alerts||[]).filter(note=>!note.startsWith(pendingPrefix));
+      if(duty.status==='pending')day.alerts.push(`${pendingPrefix} em ${display(duty.date)}. Designação pendente de definição.`);
+    }
+    return resolutions.map(item=>item.duty);
+  }
+  window.ReachableOfficer={resolve,apply};
+})();
+</script>
 <script type="application/json" id="ac4-financial-config">
 {
   "monthlyQuotaCents": {
@@ -11541,9 +11600,10 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
   }
   window.AC4Finance={price,month,asOf,status,active,documentInfo,ranking};
   if(typeof document!=='undefined'){
-    const schedules=JSON.parse(document.getElementById('calendar-data').textContent),quotas=JSON.parse(document.getElementById('ac4-financial-config').textContent).monthlyQuotaCents;
-    const refresh=()=>document.dispatchEvent(new CustomEvent('calendar-schedule-change'));
-    window.ServiceCalendar={schedules,quotas,refresh,updateAC4(location,changes){
+    const schedules=JSON.parse(document.getElementById('calendar-data').textContent),quotas=JSON.parse(document.getElementById('ac4-financial-config').textContent).monthlyQuotaCents,rosters=JSON.parse(document.getElementById('ala-rosters').textContent),officerRotation=JSON.parse(document.getElementById('odd-alcancavel-config').textContent);
+    window.ReachableOfficer.apply(schedules,officerRotation,rosters.absences);
+    const refresh=()=>{window.ReachableOfficer.apply(schedules,officerRotation,rosters.absences);document.dispatchEvent(new CustomEvent('calendar-schedule-change'));};
+    window.ServiceCalendar={schedules,quotas,rosters,officerRotation,refresh,updateAC4(location,changes){
       const day=schedules[location.period]?.days.find(d=>d.day===Number(location.day)),member=(location.area==='sat'?day?.sat?.members:day?.members)?.find(m=>m.name===location.member),event=member?.events[location.eventIndex||0];
       if(!event)throw new Error('AC4 não encontrado.');
       const next={...event,...changes},result=price(next,`${location.period}-${String(location.day).padStart(2,'0')}`);
@@ -11858,7 +11918,7 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
   'use strict';
   // Public calendar data only. Add a new YYYY-MM period after its scale is supplied.
   const schedules = window.ServiceCalendar.schedules;
-  const alaRosters=JSON.parse(document.getElementById('ala-rosters').textContent);
+  const alaRosters=window.ServiceCalendar.rosters;
   const finance=window.AC4Finance,currency=new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}),percent=new Intl.NumberFormat('pt-BR',{maximumFractionDigits:2}),dailyPercent=new Intl.NumberFormat('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
   let financialSummary,simulationPlan;
   let simulationActive=false;

@@ -2,7 +2,11 @@
 
 Calendário HTML responsivo e estático para exibição da previsão de militares por ala, dos serviços SAT e do controle financeiro de AC4. Há dados de novembro/2026 a janeiro/2027; meses sem dados mostram essa condição.
 
-O **ODD Alcançável** é **ASP OF CARVALHO de 16 a 22/11/2026** e **ASP OF BESSA de 23 a 29/11/2026**, inclusive, conforme informado pelo usuário em 15/11. A designação aparece no calendário, nos detalhes e na primeira linha da ES, com a observação **Alcançável**. O oficial alcançável não acrescenta recursos operacionais de 24h nem gera AC4. Os AC4 de análise de projetos de CARVALHO nos dias 20 e 28 e de BESSA no dia 29 permanecem separados na SAT.
+O **ODD Alcançável alterna semanalmente entre ASP OF CARVALHO e ASP OF BESSA**, de segunda a domingo, com referência em **CARVALHO de 16 a 22/11/2026** e **BESSA de 23 a 29/11/2026**. A regra aplica-se automaticamente aos dias com escala cadastrada, atravessando meses e anos: CARVALHO volta em 30/11–06/12; BESSA em 07–13/12. A configuração está em `odd-alcancavel-config`.
+
+Férias e outros afastamentos registrados em `ala-rosters.absences`, com `name`, `type`, `start` e `end` em formato `YYYY-MM-DD`, fazem o outro aspirante assumir somente nos dias abrangidos, incluindo início e término. O retorno restaura o responsável da semana, sem deslocar o rodízio original. Se ambos estiverem afastados, a designação fica pendente no calendário, detalhes e ES. A regra é recalculada no carregamento e em `ServiceCalendar.refresh()`, usando o mesmo cadastro de afastamentos das alas; não presume férias sem datas informadas.
+
+A designação aparece no calendário, nos detalhes e na primeira linha da ES, com a observação **Alcançável** e a referência ao afastamento quando houver substituição. O oficial alcançável não acrescenta recursos operacionais de 24h nem gera AC4. Os AC4 de análise de projetos de CARVALHO nos dias 20 e 28 e de BESSA no dia 29 permanecem separados na SAT.
 
 Os [AC4 de análise de projetos de 20, 28 e 29/11](docs/ac4-analise-projetos-20-28-29nov.md), solicitados em 15/11, registram ASP OF CARVALHO nos dias 20 e 28 e ASP OF BESSA no dia 29, sempre das 08h às 20h (12h). São três serviços previstos exclusivos da SAT, R$ 480,00 cada, sem participação nos recursos operacionais de 24h ou redução dos reforços simulados. Novembro passa a 70 AC4, R$ 28.082,00 comprometidos (Operacional R$ 21.662,00; SAT R$ 6.420,00) e saldo de R$ 17.518,00. Execuções confirmadas permanecem em R$ 10.966,00. A referência ao feriado de 20/11 indica ausência de expediente ordinário e preserva o novo AC4.
 
@@ -77,7 +81,7 @@ Com Playwright e Chromium disponíveis, execute `node tests/simulation-balance.b
 
 `tests/analise-projetos.test.cjs` confere os três AC4 exclusivos da SAT, horas, tarifas, acumulados, consulta/ranking e preservação da cobertura e das vagas em todas as metas de 4 a 8. `node tests/analise-projetos.browser.cjs` valida os turnos e valores sem duplicação, o feriado ordinário, a OS com uma linha por serviço, consulta/ranking, totais semanais e exclusão operacional em telas de computador e celular.
 
-`tests/odd-alcancavel.test.cjs` confere as designações inclusivas de 16 a 29/11, a separação dos AC4 SAT e a preservação de chefia, cobertura, simulação e finanças. `node tests/odd-alcancavel.browser.cjs` valida os 14 dias no calendário, nos detalhes e na ES, em computador e telas móveis de 320/390 px.
+`tests/odd-alcancavel.test.cjs` confere as designações, alternância semanal, viradas de mês/ano, afastamentos inclusivos, retorno sem deslocar o rodízio, ambos afastados, atualização idempotente e preservação de AC4, chefia, cobertura, simulação e finanças. `node tests/odd-alcancavel.browser.cjs` valida calendário/detalhes/ES nos 14 dias, rodízio até janeiro e substituição/pendência em computador e telas móveis de 320/390 px.
 
 Para abrir o site localmente, execute `python -m http.server 8000` na raiz do repositório e acesse `http://localhost:8000/`. O cadastro completo de identificação para ES/OS é importado apenas no navegador; arquivos de cadastro e documentos internos devem permanecer fora do repositório.
 
