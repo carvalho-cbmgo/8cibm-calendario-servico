@@ -2,6 +2,8 @@
 
 Calendário HTML responsivo e estático para exibição da previsão de militares por ala, dos serviços SAT e do controle financeiro de AC4. Há dados de novembro/2026 a janeiro/2027; meses sem dados mostram essa condição.
 
+O **ODD Alcançável** é **ASP OF CARVALHO de 16 a 22/11/2026** e **ASP OF BESSA de 23 a 29/11/2026**, inclusive, conforme informado pelo usuário em 15/11. A designação aparece no calendário, nos detalhes e na primeira linha da ES, com a observação **Alcançável**. O oficial alcançável não acrescenta recursos operacionais de 24h nem gera AC4. Os AC4 de análise de projetos de CARVALHO nos dias 20 e 28 e de BESSA no dia 29 permanecem separados na SAT.
+
 Os [AC4 de análise de projetos de 20, 28 e 29/11](docs/ac4-analise-projetos-20-28-29nov.md), solicitados em 15/11, registram ASP OF CARVALHO nos dias 20 e 28 e ASP OF BESSA no dia 29, sempre das 08h às 20h (12h). São três serviços previstos exclusivos da SAT, R$ 480,00 cada, sem participação nos recursos operacionais de 24h ou redução dos reforços simulados. Novembro passa a 70 AC4, R$ 28.082,00 comprometidos (Operacional R$ 21.662,00; SAT R$ 6.420,00) e saldo de R$ 17.518,00. Execuções confirmadas permanecem em R$ 10.966,00. A referência ao feriado de 20/11 indica ausência de expediente ordinário e preserva o novo AC4.
 
 A [conferência atualizada de 12/11/2026](docs/conferencia-trocas-2026-11-12.md) cruza os três consolidados recebidos: 17 autorizações de TS e oito de TS CIA afetam novembro/2026 a janeiro/2027. Foram corrigidas as TS 159, 166 e 167 e incluída a TS 169. As contrapartidas de 15 e 20/01/2027 permanecem pendentes, sem aumentar o efetivo, conforme orientação do usuário. Os relatórios de 08/11 abaixo preservam o histórico anterior.
@@ -74,6 +76,8 @@ Com Playwright e Chromium disponíveis, execute `node tests/simulation-balance.b
 `node tests/consulta-servicos.browser.cjs` valida a busca enquanto se digita, RG público e importado, rejeição de identificação inválida, TS/TS CIA, dispensas e pendências, continuidade SAT, horários e valores, navegação, alterações de AC4, exclusão da simulação, foco/Escape e toque em celular, com telas de 320 a 1800 px. A variável opcional `SERVICE_DIRECTORY_FILE` permite conferir os RGs públicos contra o Plano de Chamada local sem salvar ou registrar as identificações. `tests/consulta-servicos.test.cjs` cobre as regras de seleção, revisões, cancelamentos, períodos parciais e viradas de mês, identificação por nome/RG e preservação dos dados e valores.
 
 `tests/analise-projetos.test.cjs` confere os três AC4 exclusivos da SAT, horas, tarifas, acumulados, consulta/ranking e preservação da cobertura e das vagas em todas as metas de 4 a 8. `node tests/analise-projetos.browser.cjs` valida os turnos e valores sem duplicação, o feriado ordinário, a OS com uma linha por serviço, consulta/ranking, totais semanais e exclusão operacional em telas de computador e celular.
+
+`tests/odd-alcancavel.test.cjs` confere as designações inclusivas de 16 a 29/11, a separação dos AC4 SAT e a preservação de chefia, cobertura, simulação e finanças. `node tests/odd-alcancavel.browser.cjs` valida os 14 dias no calendário, nos detalhes e na ES, em computador e telas móveis de 320/390 px.
 
 Para abrir o site localmente, execute `python -m http.server 8000` na raiz do repositório e acesse `http://localhost:8000/`. O cadastro completo de identificação para ES/OS é importado apenas no navegador; arquivos de cadastro e documentos internos devem permanecer fora do repositório.
 
