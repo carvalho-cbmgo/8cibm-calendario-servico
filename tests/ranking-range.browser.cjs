@@ -42,7 +42,7 @@ const money=cents=>normalize(new Intl.NumberFormat('pt-BR',{style:'currency',cur
   result=await setRange('2026-11-20','2026-11-23');assert.equal(result.total,0);assert.equal(result.rows,27);
   await start.selectOption('2026-11-26');assert.equal(await end.inputValue(),'2026-11-26');result=await verify();assert.equal(result.total,41100);
   await end.selectOption('2026-11-17');assert.equal(await start.inputValue(),'2026-11-17');result=await verify();assert.equal(result.total,160200);
-  await setRange('2026-11-01','2026-11-30');await page.locator('#ac4-ranking-officers').check();result=await verify();assert.equal(result.total,2664200);assert.equal(result.rows,31);await page.locator('#ac4-ranking-seniority').check();await verify();
+  await setRange('2026-11-01','2026-11-30');await page.locator('#ac4-ranking-officers').check();result=await verify();assert.equal(result.total,2808200);assert.equal(result.rows,31);await page.locator('#ac4-ranking-seniority').check();await verify();
   const order=await page.locator('.ranking-table tbody>.ranking-row .ranking-position').allTextContents();assert.deepEqual(order,[...Array.from({length:30},(_,index)=>String(index+1)),'—']);
   for(const width of [320,390,760,761,1280]){
    await page.setViewportSize({width,height:1000});assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
@@ -56,7 +56,7 @@ const money=cents=>normalize(new Intl.NumberFormat('pt-BR',{style:'currency',cur
   await close();await page.locator('#mes-seguinte').click();await open();assert.equal(await start.inputValue(),'2027-01-01');assert.equal(await end.inputValue(),'2027-01-01');await verify();
   await close();await page.locator('#mes-anterior').click();await open();assert.equal(await start.inputValue(),'2026-12-12');assert.equal(await end.inputValue(),'2026-12-31');await verify();
   await close();await page.locator('#mes-anterior').click();await open();assert.equal(await end.inputValue(),'2026-11-30');await verify();await close();
-  await page.locator('[data-ac4-simulation]').click();await page.locator('#ac4-simulation-confirm').click();await open();result=await verify();assert.equal(result.total,2664200);assert.equal(await page.locator('.ranking-person').filter({hasText:'PREVISTO AC4'}).count(),0);await close();
+  await page.locator('[data-ac4-simulation]').click();await page.locator('#ac4-simulation-confirm').click();await open();result=await verify();assert.equal(result.total,2808200);assert.equal(await page.locator('.ranking-person').filter({hasText:'PREVISTO AC4'}).count(),0);await close();
   assert.equal(await page.evaluate(()=>JSON.stringify(window.ServiceCalendar.schedules)),source);
   await page.clock.setFixedTime(new Date('2026-11-10T01:30:00Z'));await page.reload();await open();assert.equal(await end.inputValue(),'2026-11-09');await close();
   await page.clock.setFixedTime(new Date('2026-11-10T03:30:00Z'));await open();assert.equal(await end.inputValue(),'2026-11-10');await close();

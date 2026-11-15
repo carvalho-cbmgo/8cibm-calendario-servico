@@ -4695,7 +4695,29 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
         "alerts": [],
         "sat": {
           "ordinaryStatus": "informed",
-          "members": [],
+          "members": [
+            {
+              "name": "ASP OF CARVALHO",
+              "ord": 3,
+              "badges": [],
+              "notes": [],
+              "events": [
+                {
+                  "serviceId": "ac4-analise-projetos-carvalho-2026-11-20",
+                  "mode": "ANÁLISE DE PROJETOS",
+                  "activity": "Análise de Projetos",
+                  "integrante_operacional": false,
+                  "start": "08h00",
+                  "end": "20h00",
+                  "nextDay": false,
+                  "hours": 12,
+                  "observation": "Destinação exclusiva à análise de projetos; não integra os recursos operacionais de 24h.",
+                  "document": "OS ainda não informada",
+                  "status": "planned"
+                }
+              ]
+            }
+          ],
           "alerts": [],
           "expedientStatus": "holiday"
         }
@@ -5432,7 +5454,34 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
           "4 recursos de 24h",
           "Faltam 2 recursos"
         ],
-        "alerts": []
+        "alerts": [],
+        "sat": {
+          "ordinaryStatus": "not-informed",
+          "members": [
+            {
+              "name": "ASP OF CARVALHO",
+              "ord": 3,
+              "badges": [],
+              "notes": [],
+              "events": [
+                {
+                  "serviceId": "ac4-analise-projetos-carvalho-2026-11-28",
+                  "mode": "ANÁLISE DE PROJETOS",
+                  "activity": "Análise de Projetos",
+                  "integrante_operacional": false,
+                  "start": "08h00",
+                  "end": "20h00",
+                  "nextDay": false,
+                  "hours": 12,
+                  "observation": "Destinação exclusiva à análise de projetos; não integra os recursos operacionais de 24h.",
+                  "document": "OS ainda não informada",
+                  "status": "planned"
+                }
+              ]
+            }
+          ],
+          "alerts": []
+        }
       },
       {
         "day": 29,
@@ -5583,7 +5632,34 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
           "Faltam 1 recurso"
         ],
         "alerts": [],
-        "shiftStart": "08h00"
+        "shiftStart": "08h00",
+        "sat": {
+          "ordinaryStatus": "not-informed",
+          "members": [
+            {
+              "name": "ASP OF BESSA",
+              "ord": 2,
+              "badges": [],
+              "notes": [],
+              "events": [
+                {
+                  "serviceId": "ac4-analise-projetos-bessa-2026-11-29",
+                  "mode": "ANÁLISE DE PROJETOS",
+                  "activity": "Análise de Projetos",
+                  "integrante_operacional": false,
+                  "start": "08h00",
+                  "end": "20h00",
+                  "nextDay": false,
+                  "hours": 12,
+                  "observation": "Destinação exclusiva à análise de projetos; não integra os recursos operacionais de 24h.",
+                  "document": "OS ainda não informada",
+                  "status": "planned"
+                }
+              ]
+            }
+          ],
+          "alerts": []
+        }
       },
       {
         "day": 30,
@@ -11648,11 +11724,12 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
     if(start===null||end===null)return shift.key==='matutino';
     return start<shift.end&&end+(service.nextDay?1440:0)>shift.start;
   }
-  const satActivity=service=>['Protocolo','Vistoria'].find(name=>name.toLowerCase()===String(service.activity||'').toLowerCase())||'Atividade não informada';
+  const satActivities=['Protocolo','Vistoria','Análise de Projetos'];
+  const satActivity=service=>satActivities.find(name=>name.toLowerCase()===String(service.activity||'').toLowerCase())||'Atividade não informada';
   const satContinuation=(event,shift)=>shift?.key==='vespertino'&&satClock(event.start)!==null&&satClock(event.start)<shift.start&&satInShift(event,shift);
   function satGroups(sat){
     const members=orderedDayMembers({members:sat.members});
-    return satShifts.map(shift=>({...shift,groups:['Protocolo','Vistoria','Atividade não informada'].map(activity=>({activity,members:members.flatMap((member,index)=>{
+    return satShifts.map(shift=>({...shift,groups:[...satActivities,'Atividade não informada'].map(activity=>({activity,members:members.flatMap((member,index)=>{
       const badges=member.badges.filter(service=>satInShift(service,shift)&&satActivity(service)===activity),events=member.events.filter(service=>satInShift(service,shift)&&satActivity(service)===activity);
       return badges.length||events.length?[{member:{...member,badges,events},index,total:members.length}]:[];
     }),notices:(sat.notices||[]).filter(notice=>notice.shift===shift.key&&satActivity(notice)===activity)})).filter(group=>group.members.length||group.notices.length)}));
@@ -11877,7 +11954,7 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
       const item=element('li','ranking-service-item'),top=element('div','ranking-service-top'),date=element('time','',rankingDate(record.startDate));date.dateTime=record.startDate;
       const included=record.startDate>=data.startDate&&record.startDate<=data.cutoffDate;item.dataset.rankingDate=record.startDate;item.dataset.included=String(included);
       top.append(date,element('span','ranking-service-cost',money(record.commitmentCents)));item.append(top);
-      const hours=record.minutes%60?`${Math.floor(record.minutes/60)}h${String(record.minutes%60).padStart(2,'0')}`:`${record.minutes/60}h`,mode=record.category==='sat'?'SAT':/PROEBOM/i.test(record.event.mode)?'OPERACIONAL · PROEBOM':'OPERACIONAL';
+      const hours=record.minutes%60?`${Math.floor(record.minutes/60)}h${String(record.minutes%60).padStart(2,'0')}`:`${record.minutes/60}h`,mode=record.category==='sat'?`SAT${record.event.activity?` · ${record.event.activity}`:''}`:/PROEBOM/i.test(record.event.mode)?'OPERACIONAL · PROEBOM':'OPERACIONAL';
       item.append(element('p','ranking-service-data',`${hours} · ${mode}`),element('p','ranking-service-time',`${record.start} às ${record.end}${record.endDate!==record.startDate?` · término ${rankingDate(record.endDate)}`:''}`));
       const statuses=element('div','ranking-service-statuses'),confirmed=record.status==='executed';statuses.append(element('span',`ranking-state${confirmed?' ranking-state-confirmed':''}`,confirmed?'Execução confirmada':'Previsto'));
       if(!included)statuses.append(element('span','ranking-state ranking-state-outside','Fora do período selecionado'));
@@ -12191,7 +12268,7 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
     const sat=satFor(day),section=element('section','sat-section');section.setAttribute('aria-label',`SAT do dia ${day.day}`);
     const content=element('div','sat-content service-area-content');section.append(areaHeading(day,'sat',section,[content]),content);
     if(ordinaryPending(sat))content.append(element('p','sat-status','Expediente ordinário ainda não informado.'));
-    if(sat.expedientStatus==='holiday')content.append(element('p','sat-status holiday','Feriado · Sem expediente'));
+    if(sat.expedientStatus==='holiday')content.append(element('p','sat-status holiday','Feriado · Sem expediente ordinário'));
     for(const shift of satGroups(sat)){
       if(!shift.groups.length)continue;
       const block=element('section','sat-shift');block.dataset.shift=shift.key;block.setAttribute('aria-label',`Turno ${shift.label}`);block.append(satShiftHeading(shift));
@@ -12324,7 +12401,7 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
     dialogBody.replaceChildren();
     if(original.confirmation?.status==='confirmed')dialogBody.append(element('p','scale-confirmation-note',`Escala confirmada pelo usuário em ${original.confirmation.date.split('-').reverse().join('/')}.`));
     if(sat&&ordinaryPending(data))dialogBody.append(element('p','detail-note','Expediente ordinário da SAT ainda não informado.'));
-    if(sat&&data.expedientStatus==='holiday')dialogBody.append(element('p','detail-note','Feriado · Sem expediente'));
+    if(sat&&data.expedientStatus==='holiday')dialogBody.append(element('p','detail-note','Feriado · Sem expediente ordinário'));
     else if(sat&&!day.members.length&&!data.notices?.length)dialogBody.append(element('p','detail-note','Nenhum serviço SAT informado para este dia.'));
     if(chief.status==='pending')dialogBody.append(element('p','chief-pending',chief.label));
     for(const warning of chief.warnings)dialogBody.append(element('p','detail-note',warning));

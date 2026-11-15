@@ -19,14 +19,14 @@ test('períodos parciais da TS 168 e ordinários da SAT preservam os horários c
   const partial=rows.filter(r=>r.date===day&&r.type==='ordinary'&&/WANDERSON|HENRIQUE/.test(r.member));assert.equal(partial.length,2);assert(partial.every(r=>r.minutes===720));assert.deepEqual(plain(partial.map(r=>[r.start,r.end])),[['08h00','20h00'],['20h00','08h00']]);
  }
  const sat=rows.find(r=>r.date==='2026-11-16'&&r.member==='3º SGT ROBERTO'&&r.type==='ordinary'&&r.area==='sat');assert.equal(sat.start,'13h00');assert.equal(sat.end,'18h00');assert.equal(sat.minutes,300);assert.equal(sat.activity,'Vistoria');
- assert(!rows.some(r=>r.date==='2026-11-20'&&r.area==='sat'));
+ assert(!rows.some(r=>r.date==='2026-11-20'&&r.area==='sat'&&r.type==='ordinary'));
 });
 
 test('AC4 canônico exclui cancelamentos e simulação, deduplica continuidade SAT e aplica revisões',()=>{
  const original=ac4({serviceId:'sat-test'}),revised=ac4({serviceId:'sat-test',revision:2,end:'12h00',hours:4}),cancelled=ac4({serviceId:'cancel-test',cancelled:true});
  const input={'2026-11':{days:[{day:1,ala:'ALPHA',members:[member('PREVISTO AC4',[],[ac4({simulation:true,mode:'OPERACIONAL/SOP'})],{simulationId:'virtual'})],sat:{members:[member('SD TESTE',[],[original,revised,cancelled,ac4({simulation:true,serviceId:'virtual-sat'})])]}}]}};
  const rows=lookup.month(input,'2026-11');assert.equal(rows.length,1);assert.equal(rows[0].minutes,240);assert.equal(rows[0].commitmentCents,16000);
- const real=lookup.month(data,'2026-11').filter(r=>r.type==='ac4');assert.equal(real.length,67);assert.equal(real.reduce((sum,r)=>sum+r.commitmentCents,0),2664200);
+ const real=lookup.month(data,'2026-11').filter(r=>r.type==='ac4');assert.equal(real.length,70);assert.equal(real.reduce((sum,r)=>sum+r.commitmentCents,0),2808200);
  const continuous=real.filter(r=>r.date==='2026-11-16'&&r.member==='2º SGT WANDERSON'&&r.area==='sat');assert.equal(continuous.length,1);assert.equal(continuous[0].minutes,600);assert.equal(continuous[0].commitmentCents,30000);
 });
 
