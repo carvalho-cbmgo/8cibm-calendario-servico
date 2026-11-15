@@ -732,6 +732,20 @@ html.vacancy-dialog-open,html.vacancy-dialog-open body{overflow:hidden;overscrol
 @media screen and (max-width:760px){.filters{grid-template-columns:repeat(5,minmax(0,1fr)) 44px}.filters #whatsapp-vacancies-button{padding:4px}.whatsapp-button img{width:30px;height:30px}.vacancy-body{padding:12px;font-size:15px}}
 @media screen and (max-width:350px){.filters{column-gap:4px}}
 @media print{.vacancy-dialog,.whatsapp-button{display:none!important}}
+.filters #service-lookup-button{display:inline-flex;align-items:center;justify-content:center;min-width:38px;padding:4px 7px;background:#fff;border-color:#c8d7e7;color:#234d73}
+.service-lookup-icon{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+.service-lookup-dialog{width:min(880px,calc(100% - 24px));max-height:90dvh}
+.service-lookup-body{padding:14px 16px 18px;color:#38516b;font-size:14px;line-height:1.45}
+.service-lookup-label{display:grid;gap:5px;font-weight:650}
+#service-lookup-query{width:100%;min-width:0;min-height:44px;padding:10px;border:1px solid #c8d7e7;border-radius:8px;font:inherit;color:#243e56;background:#fff}
+#service-lookup-query:focus-visible{outline:3px solid #94baff;outline-offset:2px}
+.service-lookup-person{margin-top:14px;padding-top:10px;border-top:1px solid #dce6f1;min-width:0}
+.service-lookup-person h3{margin:0;font-size:16px;overflow-wrap:anywhere}
+.service-lookup-person .ranking-service-list{margin-top:8px}
+.service-lookup-period{overflow-wrap:anywhere}
+html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscroll-behavior:none}
+@media screen and (max-width:760px){.filters{grid-template-columns:repeat(5,minmax(0,1fr)) 44px 44px}.filters #service-lookup-button{padding:4px}.service-lookup-body{padding:12px;font-size:15px}}
+@media screen and (max-width:350px){.filters [data-filter]{font-size:10px}}
 </style></head><body><main>
 <p class="page-copyright">© 2026 ASP OF CARVALHO. Todos os direitos reservados.</p>
 <header class="header">
@@ -746,12 +760,25 @@ html.vacancy-dialog-open,html.vacancy-dialog-open body{overflow:hidden;overscrol
  <section id="ac4-month-summary" class="monthly-finance" aria-label="Controle mensal da cota AC4" aria-live="polite"></section>
 </header>
 <section class="simulation-banner" id="ac4-simulation-status" role="status" aria-live="polite" hidden></section>
-<div class="filterbar"><div aria-label="Filtrar alas" class="filters" role="group"><button aria-pressed="true" data-filter="TODAS" type="button">Todas as alas</button><button aria-pressed="false" data-filter="ALPHA" type="button">Alpha</button><button aria-pressed="false" data-filter="BRAVO" type="button">Bravo</button><button aria-pressed="false" data-filter="CHARLIE" type="button">Charlie</button><button aria-pressed="false" data-filter="DELTA" type="button">Delta</button><button type="button" id="whatsapp-vacancies-button" class="whatsapp-button" aria-label="Gerar mensagem de vagas de AC4 para WhatsApp" aria-haspopup="dialog" aria-controls="vacancy-dialog" title="Vagas de AC4 para WhatsApp"><img src="assets/whatsapp.svg" width="24" height="24" alt=""/></button></div><small>Serviço operacional e previsões PROEBOM · Clique no AC4 com OS definida para copiar o SEI.</small></div>
+<div class="filterbar"><div aria-label="Filtrar alas" class="filters" role="group"><button aria-pressed="true" data-filter="TODAS" type="button">Todas as alas</button><button aria-pressed="false" data-filter="ALPHA" type="button">Alpha</button><button aria-pressed="false" data-filter="BRAVO" type="button">Bravo</button><button aria-pressed="false" data-filter="CHARLIE" type="button">Charlie</button><button aria-pressed="false" data-filter="DELTA" type="button">Delta</button><button type="button" id="whatsapp-vacancies-button" class="whatsapp-button" aria-label="Gerar mensagem de vagas de AC4 para WhatsApp" aria-haspopup="dialog" aria-controls="vacancy-dialog" title="Vagas de AC4 para WhatsApp"><img src="assets/whatsapp.svg" width="24" height="24" alt=""/></button><button type="button" id="service-lookup-button" aria-label="Consultar serviços por militar" aria-haspopup="dialog" aria-controls="service-lookup-dialog" title="Consultar serviços por militar"><svg class="service-lookup-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg></button></div><small>Serviço operacional e previsões PROEBOM · Clique no AC4 com OS definida para copiar o SEI.</small></div>
 <nav aria-label="Navegação entre os dias" class="mobile-nav"><button aria-label="Dia anterior" id="dia-anterior" type="button">‹</button><div class="mobile-nav-center"><select aria-label="Selecionar dia de serviço" id="selecionar-dia"></select><span aria-live="polite" class="mobile-nav-count" id="indicador-dias"></span></div><button aria-label="Próximo dia" id="dia-seguinte" type="button">›</button></nav><div aria-label="Calendário de novembro de 2026" class="calendar" id="calendario"></div>
 <section class="empty-state" id="sem-previsao" role="status" hidden><h2>Sem previsão cadastrada</h2><p>Não há dados de serviço cadastrados para <strong id="competencia-vazia"></strong>.</p><button type="button" id="voltar-competencia">Voltar a Novembro/2026</button></section>
 <noscript>Ative o JavaScript para selecionar o período e visualizar a previsão de serviço.</noscript>
 <div class="info"><strong>Regras e ressalvas:</strong> as informações apresentadas aqui são previsões do planejamento da escala, o que não substitui a Escala de Serviço e Ordem de Serviço homologadas.</div>
 </main>
+<dialog id="service-lookup-dialog" class="service-lookup-dialog" aria-labelledby="service-lookup-title" aria-modal="true">
+ <div class="dialog-heading"><h2 id="service-lookup-title">Consultar serviços por militar</h2><button type="button" class="dialog-close" id="service-lookup-close">Fechar</button></div>
+ <div class="service-lookup-body">
+  <p id="service-lookup-month" class="ranking-intro"></p>
+  <label class="service-lookup-label" for="service-lookup-query">Nome ou RG do militar<input id="service-lookup-query" type="search" placeholder="Digite o nome ou RG" autocomplete="off" spellcheck="false" autofocus aria-describedby="service-lookup-register-status"/></label>
+  <details class="ranking-register-panel"><summary>Cadastro local de militares</summary><label class="ranking-register" for="service-lookup-file">Importar Plano de Chamada (.xlsx) ou cadastro (.json)<input id="service-lookup-file" type="file" accept=".json,.xlsx"/></label></details>
+  <p id="service-lookup-register-status" class="ranking-register-status"></p>
+  <p id="service-lookup-import-message" class="ranking-import-message" role="status"></p>
+  <p class="ranking-status-note">Serviços cadastrados no mês, pela data de início. A previsão não comprova execução ou pagamento.</p>
+  <p id="service-lookup-summary" role="status" aria-live="polite" aria-atomic="true"></p>
+  <div id="service-lookup-results"></div>
+ </div>
+</dialog>
 <dialog id="vacancy-dialog" class="vacancy-dialog" aria-labelledby="vacancy-title" aria-modal="true">
  <div class="dialog-heading"><h2 id="vacancy-title">Vagas de AC4 para WhatsApp</h2><button type="button" class="dialog-close" id="vacancy-close">Fechar</button></div>
  <div class="vacancy-body">
@@ -11083,6 +11110,40 @@ html.vacancy-dialog-open,html.vacancy-dialog-open body{overflow:hidden;overscrol
   {"name": "SD HUGO", "ord": 30, "officer": false}
 ]
 </script>
+<script type="application/json" id="service-lookup-personnel">
+[
+  {"name":"CAP FRANCISCO LINS","rg":"2413"},
+  {"name":"ASP OF BESSA","rg":"4470"},
+  {"name":"ASP OF CARVALHO","rg":"4489"},
+  {"name":"ST OSVALDIR","rg":"1657"},
+  {"name":"ST DA SILVA","rg":"1376"},
+  {"name":"ST PASSOS","rg":"1752"},
+  {"name":"ST TAVARES","rg":"1510"},
+  {"name":"ST AISLAN","rg":"1419"},
+  {"name":"1º SGT HAMILTON","rg":"1542"},
+  {"name":"1º SGT NIKHOLAS","rg":"2876"},
+  {"name":"1º SGT HELLYSSON","rg":"2847"},
+  {"name":"2º SGT MAURO","rg":"2852"},
+  {"name":"2º SGT DIEGO","rg":"2999"},
+  {"name":"2º SGT SCHUSSLER","rg":"3408"},
+  {"name":"2º SGT GEYDSON","rg":"3270"},
+  {"name":"2º SGT LUIZ ANTONIO","rg":"3271"},
+  {"name":"2º SGT WANDERSON","rg":"3404"},
+  {"name":"2º SGT CÉSAR VIEIRA","rg":"3402"},
+  {"name":"3º SGT JORGE","rg":"3594"},
+  {"name":"3º SGT BERTONCELLO","rg":"3399"},
+  {"name":"3º SGT ROBERTO","rg":"3407"},
+  {"name":"3º SGT HENRIQUE","rg":"3398"},
+  {"name":"3º SGT LEIDE","rg":"3697"},
+  {"name":"3º SGT VALÉRIA","rg":"3698"},
+  {"name":"CB RABELO","rg":"4091"},
+  {"name":"SD CAVALCANTE","rg":"4386"},
+  {"name":"SD PICCINI","rg":"4407"},
+  {"name":"SD SANTOS","rg":"4677"},
+  {"name":"SD MARTINS","rg":"4578"},
+  {"name":"SD HUGO","rg":"4664"}
+]
+</script>
 <script type="application/json" id="ac4-financial-config">
 {
   "monthlyQuotaCents": {
@@ -11459,6 +11520,67 @@ html.vacancy-dialog-open,html.vacancy-dialog-open body{overflow:hidden;overscrol
 })();
 </script>
 <script>
+(() => {
+  'use strict';
+  const normalize=value=>String(value??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().replace(/\s+/g,' ').trim();
+  const key=name=>normalize(name)==='CAP LINS'?'CAP FRANCISCO LINS':normalize(name);
+  const clock=value=>{const match=String(value??'').match(/^(\d{1,2})(?:h|:)(\d{2})?$/);return match&&Number(match[1])<24&&Number(match[2]||0)<60?Number(match[1])*60+Number(match[2]||0):null;};
+  const dateMinute=(date,minute)=>{const value=Date.parse(`${date}T00:00:00Z`);return Number.isFinite(value)?new Date(value+minute*60000):null;};
+  const timeText=date=>`${String(date.getUTCHours()).padStart(2,'0')}h${String(date.getUTCMinutes()).padStart(2,'0')}`;
+  const virtual=member=>!!member.simulationId||key(member.name)==='PREVISTO AC4';
+  function month(schedules,period,summary=window.AC4Finance.month(schedules,period)){
+    const records=[],ordinary=new Map();
+    for(const [sourcePeriod,schedule] of Object.entries(schedules))for(const day of schedule.days||[])for(const [area,members] of [['operational',day.members||[]],['sat',day.sat?.members||[]]])for(const member of members){
+      const badges=member.badges||[];
+      if(virtual(member)||member.disponivel===false||member.afastado===true||badges.some(b=>['disp','review'].includes(b.kind)))continue;
+      for(const badge of badges){
+        if(!['ord','ts','pay','officer','compensation'].includes(badge.kind)||badge.annotationOnly===true)continue;
+        const date=badge.startDate||member.serviceStartDate||`${sourcePeriod}-${String(day.day).padStart(2,'0')}`;
+        if(date.slice(0,7)!==period)continue;
+        const note=(member.notes||[]).join(' ').match(/(\d{1,2}h(?:\d{2})?)\s*(?:às|[–-])\s*(\d{1,2}h(?:\d{2})?)/i);
+        const explicitStart=clock(badge.start||member.serviceStart||badge.troca?.inicio||note?.[1]);
+        const explicitEnd=clock(badge.end||member.serviceEnd||badge.troca?.fim||note?.[2]);
+        const hours=Number(badge.hours??member.serviceHours??(area==='sat'?(explicitStart!==null&&explicitEnd!==null?((explicitEnd-explicitStart+1440)%1440)/60:NaN):24));
+        const start=explicitStart??(area==='operational'&&hours===24?(clock(day.shiftStart)??480):null);
+        const duration=start===null||explicitEnd===null?null:(explicitEnd-start+1440)%1440||(hours===24?1440:0);
+        const valid=start!==null&&Number.isFinite(hours)&&hours>0&&hours<=24&&(duration===null||duration===hours*60);
+        const startStamp=valid?dateMinute(date,start):null,endStamp=valid?dateMinute(date,start+hours*60):null;
+        const label=badge.kind==='ts'?'TS':badge.kind==='pay'?'TS CIA · Pagamento':badge.kind==='officer'?'Oficial de Dia':badge.kind==='compensation'?'Pagamento de horas':'';
+        const record={member:member.name,personKey:key(member.name),type:'ordinary',date,area,ala:day.ala,activity:badge.activity||'',minutes:valid?hours*60:null,startDate:date,endDate:endStamp?.toISOString().slice(0,10)||null,start:startStamp?timeText(startStamp):null,end:endStamp?timeText(endStamp):null,labels:label?[label]:[]};
+        const id=[record.personKey,area,date,record.start,record.endDate,record.end,record.activity].join('|'),prior=ordinary.get(id);
+        if(prior)prior.labels=[...new Set([...prior.labels,...record.labels])];else ordinary.set(id,record);
+      }
+    }
+    records.push(...ordinary.values());
+    // Finance supplies canonical revisions and one record for a continuous SAT AC4.
+    for(const record of summary.records){
+      const source=schedules[record.sourcePeriod]?.days.find(day=>day.day===record.sourceDay);
+      const members=record.category==='sat'?source?.sat?.members:source?.members;
+      if(record.status==='cancelled'||record.event.simulation===true||key(record.member)==='PREVISTO AC4'||members?.some(m=>m.name===record.member&&virtual(m)))continue;
+      records.push({...record,personKey:key(record.member),type:'ac4',date:record.startDate,area:record.category,ala:source?.ala,activity:record.event.activity||'',labels:/PROEBOM/i.test(record.event.mode)?['PROEBOM']:[]});
+    }
+    return records.sort((a,b)=>a.date.localeCompare(b.date)||String(a.start||'').localeCompare(String(b.start||''))||a.type.localeCompare(b.type));
+  }
+  function people(schedules,roster=[],directory=[]){
+    const map=new Map(),add=name=>{if(name&&key(name)!=='PREVISTO AC4'&&!map.has(key(name)))map.set(key(name),{key:key(name),name:key(name)==='CAP FRANCISCO LINS'?'CAP FRANCISCO LINS':name});};
+    for(const person of roster){add(person.name);if(/^[\d.]+$/.test(person.rg||''))map.get(key(person.name)).rg=person.rg;}
+    for(const schedule of Object.values(schedules))for(const day of schedule.days||[])for(const member of [...(day.members||[]),...(day.sat?.members||[])])if(!virtual(member))add(member.name);
+    for(const person of directory){
+      const aliases=[...map.values()].filter(item=>normalize(person.war)&&item.key.endsWith(' '+normalize(person.war))),existing=map.get(key(person.siteName))||(aliases.length===1?aliases[0]:null);
+      if(!existing)add(person.siteName);
+      Object.assign(existing||map.get(key(person.siteName)),{full:person.full,war:person.war,rg:person.rg,grade:person.grade});
+    }
+    return [...map.values()].sort((a,b)=>a.name.localeCompare(b.name,'pt-BR'));
+  }
+  function search(people,query){
+    const text=normalize(query);if(!text)return [];
+    const rg=/^(?:RG\s*)?[\d.\s-]+$/.test(text)?text.replace(/\D/g,''):null;
+    return people.filter(person=>rg?!!person.rg&&person.rg.replace(/\D/g,'').includes(rg):text.split(' ').every(word=>normalize(`${person.name} ${person.full||''} ${person.war||''}`).includes(word)));
+  }
+  window.ServiceLookup={month,people,search};
+})();
+</script>
+<script>
 
 (() => {
   'use strict';
@@ -11473,6 +11595,7 @@ html.vacancy-dialog-open,html.vacancy-dialog-open body{overflow:hidden;overscrol
   const simulationWeekdays=[{key:1,label:'SEG',name:'Segunda-feira'},{key:2,label:'TER',name:'Terça-feira'},{key:3,label:'QUA',name:'Quarta-feira'},{key:4,label:'QUI',name:'Quinta-feira'},{key:5,label:'SEX',name:'Sexta-feira'},{key:6,label:'SAB',name:'Sábado'},{key:0,label:'DOM',name:'Domingo'}];
   let simulationScrollFrame=0;
   const rankingPersonnel=JSON.parse(document.getElementById('ranking-personnel').textContent);
+  const lookupPersonnel=JSON.parse(document.getElementById('service-lookup-personnel').textContent);
   const periods = Object.keys(schedules).sort();
   const accessDateFormat=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Sao_Paulo',year:'numeric',month:'2-digit',day:'2-digit'});
   function accessDate(){
@@ -11498,6 +11621,7 @@ html.vacancy-dialog-open,html.vacancy-dialog-open body{overflow:hidden;overscrol
   const dialogBody = document.getElementById('detalhes-conteudo');
   const rankingDialog=document.getElementById('ac4-ranking-dialog'),rankingStart=document.getElementById('ac4-ranking-start'),rankingEnd=document.getElementById('ac4-ranking-end'),rankingOfficers=document.getElementById('ac4-ranking-officers'),rankingSeniority=document.getElementById('ac4-ranking-seniority');
   const rankingRanges=new Map();
+  const lookupDialog=document.getElementById('service-lookup-dialog'),lookupButton=document.getElementById('service-lookup-button'),lookupQuery=document.getElementById('service-lookup-query');
   const vacancyDialog=document.getElementById('vacancy-dialog'),vacancyStart=document.getElementById('vacancy-start'),vacancyEnd=document.getElementById('vacancy-end'),vacancyMessage=document.getElementById('vacancy-message'),vacancyButton=document.getElementById('whatsapp-vacancies-button'),vacancyRanges=new Map();
   let vacancyPeriod=null;
   let rankingPeriod=null,selectedRankingKey=null;
@@ -11706,6 +11830,40 @@ html.vacancy-dialog-open,html.vacancy-dialog-open body{overflow:hidden;overscrol
     return section;
   }
   const rankingDate=date=>date.split('-').reverse().join('/');
+  function renderServiceLookup(){
+    const lookup=window.ServiceLookup,directory=window.ServiceDirectory,content=document.getElementById('service-lookup-results');
+    document.getElementById('service-lookup-month').textContent=`Serviços de ${periodLabel()} · Todas as alas e SAT`;
+    document.getElementById('service-lookup-register-status').textContent=directory?.count()?`${directory.count()} militares no cadastro local da sessão. A pesquisa por RG usa somente identificações validadas.`:'RGs conferidos no Plano de Chamada. Para pesquisar também pelo nome completo ou atualizar o cadastro, importe o arquivo local.';
+    content.replaceChildren();
+    const matches=lookup.search(lookup.people(schedules,lookupPersonnel,directory?.lookupPeople()||[]),lookupQuery.value),summary=document.getElementById('service-lookup-summary');
+    if(!lookupQuery.value.trim()){summary.textContent='Digite o nome ou RG para consultar os serviços do mês.';return;}
+    summary.textContent=matches.length?`${matches.length} militar${matches.length===1?' encontrado':'es encontrados'}.`:'Nenhum militar encontrado.';
+    const records=lookup.month(schedules,period,financialSummary);
+    for(const person of matches){
+      const section=element('section','service-lookup-person'),heading=element('h3'),services=records.filter(record=>record.personKey===person.key);
+      section.dataset.lookupMember=person.key;rankingIdentification(heading,person.name);if(person.rg&&!directory?.has(person.name))heading.append(` · RG ${person.rg}`);section.append(heading);
+      const ac4=services.filter(record=>record.type==='ac4'),total=ac4.reduce((sum,record)=>sum+(record.commitmentCents||0),0);
+      const ordinaryCount=services.filter(record=>record.type==='ordinary').length;
+      section.append(element('p','ranking-service-data',`${ordinaryCount} ${ordinaryCount===1?'serviço ORDINÁRIO':'serviços ORDINÁRIOS'} · ${ac4.length} AC4 · ${money(total)}${ac4.some(record=>!record.valid)?' · Há valor a conferir':''}`));
+      if(!services.length)section.append(element('p','ranking-empty',`Nenhum serviço cadastrado para este militar em ${periodLabel()}.`));
+      else{
+        const list=element('ol','ranking-service-list');
+        for(const record of services){
+          const item=element('li','ranking-service-item'),top=element('div','ranking-service-top'),date=element('time','',rankingDate(record.date));date.dateTime=record.date;
+          item.dataset.lookupType=record.type;item.dataset.lookupDate=record.date;top.append(date);
+          if(record.type==='ac4')top.append(element('span','ranking-service-cost',record.valid?money(record.commitmentCents):'Valor a conferir'));
+          item.append(top);
+          const hours=record.minutes===null||record.minutes===undefined?'Carga horária a conferir':`${record.minutes/60}h`,area=record.area==='sat'?`SAT${record.activity?` · ${record.activity}`:''}`:`Ala ${record.ala||'não informada'}`;
+          item.append(element('p','ranking-service-data',`${record.type==='ordinary'?'ORDINÁRIO':'AC4'} · ${hours} · ${area}${record.labels.length?` · ${record.labels.join(' · ')}`:''}`));
+          item.append(element('p','ranking-service-time service-lookup-period',record.start&&record.end&&record.endDate?`Início: ${rankingDate(record.startDate)} às ${record.start} · Término: ${rankingDate(record.endDate)} às ${record.end}`:'Período de início e término a conferir.'));
+          if(record.type==='ac4')item.append(element('span',`ranking-state${record.status==='executed'?' ranking-state-confirmed':''}`,record.status==='executed'?'Execução confirmada':'Previsto'));
+          list.append(item);
+        }
+        section.append(list);
+      }
+      content.append(section);
+    }
+  }
   function rankingIdentification(target,name){
     if(window.ServiceDirectory?.has(name))window.ServiceDirectory.appendIdentification(target,{name});
     else target.append(document.createTextNode(name.toLocaleUpperCase('pt-BR')));
@@ -12131,7 +12289,7 @@ html.vacancy-dialog-open,html.vacancy-dialog-open body{overflow:hidden;overscrol
     document.title = `Previsão Escalas de Serviço · ${periodLabel()} | 8ª CIBM`;
     document.querySelector('meta[name="description"]').content = `Previsão de serviço da 8ª CIBM — ${periodLabel()}.`;
     draw();
-    if(rankingDialog.open)renderRankingDialog();if(vacancyDialog.open)renderVacancyDialog();
+    if(rankingDialog.open)renderRankingDialog();if(vacancyDialog.open)renderVacancyDialog();if(lookupDialog.open)renderServiceLookup();
   }
   function moveMonth(direction) {
     const [year,month]=period.split('-').map(Number),target=new Date(Date.UTC(year,month-1+direction,1));
@@ -12348,6 +12506,18 @@ html.vacancy-dialog-open,html.vacancy-dialog-open body{overflow:hidden;overscrol
   nextMonth.addEventListener('click',()=>moveMonth(1));
   filterButtons.forEach(button => button.addEventListener('click', () => { filter = button.dataset.filter; draw();if(button.dataset.exchangeTooltip&&(button.matches(':hover')||document.activeElement===button)){hoveredBadge=button.matches(':hover')?button:null;focusedBadge=document.activeElement===button?button:null;showExchangeTooltip(button);} }));
   vacancyButton.addEventListener('click',()=>{hideExchangeTooltip();renderVacancyDialog();document.documentElement.classList.add('vacancy-dialog-open');vacancyDialog.showModal();});
+  lookupButton.addEventListener('click',()=>{hideExchangeTooltip();renderServiceLookup();lookupDialog.showModal();lookupDialog.scrollTop=0;document.documentElement.classList.add('service-lookup-open');lookupQuery.focus();});
+  lookupQuery.addEventListener('input',renderServiceLookup);
+  document.getElementById('service-lookup-close').addEventListener('click',()=>lookupDialog.close());
+  lookupDialog.addEventListener('keydown',event=>{if(event.key==='Escape'){event.preventDefault();lookupDialog.close();}});
+  lookupDialog.addEventListener('close',()=>{document.documentElement.classList.remove('service-lookup-open');lookupButton.focus({preventScroll:true});});
+  document.getElementById('service-lookup-file').addEventListener('change',async event=>{
+    const input=event.target,file=input.files[0],feedback=document.getElementById('service-lookup-import-message');if(!file)return;
+    feedback.textContent='Importando cadastro local…';
+    try{const count=await window.ServiceDirectory.importFile(file);feedback.textContent=`Cadastro local atualizado: ${count} militares.`;}
+    catch(error){feedback.textContent=`Não foi possível importar: ${error instanceof SyntaxError?'JSON inválido.':error.message}`;}
+    finally{input.value='';renderServiceLookup();}
+  });
   document.getElementById('vacancy-configure').addEventListener('click',openSimulationConfig);
   document.getElementById('vacancy-close').addEventListener('click',()=>vacancyDialog.close());
   vacancyDialog.addEventListener('close',()=>{document.documentElement.classList.remove('vacancy-dialog-open');vacancyButton.focus({preventScroll:true});});
@@ -12804,7 +12974,9 @@ html.vacancy-dialog-open,html.vacancy-dialog-open body{overflow:hidden;overscrol
       ui.registerStatus.textContent=`${directory.size} militares carregados apenas nesta sessão. CPFs não informados permanecerão em branco.`;ui.feedback.textContent='Cadastro local carregado. Confira as tabelas e clique no botão de cópia desejado.';render();
       return directory.size;
   }
-  window.ServiceDirectory={appendIdentification,has:name=>!!person(name)&&!personErrors(name).length,count:()=>directory.size,importFile:importDirectoryFile,rankingInfo:name=>{const p=person(name);return p?{ord:p.ord,officer:/^(?:CAP|ASP)\b/.test(p.grade)}:null;}};
+  // Search exposes only validated identification fields, without CPF or contacts.
+  const lookupPeople=()=>[...directory.values()].filter(p=>!personErrors(p.siteName).length).map(({siteName,full,war,rg,grade})=>({siteName,full,war,rg,grade}));
+  window.ServiceDirectory={appendIdentification,has:name=>!!person(name)&&!personErrors(name).length,count:()=>directory.size,importFile:importDirectoryFile,lookupPeople,rankingInfo:name=>{const p=person(name);return p?{ord:p.ord,officer:/^(?:CAP|ASP)\b/.test(p.grade)}:null;}};
   ui.file.addEventListener('change',async()=>{
     const file=ui.file.files[0];if(!file)return;
     try{await importDirectoryFile(file);
