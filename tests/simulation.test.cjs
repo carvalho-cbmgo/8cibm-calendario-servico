@@ -98,7 +98,7 @@ test('dados atuais respeitam as coberturas registradas e a TS 168, sem modificar
     for(const day of source[period].days)assert.equal(plan.days.get(day.day).coverage.resources,parseInt(day.coverage[0]),`${period}/${day.day}`);
     assert.equal(plan.warnings.length,0);
   }
-  for(const day of [8,29])assert.equal(simulation.coverage(source['2026-11'].days[day-1],`2026-11-${String(day).padStart(2,'0')}`).resources,5);
+  for(const day of [8,29])assert.equal(simulation.coverage(source['2026-11'].days[day-1],`2026-11-${String(day).padStart(2,'0')}`).resources,day===29?6:5);
   assert.equal(JSON.stringify(source),before);
 });
 
@@ -115,17 +115,17 @@ test('todas as metas completam somente o déficit por horário nos três meses c
   assert.equal(JSON.stringify(source),before);
 });
 
-test('novembro simula 16 recursos em 11 dias, cobra cada reforço uma vez e preserva execuções',()=>{
+test('novembro simula 13 recursos em 9 dias, cobra cada reforço uma vez e preserva execuções',()=>{
   const source=data(),plan=simulation.plan(source,'2026-11',4560000),real=finance.month(source,'2026-11',4560000);
   assert.equal(source['2026-11'].days.filter(day=>day.confirmation?.status==='confirmed').length,18);
   for(let day=1;day<=18;day++)assert.equal(plan.days.get(day).addedResources,0);
-  assert.equal(plan.days.get(27).addedResources,0);assert.equal(plan.days.get(13).addedResources,0);assert.equal(plan.days.get(20).addedResources,2);assert.equal(plan.days.get(29).addedResources,1);
-  assert.equal(plan.addedResources,16);assert.equal(plan.addedServices,16);assert.equal(plan.daysAffected,11);assert.equal(plan.summary.committedCents,1290900);
-  assert.equal(new Set(plan.summary.records.map(record=>record.key)).size,16);assert.equal(plan.summary.executedCents,0);assert.equal(plan.summary.satCents,0);
-  assert.equal(plan.summary.daily.get('2026-11-30').cumulativeCents,1290900);
-  assert.equal(real.records.length,70);assert.equal(real.committedCents,2808200);assert.equal(real.executedCents,1096600);
-  assert.equal(real.committedCents+plan.summary.committedCents,4099100);assert.equal(real.remainingCents-plan.summary.committedCents,460900);
-  assert.equal(plan.summary.records.filter(record=>record.minutes===720).length,3);assert.equal(plan.summary.records.reduce((total,record)=>total+record.minutes/60,0),348);
+  assert.equal(plan.days.get(27).addedResources,0);assert.equal(plan.days.get(13).addedResources,0);assert.equal(plan.days.get(20).addedResources,2);assert.equal(plan.days.get(29).addedResources,0);
+  assert.equal(plan.addedResources,13);assert.equal(plan.addedServices,13);assert.equal(plan.daysAffected,9);assert.equal(plan.summary.committedCents,1023800);
+  assert.equal(new Set(plan.summary.records.map(record=>record.key)).size,13);assert.equal(plan.summary.executedCents,0);assert.equal(plan.summary.satCents,0);
+  assert.equal(plan.summary.daily.get('2026-11-30').cumulativeCents,1023800);
+  assert.equal(real.records.length,87);assert.equal(real.committedCents,3284200);assert.equal(real.executedCents,1096600);
+  assert.equal(real.committedCents+plan.summary.committedCents,4308000);assert.equal(real.remainingCents-plan.summary.committedCents,252000);
+  assert.equal(plan.summary.records.filter(record=>record.minutes===720).length,3);assert.equal(plan.summary.records.reduce((total,record)=>total+record.minutes/60,0),276);
   for(const number of [19,24,26]){const complements=plan.days.get(number).members.filter(member=>member.events[0].hours===12);assert.equal(complements.length,1);assert.deepEqual([complements[0].events[0].start,complements[0].events[0].end],['08h00','20h00']);}
 });
 
@@ -139,8 +139,8 @@ test('meta de 4 a 8 altera somente os reforços necessários, sem remover recurs
   const source=data(),before=JSON.stringify(source),real=finance.month(source,'2026-11',4560000);
   const four=simulation.plan(source,'2026-11',4560000,real,4),five=simulation.plan(source,'2026-11',4560000,real,5),eight=simulation.plan(source,'2026-11',4560000,real,8);
   assert.equal(four.addedResources,0);assert.equal(four.summary.committedCents,0);assert.equal(four.days.get(12).coverage.resources,6);
-  assert.equal(five.addedResources,5);assert.equal(five.summary.committedCents,469100);
-  assert.equal(eight.addedResources,40);assert.equal(eight.daysAffected,12);assert.equal(eight.targetResources,8);
+  assert.equal(five.addedResources,4);assert.equal(five.summary.committedCents,372600);
+  assert.equal(eight.addedResources,37);assert.equal(eight.daysAffected,12);assert.equal(eight.targetResources,8);
   for(const day of source['2026-11'].days){const planned=eight.days.get(day.day);assert.equal(planned.addedResources,day.confirmation?.status==='confirmed'?0:8-planned.coverage.resources);}
   assert.equal(eight.summary.quotaCents,4560000);assert(real.remainingCents-eight.summary.committedCents<0);assert.equal(JSON.stringify(source),before);
 });

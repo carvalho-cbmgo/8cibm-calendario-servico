@@ -1,0 +1,15 @@
+{
+  "name": "8cibm-calendario-servico",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "preview": "http-server . -a 127.0.0.1 -p 8000 -c-1",
+    "test": "node --test tests/*.test.cjs",
+    "test:browser": "node scripts/test-browser.cjs",
+    "browser:install": "playwright install chromium"
+  },
+  "devDependencies": {
+    "http-server": "14.1.1",
+    "playwright": "1.65.1"
+  }
+}

@@ -2,6 +2,16 @@
 
 Calendário HTML responsivo e estático para exibição da previsão de militares por ala, dos serviços SAT e do controle financeiro de AC4. Há dados de novembro/2026 a janeiro/2027; meses sem dados mostram essa condição.
 
+Os [três AC4 operacionais de 24h de LUIZ ANTONIO](docs/ac4-luiz-antonio-22-29nov-06dez.md), em **22 e 29/11 e 06/12/2026**, vão das **08h às 08h do dia seguinte**, custam R$ 965,00 cada e permanecem previstos, com OS a definir. Novembro tem agora **87 AC4, R$ 32.842,00 comprometidos** (Operacional R$ 23.712,00; SAT R$ 9.130,00) e **R$ 12.758,00 de saldo**. Dezembro recebe R$ 965,00 previstos, sem presumir cota. A cobertura passa a cinco recursos em 22/11 e seis em 29/11 e 06/12. As atualizações abaixo preservam o histórico dos totais anteriores.
+
+A [reconferência do PDF de trocas](docs/conferencia-trocas-2026-11-16.md) e a retificação expressa do usuário regularizam as contrapartidas de **SCHUSSLER por AISLAN: TS 167 em 05/01/2027 e TS 169 em 09/01/2027**, ambas de 24h. As referências de novembro e a ES acompanham essas datas, sem pendência ou duplicação de serviço. A referência antiga de 01/01 foi removida. As demais trocas entre militares e as oito autorizações da companhia foram conferidas e preservadas.
+
+A [escala SAT de 23 a 27 e 30/11](docs/sat-23a30nov-os377.md), OS nº 377 (SEI 98422129), tem **14 AC4, 84h e R$ 2.710,00**. Por nova orientação do usuário, os serviços de **27/11 foram restaurados**, incluindo três AC4/19h/R$ 760,00 e os dois expedientes ordinários; a indicação de feriado sem expediente da SAT foi retirada. PSE de manhã e à tarde é um único AC4 de 08h às 18h (10h). Novembro tem agora **85 AC4, R$ 30.912,00 comprometidos** (Operacional R$ 21.782,00; SAT R$ 9.130,00), **saldo de R$ 14.688,00** e R$ 10.966,00 com execução confirmada. As tarifas e os demais serviços foram preservados; os totais nas anotações abaixo registram o histórico das atualizações.
+
+O 3º SGT HENRIQUE cumpre estágio supervisionado do EAS em **18 e 23/11/2026**, das **08h às 08h do dia seguinte (24h)**, sem gerar AC4. A Escala de Serviço desses dias apresenta em Alterações / Observações: **Estágio Supervisionado do EAS (SEI 202600011025103) de 24h (8h às 8h).** A cobertura passa a sete recursos de 24h em 18/11 e seis em 23/11, sem alterar os valores de AC4 cadastrados. Com a meta geral de seis, novembro passa a 15 recursos simulados adicionais (R$ 12.168,00).
+
+A [conferência de 16/11/2026](docs/conferencia-trocas-2026-11-16.md) atualiza a TS 159 para 16/12, a TS 167 para 01/01/2027 (pendente por coincidir com férias de SCHUSSLER, conforme orientação do usuário) e a TS 169 para 05/01/2027. As férias de SCHUSSLER, de 05/12/2026 a 03/01/2027, retiram oito plantões da disponibilidade. Foi acrescentado um AC4 previsto PROEBOM de HENRIQUE em 17/11, 08h–12h, OS nº 374 (SEI 98399055), R$ 120,00, sem ampliar cobertura operacional. Novembro tem agora 71 AC4, R$ 28.202,00 comprometidos (Operacional R$ 21.782,00; SAT R$ 6.420,00), saldo de R$ 17.398,00 e R$ 10.966,00 com execução confirmada. Os registros abaixo documentam o histórico anterior.
+
 O **ODD Alcançável alterna semanalmente entre ASP OF CARVALHO e ASP OF BESSA**, de segunda a domingo, com referência em **CARVALHO de 16 a 22/11/2026** e **BESSA de 23 a 29/11/2026**. A regra aplica-se automaticamente aos dias com escala cadastrada, atravessando meses e anos: CARVALHO volta em 30/11–06/12; BESSA em 07–13/12. A configuração está em `odd-alcancavel-config`.
 
 Férias e outros afastamentos registrados em `ala-rosters.absences`, com `name`, `type`, `start` e `end` em formato `YYYY-MM-DD`, fazem o outro aspirante assumir somente nos dias abrangidos, incluindo início e término. O retorno restaura o responsável da semana, sem deslocar o rodízio original. Se ambos estiverem afastados, a designação fica pendente no calendário, detalhes e ES. A regra é recalculada no carregamento e em `ServiceCalendar.refresh()`, usando o mesmo cadastro de afastamentos das alas; não presume férias sem datas informadas.
@@ -72,6 +82,22 @@ O botão do WhatsApp, imediatamente após Delta, abre uma janela com Início e F
 4. Se o artefato for aceito e a implantação terminar com **Deployment failed, try again later**, reexecute o job de publicação em **Re-run jobs → Re-run failed jobs**. Esse erro ocorre depois da construção e precisa ser acompanhado no Pages.
 
 ## Verificação local
+
+### Preparação no Windows (PowerShell)
+
+Com Node.js e npm instalados, execute na raiz do repositório:
+
+```powershell
+npm.cmd ci
+npm.cmd run browser:install
+npm.cmd test
+npm.cmd run test:browser
+npm.cmd run preview
+```
+
+Abra `http://127.0.0.1:8000/` e encerre a prévia com `Ctrl+C`. O servidor fica restrito ao computador local e não exige Python. Use `npm.cmd` para evitar o bloqueio de `npm.ps1` pela política de execução do PowerShell, sem alterar essa política. O Chromium do Playwright é instalado no cache do usuário, fora do repositório. A suíte de navegador executa todos os arquivos `tests/*.browser.cjs` sequencialmente; cada um inicia e encerra seu próprio servidor.
+
+As versões das dependências de desenvolvimento estão fixadas em `package-lock.json`. `node_modules`, resultados de testes e arquivos de ambiente são ignorados pelo Git. Mantenha documentos internos, cadastros, CPFs e contatos fora do repositório; importe cadastros somente na sessão do navegador. A preparação local não exige esses arquivos.
 
 Execute `node --test tests/*.test.cjs` para conferir tarifas, viradas de dia/mês, revisões, cancelamentos, acumulados, identificação dos documentos, seleção de chefia, simulação por cobertura de 24h e correspondência das trocas com os consolidados. `tests/vagas.test.cjs` também verifica o agrupamento das vagas, os horários complementares, o intervalo inclusivo, a ausência de alterações na escala cadastrada e o retorno de ST DA SILVA aos plantões. Os testes utilizam dados fictícios separados da escala publicada e conferem invariantes dos dados existentes.
 
