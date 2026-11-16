@@ -31,7 +31,7 @@ test('todas as combinações de 4 a 8 respeitam as metas por turno, as confirma�
  for(const period of Object.keys(input))for(let dayTarget=4;dayTarget<=8;dayTarget++)for(let nightTarget=4;nightTarget<=8;nightTarget++){
   const rules=Object.fromEntries(Array.from({length:7},(_,weekday)=>[weekday,{day:dayTarget,night:nightTarget}])),plan=simulation.plan(input,period,null,undefined,6,rules);
   for(const day of input[period].days){
-   const date=`${period}-${String(day.day).padStart(2,'0')}`,planned=plan.days.get(day.day),combined=simulation.coverage({...day,members:[...day.members,...planned.members]},date);
+   const date=`${period}-${String(day.day).padStart(2,'0')}`,planned=plan.days.get(day.day),combined=simulation.coverage({...day,members:[...day.members,...planned.members]},date,undefined,{forSimulation:true});
    for(const segment of combined.segments){const previous=planned.coverage.segments.find(part=>part.start<=segment.start&&part.end>=segment.end),clock=(combined.anchor+segment.start)%1440,target=clock>=480&&clock<1200?dayTarget:nightTarget;assert(previous);assert.equal(segment.resources,day.confirmation?.status==='confirmed'?previous.resources:Math.max(previous.resources,target),`${date} ${dayTarget}/${nightTarget}`);}
    assert.equal(planned.addedResources,combined.resources-planned.coverage.resources);if(day.confirmation?.status==='confirmed')assert.equal(planned.addedServices,0);
   }

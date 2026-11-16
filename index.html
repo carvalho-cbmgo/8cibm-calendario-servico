@@ -4998,14 +4998,15 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
                 "serviceId": "ac4-operacional-24h-luiz-antonio-2026-11-22-08h",
                 "mode": "OPERACIONAL/SOP",
                 "start": "08h00",
-                "end": "08h00",
-                "nextDay": true,
-                "hours": 24,
+                "end": "20h00",
+                "nextDay": false,
+                "hours": 12,
                 "observation": "REFORÇO OPERACIONAL",
                 "document": "OS a definir (não informada)",
                 "status": "planned",
                 "startDate": "2026-11-22",
-                "endDate": "2026-11-23"
+                "endDate": "2026-11-22",
+                "excludeFromSimulation": true
               }
             ]
           },
@@ -5039,8 +5040,8 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
           }
         ],
         "coverage": [
-          "5 recursos de 24h",
-          "Faltam 1 recurso"
+          "4 recursos de 24h",
+          "Faltam 2 recursos"
         ],
         "alerts": []
       },
@@ -6226,14 +6227,15 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
                 "serviceId": "ac4-operacional-24h-luiz-antonio-2026-11-29-08h",
                 "mode": "OPERACIONAL/SOP",
                 "start": "08h00",
-                "end": "08h00",
-                "nextDay": true,
-                "hours": 24,
+                "end": "20h00",
+                "nextDay": false,
+                "hours": 12,
                 "observation": "REFORÇO OPERACIONAL",
                 "document": "OS a definir (não informada)",
                 "status": "planned",
                 "startDate": "2026-11-29",
-                "endDate": "2026-11-30"
+                "endDate": "2026-11-29",
+                "excludeFromSimulation": true
               }
             ]
           },
@@ -6319,8 +6321,8 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
           }
         ],
         "coverage": [
-          "6 recursos de 24h",
-          "Meta de 6 recursos"
+          "5 recursos de 24h",
+          "Faltam 1 recurso"
         ],
         "alerts": [],
         "shiftStart": "08h00",
@@ -7040,14 +7042,15 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
                 "serviceId": "ac4-operacional-24h-luiz-antonio-2026-12-06-08h",
                 "mode": "OPERACIONAL/SOP",
                 "start": "08h00",
-                "end": "08h00",
-                "nextDay": true,
-                "hours": 24,
+                "end": "20h00",
+                "nextDay": false,
+                "hours": 12,
                 "observation": "REFORÇO OPERACIONAL",
                 "document": "OS a definir (não informada)",
                 "status": "planned",
                 "startDate": "2026-12-06",
-                "endDate": "2026-12-07"
+                "endDate": "2026-12-06",
+                "excludeFromSimulation": true
               }
             ]
           },
@@ -7095,8 +7098,8 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
           }
         ],
         "coverage": [
-          "6 recursos de 24h",
-          "Meta de 6 recursos"
+          "5 recursos de 24h",
+          "Faltam 1 recurso"
         ],
         "alerts": []
       },
@@ -12333,7 +12336,7 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
   const clockText=minute=>`${String(Math.floor(minute/60)).padStart(2,'0')}h${String(minute%60).padStart(2,'0')}`;
   const dayStamp=date=>Date.parse(`${date}T00:00:00Z`)/60000;
   const operational=event=>event.integrante_operacional!==false&&!/SAT|INSPEC|ANALIS|PROJETO|PROEBOM|EXTERN/.test(normalize(event.mode))&&(event.integrante_operacional===true||/^(?:OPERACIONAL(?:\/SOP)?|SOP)$/.test(normalize(event.mode)));
-  function coverage(day,date,summary){
+  function coverage(day,date,summary,{forSimulation=false}={}){
     const anchor=clock(day.shiftStart)??480,people=new Map(),warnings=[];
     const add=(member,start,end)=>{
       const a=Math.max(0,start),b=Math.min(DAY,end);if(b<=a)return;
@@ -12354,6 +12357,7 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
       }
       for(const input of member.events||[]){
         const record=summary?.byEvent.get(input),event=record?.event||input;
+        if(forSimulation&&event.excludeFromSimulation===true)continue;
         if(!finance.active(event)||!operational(event))continue;
         const value=record||finance.price(event,date);
         if(!value.valid){warnings.push(`${member.name}: AC4 operacional com horário inválido.`);continue;}
@@ -12384,7 +12388,7 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
     const {rules}=validateOptions(targetResources,customRules);
     const days=new Map(),virtual={days:[]},warnings=[];
     for(const day of schedules[period]?.days||[]){
-      const date=`${period}-${String(day.day).padStart(2,'0')}`,actual=coverage(day,date,base),members=[];
+      const date=`${period}-${String(day.day).padStart(2,'0')}`,actual=coverage(day,date,base,{forSimulation:true}),members=[];
       const weekday=new Date(`${date}T12:00:00Z`).getUTCDay(),targets={...(rules[weekday]||{day:targetResources,night:targetResources})};
       const edges=[...new Set([...actual.segments.flatMap(segment=>[segment.start,segment.end]),(480-actual.anchor+DAY)%DAY,(1200-actual.anchor+DAY)%DAY])].sort((a,b)=>a-b);
       const segments=edges.slice(0,-1).map((start,index)=>{const end=edges[index+1],part=actual.segments.find(segment=>segment.start<=start&&segment.end>=end),minute=(actual.anchor+start)%DAY,shift=minute>=480&&minute<1200?'day':'night';return {start,end,resources:part.resources,shift,target:targets[shift]};});
