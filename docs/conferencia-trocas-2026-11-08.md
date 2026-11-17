@@ -16,7 +16,7 @@ O documento da TS 167 é o **SEI 97933840**, nas páginas 23–24. As substitui�
 | 153 | 97515824 | 31/10 e 06/11/2026 | Já registrada; MARTINS/HUGO, consolidada com a referência duplicada da TS 154, sem duplicar o serviço. |
 | 155 | 97542993 | 31/10 e 05/11/2026 | Já registrada; SANTOS/PICCINI. |
 | 156 | 97543668 | 08 e 17/11/2026 | Já registrada; SANTOS/PICCINI. |
-| 157 | 97544001 | 20 e 25/11/2026 | Já registrada; SANTOS/PICCINI. |
+| 157 | 97544001 | 20 e 25/11/2026 | Removida por solicitação do usuário em 16/11; restaurados PICCINI em 20/11 e SANTOS em 25/11 como ordinários. |
 | 158 | 97544104 | 28/11 e 03/12/2026 | Já registrada; SANTOS/PICCINI. |
 | 161 | 97703197 | 05 e 08/11/2026 | Já registrada; OSVALDIR/PASSOS. |
 | 162 | 97704006 | 13 e 16/11/2026 | Já registrada; OSVALDIR/PASSOS. |

@@ -81,6 +81,7 @@ test('novembro e dezembro recebem apenas os novos custos, sem inventar cota de d
   }
 });
 
+// Baseline includes the user-requested removal of TS 157 on 16/11/2026.
 test('a inclusão preserva todos os dados e AC4 anteriores nas três competências', () => {
   const before = structuredClone(data);
   for (const [date, , resources] of entries) {
@@ -89,7 +90,7 @@ test('a inclusão preserva todos os dados e AC4 anteriores nas três competênci
     const originalResources = resources, missing = 6 - originalResources;
     day.coverage = [`${originalResources} recursos de 24h`, `Faltam ${missing} recurso${missing === 1 ? '' : 's'}`];
   }
-  assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'), '97c5af124a30b4084ea3e773ef51a63404a2480f64d183348b700670c25aa38a');
+  assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'), '8222ea75e44f19a8e057da516845788b0b7cea37bc32d3fb7d316827c6b1e5eb');
   const original = finance.month(before, '2026-11', 4560000);
   assert.equal(summary('2026-11').committedCents - original.committedCents, 96000);
   assert.equal(summary('2026-11').satCents, original.satCents);
@@ -106,7 +107,7 @@ test('a retificação altera só duração, término e cobertura dos três servi
     const full = resources + 1, missing = 6 - full;
     day.coverage = [`${full} recursos de 24h`, missing ? `Faltam ${missing} recurso` : 'Meta de 6 recursos'];
   }
-  assert.equal(createHash('sha256').update(JSON.stringify(previous)).digest('hex'), '48eef904979164752eda3ae80931b6c1cf787fa7a0545dae537753c62e9b9ff6');
+  assert.equal(createHash('sha256').update(JSON.stringify(previous)).digest('hex'), 'b635ff13bf85da940801a9d6ec3ca9d3308880debb0a068c20a56ee3002741bd');
   assert.equal(finance.month(previous, '2026-11', 4560000).committedCents - summary('2026-11').committedCents, 97000);
   assert.equal(finance.month(previous, '2026-12').committedCents - summary('2026-12').committedCents, 48500);
 });

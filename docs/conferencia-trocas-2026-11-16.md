@@ -1,5 +1,7 @@
 # Conferência de trocas e atualização de 16/11/2026
 
+**Atualização posterior em 16/11/2026:** por solicitação do usuário, a TS 157 (SEI 97544001) foi removida. PICCINI retorna ao ordinário de 20/11 e SANTOS ao de 25/11. Permanecem 16 autorizações ativas e 27 movimentações, sem alterações nas demais trocas ou nos AC4. Os quantitativos e conferências abaixo registram o histórico anterior à remoção.
+
 Foram lidos os consolidados `TROCAS-ENTRE-MILITARES-até-dia16-11-26.pdf` (26 páginas) e `TROCAS-ENTRE-MILITARES-SETEMBRO-OUTUBRO.pdf` (34 páginas). Também foi conferido o consolidado `TROCAS-COMPANHIA-até-dia11-11-26.pdf` (158 páginas), encontrado na mesma pasta. Os arquivos e dados pessoais permanecem fora do repositório.
 
 ## Reconferência do PDF reencaminhado

@@ -12,7 +12,6 @@ const documents=[
  ['153','97515824',24,[['2026-11-06','SD HUGO','SD MARTINS','2026-10-31']]],
  ['155','97542993',24,[['2026-11-05','SD PICCINI','SD SANTOS','2026-10-31']]],
  ['156','97543668',24,[['2026-11-08','SD SANTOS','SD PICCINI','2026-11-17'],['2026-11-17','SD PICCINI','SD SANTOS','2026-11-08']]],
- ['157','97544001',24,[['2026-11-20','SD SANTOS','SD PICCINI','2026-11-25'],['2026-11-25','SD PICCINI','SD SANTOS','2026-11-20']]],
  ['158','97544104',24,[['2026-11-28','SD SANTOS','SD PICCINI','2026-12-03'],['2026-12-03','SD PICCINI','SD SANTOS','2026-11-28']]],
  ['159','97553091',24,[['2026-12-16','3º SGT HENRIQUE','ST AISLAN','2026-10-31']]],
  ['160','97660634',24,[['2026-11-06','ST TAVARES','ST AISLAN','2026-10-30']]],
@@ -28,14 +27,21 @@ const documents=[
 ];
 const matches=(badge,number,sei,kind='ts')=>badge.kind===kind&&String(badge.troca?.numero).split(/\s*\/\s*/).includes(number)&&String(badge.troca?.sei).includes(sei);
 
-test('17 autorizações correspondem a 29 movimentos no período, com 153/154 unificadas e janeiro regularizado',()=>{
+test('16 autorizações ativas correspondem a 27 movimentos, com 153/154 unificadas, TS 157 removida e janeiro regularizado',()=>{
  let count=0;
  for(const [number,sei,hours,legs] of documents)for(const [date,name,replaced,related,kind='ts'] of legs){
   const members=day(date).members.filter(member=>member.name===name);assert.equal(members.length,1,`${number} ${date} ${name}`);
   const badges=members[0].badges.filter(badge=>matches(badge,number,sei,kind));assert.equal(badges.length,1,`${number} ${date}`);
   assert.equal(badges[0].troca.substituido,replaced);assert.equal(badges[0].troca.data_servico_substituido,related);assert.equal(badges[0].hours||members[0].serviceHours||24,hours);count++;
  }
- assert.equal(documents.length,16);assert.equal(count,29);const hugo=day('2026-11-06').members.filter(member=>member.name==='SD HUGO');assert.equal(hugo.length,1);assert(hugo[0].badges.some(badge=>matches(badge,'154','97518560')));
+ assert.equal(documents.length,15);assert.equal(count,27);const hugo=day('2026-11-06').members.filter(member=>member.name==='SD HUGO');assert.equal(hugo.length,1);assert(hugo[0].badges.some(badge=>matches(badge,'154','97518560')));
+});
+
+test('remoção da TS 157 restaura PICCINI em 20/11 e SANTOS em 25/11 como ordinários, sem vestígios na escala',()=>{
+ for(const [date,name,absent,ord,resources]of [['2026-11-20','SD PICCINI','SD SANTOS',27,4],['2026-11-25','SD SANTOS','SD PICCINI',28,4]]){
+  const input=day(date),members=input.members.filter(m=>m.name===name);assert.equal(members.length,1);assert(!input.members.some(m=>m.name===absent));assert.equal(members[0].ord,ord);assert.deepEqual(members[0].badges,[{kind:'ord',text:'ORDINÁRIO'}]);assert.deepEqual(members[0].notes,['Ordinário']);assert.equal(members[0].events.length,0);assert.equal(context.window.ServiceSimulation.coverage(input,date).resources,resources);
+ }
+ for(const month of Object.values(data))for(const input of month.days)for(const member of [...input.members,...(input.sat?.members||[])]){assert(!member.badges.some(b=>String(b.troca?.numero)==='157'||String(b.troca?.sei)==='97544001'));assert(!member.notes.some(note=>/TS\s*n[º°o.]?\s*157\b|97544001/.test(note)));}
 });
 
 test('TS 166 é compensada em 30/11, com antiguidade correta e sem duplicar a TS 167',()=>{

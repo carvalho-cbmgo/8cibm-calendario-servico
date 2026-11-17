@@ -36,7 +36,7 @@ As páginas referem-se ao consolidado de 11/11, exceto onde indicado. Datas sem 
 | 153 / 154 | 97515824 / 97518560 | 31/10 e 06/11 | MARTINS/HUGO: um único serviço físico, com as duas referências. TS 153: p. 1–2; TS 154: setembro/outubro, p. 31. |
 | 155 | 97542993 | 31/10 e 05/11 | SANTOS/PICCINI, já registrada; p. 3–4. |
 | 156 | 97543668 | 08 e 17/11 | SANTOS/PICCINI, já registrada; p. 5–6. |
-| 157 | 97544001 | 20 e 25/11 | SANTOS/PICCINI, já registrada; p. 7–8. |
+| 157 | 97544001 | 20 e 25/11 | Removida por solicitação do usuário em 16/11; restaurados PICCINI em 20/11 e SANTOS em 25/11 como ordinários. Referência histórica: p. 7–8. |
 | 158 | 97544104 | 28/11 e 03/12 | SANTOS/PICCINI, já registrada; p. 9–10. |
 | 159 | 97553091 | 31/10 e 26/11 | AISLAN/HENRIQUE, corrigida para 26/11; setembro/outubro, p. 32. |
 | 160 | 97660634 | 30/10 e 06/11 | AISLAN/TAVARES, já registrada; setembro/outubro, p. 33. |
