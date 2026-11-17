@@ -23,3 +23,15 @@ Quando um mês anterior possui escala no calendário, são usados os seus AC4 ca
 A ordenação por total considera o valor acumulado; os filtros de oficiais e antiguidade continuam funcionando. Um militar com AC4 somente em meses anteriores cadastrados também pode aparecer, sem antiguidade inventada. Os totais históricos não alteram a escala, a cota mensal, o planejamento financeiro, a simulação ou os documentos ES/OS.
 
 Os dados públicos ficam em `ac4-ranking-history-data`, com competência, RG e valor inteiro em centavos. O cálculo é isolado em `AC4RankingHistory`; `AC4Finance.ranking` preserva seu comportamento original. A validação inclui as oito regras em `tests/ranking-history.test.cjs`, o fluxo em `tests/ranking-history.browser.cjs` e a suíte de regressão existente.
+
+## Seletor e compartilhamento
+
+O seletor histórico mede 44 × 32 px no computador e mantém 44 × 44 px em telas móveis. Sua borda e o contorno recebem o roxo dos AC4 enquanto houver foco ou seleção ativa, inclusive com mouse e teclado.
+
+**Compartilhar Ranking** gera uma prévia em PNG com somente as colunas **ORDEM** e **MILITAR**, conforme confirmado pelo usuário. A ordem, inclusão de oficiais, intervalo atual, meses históricos e preferência por antiguidade acompanham o ranking exibido. Na ordenação por antiguidade, a coluna ORDEM mantém os números do cadastro e o traço de quem não possui antiguidade informada.
+
+A coluna MILITAR contém apenas a graduação ou patente e o nome de guerra, usando o cadastro validado quando disponível e a identificação abreviada da escala como alternativa. A imagem não captura o HTML do ranking e não inclui nomes completos, RGs, CPFs, contatos ou valores financeiros. O cabeçalho registra o mês, o intervalo e os filtros que definiram a classificação; eventual histórico parcial também é sinalizado. A geração ocorre localmente, sem envio automático.
+
+Na prévia, **Compartilhar imagem** abre o menu nativo de aplicativos do aparelho, onde o usuário pode escolher o WhatsApp quando disponível. O recurso usa [`navigator.share`](https://developer.mozilla.org/en-US/docs/Web/API/Navigator/share), após verificar o compartilhamento de arquivos com [`navigator.canShare`](https://developer.mozilla.org/en-US/docs/Web/API/Navigator/canShare); seu suporte depende do navegador e do aparelho. **Salvar imagem** oferece o PNG para download, inclusive quando o compartilhamento nativo não está disponível, permitindo anexá-lo manualmente no WhatsApp. Cancelar o compartilhamento mantém a prévia e não inicia download.
+
+`tests/ranking-share.test.cjs` valida identificação abreviada, ausência de dados pessoais/valores, ordenação e preservação das fontes. `node tests/ranking-share.browser.cjs` confere PNG real e download, prévia, foco/tamanho, filtros, compartilhamento nativo simulado, cancelamento/falhas, descarte da imagem e telas de computador/celular com toque. Nenhuma mensagem real é enviada durante os testes.

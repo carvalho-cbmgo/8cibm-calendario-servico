@@ -482,8 +482,19 @@ dialog.simulation-dialog{width:min(620px,calc(100% - 24px));max-height:calc(100d
 .ranking-range select:focus-visible{outline:3px solid #94baff;outline-offset:2px}
 .ranking-range-help{flex-basis:100%;margin:0;color:#62758a;font-size:13px}
 .ranking-history-control{display:flex;align-items:center;gap:9px;flex-basis:100%;font-weight:650;cursor:pointer;min-width:0}
-.ranking-history-control select{flex:0 0 60px;width:60px;min-height:44px;padding:7px 9px;border:1px solid #c8d7e7;border-radius:7px;background:#fff;color:#294d6b;font:inherit}
-.ranking-history-control select:focus-visible{outline:3px solid #94baff;outline-offset:2px}
+.ranking-history-control select{flex:0 0 44px;width:44px;height:32px;min-height:32px;padding:3px 4px;border:1px solid #c8d7e7;border-radius:7px;background:#fff;color:#294d6b;font:inherit;font-size:13px}
+.ranking-history-control select:focus,.ranking-history-control select:active{border-color:var(--ac4);outline:2px solid var(--ac4);outline-offset:-1px;background:#faf5ff}
+@media screen and (max-width:760px){.ranking-history-control select{height:44px;min-height:44px}}
+.ranking-share-toolbar,.ranking-share-actions{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:10px 0}
+.ranking-share-button{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:40px;padding:8px 12px;border:1px solid #c8d7e7;border-radius:8px;background:#f4f8fc;color:#28537e;font:inherit;font-weight:650;cursor:pointer}
+.ranking-share-button svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ranking-share-button:focus-visible{outline:3px solid #94baff;outline-offset:2px}.ranking-share-button:disabled{opacity:.55;cursor:default}
+.ranking-share-dialog{width:min(760px,calc(100% - 24px));max-height:94dvh}
+.ranking-share-body{padding:12px 16px 16px;color:#38516b;font-size:14px;line-height:1.45}
+.ranking-share-preview{max-height:55dvh;overflow:auto;border:1px solid #dce6f1;border-radius:8px;background:#eaf0f7}
+.ranking-share-preview img{display:block;width:100%;height:auto;background:#fff}
+.ranking-share-status{margin:6px 0;color:#526b82;font-size:13px}.ranking-share-status:empty{display:none}
+@media screen and (max-width:760px){.ranking-share-button{min-height:44px}.ranking-share-body{padding:10px 12px 14px;font-size:15px}.ranking-share-status{font-size:14px}}
 .ranking-history-status{flex-basis:100%;margin:0;color:#62758a;font-size:13px;line-height:1.45}
 .ranking-history-status:empty{display:none}
 .ranking-table .ranking-history{background:#fff6e5;color:#805718;text-align:center}
@@ -842,8 +853,13 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
   </div>
   <p id="ac4-ranking-summary" class="ranking-summary" role="status" aria-live="polite"></p>
   <p id="ac4-ranking-status-note" class="ranking-status-note"></p>
+  <div class="ranking-share-toolbar"><button type="button" id="ac4-ranking-share" class="ranking-share-button" aria-haspopup="dialog" aria-controls="ranking-share-dialog"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 16V3m-4 4 4-4 4 4M5 13v7h14v-7"/></svg>Compartilhar Ranking</button><span id="ranking-image-status" class="ranking-share-status" role="status" aria-live="polite"></span></div>
   <div id="ac4-ranking-content"></div>
  </div>
+</dialog>
+<dialog id="ranking-share-dialog" class="ranking-share-dialog" aria-labelledby="ranking-share-title">
+ <div class="dialog-heading"><h2 id="ranking-share-title">Compartilhar Ranking</h2><button type="button" id="ranking-share-close" class="dialog-close">Fechar</button></div>
+ <div class="ranking-share-body"><p class="ranking-intro">Imagem com a ordem e os filtros atuais. A coluna MILITAR contém somente graduação ou patente e nome de guerra.</p><div class="ranking-share-preview" tabindex="0" role="region" aria-label="Prévia da imagem do ranking"><img id="ranking-share-image" alt="Ranking com as colunas ORDEM e MILITAR"/></div><div class="ranking-share-actions"><button type="button" id="ranking-share-native" class="ranking-share-button" aria-describedby="ranking-share-help">Compartilhar imagem</button><button type="button" id="ranking-share-save" class="ranking-share-button">Salvar imagem</button></div><p id="ranking-share-help" class="ranking-share-status"></p><p id="ranking-share-status" class="ranking-share-status" role="status" aria-live="polite"></p></div>
 </dialog>
 <dialog id="ac4-finance-dialog" class="finance-dialog" aria-labelledby="ac4-finance-title">
  <div class="dialog-heading"><h2 id="ac4-finance-title">Cota AC4</h2><button type="button" class="dialog-close" id="ac4-finance-close">Fechar</button></div>
@@ -12352,6 +12368,46 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
 <script>
 (() => {
   'use strict';
+  const clean=value=>String(value??'').normalize('NFC').replace(/\s+/g,' ').trim().toLocaleUpperCase('pt-BR');
+  function shortName(member,references=[]){
+    const person=references.find(p=>clean(p.name||p.siteName)===clean(member));
+    if(person?.grade&&person?.war){const grade=clean(person.grade).match(/^(?:ASP\s+OF|CAP|[12][º°]?\s*TEN|MAJ|TCEL|CEL|SUBTENENTE|ST|[123][º°]?\s*SGT|CB|SD(?:\s+[12][ªA]?\s*CL)?)(?=\s|$)/)?.[0];if(grade)return `${grade} ${clean(person.war)}`;}
+    return clean(member)==='CAP LINS'?'CAP FRANCISCO LINS':clean(member);
+  }
+  function project(data,title,references=[]){
+    const date=value=>value.split('-').reverse().join('/');
+    return {title:`Ranking AC4 · ${title}`,period:`${date(data.startDate)} a ${date(data.cutoffDate)}`,historyMonths:data.historyMonths||0,sortBySeniority:!!data.sortBySeniority,partial:!!data.missingHistoryPeople,rows:data.rows.map((person,index)=>({order:data.sortBySeniority?(person.ord===null?'—':String(person.ord)):String(index+1),member:shortName(person.member,references)}))};
+  }
+  function render(snapshot){
+    const canvas=document.createElement('canvas'),ctx=canvas.getContext('2d');if(!ctx)throw new Error('Não foi possível gerar a imagem.');
+    const width=640,padding=28,orderWidth=88,memberX=padding+orderWidth+16;
+    function wrap(text,maxWidth){
+      const lines=[];let line='';
+      for(const word of text.split(' ')){const candidate=line?`${line} ${word}`:word;if(ctx.measureText(candidate).width<=maxWidth)line=candidate;else{if(line)lines.push(line);line='';for(const char of word){if(ctx.measureText(line+char).width>maxWidth){lines.push(line);line='';}line+=char;}}}
+      if(line)lines.push(line);return lines.length?lines:[''];
+    }
+    ctx.font='600 22px Arial, sans-serif';const rows=snapshot.rows.map(row=>{const lines=wrap(row.member,width-padding-memberX-14);return {...row,lines,height:Math.max(46,lines.length*28+16)};});
+    const header=172,tableHead=40,footer=snapshot.partial?82:58,height=header+tableHead+rows.reduce((sum,row)=>sum+row.height,0)+footer;
+    canvas.width=width*2;canvas.height=height*2;ctx.scale(2,2);ctx.fillStyle='#fff';ctx.fillRect(0,0,width,height);
+    ctx.fillStyle='#173b62';ctx.fillRect(0,0,width,header);ctx.fillStyle='#d6e4f4';ctx.font='600 16px Arial, sans-serif';ctx.fillText('8ª CIBM · CRISTALINA',padding,29);
+    ctx.fillStyle='#fff';ctx.font='700 27px Arial, sans-serif';ctx.fillText(snapshot.title,padding,67);ctx.font='19px Arial, sans-serif';ctx.fillText(snapshot.period,padding,99);
+    ctx.font='16px Arial, sans-serif';ctx.fillText(`Histórico: ${snapshot.historyMonths} ${snapshot.historyMonths===1?'mês anterior':'meses anteriores'}`,padding,127);ctx.fillText(snapshot.sortBySeniority?'Ordenação por antiguidade':'Ordenação pelo total de AC4',padding,151);
+    let y=header;ctx.fillStyle='#eaf1f9';ctx.fillRect(padding,y,width-2*padding,tableHead);ctx.fillStyle='#294d6b';ctx.font='700 17px Arial, sans-serif';ctx.textBaseline='middle';ctx.textAlign='center';ctx.fillText('ORDEM',padding+orderWidth/2,y+tableHead/2);ctx.textAlign='left';ctx.fillText('MILITAR',memberX,y+tableHead/2);y+=tableHead;
+    for(const [index,row]of rows.entries()){
+      ctx.fillStyle=index%2?'#f2f6fb':'#fff';ctx.fillRect(padding,y,width-2*padding,row.height);ctx.fillStyle='#526b82';ctx.font='20px Arial, sans-serif';ctx.textAlign='center';ctx.fillText(row.order,padding+orderWidth/2,y+row.height/2);
+      ctx.fillStyle='#173b62';ctx.font='600 22px Arial, sans-serif';ctx.textAlign='left';const top=y+(row.height-(row.lines.length-1)*28)/2;row.lines.forEach((line,i)=>ctx.fillText(line,memberX,top+i*28));
+      ctx.strokeStyle='#dce6f1';ctx.beginPath();ctx.moveTo(padding,y+row.height);ctx.lineTo(width-padding,y+row.height);ctx.stroke();y+=row.height;
+    }
+    ctx.fillStyle='#62758a';ctx.font='16px Arial, sans-serif';ctx.textAlign='left';ctx.fillText(`${rows.length} ${rows.length===1?'militar':'militares'}`,padding,y+27);if(snapshot.partial)ctx.fillText('Histórico parcial: há valores não informados.',padding,y+52);
+    return canvas;
+  }
+  function png(snapshot){return new Promise((resolve,reject)=>{try{render(snapshot).toBlob(blob=>blob?resolve(blob):reject(new Error('Não foi possível gerar a imagem.')),'image/png');}catch(error){reject(error);}});}
+  window.RankingImage={shortName,project,render,png};
+})();
+</script>
+<script>
+(() => {
+  'use strict';
   const normalize = v => String(v ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().replace(/\s+/g,' ').trim();
   const time = v => {const m=String(v??'').match(/^(\d{1,2})h(\d{2})?$/);return m&&Number(m[1])<24&&Number(m[2]||0)<60?Number(m[1])*60+Number(m[2]||0):null;};
   const officer = m => m.badges?.some(b=>b.kind==='officer') || /^(?:ASP|CAP|TEN|MAJ|CEL|TCEL)\b/.test(normalize(m.name));
@@ -12691,6 +12747,8 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
   const rankingDialog=document.getElementById('ac4-ranking-dialog'),rankingStart=document.getElementById('ac4-ranking-start'),rankingEnd=document.getElementById('ac4-ranking-end'),rankingOfficers=document.getElementById('ac4-ranking-officers'),rankingSeniority=document.getElementById('ac4-ranking-seniority');
   const rankingRanges=new Map();
   const rankingHistory=document.getElementById('ac4-ranking-history');
+  const rankingShare=document.getElementById('ac4-ranking-share'),rankingShareDialog=document.getElementById('ranking-share-dialog'),rankingShareNative=document.getElementById('ranking-share-native'),rankingShareImage=document.getElementById('ranking-share-image');
+  let rankingView=null,rankingExport=null,rankingImageBusy=false,rankingImageRequest=0;
   const lookupDialog=document.getElementById('service-lookup-dialog'),lookupButton=document.getElementById('service-lookup-button'),lookupQuery=document.getElementById('service-lookup-query');
   const vacancyDialog=document.getElementById('vacancy-dialog'),vacancyStart=document.getElementById('vacancy-start'),vacancyEnd=document.getElementById('vacancy-end'),vacancyMessage=document.getElementById('vacancy-message'),vacancyButton=document.getElementById('whatsapp-vacancies-button'),vacancyRanges=new Map();
   let vacancyPeriod=null;
@@ -12970,11 +13028,12 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
     }
     const range=rankingRanges.get(period)||{startDate:firstDate,endDate:todayISO<firstDate?firstDate:todayISO>lastDate?lastDate:todayISO};
     rankingStart.value=range.startDate;rankingEnd.value=range.endDate;
-    const identities=new Map(window.ServiceLookup.people(schedules,lookupPersonnel,window.ServiceDirectory?.lookupPeople()||[]).map(person=>[person.name,person.rg]));
+    const exportIdentities=window.ServiceLookup.people(schedules,lookupPersonnel,window.ServiceDirectory?.lookupPeople()||[]),identities=new Map(exportIdentities.map(person=>[person.name,person.rg]));
     const personnel=rankingPersonnel.map(person=>({...person,...window.ServiceDirectory?.rankingInfo(person.name),rg:identities.get(person.name),includeZero:true}));
     const known=new Set(personnel.map(person=>person.name.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase()));
     for(const record of financialSummary.records){const key=record.member.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase();if(!known.has(key)){personnel.push({name:record.member,...window.ServiceDirectory?.rankingInfo(record.member),includeZero:false});known.add(key);}}
     const data=window.AC4RankingHistory.rank(schedules,financialSummary,todayISO,{...range,personnel,history:rankingHistoryData,historyMonths:Number(rankingHistory.value),includeOfficers:rankingOfficers.checked,sortBySeniority:rankingSeniority.checked});
+    rankingView={data,title:periodLabel(),references:exportIdentities};rankingShare.disabled=rankingImageBusy||!data.rows.length;
     if(!data.rows.some(person=>person.key===selectedRankingKey))selectedRankingKey=null;
     document.getElementById('ac4-ranking-title').textContent=`Ranking AC4 · ${periodLabel()}`;
     document.getElementById('ac4-ranking-intro').textContent=`${data.sortBySeniority?'Ordenado por antiguidade, do mais antigo ao mais moderno. A coluna ORDEM mostra a antiguidade informada.':`AC4 Operacional + SAT${data.historyMonths?' + Histórico':''} em ordem decrescente pelo total. A coluna ORDEM mostra a posição no ranking.`} Clique no militar para consultar os serviços${data.historyMonths?' e o histórico':''}.`;
@@ -13571,6 +13630,33 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
   rankingOfficers.addEventListener('change',renderRankingDialog);
   rankingSeniority.addEventListener('change',renderRankingDialog);
   rankingHistory.addEventListener('change',renderRankingDialog);
+  function canShareRanking(file){try{return window.isSecureContext&&typeof navigator.share==='function'&&typeof navigator.canShare==='function'&&navigator.canShare({files:[file]});}catch{return false;}}
+  rankingShare.addEventListener('click',async()=>{
+    if(rankingImageBusy||!rankingView?.data.rows.length)return;
+    const view=rankingView,request=++rankingImageRequest,status=document.getElementById('ranking-image-status');rankingImageBusy=true;rankingShare.disabled=true;status.textContent='Gerando imagem…';
+    try{
+      const snapshot=window.RankingImage.project(view.data,view.title,view.references),blob=await window.RankingImage.png(snapshot);
+      if(request!==rankingImageRequest||!rankingDialog.open)return;
+      if(rankingExport)URL.revokeObjectURL(rankingExport.url);
+      const name=`ranking-ac4-${view.data.startDate}-a-${view.data.cutoffDate}-historico-${view.data.historyMonths}.png`,file=new File([blob],name,{type:'image/png'});rankingExport={file,url:URL.createObjectURL(blob),title:snapshot.title};
+      rankingShareImage.src=rankingExport.url;rankingShareImage.alt=`${snapshot.title}. ${snapshot.period}. Colunas ORDEM e MILITAR.`;rankingShareNative.disabled=!canShareRanking(file);
+      document.getElementById('ranking-share-help').textContent=rankingShareNative.disabled?'Para enviar pelo WhatsApp, salve a imagem e anexe-a na conversa. Este navegador não oferece compartilhamento de arquivos.':'Em Compartilhar imagem, escolha o WhatsApp ou outro aplicativo no menu do aparelho. Você também pode salvar o PNG.';
+      document.getElementById('ranking-share-status').textContent='';status.textContent='';rankingShareDialog.showModal();rankingShareDialog.scrollTop=0;
+    }catch{if(request===rankingImageRequest)status.textContent='Não foi possível gerar a imagem. Tente novamente.';}
+    finally{if(request===rankingImageRequest){rankingImageBusy=false;rankingShare.disabled=!rankingView?.data.rows.length;}}
+  });
+  document.getElementById('ranking-share-close').addEventListener('click',()=>rankingShareDialog.close());
+  rankingShareDialog.addEventListener('close',()=>{if(rankingExport)URL.revokeObjectURL(rankingExport.url);rankingExport=null;rankingShareImage.removeAttribute('src');if(rankingDialog.open)rankingShare.focus({preventScroll:true});});
+  rankingDialog.addEventListener('close',()=>{rankingImageRequest++;rankingImageBusy=false;document.getElementById('ranking-image-status').textContent='';});
+  document.getElementById('ranking-share-save').addEventListener('click',()=>{
+    if(!rankingExport)return;const link=element('a');link.href=rankingExport.url;link.download=rankingExport.file.name;link.hidden=true;rankingShareDialog.append(link);link.click();link.remove();document.getElementById('ranking-share-status').textContent='Download da imagem iniciado.';
+  });
+  rankingShareNative.addEventListener('click',async()=>{
+    const current=rankingExport;if(!current||!canShareRanking(current.file))return;rankingShareNative.disabled=true;
+    try{await navigator.share({files:[current.file],title:current.title});if(rankingExport===current)document.getElementById('ranking-share-status').textContent='Compartilhamento solicitado ao aparelho.';}
+    catch(error){if(rankingExport===current)document.getElementById('ranking-share-status').textContent=error.name==='AbortError'?'Compartilhamento cancelado.':'Não foi possível compartilhar. Use Salvar imagem para enviá-la pelo WhatsApp.';}
+    finally{rankingShareNative.disabled=!rankingExport||!canShareRanking(rankingExport.file);}
+  });
   document.getElementById('ac4-ranking-file').addEventListener('change',async event=>{
     const input=event.target,file=input.files[0];if(!file)return;
     const feedback=document.getElementById('ac4-ranking-import-message');input.disabled=true;feedback.textContent='Lendo cadastro local…';
