@@ -14,22 +14,23 @@ const documents=[
  ['97766395','SD CAVALCANTE','2026-11-03','2026-11-10'],
  ['97922344','2º SGT DIEGO','2026-11-22','2026-11-29'],
  ['97939827','ST OSVALDIR','2026-11-28','2026-12-05'],
- ['98254182','3º SGT HENRIQUE','2026-11-20','2026-11-13']
+ ['98254182','3º SGT HENRIQUE','2026-11-20','2026-11-13'],
+ ['98630755','SD HUGO','2026-11-20','2026-11-29']
 ];
 
-test('oito autorizações da companhia têm suas 15 movimentações publicadas, sem duplicação',()=>{
+test('nove autorizações da companhia têm suas 17 movimentações publicadas, sem duplicação',()=>{
  let count=0;
  for(const [sei,name,dispensa,pagamento] of documents)for(const [date,kind] of [[dispensa,'disp'],[pagamento,'pay']]){
   const input=day(date);if(!input)continue;
   const matches=input.members.filter(member=>member.name===name&&member.badges.some(badge=>badge.kind===kind&&badge.troca?.sei===sei));assert.equal(matches.length,1,`${sei} ${date}`);
   const badge=matches[0].badges.find(badge=>badge.kind===kind&&badge.troca?.sei===sei);assert.equal(badge.hours,24);assert.equal(badge.troca.dispensa,dispensa);assert.equal(badge.troca.pagamento,pagamento);assert.equal(badge.troca.numero,null);assert(badge.text.startsWith('TS CIA'));count++;
  }
- assert.equal(count,15);
+ assert.equal(count,17);
 });
 
 test('HENRIQUE paga 24h na Delta em 13/11 e fica dispensado na Charlie em 20/11',()=>{
  const {ServiceChief:chief,ServiceSimulation:simulation}=context.window,plan=simulation.plan(data,'2026-11',4560000);
- for(const [date,kind,ala,resources,reinforcements] of [['2026-11-13','pay','DELTA',6,0],['2026-11-20','disp','CHARLIE',4,2]]){
+ for(const [date,kind,ala,resources,reinforcements] of [['2026-11-13','pay','DELTA',6,0],['2026-11-20','disp','CHARLIE',3,3]]){
   const input=day(date),members=input.members.filter(member=>member.name==='3º SGT HENRIQUE');assert.equal(members.length,1);assert.equal(input.ala,ala);assert.equal(input.confirmation?.status??null,date==='2026-11-13'?'confirmed':null);assert.equal(members[0].ord,22);
   assert.equal(members[0].badges.length,1);assert.equal(members[0].badges[0].kind,kind);assert.equal(members[0].events.length,0);assert.equal(simulation.coverage(input,date).resources,resources);assert.equal(parseInt(input.coverage[0]),resources);
   assert.equal(plan.days.get(Number(date.slice(8))).addedServices,reinforcements);assert.equal(chief.select(input).assignments[0].name,'ST OSVALDIR');
@@ -48,8 +49,8 @@ test('OSVALDIR fica dispensado em 28/11 e paga em 05/12, com cobertura e chefia 
 
 test('trocas e férias canceladas preservam os AC4 reais e atualizam a necessidade simulada',()=>{
  const {AC4Finance:finance,ServiceSimulation:simulation}=context.window,real=finance.month(data,'2026-11',4560000),november=simulation.plan(data,'2026-11',4560000),december=simulation.plan(data,'2026-12'),january=simulation.plan(data,'2027-01');
- assert.equal(real.records.length,87);assert.equal(real.committedCents,3187200);assert.equal(real.executedCents,1096600);assert.equal(real.remainingCents,1372800);
- assert.equal(november.addedResources,15);assert.equal(november.summary.committedCents,1216800);assert.equal(november.days.get(28).addedResources,2);assert.equal(real.committedCents+november.summary.committedCents,4404000);
+ assert.equal(real.records.length,89);assert.equal(real.committedCents,3211200);assert.equal(real.executedCents,1096600);assert.equal(real.remainingCents,1348800);
+ assert.equal(november.addedResources,15);assert.equal(november.summary.committedCents,1219800);assert.equal(november.days.get(28).addedResources,2);assert.equal(real.committedCents+november.summary.committedCents,4431000);
  assert.equal(december.addedResources,31);assert.equal(december.summary.committedCents,2582500);assert.equal(december.days.get(5).addedResources,1);assert.equal(december.summary.quotaCents,null);
  assert.equal(january.addedResources,24);assert.equal(january.summary.committedCents,2080200);assert.equal(data['2026-11'].days.filter(day=>day.confirmation?.status==='confirmed').length,18);
 });

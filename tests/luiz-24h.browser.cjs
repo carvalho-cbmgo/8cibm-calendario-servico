@@ -31,7 +31,7 @@ const files = { '/': 'index.html', '/assets/cbmgo-emblema.png': 'assets/cbmgo-em
     const source = await page.evaluate(() => JSON.stringify(window.ServiceCalendar.schedules));
     for (const width of [1280, 390, 320]) {
       await page.setViewportSize({ width, height: 1000 });
-      for (const [period, number, end, resources] of [['2026-11', 22, '22/11/2026', 4], ['2026-11', 29, '29/11/2026', 5], ['2026-12', 6, '06/12/2026', 5]]) {
+      for (const [period, number, end, resources] of [['2026-11', 22, '22/11/2026', 4], ['2026-11', 29, '29/11/2026', 6], ['2026-12', 6, '06/12/2026', 5]]) {
         let current = await page.evaluate(() => window.ServiceCalendar.period);
         while (current !== period) {
           await page.locator(current < period ? '#mes-seguinte' : '#mes-anterior').click();
@@ -63,7 +63,7 @@ const files = { '/': 'index.html', '/assets/cbmgo-emblema.png': 'assets/cbmgo-em
         await page.locator('[data-ac4-simulation]').click();
         await page.locator('#ac4-simulation-target').selectOption('6');
         await page.locator('#ac4-simulation-confirm').click();
-        const expected = number === 22 ? 2 : 1;
+        const expected = number === 22 ? 2 : period === '2026-11' && number === 29 ? 0 : 1;
         assert.equal(await card.locator('.simulation-entry').count(), expected);
         assert.deepEqual(await card.locator('.simulation-entry .ac4-period').allTextContents(), Array(expected).fill('8h às 8h'));
         assert.equal(await member.locator('.chip.ac4').textContent(), 'AC4 12h');
@@ -73,8 +73,8 @@ const files = { '/': 'index.html', '/assets/cbmgo-emblema.png': 'assets/cbmgo-em
         await page.locator('#vacancy-start').selectOption(date);
         await page.locator('#vacancy-end').selectOption(date);
         const message = await page.locator('#vacancy-message').inputValue();
-        assert(message.includes('AC4 24h (08h às 08h)'));
-        assert(message.includes(expected === 2 ? '02 vagas' : '01 vaga'));
+        if (expected) assert(message.includes('AC4 24h (08h às 08h)')); else assert(message.includes('Sem vagas'));
+        if (expected) assert(message.includes(expected === 2 ? '02 vagas' : '01 vaga'));
         assert(!message.includes('LUIZ ANTONIO'));
         assert(!message.includes('AC4 12h'));
         await page.locator('#vacancy-close').click();
