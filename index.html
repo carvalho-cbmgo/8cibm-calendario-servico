@@ -768,6 +768,7 @@ html.vacancy-dialog-open,html.vacancy-dialog-open body{overflow:hidden;overscrol
 .service-lookup-person{margin-top:14px;padding-top:10px;border-top:1px solid #dce6f1;min-width:0}
 .service-lookup-person h3{margin:0;font-size:16px;overflow-wrap:anywhere}
 .service-lookup-person .ranking-service-list{margin-top:8px}
+.service-lookup-date{min-width:0;overflow-wrap:anywhere}
 .service-lookup-period{overflow-wrap:anywhere}
 html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscroll-behavior:none}
 @media screen and (max-width:760px){.filters{grid-template-columns:repeat(5,minmax(0,1fr)) 44px 44px}.filters #service-lookup-button{padding:4px}.service-lookup-body{padding:12px;font-size:15px}}
@@ -12458,9 +12459,11 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
     if(person?.grade&&person?.war){const grade=clean(person.grade).match(/^(?:ASP\s+OF|CAP|[12][º°]?\s*TEN|MAJ|TCEL|CEL|SUBTENENTE|ST|[123][º°]?\s*SGT|CB|SD(?:\s+[12][ªA]?\s*CL)?)(?=\s|$)/)?.[0];if(grade)return `${grade} ${clean(person.war)}`;}
     return clean(member)==='CAP LINS'?'CAP FRANCISCO LINS':clean(member);
   }
-  function project(data,title,references=[]){
+  function project(data,title,references=[],personnel=[]){
     const date=value=>value.split('-').reverse().join('/');
-    return {title:`Ranking AC4 · ${title}`,period:`${date(data.startDate)} a ${date(data.cutoffDate)}`,historyMonths:data.historyMonths||0,sortBySeniority:!!data.sortBySeniority,partial:!!data.missingHistoryPeople,rows:data.rows.map((person,index)=>({order:data.sortBySeniority?(person.ord===null?'—':String(person.ord)):String(index+1),member:shortName(person.member,references)}))};
+    const key=value=>clean(value).normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/^CAP LINS$/,'CAP FRANCISCO LINS');
+    const unit=new Set(personnel.map(person=>key(person.name||person.siteName))),rows=data.rows.filter(person=>unit.has(key(person.member)));
+    return {title:`Ranking AC4 · ${title}`,period:`${date(data.startDate)} a ${date(data.cutoffDate)}`,historyMonths:data.historyMonths||0,sortBySeniority:!!data.sortBySeniority,partial:rows.some(person=>person.missingHistoryPeriods?.length),rows:rows.map((person,index)=>({order:data.sortBySeniority?(person.ord===null?'—':String(person.ord)):String(index+1),member:shortName(person.member,references)}))};
   }
   function render(snapshot){
     const canvas=document.createElement('canvas'),ctx=canvas.getContext('2d');if(!ctx)throw new Error('Não foi possível gerar a imagem.');
@@ -12471,11 +12474,11 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
       if(line)lines.push(line);return lines.length?lines:[''];
     }
     ctx.font='600 22px Arial, sans-serif';const rows=snapshot.rows.map(row=>{const lines=wrap(row.member,width-padding-memberX-14);return {...row,lines,height:Math.max(46,lines.length*28+16)};});
-    const header=172,tableHead=40,footer=snapshot.partial?82:58,height=header+tableHead+rows.reduce((sum,row)=>sum+row.height,0)+footer;
+    const header=snapshot.sortBySeniority?172:148,tableHead=40,footer=snapshot.partial?82:58,height=header+tableHead+rows.reduce((sum,row)=>sum+row.height,0)+footer;
     canvas.width=width*2;canvas.height=height*2;ctx.scale(2,2);ctx.fillStyle='#fff';ctx.fillRect(0,0,width,height);
     ctx.fillStyle='#173b62';ctx.fillRect(0,0,width,header);ctx.fillStyle='#d6e4f4';ctx.font='600 16px Arial, sans-serif';ctx.fillText('8ª CIBM · CRISTALINA',padding,29);
     ctx.fillStyle='#fff';ctx.font='700 27px Arial, sans-serif';ctx.fillText(snapshot.title,padding,67);ctx.font='19px Arial, sans-serif';ctx.fillText(snapshot.period,padding,99);
-    ctx.font='16px Arial, sans-serif';ctx.fillText(`Histórico: ${snapshot.historyMonths} ${snapshot.historyMonths===1?'mês anterior':'meses anteriores'}`,padding,127);ctx.fillText(snapshot.sortBySeniority?'Ordenação por antiguidade':'Ordenação pelo total de AC4',padding,151);
+    ctx.font='16px Arial, sans-serif';ctx.fillText(`Histórico: ${snapshot.historyMonths} ${snapshot.historyMonths===1?'mês anterior':'meses anteriores'}`,padding,127);if(snapshot.sortBySeniority)ctx.fillText('Ordenação por antiguidade',padding,151);
     let y=header;ctx.fillStyle='#eaf1f9';ctx.fillRect(padding,y,width-2*padding,tableHead);ctx.fillStyle='#294d6b';ctx.font='700 17px Arial, sans-serif';ctx.textBaseline='middle';ctx.textAlign='center';ctx.fillText('ORDEM',padding+orderWidth/2,y+tableHead/2);ctx.textAlign='left';ctx.fillText('MILITAR',memberX,y+tableHead/2);y+=tableHead;
     for(const [index,row]of rows.entries()){
       ctx.fillStyle=index%2?'#f2f6fb':'#fff';ctx.fillRect(padding,y,width-2*padding,row.height);ctx.fillStyle='#526b82';ctx.font='20px Arial, sans-serif';ctx.textAlign='center';ctx.fillText(row.order,padding+orderWidth/2,y+row.height/2);
@@ -13063,12 +13066,14 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
         const list=element('ol','ranking-service-list');
         for(const record of services){
           const item=element('li','ranking-service-item'),top=element('div','ranking-service-top'),date=element('time','',rankingDate(record.date));date.dateTime=record.date;
-          item.dataset.lookupType=record.type;item.dataset.lookupDate=record.date;top.append(date);
+          const stamp=element('span','service-lookup-date'),weekday=weekdays[new Date(`${record.date}T00:00:00Z`).getUTCDay()];
+          stamp.append(date,` ${weekday} (${record.ala||'Ala não informada'})`);
+          item.dataset.lookupType=record.type;item.dataset.lookupDate=record.date;top.append(stamp);
           if(record.type==='ac4')top.append(element('span','ranking-service-cost',record.valid?money(record.commitmentCents):'Valor a conferir'));
           item.append(top);
           const hours=record.minutes===null||record.minutes===undefined?'Carga horária a conferir':`${record.minutes/60}h`,area=record.area==='sat'?`SAT${record.activity?` · ${record.activity}`:''}`:`Ala ${record.ala||'não informada'}`;
           item.append(element('p','ranking-service-data',`${record.type==='ordinary'?'ORDINÁRIO':'AC4'} · ${hours} · ${area}${record.labels.length?` · ${record.labels.join(' · ')}`:''}`));
-          item.append(element('p','ranking-service-time service-lookup-period',record.start&&record.end&&record.endDate?`Início: ${rankingDate(record.startDate)} às ${record.start} · Término: ${rankingDate(record.endDate)} às ${record.end}`:'Período de início e término a conferir.'));
+          item.append(element('p','ranking-service-time service-lookup-period service-lookup-start',record.start&&record.startDate?`Início: ${rankingDate(record.startDate)} às ${record.start}`:'Início: a conferir.'),element('p','ranking-service-time service-lookup-period service-lookup-end',record.end&&record.endDate?`Término: ${rankingDate(record.endDate)} às ${record.end}`:'Término: a conferir.'));
           if(record.type==='ac4')item.append(element('span',`ranking-state${record.status==='executed'?' ranking-state-confirmed':''}`,record.status==='executed'?'Execução confirmada':'Previsto'));
           list.append(item);
         }
@@ -13719,7 +13724,7 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
     if(rankingImageBusy||!rankingView?.data.rows.length)return;
     const view=rankingView,request=++rankingImageRequest,status=document.getElementById('ranking-image-status');rankingImageBusy=true;rankingShare.disabled=true;status.textContent='Gerando imagem…';
     try{
-      const snapshot=window.RankingImage.project(view.data,view.title,view.references),blob=await window.RankingImage.png(snapshot);
+      const snapshot=window.RankingImage.project(view.data,view.title,view.references,rankingPersonnel),blob=await window.RankingImage.png(snapshot);
       if(request!==rankingImageRequest||!rankingDialog.open)return;
       if(rankingExport)URL.revokeObjectURL(rankingExport.url);
       const name=`ranking-ac4-${view.data.startDate}-a-${view.data.cutoffDate}-historico-${view.data.historyMonths}.png`,file=new File([blob],name,{type:'image/png'});rankingExport={file,url:URL.createObjectURL(blob),title:snapshot.title};
