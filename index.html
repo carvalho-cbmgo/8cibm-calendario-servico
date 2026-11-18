@@ -232,6 +232,14 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
 .sei-scope-label{display:block;font-size:12px;font-weight:750;margin-bottom:6px}
 #sei-order-scope{max-width:100%;width:100%;padding:9px;border:1px solid #c7d6e8;border-radius:7px;font:inherit;font-size:12px;background:#fff;color:#243b55}
 .sei-scope-status{font-size:12px;color:#526882;line-height:1.5;margin:7px 0}
+.sei-order-period{margin:0 0 14px;padding:12px;border:1px solid #c7d6e8;border-radius:8px;min-width:0}
+.sei-order-period legend{font-size:12px;font-weight:750;padding:0 5px}
+.sei-period-fields{display:flex;flex-wrap:wrap;gap:10px 16px}
+.sei-period-fields label{flex:1 1 180px;min-width:0;font-size:12px;font-weight:750}
+.sei-period-fields input{display:block;box-sizing:border-box;width:100%;min-width:0;margin-top:6px;padding:9px;border:1px solid #c7d6e8;border-radius:7px;font:inherit;background:#fff;color:#243b55}
+.sei-period-fields input[aria-invalid="true"]{border-color:#b42318}
+.sei-period-error{font-size:12px;color:#b42318;margin:7px 0 0}
+.sei-period-error:empty{display:none}
 .sei-empty{font-size:13px;color:#617086}
 @media print{.day-actions{display:none!important}}
 
@@ -287,6 +295,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
  .coverage-note{font-size:14px}
  .sei-body{padding:12px 10px 20px}
  .sei-register,.sei-register input,.sei-intro,.sei-validation,.sei-scope-label,.sei-scope-status,#sei-order-scope{font-size:16px}
+ .sei-order-period legend,.sei-period-fields label,.sei-period-error{font-size:16px}
  .sei-section h3{font-size:19px}
  .sei-tools button,.sei-register button{font-size:16px;min-height:46px}
  .sei-table{min-width:1000px}
@@ -895,6 +904,15 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
   </section>
   <section class="sei-section" aria-labelledby="sei-os-title">
    <h3 id="sei-os-title">ORDEM DE SERVIÇO (AC4)</h3>
+   <fieldset id="sei-order-period" class="sei-order-period" hidden>
+    <legend>Período da Ordem de Serviço SAT</legend>
+    <div class="sei-period-fields">
+     <label for="sei-order-start">Data de início<input type="date" id="sei-order-start" required aria-describedby="sei-order-period-help sei-order-period-error"/></label>
+     <label for="sei-order-end">Data de fim<input type="date" id="sei-order-end" required aria-describedby="sei-order-period-help sei-order-period-error"/></label>
+    </div>
+    <p id="sei-order-period-help" class="sei-scope-status">Inclui as datas inicial e final. A tabela e a cópia reúnem os AC4 da SAT iniciados nesse período.</p>
+    <p id="sei-order-period-error" class="sei-period-error" role="status" aria-live="polite"></p>
+   </fieldset>
    <label class="sei-scope-label" for="sei-order-scope">AC4 incluídos na Ordem de Serviço</label>
    <select id="sei-order-scope" aria-describedby="sei-order-count"></select>
    <p id="sei-order-count" class="sei-scope-status" role="status" aria-live="polite"></p>
@@ -13903,6 +13921,7 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
     registerStatus: byId('sei-register-status'), validation: byId('sei-validation'),
     scaleSection: byId('sei-scale-section'), orderTitle: byId('sei-os-title'), scale: byId('sei-scale-container'), order: byId('sei-order-container'),
     scope: byId('sei-order-scope'), scopeStatus: byId('sei-order-count'), empty: byId('sei-os-empty'), feedback: byId('sei-feedback'),
+    period: byId('sei-order-period'), start: byId('sei-order-start'), end: byId('sei-order-end'), periodError: byId('sei-order-period-error'),
     scaleCopy: byId('sei-copy-scale'), orderCopy: byId('sei-copy-order'),
     scaleSelect: byId('sei-select-scale'), orderSelect: byId('sei-select-order')
   };
@@ -14079,8 +14098,8 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
   }
   const formatDate = date => `${pad(date.getUTCDate())}/${pad(date.getUTCMonth()+1)}/${date.getUTCFullYear()}`;
   const isoDate = () => `${current.period}-${pad(current.day.day)}`;
-  function interval(event) {
-    const result=window.AC4Finance.price(event,isoDate());
+  function interval(event,date=isoDate()) {
+    const result=window.AC4Finance.price(event,date);
     return {valid:result.valid,startDate:exchangeDate(result.startDate)||'Data a conferir',endDate:exchangeDate(result.endDate)||'Data a conferir',start:result.start||String(event.start??''),end:result.end||String(event.end??'')};
   }
   function orderedMembers() {
@@ -14096,6 +14115,26 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
     return [...merged.values()].sort((a,b)=>{
       return (person(a.name)?.ord ?? a.ord ?? Infinity)-(person(b.name)?.ord ?? b.ord ?? Infinity);
     });
+  }
+  function satPeriodError() {
+    if(!exchangeDate(ui.start.value)||!exchangeDate(ui.end.value))return 'Informe a data de início e a data de fim.';
+    if(ui.start.value>ui.end.value)return 'A data de início deve ser anterior ou igual à data de fim.';
+    if(ui.start.value<ui.start.min||ui.end.value>ui.end.max)return `Selecione datas entre ${exchangeDate(ui.start.min)} e ${exchangeDate(ui.end.max)}.`;
+    return '';
+  }
+  function satOrderRows() {
+    // The finance index resolves revisions and cancellations across all months.
+    const summary=window.AC4Finance.month(schedules,current.period),seen=new Set(),rows=[];
+    for(const [period,schedule] of Object.entries(schedules))for(const day of schedule.days||[])for(const member of day.sat?.members||[])for(const event of member.events||[]){
+      const record=summary.byEvent.get(event);
+      if(!record||record.event!==event||!window.AC4Finance.active(event)||seen.has(record.key))continue;
+      const date=`${period}-${pad(day.day)}`,startDate=exchangeDate(record.startDate)?record.startDate:date;
+      if(startDate<ui.start.value||startDate>ui.end.value)continue;
+      seen.add(record.key);rows.push({member,event,date,startDate,start:record.start||String(event.start)});
+    }
+    return rows.sort((a,b)=>a.startDate.localeCompare(b.startDate)||
+      (person(a.member.name)?.ord??a.member.ord??Infinity)-(person(b.member.name)?.ord??b.member.ord??Infinity)||
+      a.start.localeCompare(b.start)||a.member.name.localeCompare(b.member.name,'pt-BR'));
   }
   const isAbsent = m => m.badges.some(b=>b.kind==='disp');
   function companyExchange(member) {
@@ -14173,9 +14212,9 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
     table.append(cols,head,node('tbody'));return table;
   }
   function cell(text,align='left') {const td=node('td');td.style.cssText=cellStyle+`text-align:${align};`;if(text!==undefined)td.textContent=text;return td;}
-  function validationFor(members,checkReplacements=true) {
+  function validationFor(members,checkReplacements=true,date=isoDate()) {
     const hard=[],warnings=[];
-    for(const m of members){const errors=personErrors(m.name);if(errors.length)hard.push(`${m.name}: ${errors.join(', ')}.`);const p=person(m.name);if(p){if(!p.cpf)warnings.push(`${m.name}: CPF ${p.cpf===null?'inválido':'não informado'}; campo em branco.`);if(p.ord===null)warnings.push(`${m.name}: ORD não informado; mantido após a antiguidade conhecida.`);}for(const line of checkReplacements?observations(m):[])if(line?.kind==='identity'&&personErrors(line.name).length)hard.push(`${line.name}: identificação do militar substituído não disponível no cadastro.`);for(const e of m.events)if(!interval(e).valid)hard.push(`${m.name}: conferir data, horários e duração do AC4.`);}
+    for(const m of members){const errors=personErrors(m.name);if(errors.length)hard.push(`${m.name}: ${errors.join(', ')}.`);const p=person(m.name);if(p){if(!p.cpf)warnings.push(`${m.name}: CPF ${p.cpf===null?'inválido':'não informado'}; campo em branco.`);if(p.ord===null)warnings.push(`${m.name}: ORD não informado; mantido após a antiguidade conhecida.`);}for(const line of checkReplacements?observations(m):[])if(line?.kind==='identity'&&personErrors(line.name).length)hard.push(`${line.name}: identificação do militar substituído não disponível no cadastro.`);for(const e of m.events)if(!interval(e,date).valid)hard.push(`${m.name}: conferir data, horários e duração do AC4.`);}
     for(const member of members){
       const cia=companyExchange(member);if(!cia)continue;
       if(!exchangeDate(cia.dispensa)||!exchangeDate(cia.pagamento))warnings.push(`${member.name}: data de dispensa ou pagamento da TS Cia não informada; conferir a autorização.`);
@@ -14191,23 +14230,27 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
   }
   function renderOrder() {
     const rows=ui.scope.value==='all'?allOrderRows:groups[Number(ui.scope.value)]?.rows || [];
-    const validation=validationFor(rows.map(r=>({...r.member,events:[r.event]})),false);
+    const validation={hard:[],warnings:[]};
+    for(const row of rows){const result=validationFor([{...row.member,events:[row.event]}],false,row.date);validation.hard.push(...result.hard);validation.warnings.push(...result.warnings);}
     const scopeLabel=current.area==='sat'?'Todos os AC4 da SAT':'Todos os AC4 do dia';
     orderTable=makeTable(osHeaders,[12,8,12,8,40,14,6],'sei-order-table');const body=orderTable.tBodies[0];
-    for(const {member,event} of rows){const time=interval(event),tr=node('tr');tr.append(cell(time.startDate,'center'),cell(time.start,'center'),cell(time.endDate,'center'),cell(time.end,'center'));const name=cell();appendIdentification(name,member);tr.append(name,cell(person(member.name)?.cpf || '','center'),cell(`${event.hours}h`,'center'));body.append(tr);}
+    for(const {member,event,date} of rows){const time=interval(event,date),tr=node('tr');tr.append(cell(time.startDate,'center'),cell(time.start,'center'),cell(time.endDate,'center'),cell(time.end,'center'));const name=cell();appendIdentification(name,member);tr.append(name,cell(person(member.name)?.cpf || '','center'),cell(`${event.hours}h`,'center'));body.append(tr);}
     ui.order.replaceChildren(orderTable);ui.empty.hidden=!!rows.length;
     ui.scopeStatus.textContent=`${rows.length} de ${allOrderRows.length} serviços de AC4 exibidos.${ui.scope.value!=='all'&&allOrderRows.length?` Filtro ativo; selecione ${scopeLabel} para incluir todos.`:''}`;
-    orderValid=!!rows.length&&!validation.hard.length;ui.orderCopy.disabled=false;ui.orderSelect.disabled=!orderValid;
+    orderValid=!!rows.length&&!validation.hard.length;ui.orderCopy.disabled=current.area==='sat'&&!!satPeriodError();ui.orderSelect.disabled=!orderValid;
     return validation;
   }
-  function render() {
+  function render({preserveScope=false}={}) {
     if(!current)return;
-    const sat=current.area==='sat',members=orderedMembers(),validation=validationFor(members,!sat);
+    const sat=current.area==='sat',rangeError=sat?satPeriodError():'',members=sat?[]:orderedMembers(),validation=validationFor(members,!sat);
+    const previousGroup=preserveScope&&ui.scope.value!=='all'?groups[Number(ui.scope.value)]?.key:null;
     const chief=sat?{assignments:[],warnings:[]}:window.ServiceChief.select({...current.day,members},m=>person(m.name)?person(m.name).ord:m.ord);
     validation.warnings.push(...chief.warnings);if(chief.status==='pending')validation.warnings.push(chief.label);
-    ui.title.textContent=sat?`Ordem de Serviço SAT de ${formatDate(dateInfo().start)}`:`Documentos de ${formatDate(dateInfo().start)} · Ala ${current.day.ala}`;
+    ui.title.textContent=sat?(rangeError?'Ordem de Serviço SAT':`Ordem de Serviço SAT de ${exchangeDate(ui.start.value)}${ui.start.value===ui.end.value?'':` a ${exchangeDate(ui.end.value)}`}`):`Documentos de ${formatDate(dateInfo().start)} · Ala ${current.day.ala}`;
     ui.orderTitle.textContent=sat?'ORDEM DE SERVIÇO — SAT (AC4)':'ORDEM DE SERVIÇO (AC4)';
-    ui.empty.textContent=sat?'Nenhum AC4 SAT informado para esta data.':'Não há AC4 previsto para esta data.';
+    ui.empty.textContent=sat?(rangeError?'Selecione um período válido para apresentar os AC4 da SAT.':'Nenhum AC4 SAT informado para este período.'):'Não há AC4 previsto para esta data.';
+    ui.period.hidden=!sat;ui.periodError.textContent=rangeError;
+    for(const input of [ui.start,ui.end])input.setAttribute('aria-invalid',String(!!rangeError));
     ui.scaleSection.hidden=sat;
     if(sat){scaleTable=null;scaleValid=false;ui.scale.replaceChildren();ui.scaleCopy.disabled=true;ui.scaleSelect.disabled=true;}else{
       scaleTable=makeTable(esHeaders,[7,10,28,13,30,5,7],'sei-scale-table');const body=scaleTable.tBodies[0];
@@ -14231,15 +14274,17 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
       }
       ui.scale.replaceChildren(scaleTable);scaleValid=!!members.length&&!validation.hard.length;ui.scaleCopy.disabled=false;ui.scaleSelect.disabled=!scaleValid;
     }
-    allOrderRows=members.flatMap(member=>member.events.map(event=>({member,event})));
+    allOrderRows=sat?(rangeError?[]:satOrderRows()):members.flatMap(member=>member.events.map(event=>({member,event})));
     const grouped=new Map();
     for(const row of allOrderRows){const {event}=row,key=`${event.mode}\u0000${event.document}`;if(!grouped.has(key))grouped.set(key,{key,mode:event.mode,document:event.document,rows:[]});grouped.get(key).rows.push(row);}
     groups=[...grouped.values()];ui.scope.replaceChildren();
     const all=node('option','',`${sat?'Todos os AC4 da SAT':'Todos os AC4 do dia'} (${allOrderRows.length})`);all.value='all';ui.scope.append(all);
     groups.forEach((group,index)=>{const option=node('option','',`${group.mode} · ${group.document}`);option.value=String(index);ui.scope.append(option)});
-    ui.scope.value='all';ui.scope.disabled=groups.length<2;
+    const selectedGroup=previousGroup===null?-1:groups.findIndex(group=>group.key===previousGroup);
+    ui.scope.value=selectedGroup<0?'all':String(selectedGroup);ui.scope.disabled=groups.length<2;
     const osValidation=renderOrder();
-    const pending=[...current.day.alerts,...validation.hard,...validation.warnings,...osValidation.hard];
+    const alerts=sat?Object.entries(schedules).flatMap(([period,schedule])=>(schedule.days||[]).filter(day=>`${period}-${pad(day.day)}`>=ui.start.value&&`${period}-${pad(day.day)}`<=ui.end.value).flatMap(day=>day.sat?.alerts||[])):current.day.alerts;
+    const pending=[...alerts,...validation.hard,...validation.warnings,...osValidation.hard,...osValidation.warnings];
     if(!directory.size)pending.unshift('Importe o Plano de Chamada (.xlsx) ou o cadastro local (.json) para preencher as identificações completas antes de copiar.');
     if(groups.some(g=>g.rows.some(r=>r.event.status==='planned'&&!window.AC4Finance.documentInfo(r.event).number)))pending.push('Há AC4 com OS a definir. O SEI de processo não é tratado como número do documento da OS.');
     showValidation(pending);
@@ -14285,12 +14330,16 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
     const period=window.ServiceCalendar.period;
     const day=schedules[period]?.days.find(d=>d.day===Number(button.dataset.seiDay));if(!day)return;
     const area=button.dataset.serviceArea==='sat'?'sat':'operational',sat=day.sat || {members:[],alerts:[]};
+    if(area==='sat'){
+      const dates=Object.entries(schedules).flatMap(([p,schedule])=>(schedule.days||[]).map(d=>`${p}-${pad(d.day)}`)).sort();
+      for(const input of [ui.start,ui.end]){input.min=dates[0];input.max=dates.at(-1);input.value=`${period}-${pad(day.day)}`;}
+    }
     current={period,area,day:area==='sat'?{...day,members:sat.members,alerts:sat.alerts||[]}:day};ui.feedback.textContent='';render();ui.dialog.showModal();ui.dialog.scrollTop=0;
   });
   document.addEventListener('calendar-schedule-change',()=>{
     if(!current)return;
     const day=schedules[current.period]?.days.find(d=>d.day===current.day.day);if(!day)return;
-    current.day=current.area==='sat'?{...day,members:day.sat?.members||[],alerts:day.sat?.alerts||[]}:day;render();
+    current.day=current.area==='sat'?{...day,members:day.sat?.members||[],alerts:day.sat?.alerts||[]}:day;render({preserveScope:current.area==='sat'});
   });
   byId('sei-close').addEventListener('click',()=>ui.dialog.close());
   async function importDirectoryFile(file){
@@ -14322,9 +14371,11 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
   });
   byId('sei-clear-register').addEventListener('click',()=>{directory.clear();references={ts:[],cia:[],events:[]};document.dispatchEvent(new CustomEvent('service-directory-change',{detail:[]}));ui.registerStatus.textContent='Nenhum cadastro importado.';ui.feedback.textContent='Cadastro removido da sessão.';render();});
   ui.scope.addEventListener('change',()=>{renderOrder();ui.feedback.textContent='';});
+  for(const input of [ui.start,ui.end])input.addEventListener('input',()=>{render({preserveScope:true});ui.feedback.textContent='';});
   function requestCopy(kind) {
     if(kind==='scale'&&current?.area==='sat'){ui.feedback.textContent='A SAT utiliza somente a tabela de Ordem de Serviço dos AC4.';return;}
-    if(kind==='order'&&!groups.length){ui.feedback.textContent=current.area==='sat'?'Nenhum AC4 SAT informado neste dia para gerar Ordem de Serviço.':'Não há serviço de AC4 neste dia para gerar Ordem de Serviço.';return;}
+    if(kind==='order'&&current.area==='sat'&&satPeriodError()){ui.feedback.textContent=satPeriodError();return;}
+    if(kind==='order'&&!groups.length){ui.feedback.textContent=current.area==='sat'?'Nenhum AC4 SAT informado neste período para gerar Ordem de Serviço.':'Não há serviço de AC4 neste dia para gerar Ordem de Serviço.';return;}
     if(!(kind==='scale'?scaleValid:orderValid)){
       ui.feedback.textContent=directory.size?'Confira as identificações pendentes acima e importe um cadastro que as complete.':'Selecione o Plano de Chamada (.xlsx) ou cadastro local (.json) para preencher os nomes e CPFs antes de copiar.';
       ui.validation.open=true;
