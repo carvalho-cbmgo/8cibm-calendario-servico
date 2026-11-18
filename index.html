@@ -770,10 +770,15 @@ html.vacancy-dialog-open,html.vacancy-dialog-open body{overflow:hidden;overscrol
 .service-lookup-person{margin-top:14px;padding-top:10px;border-top:1px solid #dce6f1;min-width:0}
 .service-lookup-person h3{margin:0;font-size:16px;overflow-wrap:anywhere}
 .service-lookup-person .ranking-service-list{margin-top:8px}
-.service-lookup-date{display:flex;align-items:center;flex-wrap:wrap;gap:4px;min-width:0;overflow-wrap:anywhere}
+.service-lookup-dialog .ranking-service-top{align-items:center;flex-wrap:nowrap;gap:8px;white-space:nowrap}
+.service-lookup-date{display:inline-flex;align-items:center;flex:0 0 auto;gap:5px;min-width:0;white-space:nowrap;font-variant-numeric:tabular-nums}
+.service-lookup-weekday{flex:0 0 auto;padding:2px 3px;border-radius:4px;background:#edf2f7;color:#62758a;font-size:.7em;font-weight:800;letter-spacing:.04em;line-height:1.2}
+.service-lookup-date>.day-date{flex:0 0 auto}
+.service-lookup-dialog .ranking-service-cost{flex:0 0 auto;margin-left:auto;font-size:13px}
 .service-lookup-period{overflow-wrap:anywhere}
 html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscroll-behavior:none}
 @media screen and (max-width:760px){.filters{grid-template-columns:repeat(5,minmax(0,1fr)) 44px 44px}.filters #service-lookup-button{padding:4px}.service-lookup-body{padding:12px;font-size:15px}}
+@media screen and (max-width:400px){.service-lookup-dialog .ranking-service-top{gap:5px;font-size:13px}.service-lookup-date{gap:4px}.service-lookup-weekday{font-size:9px}.service-lookup-dialog .ranking-service-cost{font-size:12px}}
 @media screen and (max-width:350px){.filters [data-filter]{font-size:10px}}
 </style></head><body><main>
 <p class="page-copyright">© 2026 ASP OF CARVALHO. Todos os direitos reservados.</p>
@@ -13074,7 +13079,7 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
         for(const record of services){
           const item=element('li','ranking-service-item'),top=element('div','ranking-service-top'),date=element('time','',rankingDate(record.date));date.dateTime=record.date;
           const stamp=element('span','service-lookup-date'),info=serviceDateInfo(record.date),ala=element('span','day-date');ala.append(alaBadge(info.ala));
-          stamp.append(date,` (${info.weekday}) - `,ala);
+          stamp.append(date,' ',element('span','service-lookup-weekday',info.weekday),' ',ala);
           item.dataset.lookupType=record.type;item.dataset.lookupDate=record.date;top.append(stamp);
           if(record.type==='ac4')top.append(element('span','ranking-service-cost',record.valid?money(record.commitmentCents):'Valor a conferir'));
           item.append(top);
