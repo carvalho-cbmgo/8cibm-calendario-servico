@@ -477,6 +477,8 @@ dialog.simulation-dialog{width:min(620px,calc(100% - 24px));max-height:calc(100d
 .ranking-intro{margin:0 0 8px;color:#62758a}
 .ranking-controls{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;padding:9px 12px;background:#f4f8fd;border:1px solid #dce6f1;border-radius:9px}
 .ranking-range{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;flex-basis:100%;width:100%;max-width:460px}
+.ranking-dialog .ranking-range{max-width:620px}
+@media screen and (max-width:600px){.ranking-dialog .ranking-range{grid-template-columns:minmax(0,1fr)}}
 .ranking-range label{display:grid;gap:4px;min-width:0;font-weight:650}
 .ranking-range select{width:100%;min-width:0;min-height:44px;padding:7px 9px;border:1px solid #c8d7e7;border-radius:7px;background:#fff;color:#294d6b;font:inherit;font-weight:500}
 .ranking-range select:focus-visible{outline:3px solid #94baff;outline-offset:2px}
@@ -768,7 +770,7 @@ html.vacancy-dialog-open,html.vacancy-dialog-open body{overflow:hidden;overscrol
 .service-lookup-person{margin-top:14px;padding-top:10px;border-top:1px solid #dce6f1;min-width:0}
 .service-lookup-person h3{margin:0;font-size:16px;overflow-wrap:anywhere}
 .service-lookup-person .ranking-service-list{margin-top:8px}
-.service-lookup-date{min-width:0;overflow-wrap:anywhere}
+.service-lookup-date{display:flex;align-items:center;flex-wrap:wrap;gap:4px;min-width:0;overflow-wrap:anywhere}
 .service-lookup-period{overflow-wrap:anywhere}
 html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscroll-behavior:none}
 @media screen and (max-width:760px){.filters{grid-template-columns:repeat(5,minmax(0,1fr)) 44px 44px}.filters #service-lookup-button{padding:4px}.service-lookup-body{padding:12px;font-size:15px}}
@@ -842,7 +844,7 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
     <label for="ac4-ranking-end">Fim<select id="ac4-ranking-end" aria-describedby="ac4-ranking-range-help"></select></label>
    </div>
    <p id="ac4-ranking-range-help" class="ranking-range-help">As duas datas estão incluídas. O ranking é atualizado ao alterar a seleção.</p>
-   <label class="ranking-history-control" for="ac4-ranking-history"><select id="ac4-ranking-history" aria-describedby="ac4-ranking-history-status"><option value="0" selected>0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option></select><span>Período histórico (em meses) de AC4 acumulado no ranking</span></label>
+   <label class="ranking-history-control" for="ac4-ranking-history"><select id="ac4-ranking-history" aria-describedby="ac4-ranking-history-status"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option></select><span>Período histórico (em meses) de AC4 acumulado no ranking</span></label>
    <p id="ac4-ranking-history-status" class="ranking-history-status" role="status" aria-live="polite"></p>
    <label class="ranking-day-toggle"><input type="checkbox" id="ac4-ranking-officers"/><span>Incluir os 3 oficiais (CAP e ASP OF)</span></label>
    <label class="ranking-day-toggle"><input type="checkbox" id="ac4-ranking-seniority"/><span>Ordenar por antiguidade (mais antigo ao mais moderno)</span></label>
@@ -13046,6 +13048,11 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
     return section;
   }
   const rankingDate=date=>date.split('-').reverse().join('/');
+  function serviceDateInfo(date){
+    const weekday=weekdays[new Date(`${date}T00:00:00Z`).getUTCDay()],day=schedules[date.slice(0,7)]?.days.find(day=>day.day===Number(date.slice(8))),ala=day?.ala||'Ala não informada';
+    return {weekday,ala,label:`${rankingDate(date)} (${weekday}) - ${ala}`};
+  }
+  function alaBadge(name){const badge=element('span',`ala-badge ${name.toLowerCase()}`);badge.append(element('span','ala-label',name));return badge;}
   function renderServiceLookup(){
     const lookup=window.ServiceLookup,directory=window.ServiceDirectory,content=document.getElementById('service-lookup-results');
     document.getElementById('service-lookup-month').textContent=`Serviços de ${periodLabel()} · Todas as alas e SAT`;
@@ -13066,8 +13073,8 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
         const list=element('ol','ranking-service-list');
         for(const record of services){
           const item=element('li','ranking-service-item'),top=element('div','ranking-service-top'),date=element('time','',rankingDate(record.date));date.dateTime=record.date;
-          const stamp=element('span','service-lookup-date'),weekday=weekdays[new Date(`${record.date}T00:00:00Z`).getUTCDay()];
-          stamp.append(date,` ${weekday} (${record.ala||'Ala não informada'})`);
+          const stamp=element('span','service-lookup-date'),info=serviceDateInfo(record.date),ala=element('span','day-date');ala.append(alaBadge(info.ala));
+          stamp.append(date,` (${info.weekday}) - `,ala);
           item.dataset.lookupType=record.type;item.dataset.lookupDate=record.date;top.append(stamp);
           if(record.type==='ac4')top.append(element('span','ranking-service-cost',record.valid?money(record.commitmentCents):'Valor a conferir'));
           item.append(top);
@@ -13113,7 +13120,7 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
     const [year,month]=period.split('-').map(Number),lastDay=new Date(Date.UTC(year,month,0)).getUTCDate(),firstDate=`${period}-01`,lastDate=`${period}-${String(lastDay).padStart(2,'0')}`;
     if(rankingPeriod!==period){
       rankingPeriod=period;selectedRankingKey=null;
-      for(const select of [rankingStart,rankingEnd]){select.replaceChildren();for(let day=1;day<=lastDay;day++){const date=`${period}-${String(day).padStart(2,'0')}`,option=element('option','',rankingDate(date));option.value=date;select.append(option);}}
+      for(const select of [rankingStart,rankingEnd]){select.replaceChildren();for(let day=1;day<=lastDay;day++){const date=`${period}-${String(day).padStart(2,'0')}`,option=element('option','',serviceDateInfo(date).label);option.value=date;select.append(option);}}
     }
     const range=rankingRanges.get(period)||{startDate:firstDate,endDate:todayISO<firstDate?firstDate:todayISO>lastDate?lastDate:todayISO};
     rankingStart.value=range.startDate;rankingEnd.value=range.endDate;
@@ -13363,7 +13370,7 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
     const date = element('div', 'day-date');
     const [year, month] = period.split('-').map(Number);
     const stamp=element('span','day-stamp');stamp.append(element('span','day-num',String(day.day).padStart(2,'0')),element('span','weekday-label',weekdays[new Date(Date.UTC(year,month-1,day.day)).getUTCDay()]));
-    const ala=element('span',`ala-badge ${day.ala.toLowerCase()}`);ala.append(element('span','ala-label',day.ala));date.append(stamp,ala);
+    const ala=alaBadge(day.ala);date.append(stamp,ala);
     const dayState=element('span','day-state');
     if(confirmed){const label=element('span','scale-confirmed-label','Escala confirmada');label.title='Escala confirmada pelo usuário';dayState.append(label);}
     const resources=element('div','day-resources');resources.setAttribute('aria-label','Recursos do serviço operacional');

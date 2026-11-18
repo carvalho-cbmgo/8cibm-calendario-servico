@@ -8,7 +8,9 @@ Fonte: tabela de agosto, setembro e outubro/2026 enviada pelo usuário em 16/11/
 | Setembro/2026 | 27 | R$ 59.948,00 |
 | Outubro/2026 | 27 | R$ 68.283,00 |
 
-O seletor **Período histórico (em meses) de AC4 acumulado no ranking**, de 0 a 4, usa como referência o mês exibido no calendário. O padrão é 0; a escolha permanece durante a sessão, inclusive ao navegar entre meses, e volta a 0 ao recarregar.
+O seletor **Período histórico (em meses) de AC4 acumulado no ranking**, de 0 a 4, usa como referência o mês exibido no calendário. O padrão é **3**; a escolha permanece durante a sessão, inclusive ao navegar entre meses, e volta a **3** ao recarregar.
+
+As opções de **Início** e **Fim** apresentam data, dia da semana e ala do dia no formato **01/11/2026 (DOM) - DELTA**. Os valores internos das datas e os limites inclusivos permanecem preservados. A ala é lida da escala cadastrada; meses sem escala exibem a falta dessa informação. No celular, os seletores ocupam linhas separadas.
 
 - **0:** somente os AC4 entre Início e Fim no mês selecionado.
 - **1:** o período selecionado mais o mês anterior inteiro.

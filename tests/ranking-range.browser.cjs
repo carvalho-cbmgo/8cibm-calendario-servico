@@ -17,8 +17,8 @@ const money=cents=>normalize(new Intl.NumberFormat('pt-BR',{style:'currency',cur
   const page=await browser.newPage({viewport:{width:1280,height:1000},timezoneId:'America/Sao_Paulo'}),errors=[];page.on('pageerror',error=>errors.push(error.message));
   await page.clock.setFixedTime(new Date('2026-11-09T15:00:00Z'));await page.goto(`http://127.0.0.1:${server.address().port}/`);
   const source=await page.evaluate(()=>JSON.stringify(window.ServiceCalendar.schedules));
-  const open=()=>page.locator('[data-ac4-ranking]').click(),close=()=>page.locator('#ac4-ranking-close').click(),start=page.locator('#ac4-ranking-start'),end=page.locator('#ac4-ranking-end');
-  const verify=async()=>{
+  const open=async()=>{await page.locator('[data-ac4-ranking]').click();await page.locator('#ac4-ranking-history').selectOption('0');},close=()=>page.locator('#ac4-ranking-close').click(),start=page.locator('#ac4-ranking-start'),end=page.locator('#ac4-ranking-end');
+  const verify=async()=>{const labelsOK=await page.locator('#ac4-ranking-start,#ac4-ranking-end').evaluateAll(selects=>selects.every(select=>[...select.options].every(option=>{const iso=option.value,day=window.ServiceCalendar.schedules[iso.slice(0,7)]?.days.find(d=>d.day===Number(iso.slice(8))),weekday=['DOM','SEG','TER','QUA','QUI','SEX','SÁB'][new Date(iso+'T00:00:00Z').getUTCDay()];return option.textContent===iso.split('-').reverse().join('/')+' ('+weekday+') - '+(day?.ala||'Ala não informada');})));assert(labelsOK,'todos os rótulos de datas, dias e alas');
    const expected=await page.evaluate(()=>{
     const {schedules,period}=window.ServiceCalendar,start=document.getElementById('ac4-ranking-start').value,end=document.getElementById('ac4-ranking-end').value,officers=document.getElementById('ac4-ranking-officers').checked;
     const personnel=JSON.parse(document.getElementById('ranking-personnel').textContent),known=new Map(personnel.map(person=>[person.name,person])),records=window.AC4Finance.month(schedules,period).records.filter(record=>record.valid&&record.status!=='cancelled'&&record.startDate>=start&&record.startDate<=end&&(officers||!known.get(record.member)?.officer));
@@ -31,7 +31,7 @@ const money=cents=>normalize(new Intl.NumberFormat('pt-BR',{style:'currency',cur
    return expected;
   };
   const setRange=async(first,last)=>{await start.selectOption(first);await end.selectOption(last);return verify();};
-  await open();assert.equal(await start.inputValue(),'2026-11-01');assert.equal(await end.inputValue(),'2026-11-09');assert.equal(await start.locator('option').count(),30);assert.equal(await page.locator('#ac4-ranking-today').count(),0);await verify();
+  await open();for(const select of [start,end]){assert.equal(await select.locator('option[value="2026-11-01"]').textContent(),'01/11/2026 (DOM) - DELTA');assert.equal(await select.locator('option[value="2026-11-19"]').textContent(),'19/11/2026 (QUI) - BRAVO');}assert.equal(await start.inputValue(),'2026-11-01');assert.equal(await end.inputValue(),'2026-11-09');assert.equal(await start.locator('option').count(),30);assert.equal(await page.locator('#ac4-ranking-today').count(),0);await verify();
   let result=await setRange('2026-11-12','2026-11-26');assert.equal(result.total,1545400);assert.equal(result.count,41);assert.equal(result.rows,27);
   const luiz=page.locator('.ranking-table tbody>.ranking-row').filter({has:page.locator('.ranking-person',{hasText:'LUIZ ANTONIO'})});
   assert((await page.locator('.ranking-table tbody>.ranking-row').first().textContent()).includes('LUIZ ANTONIO'));assert.equal(normalize(await luiz.locator('.ranking-total').textContent()),money(247500));assert((await luiz.locator('.ranking-member-meta').textContent()).includes('6 previstos'));
