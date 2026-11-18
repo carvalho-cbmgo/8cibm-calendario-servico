@@ -72,7 +72,7 @@ test('nomes sem PSE geram 12 ordinários vespertinos, separados por atividade', 
 
 test('todo o calendário anterior à inclusão da SAT permanece preservado', () => {
   // Baseline includes corrected January exchanges, revised 12h AC4, TS 170-175 (TS 170 corrected to 22/11/2026) and cancellation of the operation, without the new SAT.
-  assert.equal(createHash('sha256').update(JSON.stringify(baseline())).digest('hex'), 'ba8e8c840ad78b010f9a0d9c7ee6ea2502e48ccfde9180a2c6425bcc2cdec868');
+  assert.equal(createHash('sha256').update(JSON.stringify(baseline())).digest('hex'), 'bf99350a2ec6e27773f42b54e659b7943dac11d5057323902c4545eb0d7fce3b');
   const before = baseline();
   for (const number of days) {
     const date = `2026-11-${number}`;
@@ -90,11 +90,11 @@ test('todo o calendário anterior à inclusão da SAT permanece preservado', () 
 
 test('finanças, acumulados, consulta e ranking incluem os novos AC4 sem duplicar jornadas', () => {
   const before = finance.month(baseline(), '2026-11', 4560000);
-  assert.equal(summary.records.length, 89);
-  assert.equal(summary.committedCents, 3211200);
+  assert.equal(summary.records.length, 90);
+  assert.equal(summary.committedCents, 3223200);
   assert.equal(summary.satCents, 913000);
   assert.equal(summary.operationalCents, before.operationalCents);
-  assert.equal(summary.remainingCents, 1348800);
+  assert.equal(summary.remainingCents, 1336800);
   assert.equal(summary.executedCents, before.executedCents);
   let cumulative = 0;
   for (let n = 1; n <= 30; n++) {

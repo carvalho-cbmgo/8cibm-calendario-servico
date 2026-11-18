@@ -26,7 +26,7 @@ test('AC4 canônico exclui cancelamentos e simulação, deduplica continuidade S
  const original=ac4({serviceId:'sat-test'}),revised=ac4({serviceId:'sat-test',revision:2,end:'12h00',hours:4}),cancelled=ac4({serviceId:'cancel-test',cancelled:true});
  const input={'2026-11':{days:[{day:1,ala:'ALPHA',members:[member('PREVISTO AC4',[],[ac4({simulation:true,mode:'OPERACIONAL/SOP'})],{simulationId:'virtual'})],sat:{members:[member('SD TESTE',[],[original,revised,cancelled,ac4({simulation:true,serviceId:'virtual-sat'})])]}}]}};
  const rows=lookup.month(input,'2026-11');assert.equal(rows.length,1);assert.equal(rows[0].minutes,240);assert.equal(rows[0].commitmentCents,16000);
- const real=lookup.month(data,'2026-11').filter(r=>r.type==='ac4');assert.equal(real.length,89);assert.equal(real.reduce((sum,r)=>sum+r.commitmentCents,0),3211200);
+ const real=lookup.month(data,'2026-11').filter(r=>r.type==='ac4');assert.equal(real.length,90);assert.equal(real.reduce((sum,r)=>sum+r.commitmentCents,0),3223200);
  const continuous=real.filter(r=>r.date==='2026-11-16'&&r.member==='2º SGT WANDERSON'&&r.area==='sat');assert.equal(continuous.length,1);assert.equal(continuous[0].minutes,600);assert.equal(continuous[0].commitmentCents,30000);
 });
 

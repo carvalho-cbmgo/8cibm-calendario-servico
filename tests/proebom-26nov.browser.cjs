@@ -29,14 +29,16 @@ const files = { '/': 'index.html', '/assets/cbmgo-emblema.png': 'assets/cbmgo-em
       await window.ServiceDirectory.importFile(new File([JSON.stringify({ pessoal_referencia: people })], 'cadastro-ficticio.json'));
     });
     const source = await page.evaluate(() => JSON.stringify(window.ServiceCalendar.schedules));
-    for (const width of [1280, 390, 320]) {
+    for (const width of [1280, 390, 320]) for (const day of [24, 26]) {
+      const names = day === 24 ? ['HELLYSSON'] : ['HENRIQUE', 'HELLYSSON'];
+      const serviceCount = day === 24 ? 2 : 3;
       await page.setViewportSize({ width, height: 1000 });
-      if (width <= 760) await page.locator('#selecionar-dia').selectOption('26');
-      const card = page.locator('.day[data-day="26"]'), toggle = card.locator('[data-area-toggle="operational"]');
+      if (width <= 760) await page.locator('#selecionar-dia').selectOption(String(day));
+      const card = page.locator(`.day[data-day="${day}"]`), toggle = card.locator('[data-area-toggle="operational"]');
       if (await toggle.getAttribute('aria-expanded') === 'false') await toggle.click();
       assert.equal(await card.locator('.resource-total').textContent(), '5 recursos de 24h');
-      assert.equal(await card.locator('.resource-ac4').textContent(), '3 AC4');
-      for (const name of ['HENRIQUE', 'HELLYSSON']) {
+      assert.equal(await card.locator('.resource-ac4').textContent(), `${serviceCount} AC4`);
+      for (const name of names) {
         const row = card.locator('.operational-roster .entry').filter({ has: page.locator('.name', { hasText: name }) });
         assert.equal(await row.count(), 1);
         assert.equal(await row.locator('.chip.ac4').textContent(), 'AC4 4h');
@@ -44,12 +46,12 @@ const files = { '/': 'index.html', '/assets/cbmgo-emblema.png': 'assets/cbmgo-em
         assert((await row.locator('.ac4-cost').textContent()).includes('120,00'));
       }
       await card.locator('.operational-section [data-sei-day]').click();
-      assert.equal(await page.locator('#sei-order-table tbody tr').count(), 3);
-      for (const name of ['HENRIQUE', 'HELLYSSON']) {
+      assert.equal(await page.locator('#sei-order-table tbody tr').count(), serviceCount);
+      for (const name of names) {
         const order = page.locator('#sei-order-table tbody tr').filter({ hasText: name });
         assert.equal(await order.count(), 1);
         const cells = await order.locator('td').allTextContents();
-        assert.deepEqual([cells[0], cells[1], cells[2], cells[3], cells[6]], ['26/11/2026', '08h00', '26/11/2026', '12h00', '4h']);
+        assert.deepEqual([cells[0], cells[1], cells[2], cells[3], cells[6]], [`${day}/11/2026`, '08h00', `${day}/11/2026`, '12h00', '4h']);
         const scale = page.locator('#sei-scale-table tbody tr').filter({ has: page.locator('td:nth-child(3)', { hasText: name }) });
         assert.equal(await scale.count(), 1);
         const notes = await scale.locator('td').nth(4).textContent();
@@ -58,8 +60,8 @@ const files = { '/': 'index.html', '/assets/cbmgo-emblema.png': 'assets/cbmgo-em
       await page.evaluate(() => { window.copiedProebom = null; });
       await page.locator('#sei-copy-order').click(); await page.waitForFunction(() => window.copiedProebom !== null);
       const copied = await page.evaluate(() => { const box = document.createElement('div'); box.innerHTML = window.copiedProebom; return [...box.querySelectorAll('tr')].map(r => [...r.cells].map(c => c.textContent)); });
-      assert.equal(copied.length, 3);
-      for (const name of ['HENRIQUE', 'HELLYSSON']) assert.equal(copied.filter(cells => cells[4].includes(name) && cells[6] === '4h').length, 1);
+      assert.equal(copied.length, serviceCount);
+      for (const name of names) assert.equal(copied.filter(cells => cells[4].includes(name) && cells[6] === '4h').length, 1);
       await page.locator('#sei-close').click();
       await page.locator('[data-ac4-simulation]').click(); await page.locator('#ac4-simulation-target').selectOption('6'); await page.locator('#ac4-simulation-confirm').click();
       assert.equal(await card.locator('.simulation-entry').count(), 1);
@@ -69,6 +71,6 @@ const files = { '/': 'index.html', '/assets/cbmgo-emblema.png': 'assets/cbmgo-em
     }
     assert.equal(await page.evaluate(() => JSON.stringify(window.ServiceCalendar.schedules)), source);
     assert.deepEqual(errors, []);
-    console.log('PASS: dois PROEBOM de 4h em 26/11, horários/valores/ES/OS e cópia sem duplicação, documento a definir e simulação preservada; 1280/390/320px.');
+    console.log('PASS: PROEBOM de HELLYSSON em 24/11 e HELLYSSON/HENRIQUE em 26/11, 4h/08h–12h/R$ 120 cada, ES/OS e cópia sem duplicação, documento a definir e simulação preservada; 1280/390/320px.');
   } finally { if (browser) await browser.close(); await new Promise(resolve => server.close(resolve)); }
 })().catch(error => { console.error(error); process.exitCode = 1; });

@@ -123,8 +123,8 @@ test('novembro simula 15 recursos em 9 dias, cobra cada reforço uma vez e prese
   assert.equal(plan.addedResources,15);assert.equal(plan.addedServices,15);assert.equal(plan.daysAffected,9);assert.equal(plan.summary.committedCents,1219800);
   assert.equal(new Set(plan.summary.records.map(record=>record.key)).size,15);assert.equal(plan.summary.executedCents,0);assert.equal(plan.summary.satCents,0);
   assert.equal(plan.summary.daily.get('2026-11-30').cumulativeCents,1219800);
-  assert.equal(real.records.length,89);assert.equal(real.committedCents,3211200);assert.equal(real.executedCents,1096600);
-  assert.equal(real.committedCents+plan.summary.committedCents,4431000);assert.equal(real.remainingCents-plan.summary.committedCents,129000);
+  assert.equal(real.records.length,90);assert.equal(real.committedCents,3223200);assert.equal(real.executedCents,1096600);
+  assert.equal(real.committedCents+plan.summary.committedCents,4443000);assert.equal(real.remainingCents-plan.summary.committedCents,117000);
   assert.equal(plan.summary.records.filter(record=>record.minutes===720).length,3);assert.equal(plan.summary.records.reduce((total,record)=>total+record.minutes/60,0),324);
   for(const number of [19,24,26]){const complements=plan.days.get(number).members.filter(member=>member.events[0].hours===12);assert.equal(complements.length,1);assert.deepEqual([complements[0].events[0].start,complements[0].events[0].end],['08h00','20h00']);}
 });
