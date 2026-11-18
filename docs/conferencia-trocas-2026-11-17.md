@@ -16,15 +16,16 @@ Todas as jornadas novas são de **24h, das 08h às 08h do dia seguinte**. Os sub
 
 | TS | Documento SEI | Primeiro serviço | Contrapartida | Páginas |
 |---|---|---|---|---|
+| 170 | 98553552 | 21/11/2026: AISLAN por GEYDSON | 22/11/2026: GEYDSON por AISLAN | 25–26 |
 | 171 | 98562686 | 20/11/2026: SANTOS por PICCINI | 25/11/2026: PICCINI por SANTOS | 27–28 |
 | 172 | 98563020 | 06/12/2026: SANTOS por PICCINI | 11/12/2026: PICCINI por SANTOS | 29–30 |
 | 173 | 98563378 | 14/12/2026: SANTOS por PICCINI | 19/12/2026: PICCINI por SANTOS | 31–32 |
 | 174 | 98563989 | 22/12/2026: SANTOS por PICCINI | 27/12/2026: PICCINI por SANTOS | 33–34 |
 | 175 | 98565849 | 30/12/2026: SANTOS por PICCINI | 04/01/2027: PICCINI por SANTOS | 35–36 |
 
-A **TS 170, SEI 98553552**, nas páginas 25–26, indica AISLAN por GEYDSON em 21/11/2026 e GEYDSON por AISLAN em **22/11/2027**, embora registre domingo, correspondente a 22/11/2026. A data da contrapartida foi encaminhada para esclarecimento antes do lançamento dessa autorização.
+A **TS 170, SEI 98553552**, nas páginas 25–26, imprime **22/11/2027** na contrapartida. Após a conferência, o usuário confirmou expressamente **22/11/2026**. Foram registrados AISLAN por GEYDSON em **21/11/2026, na Delta**, e GEYDSON por AISLAN em **22/11/2026, na Alpha**, com referências recíprocas. A cobertura dos dois dias permanece em quatro recursos de 24h e as chefias permanecem com OSVALDIR e DA SILVA, respectivamente. Não há lançamento dessa TS em novembro/2027.
 
-As cinco autorizações acima acrescentam dez movimentações. Permanecem **21 autorizações ativas e 37 movimentações** no período do calendário, contando separadamente as TS 153 e 154 unificadas na mesma jornada. A TS 170 não integra esses quantitativos enquanto sua data aguarda esclarecimento.
+As seis autorizações acima acrescentam doze movimentações. Permanecem **22 autorizações ativas e 39 movimentações** no período do calendário, contando separadamente as TS 153 e 154 unificadas na mesma jornada. Todas as novas trocas do PDF estão registradas, com a retificação de data da TS 170 autorizada pelo usuário.
 
 ## Preservação e conferência
 
