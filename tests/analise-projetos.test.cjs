@@ -25,7 +25,7 @@ test('novos AC4 não alteram recursos, intervalos, chefia ou reforços simulados
   assert.equal(actual.addedResources,expected.addedResources);assert.equal(actual.addedServices,expected.addedServices);assert.equal(actual.summary.committedCents,expected.summary.committedCents);
   for(const day of data['2026-11'].days){const date=`2026-11-${String(day.day).padStart(2,'0')}`,old=before['2026-11'].days.find(d=>d.day===day.day);assert.deepEqual(plain(simulation.coverage(day,date)),plain(simulation.coverage(old,date)));assert.deepEqual(plain(chief.select(day)),plain(chief.select(old)));}
  }
- const plan=simulation.plan(data,'2026-11',4560000);for(const [day,count]of [[20,2],[28,2],[29,1]])assert.equal(plan.days.get(day).addedResources,count);assert.equal(plan.addedResources,16);assert.equal(plan.summary.committedCents,1290900);assert.equal(JSON.stringify(data),original);
+ const plan=simulation.plan(data,'2026-11',4560000);for(const [day,count]of [[20,2],[28,2],[29,1]])assert.equal(plan.days.get(day).addedResources,count);assert.equal(plan.addedResources,15);assert.equal(plan.summary.committedCents,1216800);assert.equal(JSON.stringify(data),original);
 });
 
 test('modalidade de análise nunca fornece cobertura, mesmo em linha operacional com indicação conflitante',()=>{

@@ -101,7 +101,7 @@ test('HENRIQUE cumpre EAS de 24h em 18 e 23/11, com observação exata, sem gera
   const plan = simulation.plan(data, '2026-11', 4560000);
   assert.equal(plan.days.get(18).addedServices, 0);
   assert.equal(plan.days.get(23).addedServices, 0);
-  assert.equal(plan.addedResources, 16);
-  assert.equal(plan.summary.committedCents, 1290900);
+  assert.equal(plan.addedResources, 15);
+  assert.equal(plan.summary.committedCents, 1216800);
   assert.equal(data['2026-11'].days.filter(d => d.confirmation?.status === 'confirmed').length, 18);
 });

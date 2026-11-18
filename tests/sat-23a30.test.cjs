@@ -71,8 +71,8 @@ test('nomes sem PSE geram 12 ordinários vespertinos, separados por atividade', 
 });
 
 test('todo o calendário anterior à inclusão da SAT permanece preservado', () => {
-  // Baseline includes corrected January exchanges, revised 12h AC4 of LUIZ ANTONIO and removal of TS 157 and PICCINI operation dispensation, without the new SAT.
-  assert.equal(createHash('sha256').update(JSON.stringify(baseline())).digest('hex'), '77fc948baeafe09023ff37b6543cc3e42c614eaa259c939bae7e9bf3dc87fd6c');
+  // Baseline includes corrected January exchanges, revised 12h AC4, TS 171-175 and cancellation of the operation, without the new SAT.
+  assert.equal(createHash('sha256').update(JSON.stringify(baseline())).digest('hex'), '958fe50c41de2222a9a457fdccc1692781eae9323c991a48016b715a3e984be2');
   const before = baseline();
   for (const number of days) {
     const date = `2026-11-${number}`;

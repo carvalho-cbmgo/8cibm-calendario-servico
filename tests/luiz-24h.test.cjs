@@ -70,8 +70,8 @@ test('novembro e dezembro recebem apenas os novos custos, sem inventar cota de d
   const plan = simulation.plan(data, '2026-11', 4560000);
   assert.equal(plan.days.get(22).addedResources, 2);
   assert.equal(plan.days.get(29).addedResources, 1);
-  assert.equal(plan.addedResources, 16);
-  assert.equal(plan.summary.committedCents, 1290900);
+  assert.equal(plan.addedResources, 15);
+  assert.equal(plan.summary.committedCents, 1216800);
   assert.equal(simulation.plan(data, '2026-12').days.get(6).addedResources, 1);
   for (const [date] of entries) {
     const planned = simulation.plan(data, date.slice(0, 7)).days.get(Number(date.slice(8)));
@@ -81,7 +81,7 @@ test('novembro e dezembro recebem apenas os novos custos, sem inventar cota de d
   }
 });
 
-// Baseline includes removal of TS 157 and the operation dispensation of PICCINI on 24/11/2026.
+// Baseline includes removal of TS 157, cancellation of the operation and TS 171-175.
 test('a inclusão preserva todos os dados e AC4 anteriores nas três competências', () => {
   const before = structuredClone(data);
   for (const [date, , resources] of entries) {
@@ -90,7 +90,7 @@ test('a inclusão preserva todos os dados e AC4 anteriores nas três competênci
     const originalResources = resources, missing = 6 - originalResources;
     day.coverage = [`${originalResources} recursos de 24h`, `Faltam ${missing} recurso${missing === 1 ? '' : 's'}`];
   }
-  assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'), 'd867a020cce87863a54bfc2f8c1498957f5b038aaea79a31f512f616372ed2b7');
+  assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'), '32ab3a8728f0253b7c2359801a345bb72995238015a48ab02688064aff4e1c9a');
   const original = finance.month(before, '2026-11', 4560000);
   assert.equal(summary('2026-11').committedCents - original.committedCents, 96000);
   assert.equal(summary('2026-11').satCents, original.satCents);
@@ -107,7 +107,7 @@ test('a retificação altera só duração, término e cobertura dos três servi
     const full = resources + 1, missing = 6 - full;
     day.coverage = [`${full} recursos de 24h`, missing ? `Faltam ${missing} recurso` : 'Meta de 6 recursos'];
   }
-  assert.equal(createHash('sha256').update(JSON.stringify(previous)).digest('hex'), 'f06bfded709ebbc3cdc0d79922cc6d62d03a7b5913e08a30cd1779097141f68b');
+  assert.equal(createHash('sha256').update(JSON.stringify(previous)).digest('hex'), 'ff6a3406fe0e01baceea837b422538fb7cce91a70e611b2cd542f8e697feb792');
   assert.equal(finance.month(previous, '2026-11', 4560000).committedCents - summary('2026-11').committedCents, 97000);
   assert.equal(finance.month(previous, '2026-12').committedCents - summary('2026-12').committedCents, 48500);
 });

@@ -23,23 +23,28 @@ const documents=[
  ['166','97832330',24,[['2026-11-03','ST AISLAN','2º SGT SCHUSSLER','2026-11-30'],['2026-11-30','2º SGT SCHUSSLER','ST AISLAN','2026-11-03']]],
  ['167','97933840',24,[['2026-11-07','ST AISLAN','2º SGT SCHUSSLER','2027-01-05'],['2027-01-05','2º SGT SCHUSSLER','ST AISLAN','2026-11-07']]],
  ['168','98135195',12,[['2026-11-08','2º SGT WANDERSON','3º SGT HENRIQUE','2026-11-29'],['2026-11-29','3º SGT HENRIQUE','2º SGT WANDERSON','2026-11-08']]],
- ['169','98279694',24,[['2026-11-15','ST AISLAN','2º SGT SCHUSSLER','2027-01-09'],['2027-01-09','2º SGT SCHUSSLER','ST AISLAN','2026-11-15']]]
+ ['169','98279694',24,[['2026-11-15','ST AISLAN','2º SGT SCHUSSLER','2027-01-09'],['2027-01-09','2º SGT SCHUSSLER','ST AISLAN','2026-11-15']]],
+ ['171','98562686',24,[['2026-11-20','SD SANTOS','SD PICCINI','2026-11-25'],['2026-11-25','SD PICCINI','SD SANTOS','2026-11-20']]],
+ ['172','98563020',24,[['2026-12-06','SD SANTOS','SD PICCINI','2026-12-11'],['2026-12-11','SD PICCINI','SD SANTOS','2026-12-06']]],
+ ['173','98563378',24,[['2026-12-14','SD SANTOS','SD PICCINI','2026-12-19'],['2026-12-19','SD PICCINI','SD SANTOS','2026-12-14']]],
+ ['174','98563989',24,[['2026-12-22','SD SANTOS','SD PICCINI','2026-12-27'],['2026-12-27','SD PICCINI','SD SANTOS','2026-12-22']]],
+ ['175','98565849',24,[['2026-12-30','SD SANTOS','SD PICCINI','2027-01-04'],['2027-01-04','SD PICCINI','SD SANTOS','2026-12-30']]]
 ];
 const matches=(badge,number,sei,kind='ts')=>badge.kind===kind&&String(badge.troca?.numero).split(/\s*\/\s*/).includes(number)&&String(badge.troca?.sei).includes(sei);
 
-test('16 autorizações ativas correspondem a 27 movimentos, com 153/154 unificadas, TS 157 removida e janeiro regularizado',()=>{
+test('21 autorizações ativas correspondem a 37 movimentos, com 153/154 unificadas e TS 157 removida',()=>{
  let count=0;
  for(const [number,sei,hours,legs] of documents)for(const [date,name,replaced,related,kind='ts'] of legs){
   const members=day(date).members.filter(member=>member.name===name);assert.equal(members.length,1,`${number} ${date} ${name}`);
   const badges=members[0].badges.filter(badge=>matches(badge,number,sei,kind));assert.equal(badges.length,1,`${number} ${date}`);
   assert.equal(badges[0].troca.substituido,replaced);assert.equal(badges[0].troca.data_servico_substituido,related);assert.equal(badges[0].hours||members[0].serviceHours||24,hours);count++;
  }
- assert.equal(documents.length,15);assert.equal(count,27);const hugo=day('2026-11-06').members.filter(member=>member.name==='SD HUGO');assert.equal(hugo.length,1);assert(hugo[0].badges.some(badge=>matches(badge,'154','97518560')));
+ assert.equal(documents.length,20);assert.equal(count,37);const hugo=day('2026-11-06').members.filter(member=>member.name==='SD HUGO');assert.equal(hugo.length,1);assert(hugo[0].badges.some(badge=>matches(badge,'154','97518560')));
 });
 
-test('remoção da TS 157 restaura PICCINI em 20/11 e SANTOS em 25/11 como ordinários, sem vestígios na escala',()=>{
- for(const [date,name,absent,ord,resources]of [['2026-11-20','SD PICCINI','SD SANTOS',27,4],['2026-11-25','SD SANTOS','SD PICCINI',28,4]]){
-  const input=day(date),members=input.members.filter(m=>m.name===name);assert.equal(members.length,1);assert(!input.members.some(m=>m.name===absent));assert.equal(members[0].ord,ord);assert.deepEqual(members[0].badges,[{kind:'ord',text:'ORDINÁRIO'}]);assert.deepEqual(members[0].notes,['Ordinário']);assert.equal(members[0].events.length,0);assert.equal(context.window.ServiceSimulation.coverage(input,date).resources,resources);
+test('TS 157 permanece removida; a nova TS 171 rege 20 e 25/11 sem duplicar serviços ou cobertura',()=>{
+ for(const [date,name,absent,ord,resources]of [['2026-11-20','SD SANTOS','SD PICCINI',28,4],['2026-11-25','SD PICCINI','SD SANTOS',27,4]]){
+  const input=day(date),members=input.members.filter(m=>m.name===name);assert.equal(members.length,1);assert(!input.members.some(m=>m.name===absent));assert.equal(members[0].ord,ord);assert.equal(members[0].badges.length,1);assert(matches(members[0].badges[0],'171','98562686'));assert.deepEqual(members[0].notes,[`TS nº 171 (SEI 98562686). Substitui ${absent}.`]);assert.equal(members[0].events.length,0);assert.equal(context.window.ServiceSimulation.coverage(input,date).resources,resources);
  }
  for(const month of Object.values(data))for(const input of month.days)for(const member of [...input.members,...(input.sat?.members||[])]){assert(!member.badges.some(b=>String(b.troca?.numero)==='157'||String(b.troca?.sei)==='97544001'));assert(!member.notes.some(note=>/TS\s*n[º°o.]?\s*157\b|97544001/.test(note)));}
 });
@@ -78,7 +83,7 @@ test('TS 164 preserva os três militares e a cadeia de substituição em 29/11, 
 
 test('conferência das TS preserva a troca parcial 168, confirmações e totais reais/simulados',()=>{
  const {AC4Finance:finance,ServiceSimulation:simulation}=context.window,real=finance.month(data,'2026-11',4560000),plan=simulation.plan(data,'2026-11',4560000);
- assert.equal(real.records.length,87);assert.equal(real.committedCents,3187200);assert.equal(real.executedCents,1096600);assert.equal(plan.addedResources,16);assert.equal(plan.summary.committedCents,1290900);
+ assert.equal(real.records.length,87);assert.equal(real.committedCents,3187200);assert.equal(real.executedCents,1096600);assert.equal(plan.addedResources,15);assert.equal(plan.summary.committedCents,1216800);
  assert.equal(data['2026-11'].days.filter(day=>day.confirmation?.status==='confirmed').length,18);
  for(const date of ['2026-11-08','2026-11-29']){const d=day(date),partial=d.members.filter(member=>member.serviceHours===12);assert.equal(partial.length,2);assert.equal(simulation.coverage(d,date).resources,5);}
  assert(!data['2026-10']);

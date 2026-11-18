@@ -1,5 +1,7 @@
 # Dispensa de PICCINI — Operação do Goiás Alerta e Solidário
 
+**Desconsiderada em 17/11/2026, por orientação expressa do usuário.** O afastamento de 23 a 27/11 e as observações foram retirados do calendário. PICCINI volta ao ordinário de 24/11, com cinco recursos de 24h e somente um complemento diurno simulado de 12h na meta de seis. A TS 171 do novo PDF passa a reger 20 e 25/11; a TS 157 permanece removida. A [conferência de 17/11](conferencia-trocas-2026-11-17.md) registra as novas permutas. O conteúdo abaixo é somente o histórico da alteração anterior.
+
 Fonte: orientação do usuário em 16/11/2026. **SD PICCINI está empenhado de 23 a 27/11/2026, inclusive**, na Operação do Goiás Alerta e Solidário, **SEI 202600011013421**. O período foi registrado no cadastro de afastamentos das alas.
 
 Há um serviço ordinário previsto para o militar nesse intervalo: **24/11, na Charlie**. O militar permanece na escala como dispensado, com as seguintes linhas exatas em Alterações / Observações da ES:
