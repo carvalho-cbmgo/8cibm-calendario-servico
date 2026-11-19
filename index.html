@@ -28,6 +28,8 @@ h1{font-size:clamp(24px,2.7vw,39px);font-weight:850;letter-spacing:-.047em;line-
 .filterbar small{color:var(--muted);font-size:12px}
 .calendar{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,310px),1fr));gap:11px;align-items:stretch}
 .day{background:var(--white);min-width:0;border-radius:13px;overflow:hidden;box-shadow:var(--shadow);border:1px solid #dce5f0;display:flex;flex-direction:column;min-height:248px}
+.day.is-today{outline:3px solid #174f86;outline-offset:-2px}
+.day-today{display:block;flex:0 0 auto;padding:4px 11px;background:#174f86;color:#fff;font-size:12px;font-weight:800;line-height:1.4;letter-spacing:.04em}
 .day-head{padding:11px 11px 9px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:6px;background:#f9fbff}
 .day-num{font-size:25px;font-weight:860;font-variant-numeric:tabular-nums;letter-spacing:-.06em;line-height:1}
 .day-date{display:flex;align-items:center;gap:9px;min-width:0}
@@ -4561,6 +4563,27 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
             "ord": 3
           },
           {
+            "name": "ST DA SILVA",
+            "ord": 5,
+            "badges": [],
+            "notes": [],
+            "events": [
+              {
+                "serviceId": "ac4-operacional-da-silva-2026-11-19-08h",
+                "mode": "OPERACIONAL/SOP",
+                "start": "08h00",
+                "end": "20h00",
+                "nextDay": false,
+                "hours": 12,
+                "observation": "REFORÇO OPERACIONAL",
+                "document": "OS nº 383 (SEI 98682020)",
+                "status": "planned",
+                "startDate": "2026-11-19",
+                "endDate": "2026-11-19"
+              }
+            ]
+          },
+          {
             "name": "ST TAVARES",
             "badges": [
               {
@@ -4653,8 +4676,8 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
           }
         ],
         "coverage": [
-          "5 recursos de 24h",
-          "Faltam 1 recurso"
+          "6 recursos de 24h",
+          "Meta de 6 recursos"
         ],
         "alerts": [],
         "sat": {
@@ -13614,6 +13637,19 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
       status.textContent=`${periodLabel()} · ${simulationDescription()} ${result.vacancies} ${result.vacancies===1?'vaga':'vagas'} PREVISTO AC4 em ${result.daysWithVacancies} ${result.daysWithVacancies===1?'dia':'dias'}. Todos os ${result.days} dias do intervalo estão incluídos.`;
     }catch(error){vacancyMessage.value='';copy.disabled=true;status.textContent=error.message;}
   }
+  function updateCurrentDay() {
+    const today=accessDate(),todayPeriod=`${today.year}-${String(today.month).padStart(2,'0')}`,iso=`${todayPeriod}-${String(today.day).padStart(2,'0')}`;
+    for(const card of cards){
+      const current=period===todayPeriod&&Number(card.dataset.day)===today.day;
+      card.classList.toggle('is-today',current);
+      let marker=card.querySelector('.day-today');
+      if(current){
+        card.setAttribute('aria-current','date');
+        if(!marker){marker=element('time','day-today');card.prepend(marker);}
+        marker.dateTime=iso;marker.textContent=`HOJE · ${String(today.day).padStart(2,'0')}/${String(today.month).padStart(2,'0')}/${today.year}`;
+      }else{card.removeAttribute('aria-current');marker?.remove();}
+    }
+  }
   function renderPeriod() {
     const [year, month] = period.split('-').map(Number);
     window.ServiceCalendar.period=period;
@@ -13628,6 +13664,7 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
     areaControls.clear();
     cards = days.map(makeCard);
     calendar.replaceChildren(...cards);
+    updateCurrentDay();
     calendar.hidden = !hasData;
     calendar.setAttribute('aria-label', `Calendário de ${periodLabel()}`);
     empty.hidden = hasData;
@@ -13925,9 +13962,9 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
   calendar.addEventListener('touchend', event => { if (!mobile.matches) return; const dx = event.changedTouches[0].screenX - startX, dy = event.changedTouches[0].screenY - startY; if (Math.abs(dx) > 65 && Math.abs(dx) > Math.abs(dy) * 1.4) move(dx < 0 ? 1 : -1); }, {passive: true});
   document.addEventListener('service-directory-change',event=>{ordOverrides=new Map(event.detail.map(p=>[p.name,p.ord]));renderPeriod();if(dialog.open){dialog.close();openDetails(detailDay,detailArea);}});
   document.addEventListener('calendar-schedule-change',()=>{renderPeriod();if(dialog.open){dialog.close();openDetails(detailDay,detailArea);}});
-  window.addEventListener('pageshow',()=>{updateMonthCountdown();updateCurrentFinance();if(rankingDialog.open)renderRankingDialog();});
-  document.addEventListener('visibilitychange',()=>{if(!document.hidden){updateMonthCountdown();updateCurrentFinance();if(rankingDialog.open)renderRankingDialog();}});
-  window.setInterval(()=>{updateMonthCountdown();updateCurrentFinance();},60000);
+  window.addEventListener('pageshow',()=>{updateMonthCountdown();updateCurrentFinance();updateCurrentDay();if(rankingDialog.open)renderRankingDialog();});
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden){updateMonthCountdown();updateCurrentFinance();updateCurrentDay();if(rankingDialog.open)renderRankingDialog();}});
+  window.setInterval(()=>{updateMonthCountdown();updateCurrentFinance();updateCurrentDay();},60000);
   renderPeriod();
 })();
 

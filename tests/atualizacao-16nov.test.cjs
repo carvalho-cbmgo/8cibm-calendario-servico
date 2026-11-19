@@ -47,7 +47,7 @@ test('PROEBOM de HENRIQUE em 17/11 custa R$ 120, sem confirmar execução ou amp
 test('os 70 eventos AC4 anteriores permanecem integralmente preservados', () => {
   const rows = Object.entries(data).flatMap(([period, schedule]) => schedule.days.flatMap(d =>
     ['members', 'sat'].flatMap(area => (area === 'members' ? d.members : d.sat?.members || []).flatMap(m =>
-      m.events.filter(e => e.serviceId !== newId && e.serviceId !== 'ac4-proebom-hellysson-2026-11-24-08h' && !e.serviceId?.startsWith('ac4-sat-23a30nov-') && !e.serviceId?.startsWith('ac4-operacional-24h-luiz-antonio-') && !e.serviceId?.startsWith('ac4-2026-11-26-')).map(e => JSON.stringify([period, d.day, area, m.name, e])))))).sort();
+      m.events.filter(e => e.serviceId !== newId && e.serviceId !== 'ac4-operacional-da-silva-2026-11-19-08h' && e.serviceId !== 'ac4-proebom-hellysson-2026-11-24-08h' && !e.serviceId?.startsWith('ac4-sat-23a30nov-') && !e.serviceId?.startsWith('ac4-operacional-24h-luiz-antonio-') && !e.serviceId?.startsWith('ac4-2026-11-26-')).map(e => JSON.stringify([period, d.day, area, m.name, e])))))).sort();
   assert.equal(rows.length, 70);
   assert.equal(createHash('sha256').update(JSON.stringify(rows)).digest('hex'), '8400c8cc493e1ced3ae20849172cc41e3cf397ad99b98b3f8b81d9035e1c4e7a');
 });
@@ -95,13 +95,13 @@ test('HENRIQUE cumpre EAS de 24h em 18 e 23/11, com observação exata, sem gera
   const actual = finance.month(data, '2026-11', 4560000);
   const baseline = finance.month(before, '2026-11', 4560000);
   assert.equal(JSON.stringify(actual.records), JSON.stringify(baseline.records));
-  assert.equal(actual.committedCents, 3223200);
+  assert.equal(actual.committedCents, 3259200);
   assert.equal(actual.executedCents, 1096600);
-  assert.equal(actual.remainingCents, 1336800);
+  assert.equal(actual.remainingCents, 1300800);
   const plan = simulation.plan(data, '2026-11', 4560000);
   assert.equal(plan.days.get(18).addedServices, 0);
   assert.equal(plan.days.get(23).addedServices, 0);
-  assert.equal(plan.addedResources, 15);
-  assert.equal(plan.summary.committedCents, 1219800);
+  assert.equal(plan.addedResources, 14);
+  assert.equal(plan.summary.committedCents, 1183800);
   assert.equal(data['2026-11'].days.filter(d => d.confirmation?.status === 'confirmed').length, 18);
 });

@@ -115,18 +115,18 @@ test('todas as metas completam somente o déficit por horário nos três meses c
   assert.equal(JSON.stringify(source),before);
 });
 
-test('novembro simula 15 recursos em 9 dias, cobra cada reforço uma vez e preserva execuções',()=>{
+test('novembro simula 14 recursos em 8 dias, cobra cada reforço uma vez e preserva execuções',()=>{
   const source=data(),plan=simulation.plan(source,'2026-11',4560000),real=finance.month(source,'2026-11',4560000);
   assert.equal(source['2026-11'].days.filter(day=>day.confirmation?.status==='confirmed').length,18);
   for(let day=1;day<=18;day++)assert.equal(plan.days.get(day).addedResources,0);
   assert.equal(plan.days.get(27).addedResources,0);assert.equal(plan.days.get(13).addedResources,0);assert.equal(plan.days.get(20).addedResources,3);assert.equal(plan.days.get(29).addedResources,0);
-  assert.equal(plan.addedResources,15);assert.equal(plan.addedServices,15);assert.equal(plan.daysAffected,9);assert.equal(plan.summary.committedCents,1219800);
-  assert.equal(new Set(plan.summary.records.map(record=>record.key)).size,15);assert.equal(plan.summary.executedCents,0);assert.equal(plan.summary.satCents,0);
-  assert.equal(plan.summary.daily.get('2026-11-30').cumulativeCents,1219800);
-  assert.equal(real.records.length,90);assert.equal(real.committedCents,3223200);assert.equal(real.executedCents,1096600);
+  assert.equal(plan.addedResources,14);assert.equal(plan.addedServices,14);assert.equal(plan.daysAffected,8);assert.equal(plan.summary.committedCents,1183800);
+  assert.equal(new Set(plan.summary.records.map(record=>record.key)).size,14);assert.equal(plan.summary.executedCents,0);assert.equal(plan.summary.satCents,0);
+  assert.equal(plan.summary.daily.get('2026-11-30').cumulativeCents,1183800);
+  assert.equal(real.records.length,91);assert.equal(real.committedCents,3259200);assert.equal(real.executedCents,1096600);
   assert.equal(real.committedCents+plan.summary.committedCents,4443000);assert.equal(real.remainingCents-plan.summary.committedCents,117000);
-  assert.equal(plan.summary.records.filter(record=>record.minutes===720).length,3);assert.equal(plan.summary.records.reduce((total,record)=>total+record.minutes/60,0),324);
-  for(const number of [19,24,26]){const complements=plan.days.get(number).members.filter(member=>member.events[0].hours===12);assert.equal(complements.length,1);assert.deepEqual([complements[0].events[0].start,complements[0].events[0].end],['08h00','20h00']);}
+  assert.equal(plan.summary.records.filter(record=>record.minutes===720).length,2);assert.equal(plan.summary.records.reduce((total,record)=>total+record.minutes/60,0),312);
+  assert.equal(plan.days.get(19).addedServices,0);for(const number of [24,26]){const complements=plan.days.get(number).members.filter(member=>member.events[0].hours===12);assert.equal(complements.length,1);assert.deepEqual([complements[0].events[0].start,complements[0].events[0].end],['08h00','20h00']);}
 });
 
 test('tarifa acompanha cada data e o mês financeiro usa o início do reforço',()=>{
@@ -140,7 +140,7 @@ test('meta de 4 a 8 altera somente os reforços necessários, sem remover recurs
   const four=simulation.plan(source,'2026-11',4560000,real,4),five=simulation.plan(source,'2026-11',4560000,real,5),eight=simulation.plan(source,'2026-11',4560000,real,8);
   assert.equal(four.addedResources,1);assert.equal(four.summary.committedCents,99500);assert.equal(four.days.get(12).coverage.resources,6);
   assert.equal(five.addedResources,6);assert.equal(five.summary.committedCents,568600);
-  assert.equal(eight.addedResources,39);assert.equal(eight.daysAffected,12);assert.equal(eight.targetResources,8);
+  assert.equal(eight.addedResources,38);assert.equal(eight.daysAffected,12);assert.equal(eight.targetResources,8);
   for(const day of source['2026-11'].days){const planned=eight.days.get(day.day);assert.equal(planned.addedResources,day.confirmation?.status==='confirmed'?0:8-planned.coverage.resources);}
   assert.equal(eight.summary.quotaCents,4560000);assert(real.remainingCents-eight.summary.committedCents<0);assert.equal(JSON.stringify(source),before);
 });
