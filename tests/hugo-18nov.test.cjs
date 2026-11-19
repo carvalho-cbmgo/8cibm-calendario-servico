@@ -20,7 +20,7 @@ test('SEI 98630755 dispensa HUGO em 20/11 e registra um pagamento de 24h em 29/1
     for (const badge of member.badges) if (badge.troca?.sei === '98630755') references.push([input.day, member.name, badge.kind]);
   }
   assert.deepEqual(references, [[20, 'SD HUGO', 'disp'], [29, 'SD HUGO', 'pay']]);
-  for (const [number, kind, ala, resources, leader] of [[20, 'disp', 'CHARLIE', 3, 'ST OSVALDIR'], [29, 'pay', 'DELTA', 6, 'ST DA SILVA']]) {
+  for (const [number, kind, ala, resources, leader] of [[20, 'disp', 'CHARLIE', 5, 'ST OSVALDIR'], [29, 'pay', 'DELTA', 6, 'ST DA SILVA']]) {
     const input = day(number), members = input.members.filter(m => m.name === 'SD HUGO');
     assert.equal(members.length, 1);
     const member = members[0];
@@ -54,7 +54,7 @@ test('consulta e simulação respeitam a dispensa e o pagamento sem gerar AC4 pa
   const summary = finance.month(data, '2026-11', 4560000);
   assert(!summary.records.some(r => r.member === 'SD HUGO' && ['2026-11-20', '2026-11-29'].includes(r.startDate)));
   const plan = simulation.plan(data, '2026-11', 4560000);
-  assert.equal(plan.days.get(20).addedResources, 3);
+  assert.equal(plan.days.get(20).addedResources, 0);
   assert.equal(plan.days.get(29).addedResources, 0);
 });
 
@@ -94,12 +94,12 @@ test('HENRIQUE e HELLYSSON têm dois PROEBOM previstos de 4h em 26/11, com OS a 
     assert.equal(actual.summary.committedCents, original.summary.committedCents);
     assert.equal(JSON.stringify(actual.days.get(26)), JSON.stringify(original.days.get(26)));
   }
-  assert.equal(summary.records.length, 91);
-  assert.equal(summary.committedCents, 3259200);
-  assert.equal(summary.operationalCents, 2346200);
+  assert.equal(summary.records.length, 98);
+  assert.equal(summary.committedCents, 3924300);
+  assert.equal(summary.operationalCents, 3011300);
   assert.equal(summary.satCents, 913000);
   assert.equal(summary.executedCents, 1096600);
-  assert.equal(summary.remainingCents, 1300800);
+  assert.equal(summary.remainingCents, 635700);
 });
 
 test('inclusões de 18/11 preservam integralmente os demais dados do calendário', () => {
@@ -112,5 +112,5 @@ test('inclusões de 18/11 preservam integralmente os demais dados do calendário
   twentyNinth.coverage = ['5 recursos de 24h', 'Faltam 1 recurso'];
   const input = days.find(d => d.day === 26);
   input.members = input.members.filter(m => !m.events.some(e => e.serviceId?.startsWith('ac4-2026-11-26-')));
-  assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'), 'b6a9ba2af84ce9d2bc235549f0cd0d1074989216a003421ac6db531136d6d9c0');
+  assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'), 'c6abe2101a6e8eefff99671cf0829546d999c9b65167b313f6f811fd028ec488');
 });

@@ -44,13 +44,13 @@ test('HELLYSSON tem um único PROEBOM previsto de 4h em 24/11, 08h–12h, R$ 120
   assert.equal(services.length, 1);
   assert.equal(services[0].type, 'ac4');
   assert.equal(services[0].commitmentCents, 12000);
-  assert.equal(summary.records.length, 91);
-  assert.equal(summary.committedCents, 3259200);
-  assert.equal(summary.operationalCents, 2346200);
+  assert.equal(summary.records.length, 98);
+  assert.equal(summary.committedCents, 3924300);
+  assert.equal(summary.operationalCents, 3011300);
   assert.equal(summary.satCents, 913000);
-  assert.equal(summary.forecastCents, 2162600);
+  assert.equal(summary.forecastCents, 2827700);
   assert.equal(summary.executedCents, 1096600);
-  assert.equal(summary.remainingCents, 1300800);
+  assert.equal(summary.remainingCents, 635700);
   const before = finance.month(previous(), '2026-11', 4560000);
   assert.equal(summary.committedCents - before.committedCents, 12000);
   for (const [date, daily] of summary.daily) {
@@ -64,7 +64,7 @@ test('HELLYSSON tem um único PROEBOM previsto de 4h em 24/11, 08h–12h, R$ 120
 
 test('a inclusão preserva todos os dados anteriores, chefia, cobertura e reforços de 4 a 8 recursos', () => {
   const before = previous(), source = JSON.stringify(data);
-  assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'), '3b1b0f934a5f2dc18c105b7d95d779b16def36964f4f1ec16e2c8e742a1843c7');
+  assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'), 'd3b8416bac50187723ec7182bc33bff19a591d5edd7899535d203a0c12cf98c4');
   assert.equal(simulation.coverage(day(data), '2026-11-24').resources, 5);
   assert.equal(JSON.stringify(simulation.coverage(day(data), '2026-11-24')), JSON.stringify(simulation.coverage(day(before), '2026-11-24')));
   assert.equal(JSON.stringify(chief.select(day(data))), JSON.stringify(chief.select(day(before))));

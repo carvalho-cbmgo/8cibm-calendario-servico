@@ -13,7 +13,7 @@ test('três AC4 de análise de projetos têm datas, oficiais e jornadas de 12h s
 
 test('análise soma 36h/R$ 1.440 na SAT, com acumulados inclusivos e Operacional/execuções preservados',()=>{
  const summary=finance.month(data,'2026-11',4560000),before=finance.month(baseline(),'2026-11',4560000);
- assert.equal(summary.records.length,91);assert.equal(summary.committedCents,3259200);assert.equal(summary.satCents,913000);assert.equal(summary.operationalCents,2346200);assert.equal(summary.executedCents,1096600);assert.equal(summary.forecastCents,2162600);assert.equal(summary.remainingCents,1300800);
+ assert.equal(summary.records.length,98);assert.equal(summary.committedCents,3924300);assert.equal(summary.satCents,913000);assert.equal(summary.operationalCents,3011300);assert.equal(summary.executedCents,1096600);assert.equal(summary.forecastCents,2827700);assert.equal(summary.remainingCents,635700);
  assert.equal(summary.committedCents-before.committedCents,144000);assert.equal(summary.satCents-before.satCents,144000);assert.equal(summary.operationalCents,before.operationalCents);assert.equal(summary.executedCents,before.executedCents);
  for(const [date,added]of [['2026-11-19',0],['2026-11-20',48000],['2026-11-27',48000],['2026-11-28',96000],['2026-11-29',144000],['2026-11-30',144000]])assert.equal(finance.asOf(summary,date).committedCents-finance.asOf(before,date).committedCents,added);
 });
@@ -25,7 +25,7 @@ test('novos AC4 não alteram recursos, intervalos, chefia ou reforços simulados
   assert.equal(actual.addedResources,expected.addedResources);assert.equal(actual.addedServices,expected.addedServices);assert.equal(actual.summary.committedCents,expected.summary.committedCents);
   for(const day of data['2026-11'].days){const date=`2026-11-${String(day.day).padStart(2,'0')}`,old=before['2026-11'].days.find(d=>d.day===day.day);assert.deepEqual(plain(simulation.coverage(day,date)),plain(simulation.coverage(old,date)));assert.deepEqual(plain(chief.select(day)),plain(chief.select(old)));}
  }
- const plan=simulation.plan(data,'2026-11',4560000);for(const [day,count]of [[20,3],[28,2],[29,0]])assert.equal(plan.days.get(day).addedResources,count);assert.equal(plan.addedResources,14);assert.equal(plan.summary.committedCents,1183800);assert.equal(JSON.stringify(data),original);
+ const plan=simulation.plan(data,'2026-11',4560000);for(const [day,count]of [[20,0],[28,2],[29,0]])assert.equal(plan.days.get(day).addedResources,count);assert.equal(plan.addedResources,4);assert.equal(plan.summary.committedCents,309100);assert.equal(JSON.stringify(data),original);
 });
 
 test('modalidade de análise nunca fornece cobertura, mesmo em linha operacional com indicação conflitante',()=>{

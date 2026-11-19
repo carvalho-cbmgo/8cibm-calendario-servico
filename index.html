@@ -704,21 +704,22 @@ dialog.simulation-dialog{width:min(620px,calc(100% - 24px));max-height:calc(100d
  .finance-metric-label{font-size:14px}.finance-metric-amount{font-size:clamp(16px,4.4vw,18px);text-align:right}
  .finance-metric-share{font-size:13px;min-width:48px}
 }
-.current-finance{grid-area:current;position:relative;z-index:1;min-width:0;max-width:100%;font-size:12px;line-height:1.45}
-.current-finance h2{display:flex;align-items:center;gap:4px;min-height:44px;margin:0 0 5px;color:#b7c8d7;font-size:11px;font-weight:700;letter-spacing:.07em;white-space:nowrap}
-.current-finance time{color:#e2edf5;letter-spacing:0}
-.current-finance-scroll{overflow-x:auto;scrollbar-width:thin;scrollbar-color:#6f8a9f #203b50;padding-bottom:4px}
-.current-finance-scroll:focus-visible{outline:2px solid #94baff;outline-offset:2px}
+.current-finance{grid-area:current;position:relative;z-index:1;min-width:0;max-width:100%;font-size:12px;line-height:1.45;background:#f3f7fc;border:1px solid #c9d8e8;border-radius:13px;overflow:hidden}
+.current-finance h2{display:flex;align-items:center;gap:4px;min-height:32px;margin:0 0 8px;padding:4px 11px;background:#e5eef8;color:#173b62;font-size:12px;font-weight:800;letter-spacing:.04em;white-space:nowrap}
+.current-finance time{color:inherit;letter-spacing:0}
+.current-finance-scroll{overflow-x:auto;scrollbar-width:thin;scrollbar-color:#9aaec5 #e5edf6;padding:0 11px 8px}
+.current-finance-scroll:focus-visible{outline:2px solid #1859b7;outline-offset:2px}
 .current-finance-lines{display:grid;grid-template-columns:max-content max-content max-content;justify-content:start;align-items:baseline;gap:6px 10px;width:max-content;min-width:100%;font-variant-numeric:tabular-nums}
 .current-finance-row{display:contents}
-.current-finance-label{color:#c9dfeb;white-space:nowrap}
+.current-finance-label{color:#284a68;white-space:nowrap}
 .current-finance-subtotal .current-finance-label{padding-left:12px}
-.current-finance-amount{font-size:16px;font-weight:600;line-height:1.4;white-space:nowrap;color:#d7f1ff}
-.current-finance-share{font-size:11px;line-height:1.4;white-space:nowrap;color:#c1d0dd}
-.current-finance-total .current-finance-label,.current-finance-total .current-finance-amount{color:#ffd49c;font-weight:700}
-.current-finance-sat .current-finance-amount{color:#dec9f3}
-.current-finance-available .current-finance-label,.current-finance-available .current-finance-amount,.current-finance-available .current-finance-share{color:#9be8d3;font-weight:650}
-.current-finance .simulation-scroll-hint{color:#bfd8e5}
+.current-finance-amount{font-size:16px;font-weight:600;line-height:1.4;white-space:nowrap;color:#173b62}
+.current-finance-share{font-size:11px;line-height:1.4;white-space:nowrap;color:#526b83}
+.current-finance-total .current-finance-label,.current-finance-total .current-finance-amount,.current-finance-total .current-finance-share{color:#173b62;font-weight:800}
+.current-finance-operational .current-finance-label,.current-finance-operational .current-finance-amount,.current-finance-operational .current-finance-share{color:#1859b7;font-weight:600}
+.current-finance-sat .current-finance-label,.current-finance-sat .current-finance-amount,.current-finance-sat .current-finance-share{color:#7b2cbf;font-weight:600}
+.current-finance-available .current-finance-label,.current-finance-available .current-finance-amount,.current-finance-available .current-finance-share{color:#146c43;font-weight:800}
+.current-finance .simulation-scroll-hint{color:#526b83;padding-inline:11px}
 .finance-days-remaining{grid-column:1/-1}
 @media screen and (min-width:761px){
  .monthly-finance .finance-toolbar{justify-content:flex-start;gap:12px}
@@ -742,13 +743,14 @@ dialog.simulation-dialog{width:min(620px,calc(100% - 24px));max-height:calc(100d
 }
 @media screen and (max-width:760px){
  .header,.header.is-simulation{grid-template-areas:"main" "current" "finance"}
- .current-finance{border-top:1px solid #ffffff18;padding-top:5px;font-size:clamp(12px,3.4vw,14px)}
+ .current-finance{font-size:clamp(12px,3.4vw,14px)}
  .current-finance h2{font-size:12px;min-height:32px}
  .current-finance-lines{column-gap:7px}
  .current-finance-share{font-size:12px}
 }
 @media print{
  .header{grid-template-areas:"main" "current" "finance"}
+ .current-finance{background:#fff;border-color:#aaa}
  .current-finance h2,.current-finance time,.current-finance-label,.current-finance-amount,.current-finance-share{color:#38516b!important}
  .current-finance-scroll{overflow:visible}
 }
@@ -4679,6 +4681,13 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
           "6 recursos de 24h",
           "Meta de 6 recursos"
         ],
+        "confirmation": {
+          "status": "confirmed",
+          "date": "2026-11-19",
+          "source": "user",
+          "scope": "calendar",
+          "previousAlerts": []
+        },
         "alerts": [],
         "sat": {
           "ordinaryStatus": "informed",
@@ -4825,6 +4834,27 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
             "ord": 10
           },
           {
+            "name": "2º SGT WANDERSON",
+            "ord": 17,
+            "badges": [],
+            "notes": [],
+            "events": [
+              {
+                "serviceId": "ac4-operacional-wanderson-2026-11-20-08h",
+                "mode": "OPERACIONAL/SOP",
+                "start": "08h00",
+                "end": "08h00",
+                "nextDay": true,
+                "hours": 24,
+                "observation": "REFORÇO OPERACIONAL",
+                "document": "OS nº 385 (SEI 98726048)",
+                "status": "planned",
+                "startDate": "2026-11-20",
+                "endDate": "2026-11-21"
+              }
+            ]
+          },
+          {
             "name": "3º SGT HENRIQUE",
             "badges": [
               {
@@ -4844,6 +4874,27 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
             ],
             "events": [],
             "ord": 22
+          },
+          {
+            "name": "CB RABELO",
+            "ord": 25,
+            "badges": [],
+            "notes": [],
+            "events": [
+              {
+                "serviceId": "ac4-operacional-rabelo-2026-11-20-08h",
+                "mode": "OPERACIONAL/SOP",
+                "start": "08h00",
+                "end": "08h00",
+                "nextDay": true,
+                "hours": 24,
+                "observation": "REFORÇO OPERACIONAL",
+                "document": "OS nº 385 (SEI 98726048)",
+                "status": "planned",
+                "startDate": "2026-11-20",
+                "endDate": "2026-11-21"
+              }
+            ]
           },
           {
             "name": "SD SANTOS",
@@ -4889,9 +4940,16 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
           }
         ],
         "coverage": [
-          "3 recursos de 24h",
-          "Faltam 3 recursos"
+          "5 recursos de 24h",
+          "Faltam 1 recurso"
         ],
+        "confirmation": {
+          "status": "confirmed",
+          "date": "2026-11-19",
+          "source": "user",
+          "scope": "calendar",
+          "previousAlerts": []
+        },
         "alerts": [],
         "sat": {
           "ordinaryStatus": "informed",
@@ -4962,6 +5020,29 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
             "ord": 4
           },
           {
+            "name": "ST DA SILVA",
+            "ord": 5,
+            "badges": [],
+            "notes": [
+              "OS nº XXX (SEI 98726048): número da OS a confirmar."
+            ],
+            "events": [
+              {
+                "serviceId": "ac4-operacional-da-silva-2026-11-21-08h",
+                "mode": "OPERACIONAL/SOP",
+                "start": "08h00",
+                "end": "08h00",
+                "nextDay": true,
+                "hours": 24,
+                "observation": "REFORÇO OPERACIONAL",
+                "document": "OS nº XXX (SEI 98726048)",
+                "status": "planned",
+                "startDate": "2026-11-21",
+                "endDate": "2026-11-22"
+              }
+            ]
+          },
+          {
             "name": "ST AISLAN",
             "badges": [
               {
@@ -4997,6 +5078,29 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
             "ord": 17
           },
           {
+            "name": "SD PICCINI",
+            "ord": 27,
+            "badges": [],
+            "notes": [
+              "OS nº XXX (SEI 98726048): número da OS a confirmar."
+            ],
+            "events": [
+              {
+                "serviceId": "ac4-operacional-piccini-2026-11-21-08h",
+                "mode": "OPERACIONAL/SOP",
+                "start": "08h00",
+                "end": "08h00",
+                "nextDay": true,
+                "hours": 24,
+                "observation": "REFORÇO OPERACIONAL",
+                "document": "OS nº XXX (SEI 98726048)",
+                "status": "planned",
+                "startDate": "2026-11-21",
+                "endDate": "2026-11-22"
+              }
+            ]
+          },
+          {
             "name": "SD SANTOS",
             "badges": [
               {
@@ -5012,9 +5116,16 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
           }
         ],
         "coverage": [
-          "4 recursos de 24h",
-          "Faltam 2 recursos"
+          "6 recursos de 24h",
+          "Meta de 6 recursos"
         ],
+        "confirmation": {
+          "status": "confirmed",
+          "date": "2026-11-19",
+          "source": "user",
+          "scope": "calendar",
+          "previousAlerts": []
+        },
         "alerts": []
       },
       {
@@ -5048,6 +5159,27 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
             ],
             "events": [],
             "ord": 5
+          },
+          {
+            "name": "ST PASSOS",
+            "ord": 6,
+            "badges": [],
+            "notes": [],
+            "events": [
+              {
+                "serviceId": "ac4-operacional-passos-2026-11-22-08h",
+                "mode": "OPERACIONAL/SOP",
+                "start": "08h00",
+                "end": "08h00",
+                "nextDay": true,
+                "hours": 24,
+                "observation": "REFORÇO OPERACIONAL",
+                "document": "OS nº 387 (SEI 98726469)",
+                "status": "planned",
+                "startDate": "2026-11-22",
+                "endDate": "2026-11-23"
+              }
+            ]
           },
           {
             "name": "2º SGT GEYDSON",
@@ -5128,6 +5260,27 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
             "ord": 25
           },
           {
+            "name": "SD SANTOS",
+            "ord": 28,
+            "badges": [],
+            "notes": [],
+            "events": [
+              {
+                "serviceId": "ac4-operacional-santos-2026-11-22-08h",
+                "mode": "OPERACIONAL/SOP",
+                "start": "08h00",
+                "end": "08h00",
+                "nextDay": true,
+                "hours": 24,
+                "observation": "REFORÇO OPERACIONAL",
+                "document": "OS nº 387 (SEI 98726469)",
+                "status": "planned",
+                "startDate": "2026-11-22",
+                "endDate": "2026-11-23"
+              }
+            ]
+          },
+          {
             "name": "SD MARTINS",
             "badges": [
               {
@@ -5143,9 +5296,16 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
           }
         ],
         "coverage": [
-          "4 recursos de 24h",
-          "Faltam 2 recursos"
+          "6 recursos de 24h",
+          "Meta de 6 recursos"
         ],
+        "confirmation": {
+          "status": "confirmed",
+          "date": "2026-11-19",
+          "source": "user",
+          "scope": "calendar",
+          "previousAlerts": []
+        },
         "alerts": []
       },
       {
@@ -5265,6 +5425,13 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
           "6 recursos de 24h",
           "Meta de 6 recursos"
         ],
+        "confirmation": {
+          "status": "confirmed",
+          "date": "2026-11-19",
+          "source": "user",
+          "scope": "calendar",
+          "previousAlerts": []
+        },
         "alerts": [],
         "sat": {
           "ordinaryStatus": "informed",
@@ -5506,6 +5673,13 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
           "5 recursos de 24h",
           "Faltam 1 recurso"
         ],
+        "confirmation": {
+          "status": "confirmed",
+          "date": "2026-11-19",
+          "source": "user",
+          "scope": "calendar",
+          "previousAlerts": []
+        },
         "alerts": [],
         "sat": {
           "ordinaryStatus": "informed",
@@ -5616,6 +5790,27 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
             "ord": 6
           },
           {
+            "name": "2º SGT DIEGO",
+            "ord": 13,
+            "badges": [],
+            "notes": [],
+            "events": [
+              {
+                "serviceId": "ac4-operacional-diego-2026-11-25-08h",
+                "mode": "OPERACIONAL/SOP",
+                "start": "08h00",
+                "end": "08h00",
+                "nextDay": true,
+                "hours": 24,
+                "observation": "REFORÇO OPERACIONAL",
+                "document": "OS nº 388 (SEI 98727025)",
+                "status": "planned",
+                "startDate": "2026-11-25",
+                "endDate": "2026-11-26"
+              }
+            ]
+          },
+          {
             "name": "2º SGT GEYDSON",
             "badges": [
               {
@@ -5666,9 +5861,16 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
           }
         ],
         "coverage": [
-          "4 recursos de 24h",
-          "Faltam 2 recursos"
+          "5 recursos de 24h",
+          "Faltam 1 recurso"
         ],
+        "confirmation": {
+          "status": "confirmed",
+          "date": "2026-11-19",
+          "source": "user",
+          "scope": "calendar",
+          "previousAlerts": []
+        },
         "alerts": [],
         "sat": {
           "ordinaryStatus": "informed",
@@ -13096,7 +13298,7 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
     const target=document.getElementById('ac4-current-summary'),today=accessDate(),date=`${today.year}-${String(today.month).padStart(2,'0')}-${String(today.day).padStart(2,'0')}`,data=finance.asOf(financialSummary,date),extra=simulationActive?finance.asOf(simulationPlan.summary,date):null;
     const signature=JSON.stringify([period,date,simulationActive,data.quotaCents,data.operationalCents,data.satCents,extra?.operationalCents||0,extra?.satCents||0]);
     if(target.dataset.signature===signature)return;target.dataset.signature=signature;target.replaceChildren();target.classList.toggle('is-simulation',simulationActive);
-    const heading=element('h2','','AC4 CORRENTE - '),stamp=element('time','',date.split('-').reverse().join('/'));stamp.dateTime=date;heading.append(stamp);target.append(heading);
+    const heading=element('h2','','AC4 HOJE - '),stamp=element('time','',date.split('-').reverse().join('/'));stamp.dateTime=date;heading.append(stamp);target.append(heading);
     const scroll=element('div','current-finance-scroll'),lines=element('div','current-finance-lines'),hint=element('p','simulation-scroll-hint','↔ Deslize para ver todos os valores');hint.id='current-finance-scroll-hint';hint.hidden=true;
     scroll.tabIndex=0;scroll.setAttribute('role','group');scroll.setAttribute('aria-label','Valores acumulados até hoje. Use a rolagem horizontal se necessário.');scroll.setAttribute('aria-describedby',hint.id);scroll.dataset.simulationScroll=hint.id;
     const row=(label,cents,delta,className)=>{

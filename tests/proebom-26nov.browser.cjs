@@ -64,8 +64,8 @@ const files = { '/': 'index.html', '/assets/cbmgo-emblema.png': 'assets/cbmgo-em
       for (const name of names) assert.equal(copied.filter(cells => cells[4].includes(name) && cells[6] === '4h').length, 1);
       await page.locator('#sei-close').click();
       await page.locator('[data-ac4-simulation]').click(); await page.locator('#ac4-simulation-target').selectOption('6'); await page.locator('#ac4-simulation-confirm').click();
-      assert.equal(await card.locator('.simulation-entry').count(), 1);
-      assert.equal(await card.locator('.simulation-entry .ac4-period').textContent(), '8h às 20h');
+      assert.equal(await card.locator('.simulation-entry').count(), day === 24 ? 0 : 1);
+      if (day === 26) assert.equal(await card.locator('.simulation-entry .ac4-period').textContent(), '8h às 20h');
       await page.locator('[data-ac4-simulation]').click(); await page.locator('#ac4-simulation-disregard').click();
       assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
     }

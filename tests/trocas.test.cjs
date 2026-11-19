@@ -46,7 +46,7 @@ test('22 autorizações ativas correspondem a 39 movimentos, com 153/154 unifica
 test('TS 170 usa 21 e 22/11/2026, jornadas únicas de 24h e antiguidade própria, preservando chefia, cobertura e AC4',()=>{
  const {AC4Finance:finance,ServiceSimulation:simulation,ServiceChief:chief}=context.window;
  for(const [date,name,replaced,ord,leader]of [['2026-11-21','ST AISLAN','2º SGT GEYDSON',8,'ST OSVALDIR'],['2026-11-22','2º SGT GEYDSON','ST AISLAN',15,'ST DA SILVA']]){
-  const input=day(date),members=input.members.filter(m=>m.name===name);assert.equal(members.length,1);assert(!input.members.some(m=>m.name===replaced));assert.equal(members[0].ord,ord);assert.equal(members[0].events.length,0);assert.equal(members[0].badges.length,1);assert(matches(members[0].badges[0],'170','98553552'));assert.equal(chief.select(input).assignments[0].name,leader);assert.equal(simulation.coverage(input,date).resources,4);assert.deepEqual(input.coverage,['4 recursos de 24h','Faltam 2 recursos']);
+  const input=day(date),members=input.members.filter(m=>m.name===name);assert.equal(members.length,1);assert(!input.members.some(m=>m.name===replaced));assert.equal(members[0].ord,ord);assert.equal(members[0].events.length,0);assert.equal(members[0].badges.length,1);assert(matches(members[0].badges[0],'170','98553552'));assert.equal(chief.select(input).assignments[0].name,leader);assert.equal(simulation.coverage(input,date).resources,6);assert.deepEqual(input.coverage,['6 recursos de 24h','Meta de 6 recursos']);
  }
  const snapshot=JSON.stringify(data),baseline=structuredClone(data);for(const [number,name,ord]of [[21,'2º SGT GEYDSON',15],[22,'ST AISLAN',8]]){const member=baseline['2026-11'].days.find(d=>d.day===number).members.find(m=>m.badges.some(b=>b.troca?.numero==='170'));member.name=name;member.ord=ord;member.badges=[{kind:'ord',text:'ORDINÁRIO'}];member.notes=['Ordinário'];}
  for(const period of Object.keys(data))assert.equal(JSON.stringify(finance.month(data,period)),JSON.stringify(finance.month(baseline,period)));
@@ -55,7 +55,7 @@ test('TS 170 usa 21 e 22/11/2026, jornadas únicas de 24h e antiguidade própria
 });
 
 test('TS 157 permanece removida; a nova TS 171 rege 20 e 25/11 sem duplicar serviços ou cobertura',()=>{
- for(const [date,name,absent,ord,resources]of [['2026-11-20','SD SANTOS','SD PICCINI',28,3],['2026-11-25','SD PICCINI','SD SANTOS',27,4]]){
+ for(const [date,name,absent,ord,resources]of [['2026-11-20','SD SANTOS','SD PICCINI',28,5],['2026-11-25','SD PICCINI','SD SANTOS',27,5]]){
   const input=day(date),members=input.members.filter(m=>m.name===name);assert.equal(members.length,1);assert(!input.members.some(m=>m.name===absent));assert.equal(members[0].ord,ord);assert.equal(members[0].badges.length,1);assert(matches(members[0].badges[0],'171','98562686'));assert.deepEqual(members[0].notes,[`TS nº 171 (SEI 98562686). Substitui ${absent}.`]);assert.equal(members[0].events.length,0);assert.equal(context.window.ServiceSimulation.coverage(input,date).resources,resources);
  }
  for(const month of Object.values(data))for(const input of month.days)for(const member of [...input.members,...(input.sat?.members||[])]){assert(!member.badges.some(b=>String(b.troca?.numero)==='157'||String(b.troca?.sei)==='97544001'));assert(!member.notes.some(note=>/TS\s*n[º°o.]?\s*157\b|97544001/.test(note)));}
@@ -95,8 +95,8 @@ test('TS 164 preserva os três militares e a cadeia de substituição em 29/11, 
 
 test('conferência das TS preserva a troca parcial 168, confirmações e totais reais/simulados',()=>{
  const {AC4Finance:finance,ServiceSimulation:simulation}=context.window,real=finance.month(data,'2026-11',4560000),plan=simulation.plan(data,'2026-11',4560000);
- assert.equal(real.records.length,91);assert.equal(real.committedCents,3259200);assert.equal(real.executedCents,1096600);assert.equal(plan.addedResources,14);assert.equal(plan.summary.committedCents,1183800);
- assert.equal(data['2026-11'].days.filter(day=>day.confirmation?.status==='confirmed').length,18);
+ assert.equal(real.records.length,98);assert.equal(real.committedCents,3924300);assert.equal(real.executedCents,1096600);assert.equal(plan.addedResources,4);assert.equal(plan.summary.committedCents,309100);
+ assert.equal(data['2026-11'].days.filter(day=>day.confirmation?.status==='confirmed').length,25);
  for(const date of ['2026-11-08','2026-11-29']){const d=day(date),partial=d.members.filter(member=>member.serviceHours===12);assert.equal(partial.length,2);assert.equal(simulation.coverage(d,date).resources,date==='2026-11-29'?6:5);}
  assert(!data['2026-10']);
 });
