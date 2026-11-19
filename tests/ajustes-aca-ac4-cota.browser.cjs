@@ -60,7 +60,7 @@ const root = path.join(__dirname, '..');
       assert.equal(copiedChief.rows.filter(row=>row[1]==='CHEFE DE ALA'&&row[2].includes('TAVARES')).length,1);
       await page.locator('#sei-close').click();
       for(const [number,name,hours,endDate,cost,resources,mode] of [
-        [21,'HELLYSSON',24,'22/11/2026','995,00',7,'OPERACIONAL/SOP'],
+        [20,'HELLYSSON',24,'21/11/2026','995,00',6,'OPERACIONAL/SOP'],
         [22,'LUIZ ANTONIO',24,'23/11/2026','965,00',7,'OPERACIONAL/SOP'],
         [23,'NIKHOLAS',12,'23/11/2026','360,00',6,'OPERACIONAL/SOP'],
         [24,'HELLYSSON',12,'24/11/2026','360,00',5,'PROEBOM 2026'],
@@ -78,8 +78,9 @@ const root = path.join(__dirname, '..');
         const scope=page.locator('#sei-order-scope');
         if(await scope.isEnabled())await scope.selectOption(await scope.locator('option').filter({hasText:'OS a definir'}).filter({hasText:mode}).getAttribute('value'));
         const copied=await copy('order');
-        assert.equal(copied.headers,0);assert.equal(copied.rows.length,1);
-        assert(copied.rows[0][4].includes(name));assert.equal(copied.rows[0][2],endDate);assert.equal(copied.rows[0][6],`${hours}h`);
+        assert.equal(copied.headers,0);assert.equal(copied.rows.length,number===20?3:1);
+        const copiedMember=copied.rows.filter(row=>row[4].includes(name));
+        assert.equal(copiedMember.length,1);assert.equal(copiedMember[0][2],endDate);assert.equal(copiedMember[0][6],`${hours}h`);
         await page.locator('#sei-close').click();
       }
       assert((await page.locator('#ac4-month-summary').textContent()).includes('45.840,00'));
@@ -96,7 +97,7 @@ const root = path.join(__dirname, '..');
     }
     assert.equal(await page.evaluate(()=>JSON.stringify(window.ServiceCalendar.schedules)),source);
     assert.deepEqual(errors,[]);
-    console.log('PASS: TAVARES ACA for 24h on 19/11 in calendar/ES/clipboard, HELLYSSON 21/24, LUIZ 22, NIKHOLAS 23, times/costs/OS copies, quota R$ 45840, real/simulated balances and preserved data; desktop/320/390px.');
+    console.log('PASS: TAVARES ACA for 24h on 19/11 in calendar/ES/clipboard, HELLYSSON 20/24, LUIZ 22, NIKHOLAS 23, times/costs/OS copies, quota R$ 45840, real/simulated balances and preserved data; desktop/320/390px.');
   } finally {
     if(browser)await browser.close();
     await new Promise(resolve=>server.close(resolve));

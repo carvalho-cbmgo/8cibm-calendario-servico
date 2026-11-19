@@ -23,7 +23,7 @@ const idFor = (day, key) => `ac4-operacional-${key}-2026-11-${day}-08h`;
 const ids = new Set(entries.map(([day, ,key]) => idFor(day, key)));
 const previous = () => {
   const copy = structuredClone(data);
-  for (const [number, resources] of [[20,3], [21,5], [22,5], [25,4]]) {
+  for (const [number, resources] of [[20,4], [21,4], [22,5], [25,4]]) {
     const day = copy['2026-11'].days.find(d => d.day === number);
     day.members = day.members.filter(m => !m.events.some(e => ids.has(e.serviceId)));
     day.coverage = [`${resources} recursos de 24h`, `Faltam ${6-resources} recurso${resources === 5 ? '' : 's'}`];
@@ -79,8 +79,8 @@ test('novos serviços somam R$ 6.651 sem alterar SAT, execuções ou tarifas', (
 
 test('confirmações, dados anteriores e chefia são preservados; cobertura atualiza sem novos reforços simulados', () => {
   const before = previous(), snapshot = JSON.stringify(data);
-  assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'), '7fc801ea38c537eff1ec8656081a92976b89a6d5360125382dbedc833e219b1e');
-  for (const [number, resources] of [[20,5], [21,7], [22,7], [25,5]]) {
+  assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'), 'a33b2ac7f45db76282d322dac5f35fa1a71a0eef5b8daa618879dc37c7e1d614');
+  for (const [number, resources] of [[20,6], [21,6], [22,7], [25,5]]) {
     const day = data['2026-11'].days.find(d => d.day === number);
     assert.equal(simulation.coverage(day, `2026-11-${number}`).resources, resources);
     assert.equal(parseInt(day.coverage[0]), resources);

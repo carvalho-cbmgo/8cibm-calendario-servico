@@ -20,7 +20,7 @@ test('SEI 98630755 dispensa HUGO em 20/11 e registra um pagamento de 24h em 29/1
     for (const badge of member.badges) if (badge.troca?.sei === '98630755') references.push([input.day, member.name, badge.kind]);
   }
   assert.deepEqual(references, [[20, 'SD HUGO', 'disp'], [29, 'SD HUGO', 'pay']]);
-  for (const [number, kind, ala, resources, leader] of [[20, 'disp', 'CHARLIE', 5, 'ST OSVALDIR'], [29, 'pay', 'DELTA', 6, 'ST DA SILVA']]) {
+  for (const [number, kind, ala, resources, leader] of [[20, 'disp', 'CHARLIE', 6, 'ST OSVALDIR'], [29, 'pay', 'DELTA', 6, 'ST DA SILVA']]) {
     const input = day(number), members = input.members.filter(m => m.name === 'SD HUGO');
     assert.equal(members.length, 1);
     const member = members[0];
@@ -112,5 +112,5 @@ test('inclusões de 18/11 preservam integralmente os demais dados do calendário
   twentyNinth.coverage = ['5 recursos de 24h', 'Faltam 1 recurso'];
   const input = days.find(d => d.day === 26);
   input.members = input.members.filter(m => !m.events.some(e => e.serviceId?.startsWith('ac4-2026-11-26-')));
-  assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'), '75a4d9bb79c258625162a1e8d8949777c25828b02c8be4af46a7d3fec6699518');
+  assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'), 'ecf04441281bc0d997985161bf5e64efa3d7a8afcd8e3a387253c48879c0571d');
 });

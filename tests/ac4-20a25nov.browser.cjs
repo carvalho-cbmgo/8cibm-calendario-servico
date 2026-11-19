@@ -3,8 +3,8 @@ const fs = require('node:fs'), http = require('node:http'), path = require('node
 const { chromium } = require('playwright');
 const root = path.join(__dirname, '..');
 const entries = [
-  { day: 20, number: '385', sei: '98726048', resources: 5, services: 2, cost: '995,00', names: ['WANDERSON', 'RABELO'] },
-  { day: 21, number: 'XXX', sei: '98726048', resources: 7, services: 3, cost: '995,00', names: ['DA SILVA', 'PICCINI'] },
+  { day: 20, number: '385', sei: '98726048', resources: 6, services: 3, cost: '995,00', names: ['HELLYSSON', 'WANDERSON', 'RABELO'] },
+  { day: 21, number: 'XXX', sei: '98726048', resources: 6, services: 2, cost: '995,00', names: ['DA SILVA', 'PICCINI'] },
   { day: 22, number: '387', sei: '98726469', resources: 7, services: 3, cost: '965,00', names: ['PASSOS', 'SANTOS'] },
   { day: 25, number: '388', sei: '98727025', resources: 5, services: 1, cost: '741,00', names: ['DIEGO'] },
 ];
@@ -98,7 +98,7 @@ const entries = [
     }
     assert.equal(await page.evaluate(() => JSON.stringify(window.ServiceCalendar.schedules)), source);
     assert.deepEqual(errors, []);
-    console.log('PASS: seven 24h AC4/168h/R$ 6651, 20/21/22/25 November, OS/SEI and preserved XXX placeholder, calendar/ES/OS/clipboard, costs, confirmation and no new simulated vacancies; desktop/320/390px.');
+    console.log('PASS: 24h AC4 on 20/21/22/25 November including HELLYSSON transferred to 20/11, OS/SEI and preserved XXX placeholder, calendar/ES/OS/clipboard, costs, confirmation and no new simulated vacancies; desktop/320/390px.');
   } finally {
     if (browser) await browser.close();
     await new Promise(resolve => server.close(resolve));

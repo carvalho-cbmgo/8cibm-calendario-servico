@@ -2,6 +2,8 @@
 
 Calendário HTML responsivo e estático para exibição da previsão de militares por ala, dos serviços SAT e do controle financeiro de AC4. Há dados de novembro/2026 a janeiro/2027; meses sem dados mostram essa condição.
 
+O **AC4 de 24h de HELLYSSON foi transferido de 21/11 para 20/11/2026**, das **08h de 20/11 às 08h de 21/11**, referente à **OS nº 385 (SEI 98726048)**. Não há duplicação em 21/11; ambos os dias ficam com seis recursos de 24h. O serviço mantém o custo de R$ 995,00 e o estado previsto. Os totais mensais, a cota, as confirmações e a simulação permanecem iguais. Os parágrafos seguintes registram as revisões anteriores.
+
 Na revisão de **19/11/2026**, **ST TAVARES foi designado expressamente como ACA das 24h de 19/11**. Foram incluídos **HELLYSSON em 21/11, 24h/08h–08h**, e **NIKHOLAS em 23/11, 12h/08h–20h**, com OS a definir. O PROEBOM de **HELLYSSON em 24/11 passou de 4h para 12h, 08h–20h**, mantendo a classificação e o identificador. O AC4 de **LUIZ ANTONIO em 22/11 passou para 24h, 08h de 22/11 às 08h de 23/11**; os de 29/11 e 06/12 continuam em 12h. As exclusões de simulação já configuradas por serviço foram preservadas. A cobertura de 21/22/23/24 fica em 7/7/6/5 recursos de 24h.
 
 A **cota de novembro é R$ 45.840,00**. O mês passa a **100 AC4/R$ 41.323,00 comprometidos** (Operacional R$ 32.193,00; SAT R$ 9.130,00), com **R$ 4.517,00 de saldo**. Os R$ 30.357,00 previstos e R$ 10.966,00 com execução confirmada preservam as tarifas existentes. A simulação continua com quatro serviços/R$ 3.091,00, deixando R$ 1.426,00 após o reforço simulado. As confirmações de 01–25 e os demais registros foram preservados. Os totais abaixo documentam as revisões anteriores.

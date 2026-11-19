@@ -20,7 +20,7 @@ test('0 preserva ranking atual e 1/2/3 somam meses anteriores inteiros, sem rest
 });
 
 test('4 inclui julho como não informado; zero explícito permanece conhecido e a soma é parcial',()=>{
- const result=rank(4,{startDate:'2026-11-21',endDate:'2026-11-21'});assert.equal(result.currentCents,298500);assert.equal(result.historyCents,17728600);assert.equal(result.missingHistoryPeople,27);
+ const result=rank(4,{startDate:'2026-11-21',endDate:'2026-11-21'});assert.equal(result.currentCents,199000);assert.equal(result.historyCents,17728600);assert.equal(result.missingHistoryPeople,27);
  const leide=result.rows.find(p=>p.member==='3º SGT LEIDE');assert.equal(leide.historyCents,0);assert.deepEqual(plain(leide.missingHistoryPeriods),['2026-07']);assert(leide.history.filter(p=>p.period!=='2026-07').every(p=>p.amountCents===0&&p.source==='consolidated'));assert.equal(leide.history.find(p=>p.period==='2026-07').amountCents,null);
 });
 

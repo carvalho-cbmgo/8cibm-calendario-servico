@@ -16,8 +16,8 @@ const previous = () => {
   const copy = structuredClone(data), nineteenth = day(copy, 19);
   delete nineteenth.shiftStart; delete nineteenth.chief;
   nineteenth.members.find(m => m.name === 'ST TAVARES').notes = ['Ordinário'];
-  day(copy, 21).members = day(copy, 21).members.filter(m => m.name !== '1º SGT HELLYSSON');
-  day(copy, 21).coverage = ['6 recursos de 24h', 'Meta de 6 recursos'];
+  day(copy, 20).members = day(copy, 20).members.filter(m => m.name !== '1º SGT HELLYSSON');
+  day(copy, 20).coverage = ['5 recursos de 24h', 'Faltam 1 recurso'];
   Object.assign(day(copy, 22).members.find(m => m.name === '2º SGT LUIZ ANTONIO').events[0], { end:'20h00', nextDay:false, hours:12, endDate:'2026-11-22' });
   day(copy, 22).coverage = ['6 recursos de 24h', 'Meta de 6 recursos'];
   day(copy, 23).members = day(copy, 23).members.filter(m => m.name !== '1º SGT NIKHOLAS');
@@ -37,7 +37,7 @@ test('TAVARES é o ACA expressamente designado para as 24h de 19/11, sem atribui
 test('HELLYSSON, LUIZ e NIKHOLAS têm os períodos retificados, com identidades e exclusões preservadas', () => {
   const summary = finance.month(data, '2026-11', config.monthlyQuotaCents['2026-11']);
   for (const [number,name,hours,endDate,cost,mode] of [
-    [21,'1º SGT HELLYSSON',24,'2026-11-22',99500,'OPERACIONAL/SOP'],
+    [20,'1º SGT HELLYSSON',24,'2026-11-21',99500,'OPERACIONAL/SOP'],
     [22,'2º SGT LUIZ ANTONIO',24,'2026-11-23',96500,'OPERACIONAL/SOP'],
     [23,'1º SGT NIKHOLAS',12,'2026-11-23',36000,'OPERACIONAL/SOP'],
     [24,'1º SGT HELLYSSON',12,'2026-11-24',36000,'PROEBOM 2026'],
@@ -49,9 +49,13 @@ test('HELLYSSON, LUIZ e NIKHOLAS têm os períodos retificados, com identidades 
     assert.equal(r.endDate, endDate); assert.equal(r.event.hours, hours); assert.equal(r.minutes, hours*60);
     assert.equal(r.event.mode, mode); assert.equal(r.event.nextDay, hours === 24);
     assert.equal(r.costCents, cost); assert.equal(r.status, 'forecast');
-    assert.equal(r.event.executionConfirmed, undefined); assert.equal(finance.documentInfo(r.event).number, '');
+    assert.equal(r.event.executionConfirmed, undefined); assert.equal(finance.documentInfo(r.event).number, number === 20 ? '385' : '');
     assert.equal(lookup.month(data,'2026-11').filter(s => s.date === `2026-11-${number}` && s.member === name && s.type === 'ac4').length, 1);
   }
+  assert(!day(data,21).members.some(m => m.name === '1º SGT HELLYSSON'));
+  const hellysson = day(data,20).members.find(m => m.name === '1º SGT HELLYSSON').events[0];
+  assert.equal(hellysson.serviceId, 'ac4-operacional-hellysson-2026-11-20-08h');
+  assert.equal(finance.documentInfo(hellysson).sei, '98726048');
   const luiz = day(data,22).members.find(m => m.name === '2º SGT LUIZ ANTONIO').events[0];
   assert.equal(luiz.serviceId, 'ac4-operacional-24h-luiz-antonio-2026-11-22-08h');
   assert.equal(luiz.excludeFromSimulation, true);
@@ -71,7 +75,8 @@ test('cota R$ 45.840 e AC4 atualizados mantêm tarifas, execuções e simulaçã
   assert.equal(summary.forecastCents,3035700); assert.equal(summary.executedCents,1096600);
   assert.equal(summary.remainingCents,451700); assert.equal(summary.committedCents-before.committedCents,208000);
   assert.equal(finance.asOf(summary,'2026-11-19').remainingCents,1951000);
-  assert.equal(simulation.coverage(day(data,21),'2026-11-21').resources,7);
+  assert.equal(simulation.coverage(day(data,20),'2026-11-20').resources,6);
+  assert.equal(simulation.coverage(day(data,21),'2026-11-21').resources,6);
   assert.equal(simulation.coverage(day(data,22),'2026-11-22').resources,7);
   assert.equal(simulation.coverage(day(data,22),'2026-11-22',undefined,{forSimulation:true}).resources,6);
   assert.equal(simulation.coverage(day(data,23),'2026-11-23').resources,6);

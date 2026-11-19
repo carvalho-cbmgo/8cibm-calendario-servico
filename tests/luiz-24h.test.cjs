@@ -90,7 +90,7 @@ test('a inclusão preserva todos os dados e AC4 anteriores nas três competênci
     const originalResources = resources - (date === '2026-11-22' ? 1 : 0), missing = 6 - originalResources;
     day.coverage = [`${originalResources} recursos de 24h`, missing > 0 ? `Faltam ${missing} recurso${missing === 1 ? '' : 's'}` : 'Meta de 6 recursos'];
   }
-  assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'), '26e0a5ff65cbec5900d754f9d7f113812f0610d2211c78e069cce4042d9792ff');
+  assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'), 'e256e4df6b2e06c57f8d33850986eb73ca0920e47767e1c3316223e400666f23');
   const original = finance.month(before, '2026-11', 4584000);
   assert.equal(summary('2026-11').committedCents - original.committedCents, 144500);
   assert.equal(summary('2026-11').satCents, original.satCents);
@@ -107,7 +107,7 @@ test('a retificação altera só duração, término e cobertura dos três servi
     const full = resources + (date === '2026-11-22' ? 0 : 1), missing = 6 - full;
     day.coverage = [`${full} recursos de 24h`, missing > 0 ? `Faltam ${missing} recurso` : 'Meta de 6 recursos'];
   }
-  assert.equal(createHash('sha256').update(JSON.stringify(previous)).digest('hex'), 'f35f2b314960af0255404c6c2b96febf444b601a25f010724f6a312794ca2f66');
+  assert.equal(createHash('sha256').update(JSON.stringify(previous)).digest('hex'), 'f5fdf6da66806ae2f9874b56d25a1384bb0aab79c65266cf1259c5f9a5fb0d87');
   assert.equal(finance.month(previous, '2026-11', 4584000).committedCents - summary('2026-11').committedCents, 48500);
   assert.equal(finance.month(previous, '2026-12').committedCents - summary('2026-12').committedCents, 48500);
 });

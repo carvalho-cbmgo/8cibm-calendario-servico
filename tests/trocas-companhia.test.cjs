@@ -30,7 +30,7 @@ test('nove autorizações da companhia têm suas 17 movimentações publicadas, 
 
 test('HENRIQUE paga 24h na Delta em 13/11 e fica dispensado na Charlie em 20/11',()=>{
  const {ServiceChief:chief,ServiceSimulation:simulation}=context.window,plan=simulation.plan(data,'2026-11',4584000);
- for(const [date,kind,ala,resources,reinforcements] of [['2026-11-13','pay','DELTA',6,0],['2026-11-20','disp','CHARLIE',5,0]]){
+ for(const [date,kind,ala,resources,reinforcements] of [['2026-11-13','pay','DELTA',6,0],['2026-11-20','disp','CHARLIE',6,0]]){
   const input=day(date),members=input.members.filter(member=>member.name==='3º SGT HENRIQUE');assert.equal(members.length,1);assert.equal(input.ala,ala);assert.equal(input.confirmation?.status,'confirmed');assert.equal(members[0].ord,22);
   assert.equal(members[0].badges.length,1);assert.equal(members[0].badges[0].kind,kind);assert.equal(members[0].events.length,0);assert.equal(simulation.coverage(input,date).resources,resources);assert.equal(parseInt(input.coverage[0]),resources);
   assert.equal(plan.days.get(Number(date.slice(8))).addedServices,reinforcements);assert.equal(chief.select(input).assignments[0].name,'ST OSVALDIR');
