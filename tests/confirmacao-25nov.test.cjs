@@ -26,7 +26,7 @@ test('escalas de 1 a 25/11 estão confirmadas, com sete novas confirmações em 
       assert.deepEqual(day.confirmation, { status: 'confirmed', date: '2026-11-19', source: 'user', scope: 'calendar', previousAlerts: [] });
     }
   }
-  assert.equal(createHash('sha256').update(JSON.stringify(previous())).digest('hex'), '73aca8e9b07c93c611b128621ce7ec3529ef3bf25c71111975e734e38b2d2af8');
+  assert.equal(createHash('sha256').update(JSON.stringify(previous())).digest('hex'), '0a05357e0a21bf1259ceb7a9fb9094bf3d99f9211cbd25bbc63efe95c4df555c');
 });
 
 test('confirmar a escala preserva integralmente AC4, execuções, tarifas, cobertura e chefia', () => {
@@ -42,23 +42,23 @@ test('confirmar a escala preserva integralmente AC4, execuções, tarifas, cober
     assert.equal(JSON.stringify(chief.select(day)), JSON.stringify(chief.select(old)));
     assert.equal(JSON.stringify(simulation.coverage(day, `2026-11-${String(day.day).padStart(2, '0')}`)), JSON.stringify(simulation.coverage(old, `2026-11-${String(day.day).padStart(2, '0')}`)));
   }
-  const summary = finance.month(data, '2026-11', 4560000);
-  assert.equal(summary.records.length, 98);
-  assert.equal(summary.committedCents, 3924300);
-  assert.equal(summary.forecastCents, 2827700);
+  const summary = finance.month(data, '2026-11', 4584000);
+  assert.equal(summary.records.length, 100);
+  assert.equal(summary.committedCents, 4132300);
+  assert.equal(summary.forecastCents, 3035700);
   assert.equal(summary.executedCents, 1096600);
-  assert.equal(summary.remainingCents, 635700);
+  assert.equal(summary.remainingCents, 451700);
 });
 
 test('somente os dias a partir de 26/11 recebem reforços simulados, em todas as metas', () => {
   const before = previous(), source = JSON.stringify(data);
   for (let target = 4; target <= 8; target++) {
-    const actual = simulation.plan(data, '2026-11', 4560000, undefined, target);
-    const old = simulation.plan(before, '2026-11', 4560000, undefined, target);
+    const actual = simulation.plan(data, '2026-11', 4584000, undefined, target);
+    const old = simulation.plan(before, '2026-11', 4584000, undefined, target);
     for (let day = 1; day <= 25; day++) assert.equal(actual.days.get(day).addedServices, 0);
     for (let day = 26; day <= 30; day++) assert.equal(JSON.stringify(actual.days.get(day)), JSON.stringify(old.days.get(day)));
   }
-  const plan = simulation.plan(data, '2026-11', 4560000);
+  const plan = simulation.plan(data, '2026-11', 4584000);
   assert.equal(plan.addedServices, 4);
   assert.equal(plan.daysAffected, 3);
   assert.equal(plan.summary.committedCents, 309100);

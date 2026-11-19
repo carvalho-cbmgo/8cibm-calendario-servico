@@ -29,7 +29,7 @@ test('nove autorizações da companhia têm suas 17 movimentações publicadas, 
 });
 
 test('HENRIQUE paga 24h na Delta em 13/11 e fica dispensado na Charlie em 20/11',()=>{
- const {ServiceChief:chief,ServiceSimulation:simulation}=context.window,plan=simulation.plan(data,'2026-11',4560000);
+ const {ServiceChief:chief,ServiceSimulation:simulation}=context.window,plan=simulation.plan(data,'2026-11',4584000);
  for(const [date,kind,ala,resources,reinforcements] of [['2026-11-13','pay','DELTA',6,0],['2026-11-20','disp','CHARLIE',5,0]]){
   const input=day(date),members=input.members.filter(member=>member.name==='3º SGT HENRIQUE');assert.equal(members.length,1);assert.equal(input.ala,ala);assert.equal(input.confirmation?.status,'confirmed');assert.equal(members[0].ord,22);
   assert.equal(members[0].badges.length,1);assert.equal(members[0].badges[0].kind,kind);assert.equal(members[0].events.length,0);assert.equal(simulation.coverage(input,date).resources,resources);assert.equal(parseInt(input.coverage[0]),resources);
@@ -48,9 +48,9 @@ test('OSVALDIR fica dispensado em 28/11 e paga em 05/12, com cobertura e chefia 
 });
 
 test('trocas e férias canceladas preservam os AC4 reais e atualizam a necessidade simulada',()=>{
- const {AC4Finance:finance,ServiceSimulation:simulation}=context.window,real=finance.month(data,'2026-11',4560000),november=simulation.plan(data,'2026-11',4560000),december=simulation.plan(data,'2026-12'),january=simulation.plan(data,'2027-01');
- assert.equal(real.records.length,98);assert.equal(real.committedCents,3924300);assert.equal(real.executedCents,1096600);assert.equal(real.remainingCents,635700);
- assert.equal(november.addedResources,4);assert.equal(november.summary.committedCents,309100);assert.equal(november.days.get(28).addedResources,2);assert.equal(real.committedCents+november.summary.committedCents,4233400);
+ const {AC4Finance:finance,ServiceSimulation:simulation}=context.window,real=finance.month(data,'2026-11',4584000),november=simulation.plan(data,'2026-11',4584000),december=simulation.plan(data,'2026-12'),january=simulation.plan(data,'2027-01');
+ assert.equal(real.records.length,100);assert.equal(real.committedCents,4132300);assert.equal(real.executedCents,1096600);assert.equal(real.remainingCents,451700);
+ assert.equal(november.addedResources,4);assert.equal(november.summary.committedCents,309100);assert.equal(november.days.get(28).addedResources,2);assert.equal(real.committedCents+november.summary.committedCents,4441400);
  assert.equal(december.addedResources,31);assert.equal(december.summary.committedCents,2582500);assert.equal(december.days.get(5).addedResources,1);assert.equal(december.summary.quotaCents,null);
  assert.equal(january.addedResources,24);assert.equal(january.summary.committedCents,2080200);assert.equal(data['2026-11'].days.filter(day=>day.confirmation?.status==='confirmed').length,25);
 });

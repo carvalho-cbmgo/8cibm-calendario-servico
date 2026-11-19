@@ -57,17 +57,17 @@ test('OS e SEI são identificados independentemente da confirmação da execuç�
 
 test('revisões e cancelamentos têm um registro canônico para finanças e tabelas',()=>{
   const original=event(),revised=event({revision:2,document:'OS nº 347; SEI 97833404'});
-  const summary=finance.month(schedule([original,revised]),'2026-11',4560000);
+  const summary=finance.month(schedule([original,revised]),'2026-11',4584000);
   assert.equal(summary.committedCents,12000);assert.equal(summary.duplicateCount,1);assert.equal(summary.records.length,1);
   assert.equal(summary.byEvent.get(original).event,revised);assert.equal(summary.byEvent.get(revised).event,revised);
   const cancelled=event({revision:3,cancelled:true});
-  const after=finance.month(schedule([original,revised,cancelled]),'2026-11',4560000);
+  const after=finance.month(schedule([original,revised,cancelled]),'2026-11',4584000);
   assert.equal(after.committedCents,0);assert.equal(after.cancelledCount,1);assert.equal(after.byEvent.get(original).event,cancelled);
 });
 
 test('competência usa início do serviço e mantém aliases consultáveis em outro mês',()=>{
   const source=event({startDate:'2026-11-30',endDate:'2026-12-01',end:'08h00',hours:24});
-  const data=schedule([source],30),november=finance.month(data,'2026-11',4560000),december=finance.month(data,'2026-12');
+  const data=schedule([source],30),november=finance.month(data,'2026-11',4584000),december=finance.month(data,'2026-12');
   assert.equal(november.committedCents,74100);assert.equal(december.committedCents,0);assert.equal(december.quotaCents,null);
   assert.equal(december.byEvent.get(source).event,source);
 });
@@ -75,9 +75,9 @@ test('competência usa início do serviço e mantém aliases consultáveis em ou
 test('SAT e PROEBOM, acumulados inclusivos, execução confirmada e saldo',()=>{
   const op=event({mode:'PROEBOM 2026'}),sat=event({mode:'SAT',executionConfirmed:true});
   const data={'2026-11':{days:[{day:3,members:[member([op])],sat:{members:[member([sat],{name:'3º SGT TESTE'})]}},{day:5,members:[member([event({cancelled:true})])]}]}};
-  const summary=finance.month(data,'2026-11',4560000),day=summary.daily.get('2026-11-03');
+  const summary=finance.month(data,'2026-11',4584000),day=summary.daily.get('2026-11-03');
   assert.equal(summary.operationalCents,12000);assert.equal(summary.satCents,12000);assert.equal(summary.forecastCents,12000);assert.equal(summary.executedCents,12000);
-  assert.equal(day.cumulativeCents,24000);assert.equal(day.cumulativeOperationalCents,12000);assert.equal(day.cumulativeSatCents,12000);assert.equal(day.remainingCents,4536000);
+  assert.equal(day.cumulativeCents,24000);assert.equal(day.cumulativeOperationalCents,12000);assert.equal(day.cumulativeSatCents,12000);assert.equal(day.remainingCents,4560000);
   assert.equal(summary.daily.get('2026-11-02').cumulativeCents,0);assert.equal(summary.daily.get('2026-11-30').cumulativeCents,24000);
   assert.equal(finance.month(data,'2026-11').remainingCents,null);
 });
@@ -98,29 +98,29 @@ test('todos os meses cadastrados mantêm totais e acumulados consistentes',()=>{
 });
 
 test('AC4 corrente inclui o dia de acesso, Operacional e SAT, sem incluir serviços posteriores',()=>{
-  const data=JSON.parse(scripts.find(([,attrs])=>attrs.includes('id="calendar-data"'))[2]),summary=finance.month(data,'2026-11',4560000);
-  const current=finance.asOf(summary,'2026-11-09');assert.equal(current.date,'2026-11-09');assert.equal(current.committedCents,1197700);assert.equal(current.operationalCents,1017700);assert.equal(current.satCents,180000);assert.equal(current.remainingCents,3362300);
+  const data=JSON.parse(scripts.find(([,attrs])=>attrs.includes('id="calendar-data"'))[2]),summary=finance.month(data,'2026-11',4584000);
+  const current=finance.asOf(summary,'2026-11-09');assert.equal(current.date,'2026-11-09');assert.equal(current.committedCents,1197700);assert.equal(current.operationalCents,1017700);assert.equal(current.satCents,180000);assert.equal(current.remainingCents,3386300);
   assert.equal(current.committedCents,current.operationalCents+current.satCents);assert.equal(current.committedCents+current.remainingCents,summary.quotaCents);assert(current.committedCents<summary.committedCents);
   assert.equal(finance.asOf(summary,'2026-11-12').committedCents,1438900);assert.equal(finance.asOf(summary,'2026-11-08').committedCents,1096600);
 });
 
 test('AC4 corrente respeita meses anteriores/futuros e não inventa cota',()=>{
-  const data=schedule([event()]),summary=finance.month(data,'2026-11',4560000);
-  assert.equal(finance.asOf(summary,'2026-10-31').committedCents,0);assert.equal(finance.asOf(summary,'2026-10-31').remainingCents,4560000);
+  const data=schedule([event()]),summary=finance.month(data,'2026-11',4584000);
+  assert.equal(finance.asOf(summary,'2026-10-31').committedCents,0);assert.equal(finance.asOf(summary,'2026-10-31').remainingCents,4584000);
   assert.equal(finance.asOf(summary,'2026-12-05').committedCents,12000);assert.equal(finance.asOf(summary,'2026-12-05').cutoffDate,'2026-11-30');
   assert.equal(finance.asOf(finance.month(data,'2026-11'),'2026-11-30').remainingCents,null);assert.throws(()=>finance.asOf(summary,'2026-11-31'),/inválida/);
 });
 
 test('acumulados correntes acompanham revisão/cancelamento e usam a data inicial dos noturnos',()=>{
   const original=event({serviceId:'asof-night-test',start:'20h00',end:'08h00',nextDay:true,hours:12}),revised={...original,revision:2,end:'00h00',hours:4};
-  const data=schedule([original,revised],5),summary=finance.month(data,'2026-11',4560000);
+  const data=schedule([original,revised],5),summary=finance.month(data,'2026-11',4584000);
   assert.equal(finance.asOf(summary,'2026-11-04').committedCents,0);assert.equal(finance.asOf(summary,'2026-11-05').committedCents,12600);assert.equal(finance.asOf(summary,'2026-11-06').committedCents,12600);
-  revised.cancelled=true;assert.equal(finance.asOf(finance.month(data,'2026-11',4560000),'2026-11-05').committedCents,0);
+  revised.cancelled=true;assert.equal(finance.asOf(finance.month(data,'2026-11',4584000),'2026-11-05').committedCents,0);
 });
 
 test('seis AC4 noturnos de LUIZ ANTONIO são previstos de 12h, sem duplicação ou execução presumida',()=>{
   const data=JSON.parse(scripts.find(([,attrs])=>attrs.includes('id="calendar-data"'))[2]);
-  const summary=finance.month(data,'2026-11',4560000),dates=[10,12,17,19,24,26];
+  const summary=finance.month(data,'2026-11',4584000),dates=[10,12,17,19,24,26];
   const records=summary.records.filter(record=>record.event.serviceId?.startsWith('ac4-operacional-luiz-antonio-'));
   assert.equal(records.length,6);assert.equal(new Set(records.map(record=>record.key)).size,6);
   assert.deepEqual(plain(records.map(record=>[record.startDate,record.endDate,record.costCents])),[
@@ -132,23 +132,23 @@ test('seis AC4 noturnos de LUIZ ANTONIO são previstos de 12h, sem duplicação 
   }
   for(const date of dates){const members=data['2026-11'].days.find(day=>day.day===date).members.filter(member=>member.name==='2º SGT LUIZ ANTONIO');assert.equal(members.length,1);assert.equal(members[0].ord,16);assert.equal(members[0].events.length,1);assert.equal(members[0].badges.length,0);}
   assert.equal(records.reduce((total,record)=>total+record.costCents,0),237600);
-  assert.equal(summary.operationalCents,3011300);assert.equal(summary.satCents,913000);assert.equal(summary.committedCents,3924300);assert.equal(summary.forecastCents,2827700);assert.equal(summary.executedCents,1096600);assert.equal(summary.remainingCents,635700);
+  assert.equal(summary.operationalCents,3219300);assert.equal(summary.satCents,913000);assert.equal(summary.committedCents,4132300);assert.equal(summary.forecastCents,3035700);assert.equal(summary.executedCents,1096600);assert.equal(summary.remainingCents,451700);
 });
 
 test('errata da OS 356 vincula os três AC4 de 10/11 sem duplicar serviços ou confirmar execução',()=>{
-  const data=JSON.parse(scripts.find(([,attrs])=>attrs.includes('id="calendar-data"'))[2]),summary=finance.month(data,'2026-11',4560000),records=summary.records.filter(record=>record.event.document?.includes('98274343'));
+  const data=JSON.parse(scripts.find(([,attrs])=>attrs.includes('id="calendar-data"'))[2]),summary=finance.month(data,'2026-11',4584000),records=summary.records.filter(record=>record.event.document?.includes('98274343'));
   assert.deepEqual(plain(records.map(record=>[record.member,record.startDate,record.start,record.endDate,record.end,record.costCents])),[
     ['1º SGT HELLYSSON','2026-11-10','08h00','2026-11-10','12h00',12000],
     ['2º SGT LUIZ ANTONIO','2026-11-10','20h00','2026-11-11','08h00',38100],
     ['3º SGT HENRIQUE','2026-11-10','08h00','2026-11-10','12h00',12000]
   ]);
   for(const record of records){assert.deepEqual(plain(finance.documentInfo(record.event)),{number:'356/2026',sei:'98274343'});assert(record.event.document.includes('OS original SEI 98070695'));assert(record.event.document.includes('202500011045608'));assert.equal(record.status,'forecast');assert.equal(record.event.executionConfirmed,undefined);}
-  assert.equal(summary.records.length,98);assert.equal(summary.committedCents,3924300);assert.equal(summary.executedCents,1096600);assert.equal(summary.daily.get('2026-11-10').operationalCents,62100);assert.equal(summary.daily.get('2026-11-10').committedCents,104100);
+  assert.equal(summary.records.length,100);assert.equal(summary.committedCents,4132300);assert.equal(summary.executedCents,1096600);assert.equal(summary.daily.get('2026-11-10').operationalCents,62100);assert.equal(summary.daily.get('2026-11-10').committedCents,104100);
   assert(records.filter(record=>record.member!=='2º SGT LUIZ ANTONIO').every(record=>record.event.mode==='PROEBOM 2026'));assert.equal(data['2026-11'].days[9].confirmation.status,'confirmed');
 });
 
 test('retificação SAT de WANDERSON em 10 e 12/11 ajusta períodos e custos sem duplicar serviços ou confirmar execução',()=>{
-  const data=JSON.parse(scripts.find(([,attrs])=>attrs.includes('id="calendar-data"'))[2]),summary=finance.month(data,'2026-11',4560000);
+  const data=JSON.parse(scripts.find(([,attrs])=>attrs.includes('id="calendar-data"'))[2]),summary=finance.month(data,'2026-11',4584000);
   for(const [day,start,hours,cost,sat,total] of [[10,'08h00',10,30000,42000,104100],[12,'07h00',11,33000,45000,122100]]){
     const date=`2026-11-${day}`,members=data['2026-11'].days.find(item=>item.day===day).sat.members.filter(member=>member.name==='2º SGT WANDERSON'),records=summary.records.filter(record=>record.member==='2º SGT WANDERSON'&&record.startDate===date&&record.category==='sat');
     assert.equal(members.length,1);assert.equal(members[0].events.length,1);assert.equal(members[0].badges.length,0);assert.equal(records.length,1);
@@ -156,7 +156,7 @@ test('retificação SAT de WANDERSON em 10 e 12/11 ajusta períodos e custos sem
     assert.equal(summary.daily.get(date).satCents,sat);assert.equal(summary.daily.get(date).committedCents,total);
   }
   assert.equal(summary.daily.get('2026-11-10').cumulativeCents,1301800);assert.equal(summary.daily.get('2026-11-11').cumulativeCents,1316800);assert.equal(summary.daily.get('2026-11-12').cumulativeCents,1438900);
-  assert.equal(summary.records.length,98);assert.equal(summary.satCents,913000);assert.equal(summary.committedCents,3924300);assert.equal(summary.remainingCents,635700);assert.equal(summary.executedCents,1096600);
+  assert.equal(summary.records.length,100);assert.equal(summary.satCents,913000);assert.equal(summary.committedCents,4132300);assert.equal(summary.remainingCents,451700);assert.equal(summary.executedCents,1096600);
 });
 
 test('chefia respeita antiguidade, ausência, ODD e pendências de períodos parciais',()=>{
@@ -276,14 +276,14 @@ test('reforço adicional entra somente com AC4 até o corte e fica sem antiguida
   const officers=finance.ranking(summary,'2026-11-07',true,{...options,includeOfficers:true});
   assert.equal(officers.rows.length,31);assert.equal(officers.totalCents,1096600);
   const full=finance.ranking(summary,'2026-12-01',true,{...options,includeOfficers:true});
-  assert.equal(full.totalCents,summary.committedCents);assert.equal(full.totalCents,3924300);
+  assert.equal(full.totalCents,summary.committedCents);assert.equal(full.totalCents,4132300);
 });
 
 test('ranking filtra início e fim inclusivos, somando Operacional e SAT pela data inicial do AC4',()=>{
   const data=JSON.parse(scripts.find(([,attrs])=>attrs.includes('id="calendar-data"'))[2]),summary=finance.month(data,'2026-11');
   const range=(startDate,endDate)=>finance.ranking(summary,'2026-11-09',true,{startDate,endDate});
-  const result=range('2026-11-12','2026-11-26');assert.equal(result.startDate,'2026-11-12');assert.equal(result.cutoffDate,'2026-11-26');assert.equal(result.recordCount,53);assert.equal(result.totalCents,2330500);assert.equal(result.executedCents,0);assert.equal(result.forecastCents,2330500);
-  const luiz=result.rows.find(person=>person.member==='2º SGT LUIZ ANTONIO');assert.equal(luiz.records.length,6);assert.equal(luiz.monthlyRecords.length,11);assert.equal(luiz.totalCents,247500);assert.equal(result.rows[0].member,'2º SGT WANDERSON');
+  const result=range('2026-11-12','2026-11-26');assert.equal(result.startDate,'2026-11-12');assert.equal(result.cutoffDate,'2026-11-26');assert.equal(result.recordCount,55);assert.equal(result.totalCents,2538500);assert.equal(result.executedCents,0);assert.equal(result.forecastCents,2538500);
+  const luiz=result.rows.find(person=>person.member==='2º SGT LUIZ ANTONIO');assert.equal(luiz.records.length,6);assert.equal(luiz.monthlyRecords.length,11);assert.equal(luiz.totalCents,296000);assert.equal(result.rows[0].member,'2º SGT LUIZ ANTONIO');
   const twelfth=range('2026-11-12','2026-11-12');assert.equal(twelfth.operationalCents,77100);assert.equal(twelfth.satCents,45000);assert.equal(twelfth.totalCents,122100);
   const thirteenth=range('2026-11-13','2026-11-13');assert.equal(thirteenth.totalCents,259000);assert(!thirteenth.rows.some(person=>person.member==='2º SGT LUIZ ANTONIO'));
   assert.equal(range('2026-11-01','2026-11-30').totalCents,summary.committedCents);
@@ -292,7 +292,7 @@ test('ranking filtra início e fim inclusivos, somando Operacional e SAT pela da
 test('intervalos sem AC4 mantêm os 27 praças, e filtros de oficiais e antiguidade usam os valores do período',()=>{
   const data=JSON.parse(scripts.find(([,attrs])=>attrs.includes('id="calendar-data"'))[2]),summary=finance.month(data,'2026-11'),options={startDate:'2026-11-21',endDate:'2026-11-21',personnel:rankingPersonnel,includeOfficers:false};
   const empty=finance.ranking(finance.month({'2026-11':{days:[]}},'2026-11'),'2026-11-09',true,options);assert.equal(empty.rows.length,27);assert.equal(empty.totalCents,0);assert.equal(empty.recordCount,0);assert(!empty.rows.some(person=>person.member==='1º SGT FERREIRA'));
-  const all=finance.ranking(summary,'2026-11-09',true,{...options,startDate:'2026-11-12',endDate:'2026-11-26',includeOfficers:true,sortBySeniority:true});assert.equal(all.rows.length,30);assert.deepEqual(plain(all.rows.map(person=>person.ord)),Array.from({length:30},(_,index)=>index+1));assert.equal(all.totalCents,2330500);
+  const all=finance.ranking(summary,'2026-11-09',true,{...options,startDate:'2026-11-12',endDate:'2026-11-26',includeOfficers:true,sortBySeniority:true});assert.equal(all.rows.length,30);assert.deepEqual(plain(all.rows.map(person=>person.ord)),Array.from({length:30},(_,index)=>index+1));assert.equal(all.totalCents,2538500);
 });
 
 test('ranking rejeita datas inválidas, fora do mês e intervalos invertidos',()=>{

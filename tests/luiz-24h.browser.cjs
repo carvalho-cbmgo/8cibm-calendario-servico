@@ -31,7 +31,7 @@ const files = { '/': 'index.html', '/assets/cbmgo-emblema.png': 'assets/cbmgo-em
     const source = await page.evaluate(() => JSON.stringify(window.ServiceCalendar.schedules));
     for (const width of [1280, 390, 320]) {
       await page.setViewportSize({ width, height: 1000 });
-      for (const [period, number, end, resources] of [['2026-11', 22, '22/11/2026', 6], ['2026-11', 29, '29/11/2026', 6], ['2026-12', 6, '06/12/2026', 5]]) {
+      for (const [period, number, end, resources, hours, cost] of [['2026-11', 22, '23/11/2026', 7, 24, '965,00'], ['2026-11', 29, '29/11/2026', 6, 12, '480,00'], ['2026-12', 6, '06/12/2026', 5, 12, '480,00']]) {
         let current = await page.evaluate(() => window.ServiceCalendar.period);
         while (current !== period) {
           await page.locator(current < period ? '#mes-seguinte' : '#mes-anterior').click();
@@ -42,23 +42,23 @@ const files = { '/': 'index.html', '/assets/cbmgo-emblema.png': 'assets/cbmgo-em
         if (await toggle.getAttribute('aria-expanded') === 'false') await toggle.click();
         const member = card.locator('.operational-roster .entry').filter({ has: page.locator('.name', { hasText: 'LUIZ ANTONIO' }) });
         assert.equal(await member.count(), 1);
-        assert.equal(await member.locator('.chip.ac4').textContent(), 'AC4 12h');
-        assert.equal(await member.locator('.ac4-period').textContent(), '8h às 20h');
-        assert((await member.locator('.ac4-cost').textContent()).includes('480,00'));
+        assert.equal(await member.locator('.chip.ac4').textContent(), `AC4 ${hours}h`);
+        assert.equal(await member.locator('.ac4-period').textContent(), hours === 24 ? '8h às 8h' : '8h às 20h');
+        assert((await member.locator('.ac4-cost').textContent()).includes(cost));
         assert.equal(await card.locator('.resource-total').textContent(), `${resources} recursos de 24h`);
         await card.locator('.operational-section [data-details]').click();
         assert((await page.locator('#detalhes-conteudo').textContent()).includes('LUIZ ANTONIO'));
-        assert((await page.locator('#detalhes-conteudo').textContent()).includes('480,00'));
+        assert((await page.locator('#detalhes-conteudo').textContent()).includes(cost));
         await page.locator('#fechar-detalhes').click();
         await card.locator('.operational-section [data-sei-day]').click();
         const scale = page.locator('#sei-scale-table tbody tr').filter({ has: page.locator('td:nth-child(3)', { hasText: 'LUIZ ANTONIO' }) });
         const order = page.locator('#sei-order-table tbody tr').filter({ hasText: 'LUIZ ANTONIO' });
         assert.equal(await scale.count(), 1);
-        assert.equal(await scale.locator('td').nth(5).textContent(), '12h');
+        assert.equal(await scale.locator('td').nth(5).textContent(), `${hours}h`);
         assert((await scale.locator('td').nth(4).textContent()).includes('PREVISTO'));
         assert.equal(await order.count(), 1);
         const cells = await order.locator('td').allTextContents();
-        assert.deepEqual([cells[0], cells[1], cells[2], cells[3], cells[6]], [`${String(number).padStart(2, '0')}/${period.slice(5)}/2026`, '08h00', end, '20h00', '12h']);
+        assert.deepEqual([cells[0], cells[1], cells[2], cells[3], cells[6]], [`${String(number).padStart(2, '0')}/${period.slice(5)}/2026`, '08h00', end, hours === 24 ? '08h00' : '20h00', `${hours}h`]);
         await page.locator('#sei-close').click();
         await page.locator('[data-ac4-simulation]').click();
         await page.locator('#ac4-simulation-target').selectOption('6');
@@ -66,8 +66,8 @@ const files = { '/': 'index.html', '/assets/cbmgo-emblema.png': 'assets/cbmgo-em
         const expected = period === '2026-12' ? 1 : 0;
         assert.equal(await card.locator('.simulation-entry').count(), expected);
         assert.deepEqual(await card.locator('.simulation-entry .ac4-period').allTextContents(), Array(expected).fill('8h às 8h'));
-        assert.equal(await member.locator('.chip.ac4').textContent(), 'AC4 12h');
-        assert((await member.locator('.ac4-cost').textContent()).includes('480,00'));
+        assert.equal(await member.locator('.chip.ac4').textContent(), `AC4 ${hours}h`);
+        assert((await member.locator('.ac4-cost').textContent()).includes(cost));
         await page.locator('#whatsapp-vacancies-button').click();
         const date = `${period}-${String(number).padStart(2, '0')}`;
         await page.locator('#vacancy-start').selectOption(date);
@@ -81,13 +81,13 @@ const files = { '/': 'index.html', '/assets/cbmgo-emblema.png': 'assets/cbmgo-em
         await page.locator('[data-ac4-simulation]').click();
         await page.locator('#ac4-simulation-disregard').click();
         assert.equal(await card.locator('.simulation-entry').count(), 0);
-        assert.equal(await member.locator('.chip.ac4').textContent(), 'AC4 12h');
+        assert.equal(await member.locator('.chip.ac4').textContent(), `AC4 ${hours}h`);
         assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
       }
     }
     assert.equal(await page.evaluate(() => JSON.stringify(window.ServiceCalendar.schedules)), source);
     assert.deepEqual(errors, []);
-    console.log('PASS: três AC4 12h de LUIZ ANTONIO, R$ 480 cada, ES/OS preservadas e exclusão do cálculo dos reforços; vagas de 24h no calendário/WhatsApp e desativação sem alterar os serviços; 1280/390/320px.');
+    console.log('PASS: LUIZ ANTONIO 24h em 22/11 e 12h em 29/11 e 06/12, períodos/valores/ES/OS e exclusões preservadas; calendário/WhatsApp e desativação sem alterar serviços; 1280/390/320px.');
   } finally {
     if (browser) await browser.close();
     await new Promise(resolve => server.close(resolve));

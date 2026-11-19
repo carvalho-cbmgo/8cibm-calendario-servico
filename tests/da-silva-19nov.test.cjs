@@ -20,7 +20,7 @@ const previous = () => {
 };
 
 test('ST DA SILVA tem um AC4 operacional previsto de 12h em 19/11, OS 383/SEI 98682020, a R$ 360', () => {
-  const summary = finance.month(data, '2026-11', 4560000);
+  const summary = finance.month(data, '2026-11', 4584000);
   const records = summary.records.filter(r => r.event.serviceId === id);
   assert.equal(records.length, 1);
   const record = records[0];
@@ -42,14 +42,14 @@ test('ST DA SILVA tem um AC4 operacional previsto de 12h em 19/11, OS 383/SEI 98
   assert.equal(services.length, 1);
   assert.equal(services[0].type, 'ac4');
   assert.equal(services[0].commitmentCents, 36000);
-  const before = finance.month(previous(), '2026-11', 4560000);
-  assert.equal(summary.records.length, 98);
-  assert.equal(summary.committedCents, 3924300);
-  assert.equal(summary.operationalCents, 3011300);
+  const before = finance.month(previous(), '2026-11', 4584000);
+  assert.equal(summary.records.length, 100);
+  assert.equal(summary.committedCents, 4132300);
+  assert.equal(summary.operationalCents, 3219300);
   assert.equal(summary.satCents, 913000);
-  assert.equal(summary.forecastCents, 2827700);
+  assert.equal(summary.forecastCents, 3035700);
   assert.equal(summary.executedCents, 1096600);
-  assert.equal(summary.remainingCents, 635700);
+  assert.equal(summary.remainingCents, 451700);
   for (const [date, daily] of summary.daily) {
     assert.equal(daily.committedCents - before.daily.get(date).committedCents, date === record.startDate ? 36000 : 0);
     assert.equal(daily.cumulativeCents - before.daily.get(date).cumulativeCents, date >= record.startDate ? 36000 : 0);
@@ -60,24 +60,25 @@ test('ST DA SILVA tem um AC4 operacional previsto de 12h em 19/11, OS 383/SEI 98
 
 test('o diurno complementa o noturno de LUIZ, elimina a vaga simulada e preserva os demais dados e tarifas', () => {
   const before = previous(), source = JSON.stringify(data);
-  assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'), '385b77e6c9db640eb34a736610487c5c9d97942186a8b0406ce234fe32ec3f65');
+  assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'), '11c9ea45f72c08152664da84460f6713e88c80eb29ab060d1aae812eb0e84d36');
   const coverage = simulation.coverage(day(data), '2026-11-19');
   assert.equal(coverage.resources, 6);
   assert(coverage.segments.every(s => s.resources === 6));
   assert.deepEqual(day(data).coverage, ['6 recursos de 24h', 'Meta de 6 recursos']);
-  // Existing chief rules require explicit confirmation when a senior member works a partial shift.
-  assert.equal(chief.select(day(data)).status, 'pending');
+  // The user expressly assigned the full 24h chief role to TAVARES.
+  assert.equal(chief.select(day(data)).status, 'selected');
+  assert.equal(chief.select(day(data)).assignments[0].name, 'ST TAVARES');
   for (let target = 4; target <= 8; target++) {
     const unconfirmed = structuredClone(data), originalDay = structuredClone(before);
     delete day(unconfirmed).confirmation; delete day(originalDay).confirmation;
-    const actual = simulation.plan(unconfirmed, '2026-11', 4560000, undefined, target);
-    const original = simulation.plan(originalDay, '2026-11', 4560000, undefined, target);
+    const actual = simulation.plan(unconfirmed, '2026-11', 4584000, undefined, target);
+    const original = simulation.plan(originalDay, '2026-11', 4584000, undefined, target);
     assert.equal(original.summary.committedCents - actual.summary.committedCents, target >= 6 ? 36000 : 0);
     for (const number of data['2026-11'].days.map(d => d.day).filter(n => n !== 19)) {
       assert.equal(JSON.stringify(actual.days.get(number)), JSON.stringify(original.days.get(number)));
     }
   }
-  const plan = simulation.plan(data, '2026-11', 4560000);
+  const plan = simulation.plan(data, '2026-11', 4584000);
   assert.equal(plan.days.get(19).addedServices, 0);
   assert.equal(plan.addedServices, 4);
   assert.equal(plan.daysAffected, 3);

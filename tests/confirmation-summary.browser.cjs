@@ -52,14 +52,14 @@ const contrast = (text, background) => {
       assert([...styles.rows[0], ...styles.rows[3]].every(cell => cell.weight >= 800));
       assert.equal(await page.locator('.current-finance h2').textContent(), 'AC4 HOJE - 19/11/2026');
       assert((await page.locator('.current-finance-total .current-finance-amount').textContent()).includes('26.330,00'));
-      assert((await page.locator('.current-finance-available .current-finance-amount').textContent()).includes('19.270,00'));
+      assert((await page.locator('.current-finance-available .current-finance-amount').textContent()).includes('19.510,00'));
     };
     assert.deepEqual(await page.locator('.day.is-scale-confirmed').evaluateAll(cards => cards.map(c => Number(c.dataset.day))), Array.from({ length: 25 }, (_, i) => i + 1));
     for (const width of [1280, 390, 320]) {
       await page.setViewportSize({ width, height: 1100 });
       await checkSummary();
       assert.equal(await page.locator('.current-finance time').getAttribute('datetime'), '2026-11-19');
-      assert((await page.locator('#ac4-month-summary').textContent()).includes('39.243,00'));
+      assert((await page.locator('#ac4-month-summary').textContent()).includes('41.323,00'));
       for (const day of [1, 25, 26]) {
         if (width < 761) await page.locator('#selecionar-dia').selectOption(String(day));
         const card = page.locator(`.day[data-day="${day}"]`);
@@ -77,8 +77,8 @@ const contrast = (text, background) => {
       await page.locator('#ac4-simulation-confirm').click();
       assert.equal(await page.locator('.is-scale-confirmed .simulation-entry').count(), 0);
       assert.deepEqual(await page.locator('.simulation-entry').evaluateAll(rows => rows.map(row => Number(row.closest('.day').dataset.day))), [26, 28, 28, 30]);
-      assert((await page.locator('#ac4-month-summary').textContent()).includes('42.334,00'));
-      assert((await page.locator('#ac4-month-summary').textContent()).includes('3.266,00'));
+      assert((await page.locator('#ac4-month-summary').textContent()).includes('44.414,00'));
+      assert((await page.locator('#ac4-month-summary').textContent()).includes('1.426,00'));
       await checkSummary();
       await page.locator('[data-ac4-simulation]').click();
       await page.locator('#ac4-simulation-disregard').click();

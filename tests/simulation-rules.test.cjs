@@ -4,7 +4,7 @@ const html=fs.readFileSync(path.join(__dirname,'..','index.html'),'utf8'),script
 for(const name of ['AC4Finance','ServiceSimulation'])vm.runInContext(scripts.find(([,attrs,source])=>!attrs.includes('application/json')&&source.includes(`window.${name}=`))[2],context);
 const {AC4Finance:finance,ServiceSimulation:simulation}=context.window;
 const plain=value=>JSON.parse(JSON.stringify(value)),ordinary=count=>Array.from({length:count},(_,index)=>({name:`ST TESTE ${index}`,badges:[{kind:'ord'}],notes:[],events:[]}));
-const source=members=>({'2026-11':{days:[{day:12,members}]}}),custom=(day,night,members=ordinary(5))=>simulation.plan(source(members),'2026-11',4560000,undefined,6,{4:{day,night}});
+const source=members=>({'2026-11':{days:[{day:12,members}]}}),custom=(day,night,members=ordinary(5))=>simulation.plan(source(members),'2026-11',4584000,undefined,6,{4:{day,night}});
 const shifts=day=>plain(day.members.map(member=>[member.events[0].start,member.events[0].end,member.events[0].hours]));
 const data=()=>JSON.parse(scripts.find(([,attrs])=>attrs.includes('id="calendar-data"'))[2]);
 
@@ -21,7 +21,7 @@ test('metas diferentes combinam o reforço comum de 24h com complementos noturno
 });
 
 test('a noite usa a regra do dia inicial e os dias desmarcados usam a meta geral',()=>{
- const input={'2026-11':{days:[20,21,23].map(day=>({day,members:ordinary(5)}))}},plan=simulation.plan(input,'2026-11',4560000,undefined,6,{5:{day:5,night:7},6:{day:8,night:4}});
+ const input={'2026-11':{days:[20,21,23].map(day=>({day,members:ordinary(5)}))}},plan=simulation.plan(input,'2026-11',4584000,undefined,6,{5:{day:5,night:7},6:{day:8,night:4}});
  assert.deepEqual(shifts(plan.days.get(20)),[['20h00','08h00',12],['20h00','08h00',12]]);assert.equal(plan.summary.daily.get('2026-11-20').committedCents,103000);assert(plan.days.get(20).members.every(member=>member.events[0].endDate==='2026-11-21'));
  assert.deepEqual(shifts(plan.days.get(21)),Array.from({length:3},()=>['08h00','20h00',12]));assert.equal(plan.summary.daily.get('2026-11-21').committedCents,144000);assert.deepEqual(shifts(plan.days.get(23)),[['08h00','08h00',24]]);assert.equal(plan.summary.committedCents,321100);
 });

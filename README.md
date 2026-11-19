@@ -2,6 +2,10 @@
 
 Calendário HTML responsivo e estático para exibição da previsão de militares por ala, dos serviços SAT e do controle financeiro de AC4. Há dados de novembro/2026 a janeiro/2027; meses sem dados mostram essa condição.
 
+Na revisão de **19/11/2026**, **ST TAVARES foi designado expressamente como ACA das 24h de 19/11**. Foram incluídos **HELLYSSON em 21/11, 24h/08h–08h**, e **NIKHOLAS em 23/11, 12h/08h–20h**, com OS a definir. O PROEBOM de **HELLYSSON em 24/11 passou de 4h para 12h, 08h–20h**, mantendo a classificação e o identificador. O AC4 de **LUIZ ANTONIO em 22/11 passou para 24h, 08h de 22/11 às 08h de 23/11**; os de 29/11 e 06/12 continuam em 12h. As exclusões de simulação já configuradas por serviço foram preservadas. A cobertura de 21/22/23/24 fica em 7/7/6/5 recursos de 24h.
+
+A **cota de novembro é R$ 45.840,00**. O mês passa a **100 AC4/R$ 41.323,00 comprometidos** (Operacional R$ 32.193,00; SAT R$ 9.130,00), com **R$ 4.517,00 de saldo**. Os R$ 30.357,00 previstos e R$ 10.966,00 com execução confirmada preservam as tarifas existentes. A simulação continua com quatro serviços/R$ 3.091,00, deixando R$ 1.426,00 após o reforço simulado. As confirmações de 01–25 e os demais registros foram preservados. Os totais abaixo documentam as revisões anteriores.
+
 Foram acrescentados **sete AC4 operacionais previstos de 24h, das 08h às 08h do dia seguinte**, totalizando **168h e R$ 6.651,00**:
 
 | Data | Militares | Documento informado | Custo dos novos serviços |
@@ -147,6 +151,8 @@ As versões das dependências de desenvolvimento estão fixadas em `package-lock
 `node --test tests/confirmacao-25nov.test.cjs` confere o intervalo confirmado, histórico, preservação integral dos demais dados, valores e execuções e exclusão da simulação nas metas de 4 a 8. `node tests/confirmation-summary.browser.cjs` valida o destaque do resumo, valores correntes e mensais, badges, detalhes, datas e simulação, em computador e celular. Regressões de reforços em dias já confirmados usam cópias temporárias explicitamente sem a confirmação quando necessário.
 
 `node --test tests/ac4-20a25nov.test.cjs` verifica os sete AC4, documentos e pendência de 21/11, períodos, custos, consulta, cobertura e preservação do calendário anterior por SHA-256. `node tests/ac4-20a25nov.browser.cjs` confere calendário, ES/OS e cópia, observações da OS XXX, confirmações e exclusão de vagas simuladas, em computador e celular.
+
+`node --test tests/ajustes-aca-ac4-cota.test.cjs` confere a designação de TAVARES, serviços novos e retificados, manutenção dos demais AC4 de LUIZ, exclusões específicas da simulação, cota e preservação dos dados anteriores. `node tests/ajustes-aca-ac4-cota.browser.cjs` valida ACA no calendário/ES/cópia, os quatro serviços, datas, valores, cota, ranking e simulação, em computador e celular. As regressões financeiras usam a cota atual ou valores fictícios explícitos de seus cenários.
 
 Execute `node --test tests/*.test.cjs` para conferir tarifas, viradas de dia/mês, revisões, cancelamentos, acumulados, identificação dos documentos, seleção de chefia, simulação por cobertura de 24h e correspondência das trocas com os consolidados. `tests/vagas.test.cjs` também verifica o agrupamento das vagas, os horários complementares, o intervalo inclusivo, a ausência de alterações na escala cadastrada e o retorno de ST DA SILVA aos plantões. Os testes utilizam dados fictícios separados da escala publicada e conferem invariantes dos dados existentes.
 

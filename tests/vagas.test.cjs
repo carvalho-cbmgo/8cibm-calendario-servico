@@ -6,7 +6,7 @@ const json=id=>JSON.parse(scripts.find(([,attrs])=>attrs.includes(`id="${id}"`))
 const schedules=json('calendar-data'),context=vm.createContext({window:{}});
 for(const name of ['AC4Finance','ServiceChief','ServiceSimulation','ServiceVacancies'])vm.runInContext(scripts.find(([,attrs,source])=>!attrs.includes('application/json')&&source.includes(`window.${name}=`))[2],context);
 const {AC4Finance:finance,ServiceChief:chief,ServiceSimulation:simulation,ServiceVacancies:vacancies}=context.window;
-const plan=simulation.plan(schedules,'2026-11',4560000);
+const plan=simulation.plan(schedules,'2026-11',4584000);
 const build=(start,end=start)=>vacancies.build(schedules,'2026-11',plan,`2026-11-${start}`,`2026-11-${end}`);
 
 test('mensagem inclui todos os dias do intervalo e não oferece vagas já preenchidas',()=>{
@@ -42,9 +42,9 @@ test('intervalo inclusivo rejeita inversão, outro mês, dia inválido e previs�
 });
 
 test('meta configurada altera a mensagem sem modificar os serviços cadastrados',()=>{
- const before=JSON.stringify(schedules),higher=simulation.plan(schedules,'2026-11',4560000,undefined,8),result=vacancies.build(schedules,'2026-11',higher,'2026-11-28','2026-11-28');
+ const before=JSON.stringify(schedules),higher=simulation.plan(schedules,'2026-11',4584000,undefined,8),result=vacancies.build(schedules,'2026-11',higher,'2026-11-28','2026-11-28');
  assert.equal(result.vacancies,4);assert(result.message.includes('Voluntários (04 vagas)'));assert.equal(JSON.stringify(schedules),before);
- assert.equal(finance.month(schedules,'2026-11',4560000).committedCents,3924300);
+ assert.equal(finance.month(schedules,'2026-11',4584000).committedCents,4132300);
 });
 
 test('cancelamento das férias restaura os oito plantões da Alpha, a chefia e a cobertura',()=>{

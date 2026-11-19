@@ -23,16 +23,16 @@ const idFor = (day, key) => `ac4-operacional-${key}-2026-11-${day}-08h`;
 const ids = new Set(entries.map(([day, ,key]) => idFor(day, key)));
 const previous = () => {
   const copy = structuredClone(data);
-  for (const [number, resources] of [[20,3], [21,4], [22,4], [25,4]]) {
+  for (const [number, resources] of [[20,3], [21,5], [22,5], [25,4]]) {
     const day = copy['2026-11'].days.find(d => d.day === number);
     day.members = day.members.filter(m => !m.events.some(e => ids.has(e.serviceId)));
-    day.coverage = [`${resources} recursos de 24h`, `Faltam ${6-resources} recursos`];
+    day.coverage = [`${resources} recursos de 24h`, `Faltam ${6-resources} recurso${resources === 5 ? '' : 's'}`];
   }
   return copy;
 };
 
 test('sete AC4 de 24h têm os documentos e períodos informados, com OS XXX pendente em 21/11', () => {
-  const summary = finance.month(data, '2026-11', 4560000);
+  const summary = finance.month(data, '2026-11', 4584000);
   const records = summary.records.filter(r => ids.has(r.event.serviceId));
   assert.equal(records.length, 7);
   assert.equal(new Set(records.map(r => r.key)).size, 7);
@@ -60,14 +60,14 @@ test('sete AC4 de 24h têm os documentos e períodos informados, com OS XXX pend
 });
 
 test('novos serviços somam R$ 6.651 sem alterar SAT, execuções ou tarifas', () => {
-  const before = finance.month(previous(), '2026-11', 4560000), actual = finance.month(data, '2026-11', 4560000);
-  assert.equal(actual.records.length, 98);
-  assert.equal(actual.committedCents, 3924300);
-  assert.equal(actual.operationalCents, 3011300);
+  const before = finance.month(previous(), '2026-11', 4584000), actual = finance.month(data, '2026-11', 4584000);
+  assert.equal(actual.records.length, 100);
+  assert.equal(actual.committedCents, 4132300);
+  assert.equal(actual.operationalCents, 3219300);
   assert.equal(actual.satCents, 913000);
-  assert.equal(actual.forecastCents, 2827700);
+  assert.equal(actual.forecastCents, 3035700);
   assert.equal(actual.executedCents, 1096600);
-  assert.equal(actual.remainingCents, 635700);
+  assert.equal(actual.remainingCents, 451700);
   const additions = new Map([['2026-11-20',199000], ['2026-11-21',199000], ['2026-11-22',193000], ['2026-11-25',74100]]);
   let cumulative = 0;
   for (const [date, day] of [...actual.daily].sort(([a],[b]) => a.localeCompare(b))) {
@@ -79,8 +79,8 @@ test('novos serviços somam R$ 6.651 sem alterar SAT, execuções ou tarifas', (
 
 test('confirmações, dados anteriores e chefia são preservados; cobertura atualiza sem novos reforços simulados', () => {
   const before = previous(), snapshot = JSON.stringify(data);
-  assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'), 'ea800688e6122d7bc36ec2fbb6af64944577f5491f25e3d5f6bb2898aa130618');
-  for (const [number, resources] of [[20,5], [21,6], [22,6], [25,5]]) {
+  assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'), '7fc801ea38c537eff1ec8656081a92976b89a6d5360125382dbedc833e219b1e');
+  for (const [number, resources] of [[20,5], [21,7], [22,7], [25,5]]) {
     const day = data['2026-11'].days.find(d => d.day === number);
     assert.equal(simulation.coverage(day, `2026-11-${number}`).resources, resources);
     assert.equal(parseInt(day.coverage[0]), resources);
@@ -88,8 +88,8 @@ test('confirmações, dados anteriores e chefia são preservados; cobertura atua
     assert.equal(JSON.stringify(chief.select(day)), JSON.stringify(chief.select(before['2026-11'].days.find(d => d.day === number))));
   }
   for (let target = 4; target <= 8; target++) {
-    const actual = simulation.plan(data, '2026-11', 4560000, undefined, target);
-    const old = simulation.plan(before, '2026-11', 4560000, undefined, target);
+    const actual = simulation.plan(data, '2026-11', 4584000, undefined, target);
+    const old = simulation.plan(before, '2026-11', 4584000, undefined, target);
     assert.equal(actual.summary.committedCents, old.summary.committedCents);
     assert.equal(actual.addedServices, old.addedServices);
     for (let number = 1; number <= 25; number++) assert.equal(actual.days.get(number).addedServices, 0);

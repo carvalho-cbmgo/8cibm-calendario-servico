@@ -64,14 +64,14 @@ const money=cents=>normalize(currency.format(cents/100));
   };
   await verify(false);
   await configure(6);const six=await verify(true);
-  assert.deepEqual(six.days.filter(d=>[12,13,14,30].includes(Number(d.date.slice(8)))).map(d=>six.quota-d.actualCumulative-d.extraCumulative),[3121100,2862100,2663100,326600]);
+  assert.deepEqual(six.days.filter(d=>[12,13,14,30].includes(Number(d.date.slice(8)))).map(d=>six.quota-d.actualCumulative-d.extraCumulative),[3145100,2886100,2687100,142600]);
   assert.equal(six.days[26].extra,0);assert.equal(six.days[26].extraCumulative,six.days[25].extraCumulative);
   await configure(4);await verify(true,4);
-  await configure(8);const ten=await verify(true,8);assert.equal(ten.quota-ten.days.at(-1).actualCumulative-ten.days.at(-1).extraCumulative,-566800);
+  await configure(8);const ten=await verify(true,8);assert.equal(ten.quota-ten.days.at(-1).actualCumulative-ten.days.at(-1).extraCumulative,-750800);
   // Exercise a negative balance with a fictitious quota, only in this discarded browser session.
   await page.evaluate(()=>{window.ServiceCalendar.quotas['2026-11']=3000000;window.ServiceCalendar.refresh();});
   const negative=await verify(true,8);assert(negative.quota-negative.days.at(-1).actualCumulative-negative.days.at(-1).extraCumulative<0);
-  await page.evaluate(()=>{window.ServiceCalendar.quotas['2026-11']=4560000;window.ServiceCalendar.refresh();});await verify(true,8);
+  await page.evaluate(()=>{window.ServiceCalendar.quotas['2026-11']=4584000;window.ServiceCalendar.refresh();});await verify(true,8);
   await configure(6);
   const location=await page.evaluate(()=>{
    const day=window.ServiceCalendar.schedules['2026-11'].days.find(d=>d.day===12),member=day.sat.members.find(m=>m.events.some(event=>event.hours===4));

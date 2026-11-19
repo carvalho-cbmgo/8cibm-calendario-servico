@@ -4594,7 +4594,8 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
               }
             ],
             "notes": [
-              "Ordinário"
+              "Ordinário",
+              "ACA do serviço de 24h, conforme designação do usuário."
             ],
             "events": [],
             "ord": 7
@@ -4785,7 +4786,9 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
             }
           ],
           "alerts": []
-        }
+        },
+        "shiftStart": "08h00",
+        "chief": "ST TAVARES"
       },
       {
         "day": 20,
@@ -5064,6 +5067,27 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
             "ord": 8
           },
           {
+            "name": "1º SGT HELLYSSON",
+            "ord": 11,
+            "badges": [],
+            "notes": [],
+            "events": [
+              {
+                "serviceId": "ac4-operacional-hellysson-2026-11-21-08h",
+                "mode": "OPERACIONAL/SOP",
+                "start": "08h00",
+                "end": "08h00",
+                "nextDay": true,
+                "hours": 24,
+                "observation": "REFORÇO OPERACIONAL",
+                "document": "OS a definir (não informada)",
+                "status": "planned",
+                "startDate": "2026-11-21",
+                "endDate": "2026-11-22"
+              }
+            ]
+          },
+          {
             "name": "2º SGT WANDERSON",
             "badges": [
               {
@@ -5116,7 +5140,7 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
           }
         ],
         "coverage": [
-          "6 recursos de 24h",
+          "7 recursos de 24h",
           "Meta de 6 recursos"
         ],
         "confirmation": {
@@ -5233,14 +5257,14 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
                 "serviceId": "ac4-operacional-24h-luiz-antonio-2026-11-22-08h",
                 "mode": "OPERACIONAL/SOP",
                 "start": "08h00",
-                "end": "20h00",
-                "nextDay": false,
-                "hours": 12,
+                "end": "08h00",
+                "nextDay": true,
+                "hours": 24,
                 "observation": "REFORÇO OPERACIONAL",
                 "document": "OS a definir (não informada)",
                 "status": "planned",
                 "startDate": "2026-11-22",
-                "endDate": "2026-11-22",
+                "endDate": "2026-11-23",
                 "excludeFromSimulation": true
               }
             ]
@@ -5296,7 +5320,7 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
           }
         ],
         "coverage": [
-          "6 recursos de 24h",
+          "7 recursos de 24h",
           "Meta de 6 recursos"
         ],
         "confirmation": {
@@ -5339,6 +5363,27 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
             ],
             "events": [],
             "ord": 7
+          },
+          {
+            "name": "1º SGT NIKHOLAS",
+            "ord": 10,
+            "badges": [],
+            "notes": [],
+            "events": [
+              {
+                "serviceId": "ac4-operacional-nikholas-2026-11-23-08h",
+                "mode": "OPERACIONAL/SOP",
+                "start": "08h00",
+                "end": "20h00",
+                "nextDay": false,
+                "hours": 12,
+                "observation": "REFORÇO OPERACIONAL",
+                "document": "OS a definir (não informada)",
+                "status": "planned",
+                "startDate": "2026-11-23",
+                "endDate": "2026-11-23"
+              }
+            ]
           },
           {
             "name": "1º SGT HELLYSSON",
@@ -5594,9 +5639,9 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
                 "serviceId": "ac4-proebom-hellysson-2026-11-24-08h",
                 "mode": "PROEBOM 2026",
                 "start": "08h00",
-                "end": "12h00",
+                "end": "20h00",
                 "nextDay": false,
-                "hours": 4,
+                "hours": 12,
                 "observation": "PROEBOM 2026",
                 "document": "OS a definir (não informada)",
                 "status": "planned",
@@ -12611,7 +12656,7 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
 <script type="application/json" id="ac4-financial-config">
 {
   "monthlyQuotaCents": {
-    "2026-11": 4560000
+    "2026-11": 4584000
   }
 }
 </script>

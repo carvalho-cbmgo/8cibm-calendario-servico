@@ -26,16 +26,16 @@ test('afastamento parcial usa limites inclusivos e retorno imediato sem deslocar
 });
 
 test('dois afastamentos deixam ODD pendente somente na sobreposição e preservam AC4',()=>{
- const source=structuredClone(data),absences=[{name:'ASP OF CARVALHO',type:'Férias',start:'2026-11-18',end:'2026-11-20'},{name:'ASP OF BESSA',type:'Férias',start:'2026-11-19',end:'2026-11-21'}],before=finance.month(source,'2026-11',4560000);rotation.apply(source,config,absences);
+ const source=structuredClone(data),absences=[{name:'ASP OF CARVALHO',type:'Férias',start:'2026-11-18',end:'2026-11-20'},{name:'ASP OF BESSA',type:'Férias',start:'2026-11-19',end:'2026-11-21'}],before=finance.month(source,'2026-11',4584000);rotation.apply(source,config,absences);
  for(const number of [19,20]){const day=source['2026-11'].days.find(d=>d.day===number);assert(!day.members.some(isOfficer));assert.equal(day.alerts.filter(a=>a.startsWith('ODD Alcançável:')).length,1);assert.equal(rotation.resolve(`2026-11-${number}`,config,absences).status,'pending');}
- assert.equal(source['2026-11'].days.find(d=>d.day===18).members.find(isOfficer).name,'ASP OF BESSA');assert.equal(source['2026-11'].days.find(d=>d.day===21).members.find(isOfficer).name,'ASP OF CARVALHO');assert.deepEqual(plain(finance.month(source,'2026-11',4560000).records),plain(before.records));
+ assert.equal(source['2026-11'].days.find(d=>d.day===18).members.find(isOfficer).name,'ASP OF BESSA');assert.equal(source['2026-11'].days.find(d=>d.day===21).members.find(isOfficer).name,'ASP OF CARVALHO');assert.deepEqual(plain(finance.month(source,'2026-11',4584000).records),plain(before.records));
  rotation.apply(source,config,[]);for(const number of [19,20]){const day=source['2026-11'].days.find(d=>d.day===number);assert.equal(day.members.find(isOfficer).name,'ASP OF CARVALHO');assert(!day.alerts.some(a=>a.startsWith('ODD Alcançável:')));}
 });
 
 test('aplicação é idempotente e a substituição não cria AC4, recursos ou chefia',()=>{
- const source=structuredClone(data),absences=[{name:'ASP OF CARVALHO',type:'Férias',start:'2026-11-16',end:'2026-11-22'}],before=finance.month(source,'2026-11',4560000),plans=[4,6,8].map(target=>simulation.plan(source,'2026-11',4560000,undefined,target));rotation.apply(source,config,absences);const once=JSON.stringify(source);rotation.apply(source,config,absences);assert.equal(JSON.stringify(source),once);
- const day=source['2026-11'].days.find(d=>d.day===20);assert.equal(day.members.find(isOfficer).name,'ASP OF BESSA');assert(day.members.find(isOfficer).notes.some(note=>note.includes('ASP OF CARVALHO')&&note.includes('Férias')));assert.deepEqual(plain(finance.month(source,'2026-11',4560000).records),plain(before.records));
- for(const [index,target]of [4,6,8].entries()){const actual=simulation.plan(source,'2026-11',4560000,undefined,target);assert.equal(actual.addedServices,plans[index].addedServices);assert.equal(actual.summary.committedCents,plans[index].summary.committedCents);}
+ const source=structuredClone(data),absences=[{name:'ASP OF CARVALHO',type:'Férias',start:'2026-11-16',end:'2026-11-22'}],before=finance.month(source,'2026-11',4584000),plans=[4,6,8].map(target=>simulation.plan(source,'2026-11',4584000,undefined,target));rotation.apply(source,config,absences);const once=JSON.stringify(source);rotation.apply(source,config,absences);assert.equal(JSON.stringify(source),once);
+ const day=source['2026-11'].days.find(d=>d.day===20);assert.equal(day.members.find(isOfficer).name,'ASP OF BESSA');assert(day.members.find(isOfficer).notes.some(note=>note.includes('ASP OF CARVALHO')&&note.includes('Férias')));assert.deepEqual(plain(finance.month(source,'2026-11',4584000).records),plain(before.records));
+ for(const [index,target]of [4,6,8].entries()){const actual=simulation.plan(source,'2026-11',4584000,undefined,target);assert.equal(actual.addedServices,plans[index].addedServices);assert.equal(actual.summary.committedCents,plans[index].summary.committedCents);}
  assert.deepEqual(plain(chief.select(day)),plain(chief.select(data['2026-11'].days.find(d=>d.day===20))));
 });
 
@@ -48,8 +48,8 @@ test('afastamentos cancelados e de outros militares não alteram a escala; dados
 test('ODD não altera chefia, cobertura, reforços simulados, finanças ou confirmações',()=>{
  const before=structuredClone(data),source=JSON.stringify(data);for(const day of before['2026-11'].days.filter(selected))day.members=day.members.filter(m=>!isOfficer(m));
  for(const day of data['2026-11'].days.filter(selected)){const old=before['2026-11'].days.find(d=>d.day===day.day),date=`2026-11-${day.day}`;assert.deepEqual(plain(chief.select(day)),plain(chief.select(old)));assert.deepEqual(plain(simulation.coverage(day,date)),plain(simulation.coverage(old,date)));assert.deepEqual(day.confirmation,old.confirmation);}
- for(const target of [4,5,6,7,8]){const actual=simulation.plan(data,'2026-11',4560000,undefined,target),expected=simulation.plan(before,'2026-11',4560000,undefined,target);assert.equal(actual.addedResources,expected.addedResources);assert.equal(actual.addedServices,expected.addedServices);assert.equal(actual.summary.committedCents,expected.summary.committedCents);}
- const real=finance.month(data,'2026-11',4560000),original=finance.month(before,'2026-11',4560000);assert.deepEqual(plain(real.records),plain(original.records));assert.equal(real.records.length,98);assert.equal(real.committedCents,3924300);assert.equal(real.remainingCents,635700);assert.equal(real.executedCents,1096600);assert.equal(JSON.stringify(data),source);
+ for(const target of [4,5,6,7,8]){const actual=simulation.plan(data,'2026-11',4584000,undefined,target),expected=simulation.plan(before,'2026-11',4584000,undefined,target);assert.equal(actual.addedResources,expected.addedResources);assert.equal(actual.addedServices,expected.addedServices);assert.equal(actual.summary.committedCents,expected.summary.committedCents);}
+ const real=finance.month(data,'2026-11',4584000),original=finance.month(before,'2026-11',4584000);assert.deepEqual(plain(real.records),plain(original.records));assert.equal(real.records.length,100);assert.equal(real.committedCents,4132300);assert.equal(real.remainingCents,451700);assert.equal(real.executedCents,1096600);assert.equal(JSON.stringify(data),source);
 });
 
 test('ODD e AC4 de análise permanecem separados por área, inclusive quando são do mesmo oficial',()=>{

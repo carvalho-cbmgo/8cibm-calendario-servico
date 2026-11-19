@@ -3,7 +3,7 @@ const html=fs.readFileSync(path.join(__dirname,'..','index.html'),'utf8'),script
 for(const name of ['AC4Finance','AC4RankingHistory','ServiceSimulation'])vm.runInContext(scripts.find(([,a,s])=>!a.includes('application/json')&&s.includes(`window.${name}=`))[2],context);
 const {AC4Finance:finance,AC4RankingHistory:ranking,ServiceSimulation:simulation}=context.window,plain=value=>JSON.parse(JSON.stringify(value));
 const personnel=roster.map(person=>({...person,rg:identities.find(p=>p.name===person.name).rg}));
-const rank=(months,options={},schedules=data,period='2026-11')=>ranking.rank(schedules,finance.month(schedules,period,4560000),'2026-11-16',{historyMonths:months,history,personnel,includeOfficers:false,startDate:`${period}-01`,endDate:`${period}-30`,...options});
+const rank=(months,options={},schedules=data,period='2026-11')=>ranking.rank(schedules,finance.month(schedules,period,4584000),'2026-11-16',{historyMonths:months,history,personnel,includeOfficers:false,startDate:`${period}-01`,endDate:`${period}-30`,...options});
 const synthetic=(name,extra={})=>({name,ord:1,badges:[],notes:[],events:[{mode:'OPERACIONAL/SOP',start:'08h00',end:'12h00',hours:4,...extra}]});
 
 test('histórico transcrito tem 27 RGs validados por mês, em centavos, sem nomes completos ou dados adicionais',()=>{
@@ -20,7 +20,7 @@ test('0 preserva ranking atual e 1/2/3 somam meses anteriores inteiros, sem rest
 });
 
 test('4 inclui julho como não informado; zero explícito permanece conhecido e a soma é parcial',()=>{
- const result=rank(4,{startDate:'2026-11-21',endDate:'2026-11-21'});assert.equal(result.currentCents,199000);assert.equal(result.historyCents,17728600);assert.equal(result.missingHistoryPeople,27);
+ const result=rank(4,{startDate:'2026-11-21',endDate:'2026-11-21'});assert.equal(result.currentCents,298500);assert.equal(result.historyCents,17728600);assert.equal(result.missingHistoryPeople,27);
  const leide=result.rows.find(p=>p.member==='3º SGT LEIDE');assert.equal(leide.historyCents,0);assert.deepEqual(plain(leide.missingHistoryPeriods),['2026-07']);assert(leide.history.filter(p=>p.period!=='2026-07').every(p=>p.amountCents===0&&p.source==='consolidated'));assert.equal(leide.history.find(p=>p.period==='2026-07').amountCents,null);
 });
 
@@ -45,6 +45,6 @@ test('inclui militares somente históricos, respeita oficiais/antiguidade e não
 });
 
 test('histórico não altera escala, cota, finanças ou simulação e rejeita valores inválidos',()=>{
- const source=JSON.stringify(data),before=finance.month(data,'2026-11',4560000),plan=simulation.plan(data,'2026-11',4560000);for(const months of [0,1,2,3,4])rank(months);assert.equal(JSON.stringify(data),source);const after=finance.month(data,'2026-11',4560000);for(const field of ['committedCents','executedCents','remainingCents','operationalCents','satCents'])assert.equal(after[field],before[field]);assert.equal(simulation.plan(data,'2026-11',4560000).summary.committedCents,plan.summary.committedCents);
+ const source=JSON.stringify(data),before=finance.month(data,'2026-11',4584000),plan=simulation.plan(data,'2026-11',4584000);for(const months of [0,1,2,3,4])rank(months);assert.equal(JSON.stringify(data),source);const after=finance.month(data,'2026-11',4584000);for(const field of ['committedCents','executedCents','remainingCents','operationalCents','satCents'])assert.equal(after[field],before[field]);assert.equal(simulation.plan(data,'2026-11',4584000).summary.committedCents,plan.summary.committedCents);
  for(const value of [-1,5,1.5,'1'])assert.throws(()=>rank(value),/0 a 4/);assert.throws(()=>rank(1,{history:{'2026-10':{'1657':-1}}}),/Valor ou RG inválido/);assert.throws(()=>ranking.periods('2026-13',1),/0 a 4/);
 });

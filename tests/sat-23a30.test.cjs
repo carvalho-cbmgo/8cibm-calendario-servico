@@ -14,7 +14,7 @@ for (const name of ['AC4Finance', 'ServiceChief', 'ServiceSimulation', 'ServiceL
 const { AC4Finance: finance, ServiceChief: chief, ServiceSimulation: simulation, ServiceLookup: lookup } = context.window;
 const days = [23, 24, 25, 26, 27, 30];
 const day = number => data['2026-11'].days.find(d => d.day === number);
-const summary = finance.month(data, '2026-11', 4560000);
+const summary = finance.month(data, '2026-11', 4584000);
 const added = summary.records.filter(r => r.event.serviceId?.startsWith('ac4-sat-23a30nov-'));
 const plain = value => JSON.parse(JSON.stringify(value));
 const baseline = () => {
@@ -72,7 +72,7 @@ test('nomes sem PSE geram 12 ordinários vespertinos, separados por atividade', 
 
 test('todo o calendário anterior à inclusão da SAT permanece preservado', () => {
   // Baseline includes corrected January exchanges, revised 12h AC4, TS 170-175 (TS 170 corrected to 22/11/2026) and cancellation of the operation, without the new SAT.
-  assert.equal(createHash('sha256').update(JSON.stringify(baseline())).digest('hex'), '8d01fbdaba07d5f8832a5443a8a5585fadca450822e618f7d9a41059356bf45c');
+  assert.equal(createHash('sha256').update(JSON.stringify(baseline())).digest('hex'), '3c01966310650f23ba081fbd5a1c7623199abf4490e50722837d744e8d72d32f');
   const before = baseline();
   for (const number of days) {
     const date = `2026-11-${number}`;
@@ -81,20 +81,20 @@ test('todo o calendário anterior à inclusão da SAT permanece preservado', () 
     assert.deepEqual(plain(chief.select(day(number))), plain(chief.select(original)));
   }
   for (let target = 4; target <= 8; target++) {
-    const actual = simulation.plan(data, '2026-11', 4560000, undefined, target);
-    const original = simulation.plan(before, '2026-11', 4560000, undefined, target);
+    const actual = simulation.plan(data, '2026-11', 4584000, undefined, target);
+    const original = simulation.plan(before, '2026-11', 4584000, undefined, target);
     assert.equal(actual.addedResources, original.addedResources);
     assert.equal(actual.summary.committedCents, original.summary.committedCents);
   }
 });
 
 test('finanças, acumulados, consulta e ranking incluem os novos AC4 sem duplicar jornadas', () => {
-  const before = finance.month(baseline(), '2026-11', 4560000);
-  assert.equal(summary.records.length, 98);
-  assert.equal(summary.committedCents, 3924300);
+  const before = finance.month(baseline(), '2026-11', 4584000);
+  assert.equal(summary.records.length, 100);
+  assert.equal(summary.committedCents, 4132300);
   assert.equal(summary.satCents, 913000);
   assert.equal(summary.operationalCents, before.operationalCents);
-  assert.equal(summary.remainingCents, 635700);
+  assert.equal(summary.remainingCents, 451700);
   assert.equal(summary.executedCents, before.executedCents);
   let cumulative = 0;
   for (let n = 1; n <= 30; n++) {

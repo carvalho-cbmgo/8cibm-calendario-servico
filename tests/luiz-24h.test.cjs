@@ -14,11 +14,11 @@ for (const name of ['AC4Finance', 'ServiceChief', 'ServiceSimulation', 'ServiceL
 const { AC4Finance: finance, ServiceChief: chief, ServiceSimulation: simulation, ServiceLookup: lookup } = context.window;
 const prefix = 'ac4-operacional-24h-luiz-antonio-';
 // Preserve service IDs when revising the original 24h services to 12h.
-const entries = [['2026-11-22', '2026-11-22', 6, 'ST DA SILVA'], ['2026-11-29', '2026-11-29', 6, 'ST DA SILVA'], ['2026-12-06', '2026-12-06', 5, 'ST OSVALDIR']];
-const summary = period => finance.month(data, period, period === '2026-11' ? 4560000 : undefined);
+const entries = [['2026-11-22', '2026-11-23', 7, 'ST DA SILVA', 24, 96500], ['2026-11-29', '2026-11-29', 6, 'ST DA SILVA', 12, 48000], ['2026-12-06', '2026-12-06', 5, 'ST OSVALDIR', 12, 48000]];
+const summary = period => finance.month(data, period, period === '2026-11' ? 4584000 : undefined);
 
-test('três AC4 de LUIZ ANTONIO são únicos, operacionais de 12h e previstos, a R$ 480 cada', () => {
-  for (const [date, end, resources, leader] of entries) {
+test('LUIZ tem um AC4 previsto de 24h em 22/11 e mantém 12h em 29/11 e 06/12, sem duplicação', () => {
+  for (const [date, end, resources, leader, hours, cost] of entries) {
     const period = date.slice(0, 7), day = data[period].days.find(d => d.day === Number(date.slice(8)));
     const members = day.members.filter(m => m.name === '2º SGT LUIZ ANTONIO');
     assert.equal(members.length, 1);
@@ -30,14 +30,14 @@ test('três AC4 de LUIZ ANTONIO são únicos, operacionais de 12h e previstos, a
     const record = records[0];
     assert(record.event.serviceId.startsWith(prefix));
     assert.equal(record.start, '08h00');
-    assert.equal(record.end, '20h00');
+    assert.equal(record.end, hours === 24 ? '08h00' : '20h00');
     assert.equal(record.endDate, end);
-    assert.equal(record.minutes, 720);
-    assert.equal(record.event.hours, 12);
-    assert.equal(record.event.nextDay, false);
+    assert.equal(record.minutes, hours*60);
+    assert.equal(record.event.hours, hours);
+    assert.equal(record.event.nextDay, hours === 24);
     assert.equal(record.event.excludeFromSimulation, true);
     assert.equal(record.category, 'operational');
-    assert.equal(record.costCents, 48000);
+    assert.equal(record.costCents, cost);
     assert.equal(record.financialMonth, period);
     assert.equal(record.status, 'forecast');
     assert.equal(record.event.executionConfirmed, undefined);
@@ -49,25 +49,25 @@ test('três AC4 de LUIZ ANTONIO são únicos, operacionais de 12h e previstos, a
     const rows = lookup.month(data, period).filter(r => r.member === members[0].name && r.date === date);
     assert.equal(rows.length, 1);
     assert.equal(rows[0].type, 'ac4');
-    assert.equal(rows[0].minutes, 720);
-    assert.equal(rows[0].commitmentCents, 48000);
+    assert.equal(rows[0].minutes, hours*60);
+    assert.equal(rows[0].commitmentCents, cost);
   }
 });
 
 test('novembro e dezembro recebem apenas os novos custos, sem inventar cota de dezembro', () => {
   const november = summary('2026-11'), december = summary('2026-12');
-  assert.equal(november.records.length, 98);
-  assert.equal(november.committedCents, 3924300);
-  assert.equal(november.operationalCents, 3011300);
+  assert.equal(november.records.length, 100);
+  assert.equal(november.committedCents, 4132300);
+  assert.equal(november.operationalCents, 3219300);
   assert.equal(november.satCents, 913000);
-  assert.equal(november.remainingCents, 635700);
+  assert.equal(november.remainingCents, 451700);
   assert.equal(november.executedCents, 1096600);
   assert.equal(december.records.length, 1);
   assert.equal(december.committedCents, 48000);
   assert.equal(december.quotaCents, null);
   assert.equal(december.remainingCents, null);
   assert.equal(december.executedCents, 0);
-  const plan = simulation.plan(data, '2026-11', 4560000);
+  const plan = simulation.plan(data, '2026-11', 4584000);
   assert.equal(plan.days.get(22).addedResources, 0);
   assert.equal(plan.days.get(29).addedResources, 0);
   assert.equal(plan.addedResources, 4);
@@ -87,12 +87,12 @@ test('a inclusão preserva todos os dados e AC4 anteriores nas três competênci
   for (const [date, , resources] of entries) {
     const day = before[date.slice(0, 7)].days.find(d => d.day === Number(date.slice(8)));
     day.members = day.members.filter(m => !m.events.some(e => e.serviceId?.startsWith(prefix)));
-    const originalResources = resources, missing = 6 - originalResources;
+    const originalResources = resources - (date === '2026-11-22' ? 1 : 0), missing = 6 - originalResources;
     day.coverage = [`${originalResources} recursos de 24h`, missing > 0 ? `Faltam ${missing} recurso${missing === 1 ? '' : 's'}` : 'Meta de 6 recursos'];
   }
-  assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'), 'c96cf85e0ffb57f1832cd6d05e30d7d73a9abd4fab470b2e22e25e736562fa03');
-  const original = finance.month(before, '2026-11', 4560000);
-  assert.equal(summary('2026-11').committedCents - original.committedCents, 96000);
+  assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'), '26e0a5ff65cbec5900d754f9d7f113812f0610d2211c78e069cce4042d9792ff');
+  const original = finance.month(before, '2026-11', 4584000);
+  assert.equal(summary('2026-11').committedCents - original.committedCents, 144500);
   assert.equal(summary('2026-11').satCents, original.satCents);
 });
 
@@ -104,11 +104,11 @@ test('a retificação altera só duração, término e cobertura dos três servi
     delete event.excludeFromSimulation;
     const next = new Date(`${date}T12:00:00Z`); next.setUTCDate(next.getUTCDate() + 1);
     Object.assign(event, { hours: 24, end: '08h00', nextDay: true, endDate: next.toISOString().slice(0, 10) });
-    const full = resources + 1, missing = 6 - full;
+    const full = resources + (date === '2026-11-22' ? 0 : 1), missing = 6 - full;
     day.coverage = [`${full} recursos de 24h`, missing > 0 ? `Faltam ${missing} recurso` : 'Meta de 6 recursos'];
   }
-  assert.equal(createHash('sha256').update(JSON.stringify(previous)).digest('hex'), '81a36357970a7358e29f7d2bb91c2dc6949cbb0c5932bf8b7f780ec342326b99');
-  assert.equal(finance.month(previous, '2026-11', 4560000).committedCents - summary('2026-11').committedCents, 97000);
+  assert.equal(createHash('sha256').update(JSON.stringify(previous)).digest('hex'), 'f35f2b314960af0255404c6c2b96febf444b601a25f010724f6a312794ca2f66');
+  assert.equal(finance.month(previous, '2026-11', 4584000).committedCents - summary('2026-11').committedCents, 48500);
   assert.equal(finance.month(previous, '2026-12').committedCents - summary('2026-12').committedCents, 48500);
 });
 
@@ -123,7 +123,7 @@ test('exclusão da simulação limita-se aos três AC4 e preserva a cobertura re
     const excluded = simulation.coverage(input, date, undefined, { forSimulation: true });
     const at = (coverage, minute) => coverage.segments.find(s => s.start <= minute && s.end > minute).resources;
     assert.equal(at(normal, 0), at(excluded, 0) + 1);
-    assert.equal(at(normal, 720), at(excluded, 720));
+    assert.equal(at(normal, 720), at(excluded, 720) + (date === '2026-11-22' ? 1 : 0));
     withoutServices[date.slice(0, 7)].days.find(d => d.day === input.day).members = input.members.filter(m => !m.events.some(e => e.serviceId?.startsWith(prefix)));
   }
   const source = JSON.stringify(data);
@@ -140,7 +140,7 @@ test('exclusão da simulação limita-se aos três AC4 e preserva a cobertura re
     }
   }
   assert.equal(JSON.stringify(data), source);
-  assert.equal(summary('2026-11').committedCents, 3924300);
+  assert.equal(summary('2026-11').committedCents, 4132300);
   assert.equal(summary('2026-12').committedCents, 48000);
 });
 

@@ -1,6 +1,6 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),http=require('node:http'),path=require('node:path');
 const {chromium}=require('playwright'),root=path.join(__dirname,'..');
-const normal=text=>text.replace(/\s+/g,' ').trim(),money=value=>normal(new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(value/100)),percent=value=>`${new Intl.NumberFormat('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}).format(value/4560000*100)}%`;
+const normal=text=>text.replace(/\s+/g,' ').trim(),money=value=>normal(new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(value/100)),percent=value=>`${new Intl.NumberFormat('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}).format(value/4584000*100)}%`;
 (async()=>{
  const server=http.createServer((req,res)=>{const file={'/':'index.html','/index.html':'index.html','/assets/cbmgo-emblema.png':'assets/cbmgo-emblema.png','/assets/whatsapp.svg':'assets/whatsapp.svg'}[req.url];if(!file){res.writeHead(404);res.end();return;}res.setHeader('Content-Type',file.endsWith('.png')?'image/png':file.endsWith('.svg')?'image/svg+xml':'text/html; charset=utf-8');res.end(fs.readFileSync(path.join(root,file)));});let browser;
  try{

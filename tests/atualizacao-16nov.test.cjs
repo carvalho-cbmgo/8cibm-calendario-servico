@@ -16,6 +16,7 @@ const { AC4Finance: finance, ServiceSimulation: simulation, ServiceLookup: looku
 const day = date => data[date.slice(0, 7)].days.find(d => d.day === Number(date.slice(8)));
 const newId = 'ac4-proebom-henrique-2026-11-17-08h';
 const recentIds = new Set([
+  'ac4-operacional-hellysson-2026-11-21-08h', 'ac4-operacional-nikholas-2026-11-23-08h',
   'ac4-operacional-wanderson-2026-11-20-08h', 'ac4-operacional-rabelo-2026-11-20-08h',
   'ac4-operacional-da-silva-2026-11-21-08h', 'ac4-operacional-piccini-2026-11-21-08h',
   'ac4-operacional-passos-2026-11-22-08h', 'ac4-operacional-santos-2026-11-22-08h',
@@ -23,7 +24,7 @@ const recentIds = new Set([
 ]);
 
 test('PROEBOM de HENRIQUE em 17/11 custa R$ 120, sem confirmar execução ou ampliar cobertura', () => {
-  const summary = finance.month(data, '2026-11', 4560000);
+  const summary = finance.month(data, '2026-11', 4584000);
   const records = summary.records.filter(r => r.event.serviceId === newId);
   assert.equal(records.length, 1);
   const r = records[0];
@@ -43,8 +44,8 @@ test('PROEBOM de HENRIQUE em 17/11 custa R$ 120, sem confirmar execução ou amp
   baseline['2026-11'].days.find(d => d.day === 17).members = day('2026-11-17').members.filter(m => m.name !== r.member);
   for (let target = 4; target <= 8; target++) {
     assert.equal(simulation.coverage(day('2026-11-17'), '2026-11-17').resources, 6);
-    const actual = simulation.plan(data, '2026-11', 4560000, undefined, target);
-    const before = simulation.plan(baseline, '2026-11', 4560000, undefined, target);
+    const actual = simulation.plan(data, '2026-11', 4584000, undefined, target);
+    const before = simulation.plan(baseline, '2026-11', 4584000, undefined, target);
     assert.equal(actual.addedResources, before.addedResources);
     assert.equal(actual.summary.committedCents, before.summary.committedCents);
   }
@@ -98,13 +99,13 @@ test('HENRIQUE cumpre EAS de 24h em 18 e 23/11, com observação exata, sem gera
     assert.equal(context.window.ServiceChief.select(input).assignments[0].name, chief);
     before['2026-11'].days.find(d => d.day === number).members = input.members.filter(m => m.name !== '3º SGT HENRIQUE');
   }
-  const actual = finance.month(data, '2026-11', 4560000);
-  const baseline = finance.month(before, '2026-11', 4560000);
+  const actual = finance.month(data, '2026-11', 4584000);
+  const baseline = finance.month(before, '2026-11', 4584000);
   assert.equal(JSON.stringify(actual.records), JSON.stringify(baseline.records));
-  assert.equal(actual.committedCents, 3924300);
+  assert.equal(actual.committedCents, 4132300);
   assert.equal(actual.executedCents, 1096600);
-  assert.equal(actual.remainingCents, 635700);
-  const plan = simulation.plan(data, '2026-11', 4560000);
+  assert.equal(actual.remainingCents, 451700);
+  const plan = simulation.plan(data, '2026-11', 4584000);
   assert.equal(plan.days.get(18).addedServices, 0);
   assert.equal(plan.days.get(23).addedServices, 0);
   assert.equal(plan.addedResources, 4);

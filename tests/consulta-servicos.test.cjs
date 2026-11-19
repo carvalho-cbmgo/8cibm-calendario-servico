@@ -26,7 +26,7 @@ test('AC4 canônico exclui cancelamentos e simulação, deduplica continuidade S
  const original=ac4({serviceId:'sat-test'}),revised=ac4({serviceId:'sat-test',revision:2,end:'12h00',hours:4}),cancelled=ac4({serviceId:'cancel-test',cancelled:true});
  const input={'2026-11':{days:[{day:1,ala:'ALPHA',members:[member('PREVISTO AC4',[],[ac4({simulation:true,mode:'OPERACIONAL/SOP'})],{simulationId:'virtual'})],sat:{members:[member('SD TESTE',[],[original,revised,cancelled,ac4({simulation:true,serviceId:'virtual-sat'})])]}}]}};
  const rows=lookup.month(input,'2026-11');assert.equal(rows.length,1);assert.equal(rows[0].minutes,240);assert.equal(rows[0].commitmentCents,16000);
- const real=lookup.month(data,'2026-11').filter(r=>r.type==='ac4');assert.equal(real.length,98);assert.equal(real.reduce((sum,r)=>sum+r.commitmentCents,0),3924300);
+ const real=lookup.month(data,'2026-11').filter(r=>r.type==='ac4');assert.equal(real.length,100);assert.equal(real.reduce((sum,r)=>sum+r.commitmentCents,0),4132300);
  const continuous=real.filter(r=>r.date==='2026-11-16'&&r.member==='2º SGT WANDERSON'&&r.area==='sat');assert.equal(continuous.length,1);assert.equal(continuous[0].minutes,600);assert.equal(continuous[0].commitmentCents,30000);
 });
 
@@ -41,10 +41,10 @@ test('busca usa nome sem acentos, vários termos e RG formatado do cadastro; pre
 });
 
 test('pendências de janeiro e dispensas não viram serviços; consulta preserva escala e finanças',()=>{
- const source=JSON.stringify(data),before=finance.month(data,'2026-11',4560000);
+ const source=JSON.stringify(data),before=finance.month(data,'2026-11',4584000);
  const january=lookup.month(data,'2027-01');assert(!january.some(r=>r.member==='2º SGT SCHUSSLER'&&['2027-01-01','2027-01-02','2027-01-15','2027-01-20'].includes(r.date)));
  const november=lookup.month(data,'2026-11');assert(!november.some(r=>r.member==='3º SGT HENRIQUE'&&r.date==='2026-11-20'&&r.type==='ordinary'));assert(november.some(r=>r.member==='3º SGT HENRIQUE'&&r.date==='2026-11-13'&&r.labels.includes('TS CIA · Pagamento')));
- assert.equal(JSON.stringify(data),source);const after=finance.month(data,'2026-11',4560000);for(const field of ['committedCents','executedCents','remainingCents','operationalCents','satCents'])assert.equal(after[field],before[field]);
+ assert.equal(JSON.stringify(data),source);const after=finance.month(data,'2026-11',4584000);for(const field of ['committedCents','executedCents','remainingCents','operationalCents','satCents'])assert.equal(after[field],before[field]);
 });
 
 test('horários ordinários incompletos permanecem a conferir',()=>{
