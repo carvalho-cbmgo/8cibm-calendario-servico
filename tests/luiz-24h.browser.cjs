@@ -55,7 +55,8 @@ const files = { '/': 'index.html', '/assets/cbmgo-emblema.png': 'assets/cbmgo-em
         const order = page.locator('#sei-order-table tbody tr').filter({ hasText: 'LUIZ ANTONIO' });
         assert.equal(await scale.count(), 1);
         assert.equal(await scale.locator('td').nth(5).textContent(), `${hours}h`);
-        assert((await scale.locator('td').nth(4).textContent()).includes('PREVISTO'));
+        const expectedReference = period === '2026-11' && number === 22 ? 'OS nº 387 (SEI 98726469)' : 'PREVISTO';
+        assert((await scale.locator('td').nth(4).textContent()).includes(expectedReference));
         assert.equal(await order.count(), 1);
         const cells = await order.locator('td').allTextContents();
         assert.deepEqual([cells[0], cells[1], cells[2], cells[3], cells[6]], [`${String(number).padStart(2, '0')}/${period.slice(5)}/2026`, '08h00', end, hours === 24 ? '08h00' : '20h00', `${hours}h`]);

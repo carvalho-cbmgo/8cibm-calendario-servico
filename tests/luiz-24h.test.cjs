@@ -41,8 +41,8 @@ test('LUIZ tem um AC4 previsto de 24h em 22/11 e mantém 12h em 29/11 e 06/12, s
     assert.equal(record.financialMonth, period);
     assert.equal(record.status, 'forecast');
     assert.equal(record.event.executionConfirmed, undefined);
-    assert.equal(finance.documentInfo(record.event).number, '');
-    assert.equal(finance.documentInfo(record.event).sei, '');
+    assert.equal(finance.documentInfo(record.event).number, date === '2026-11-22' ? '387' : '');
+    assert.equal(finance.documentInfo(record.event).sei, date === '2026-11-22' ? '98726469' : '');
     assert.equal(day.confirmation?.status, date === '2026-11-22' ? 'confirmed' : undefined);
     assert.equal(simulation.coverage(day, date).resources, resources);
     assert.equal(chief.select(day).assignments[0].name, leader);
@@ -90,7 +90,7 @@ test('a inclusão preserva todos os dados e AC4 anteriores nas três competênci
     const originalResources = resources - (date === '2026-11-22' ? 1 : 0), missing = 6 - originalResources;
     day.coverage = [`${originalResources} recursos de 24h`, missing > 0 ? `Faltam ${missing} recurso${missing === 1 ? '' : 's'}` : 'Meta de 6 recursos'];
   }
-  assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'), 'e256e4df6b2e06c57f8d33850986eb73ca0920e47767e1c3316223e400666f23');
+  assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'), '2c4d5474777d730dd5bd3c856ff97d79bfd069474d3f4c4a973245e459a60389');
   const original = finance.month(before, '2026-11', 4584000);
   assert.equal(summary('2026-11').committedCents - original.committedCents, 144500);
   assert.equal(summary('2026-11').satCents, original.satCents);
@@ -107,7 +107,7 @@ test('a retificação altera só duração, término e cobertura dos três servi
     const full = resources + (date === '2026-11-22' ? 0 : 1), missing = 6 - full;
     day.coverage = [`${full} recursos de 24h`, missing > 0 ? `Faltam ${missing} recurso` : 'Meta de 6 recursos'];
   }
-  assert.equal(createHash('sha256').update(JSON.stringify(previous)).digest('hex'), 'f5fdf6da66806ae2f9874b56d25a1384bb0aab79c65266cf1259c5f9a5fb0d87');
+  assert.equal(createHash('sha256').update(JSON.stringify(previous)).digest('hex'), 'bd447179a9c35dd6dc262d037afe8dae7d4023aaa207b0d03977e97db8465b0a');
   assert.equal(finance.month(previous, '2026-11', 4584000).committedCents - summary('2026-11').committedCents, 48500);
   assert.equal(finance.month(previous, '2026-12').committedCents - summary('2026-12').committedCents, 48500);
 });

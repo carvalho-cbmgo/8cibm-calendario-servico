@@ -60,7 +60,7 @@ test('ST DA SILVA tem um AC4 operacional previsto de 12h em 19/11, OS 383/SEI 98
 
 test('o diurno complementa o noturno de LUIZ, elimina a vaga simulada e preserva os demais dados e tarifas', () => {
   const before = previous(), source = JSON.stringify(data);
-  assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'), '52d05721d56959f79aada599ae63484f94e794caa77e69adde422512d0730196');
+  assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'), '3475e66247255fa5ddc6dc165804dedf3a002db6ba301d71957a1a1d8965e40f');
   const coverage = simulation.coverage(day(data), '2026-11-19');
   assert.equal(coverage.resources, 6);
   assert(coverage.segments.every(s => s.resources === 6));

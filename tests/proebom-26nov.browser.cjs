@@ -56,7 +56,7 @@ const files = { '/': 'index.html', '/assets/cbmgo-emblema.png': 'assets/cbmgo-em
         const scale = page.locator('#sei-scale-table tbody tr').filter({ has: page.locator('td:nth-child(3)', { hasText: name }) });
         assert.equal(await scale.count(), 1);
         const notes = await scale.locator('td').nth(4).textContent();
-        assert(notes.includes('PROEBOM 2026')); assert(notes.includes('PREVISTO')); assert(!notes.includes('98630755'));
+        assert(notes.includes('PROEBOM 2026')); assert(notes.includes(day === 24 ? 'OS nº 389 (SEI 98752623)' : 'PREVISTO')); assert(!notes.includes('98630755'));
       }
       await page.evaluate(() => { window.copiedProebom = null; });
       await page.locator('#sei-copy-order').click(); await page.waitForFunction(() => window.copiedProebom !== null);
@@ -72,6 +72,6 @@ const files = { '/': 'index.html', '/assets/cbmgo-emblema.png': 'assets/cbmgo-em
     }
     assert.equal(await page.evaluate(() => JSON.stringify(window.ServiceCalendar.schedules)), source);
     assert.deepEqual(errors, []);
-    console.log('PASS: HELLYSSON PROEBOM 12h em 24/11 e HELLYSSON/HENRIQUE 4h em 26/11, períodos/valores/ES/OS e cópia sem duplicação, documento a definir e simulação preservada; 1280/390/320px.');
+    console.log('PASS: HELLYSSON PROEBOM 12h/OS 389 em 24/11 e HELLYSSON/HENRIQUE 4h/OS a definir em 26/11, períodos/valores/ES/OS e cópia sem duplicação, simulação preservada; 1280/390/320px.');
   } finally { if (browser) await browser.close(); await new Promise(resolve => server.close(resolve)); }
 })().catch(error => { console.error(error); process.exitCode = 1; });

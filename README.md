@@ -2,6 +2,18 @@
 
 Calendário HTML responsivo e estático para exibição da previsão de militares por ala, dos serviços SAT e do controle financeiro de AC4. Há dados de novembro/2026 a janeiro/2027; meses sem dados mostram essa condição.
 
+Em **20/11/2026**, foram atualizadas as referências dos AC4 **operacionais e PROEBOM**, conforme confirmação do usuário:
+
+| Data do AC4 | OS nº | SEI |
+|---|---|---|
+| 21/11/2026 | 386 | 98726048 |
+| 22/11/2026 | 387 | 98726469 |
+| 23/11/2026 | 388 | 98727025 |
+| 24/11/2026 | 389 | 98752623 |
+| 25/11/2026 | 388 | 98752637 |
+
+A pendência “OS nº XXX” de 21/11 foi resolvida. As duas referências à OS nº 388 usam os SEIs distintos informados para cada data. A **SAT permanece na OS nº 377 (SEI 98422129)**. Períodos, identificadores dos serviços, exclusões de simulação, confirmações, cobertura e valores financeiros foram preservados: novembro mantém **100 AC4/R$ 41.323,00**, cota de **R$ 45.840,00** e saldo de **R$ 4.517,00**. Os registros abaixo preservam o histórico das revisões anteriores.
+
 O **AC4 de 24h de HELLYSSON foi transferido de 21/11 para 20/11/2026**, das **08h de 20/11 às 08h de 21/11**, referente à **OS nº 385 (SEI 98726048)**. Não há duplicação em 21/11; ambos os dias ficam com seis recursos de 24h. O serviço mantém o custo de R$ 995,00 e o estado previsto. Os totais mensais, a cota, as confirmações e a simulação permanecem iguais. Os parágrafos seguintes registram as revisões anteriores.
 
 Na revisão de **19/11/2026**, **ST TAVARES foi designado expressamente como ACA das 24h de 19/11**. Foram incluídos **HELLYSSON em 21/11, 24h/08h–08h**, e **NIKHOLAS em 23/11, 12h/08h–20h**, com OS a definir. O PROEBOM de **HELLYSSON em 24/11 passou de 4h para 12h, 08h–20h**, mantendo a classificação e o identificador. O AC4 de **LUIZ ANTONIO em 22/11 passou para 24h, 08h de 22/11 às 08h de 23/11**; os de 29/11 e 06/12 continuam em 12h. As exclusões de simulação já configuradas por serviço foram preservadas. A cobertura de 21/22/23/24 fica em 7/7/6/5 recursos de 24h.

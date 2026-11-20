@@ -56,7 +56,7 @@ test('os 70 eventos AC4 anteriores permanecem integralmente preservados', () => 
     ['members', 'sat'].flatMap(area => (area === 'members' ? d.members : d.sat?.members || []).flatMap(m =>
       m.events.filter(e => !recentIds.has(e.serviceId) && e.serviceId !== newId && e.serviceId !== 'ac4-operacional-da-silva-2026-11-19-08h' && e.serviceId !== 'ac4-proebom-hellysson-2026-11-24-08h' && !e.serviceId?.startsWith('ac4-sat-23a30nov-') && !e.serviceId?.startsWith('ac4-operacional-24h-luiz-antonio-') && !e.serviceId?.startsWith('ac4-2026-11-26-')).map(e => JSON.stringify([period, d.day, area, m.name, e])))))).sort();
   assert.equal(rows.length, 70);
-  assert.equal(createHash('sha256').update(JSON.stringify(rows)).digest('hex'), '8400c8cc493e1ced3ae20849172cc41e3cf397ad99b98b3f8b81d9035e1c4e7a');
+  assert.equal(createHash('sha256').update(JSON.stringify(rows)).digest('hex'), '9c81cbd4683f4b4b2337a20392cc5216840884c6d59843a386d258836f9c0365');
 });
 
 test('férias inclusivas de SCHUSSLER excluem oito plantões, com TS 167 após o afastamento e ordinário em 06/01', () => {

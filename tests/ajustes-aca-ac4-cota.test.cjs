@@ -31,7 +31,7 @@ test('TAVARES é o ACA expressamente designado para as 24h de 19/11, sem atribui
   assert.equal(JSON.stringify(result.assignments), JSON.stringify([{name:'ST TAVARES', start:0, end:1440}]));
   assert.equal(day(data, 19).chief, 'ST TAVARES');
   assert.equal(simulation.coverage(day(data, 19), '2026-11-19').resources, 6);
-  assert.equal(createHash('sha256').update(JSON.stringify(previous())).digest('hex'), '099e3fe98b9b557b46e532275d918397697cc94f14c843c9cd74630133add918');
+  assert.equal(createHash('sha256').update(JSON.stringify(previous())).digest('hex'), '585fe5cf02bb31a77d51c443b13fc4b812fd324d0ec0a40a681ef9e33b3b00de');
 });
 
 test('HELLYSSON, LUIZ e NIKHOLAS têm os períodos retificados, com identidades e exclusões preservadas', () => {
@@ -49,7 +49,9 @@ test('HELLYSSON, LUIZ e NIKHOLAS têm os períodos retificados, com identidades 
     assert.equal(r.endDate, endDate); assert.equal(r.event.hours, hours); assert.equal(r.minutes, hours*60);
     assert.equal(r.event.mode, mode); assert.equal(r.event.nextDay, hours === 24);
     assert.equal(r.costCents, cost); assert.equal(r.status, 'forecast');
-    assert.equal(r.event.executionConfirmed, undefined); assert.equal(finance.documentInfo(r.event).number, number === 20 ? '385' : '');
+    const documents = {20:['385','98726048'],22:['387','98726469'],23:['388','98727025'],24:['389','98752623']};
+    assert.equal(r.event.executionConfirmed, undefined); assert.equal(finance.documentInfo(r.event).number, documents[number][0]);
+    assert.equal(finance.documentInfo(r.event).sei, documents[number][1]);
     assert.equal(lookup.month(data,'2026-11').filter(s => s.date === `2026-11-${number}` && s.member === name && s.type === 'ac4').length, 1);
   }
   assert(!day(data,21).members.some(m => m.name === '1º SGT HELLYSSON'));

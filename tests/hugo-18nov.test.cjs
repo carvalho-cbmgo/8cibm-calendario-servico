@@ -112,5 +112,5 @@ test('inclusões de 18/11 preservam integralmente os demais dados do calendário
   twentyNinth.coverage = ['5 recursos de 24h', 'Faltam 1 recurso'];
   const input = days.find(d => d.day === 26);
   input.members = input.members.filter(m => !m.events.some(e => e.serviceId?.startsWith('ac4-2026-11-26-')));
-  assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'), 'ecf04441281bc0d997985161bf5e64efa3d7a8afcd8e3a387253c48879c0571d');
+  assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'), '85f3fc86eab888a47fd4c6a350a6a07d3eaa664ea0bfcd84fc8a1fba8880baa9');
 });

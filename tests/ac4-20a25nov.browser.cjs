@@ -4,9 +4,9 @@ const { chromium } = require('playwright');
 const root = path.join(__dirname, '..');
 const entries = [
   { day: 20, number: '385', sei: '98726048', resources: 6, services: 3, cost: '995,00', names: ['HELLYSSON', 'WANDERSON', 'RABELO'] },
-  { day: 21, number: 'XXX', sei: '98726048', resources: 6, services: 2, cost: '995,00', names: ['DA SILVA', 'PICCINI'] },
-  { day: 22, number: '387', sei: '98726469', resources: 7, services: 3, cost: '965,00', names: ['PASSOS', 'SANTOS'] },
-  { day: 25, number: '388', sei: '98727025', resources: 5, services: 1, cost: '741,00', names: ['DIEGO'] },
+  { day: 21, number: '386', sei: '98726048', resources: 6, services: 2, cost: '995,00', names: ['DA SILVA', 'PICCINI'] },
+  { day: 22, number: '387', sei: '98726469', resources: 7, services: 3, cost: '965,00', names: ['PASSOS', 'LUIZ ANTONIO', 'SANTOS'] },
+  { day: 25, number: '388', sei: '98752637', resources: 5, services: 1, cost: '741,00', names: ['DIEGO'] },
 ];
 
 (async () => {
@@ -56,10 +56,8 @@ const entries = [
           assert.equal(await row.count(), 1);
           assert.equal(await row.locator('.chip.ac4').textContent(), 'AC4 24h');
           assert((await row.locator('.ac4-cost').textContent()).includes(item.cost));
-          if (item.number !== 'XXX') {
-            await row.locator(`[data-copy-sei="${item.sei}"]`).click();
-            assert.equal(await page.evaluate(() => window.copiedSEI), item.sei);
-          } else assert((await row.getAttribute('title')).includes(item.sei));
+          await row.locator(`[data-copy-sei="${item.sei}"]`).click();
+          assert.equal(await page.evaluate(() => window.copiedSEI), item.sei);
         }
         await card.locator('.operational-section [data-sei-day]').click();
         assert.equal(await page.locator('#sei-order-table tbody tr').count(), item.services);
@@ -69,7 +67,7 @@ const entries = [
           assert.deepEqual([cells[0],cells[1],cells[2],cells[3],cells[6]], [`${item.day}/11/2026`,'08h00',`${item.day+1}/11/2026`,'08h00','24h']);
           const notes = await page.locator('#sei-scale-table tbody tr').filter({ has: page.locator('td:nth-child(3)', { hasText: name }) }).locator('td').nth(4).textContent();
           assert(notes.includes(item.sei)); assert(notes.includes(item.number));
-          if (item.number === 'XXX') assert(notes.includes('confirmar'));
+          assert(!notes.includes('XXX'));
         }
         const option = await page.locator('#sei-order-scope option').filter({ hasText: `OS nº ${item.number}` }).getAttribute('value');
         if (await page.locator('#sei-order-scope').isEnabled()) await page.locator('#sei-order-scope').selectOption(option);
@@ -79,12 +77,11 @@ const entries = [
         const copied = await page.evaluate(() => { const box=document.createElement('div'); box.innerHTML=window.copiedTable; return { rows:[...box.querySelectorAll('tr')].map(row=>[...row.cells].map(c=>c.textContent)), headers:box.querySelectorAll('th').length }; });
         assert.equal(copied.rows.length, item.names.length); assert.equal(copied.headers, 0);
         assert(copied.rows.every(row => row[6] === '24h' && row[0] === `${item.day}/11/2026` && row[2] === `${item.day+1}/11/2026`));
-        if (item.number === 'XXX') {
-          await page.evaluate(() => { window.copiedTable = null; });
-          await page.locator('#sei-copy-scale').click();
-          await page.waitForFunction(() => window.copiedTable);
-          assert((await page.evaluate(() => window.copiedTable)).includes('XXX (SEI 98726048)'));
-        }
+        await page.evaluate(() => { window.copiedTable = null; });
+        await page.locator('#sei-copy-scale').click();
+        await page.waitForFunction(() => window.copiedTable);
+        assert((await page.evaluate(() => window.copiedTable)).includes(`OS nº ${item.number} (SEI ${item.sei})`));
+        assert(!(await page.evaluate(() => window.copiedTable)).includes('XXX'));
         await page.locator('#sei-close').click();
       }
       await page.locator('[data-ac4-simulation]').click();
@@ -98,7 +95,7 @@ const entries = [
     }
     assert.equal(await page.evaluate(() => JSON.stringify(window.ServiceCalendar.schedules)), source);
     assert.deepEqual(errors, []);
-    console.log('PASS: 24h AC4 on 20/21/22/25 November including HELLYSSON transferred to 20/11, OS/SEI and preserved XXX placeholder, calendar/ES/OS/clipboard, costs, confirmation and no new simulated vacancies; desktop/320/390px.');
+    console.log('PASS: 24h AC4 on 20/21/22/25 November, current OS/SEI and resolved OS 386 placeholder, calendar/ES/OS/clipboard, costs, confirmation and no new simulated vacancies; desktop/320/390px.');
   } finally {
     if (browser) await browser.close();
     await new Promise(resolve => server.close(resolve));

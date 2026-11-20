@@ -128,7 +128,7 @@ test('seis AC4 noturnos de LUIZ ANTONIO são previstos de 12h, sem duplicação 
   ]);
   for(const record of records){
     assert.equal(record.member,'2º SGT LUIZ ANTONIO');assert.equal(record.minutes,720);assert.equal(record.start,'20h00');assert.equal(record.end,'08h00');assert.equal(record.financialMonth,'2026-11');
-    assert.equal(record.category,'operational');assert.equal(record.status,'forecast');assert.equal(record.event.executionConfirmed,undefined);assert.deepEqual(plain(finance.documentInfo(record.event)),record.startDate==='2026-11-10'?{number:'356/2026',sei:'98274343'}:record.startDate==='2026-11-12'?{number:'367',sei:'98339864'}:record.startDate==='2026-11-17'?{number:'374',sei:'98399055'}:{number:'',sei:''});
+    assert.equal(record.category,'operational');assert.equal(record.status,'forecast');assert.equal(record.event.executionConfirmed,undefined);assert.deepEqual(plain(finance.documentInfo(record.event)),record.startDate==='2026-11-10'?{number:'356/2026',sei:'98274343'}:record.startDate==='2026-11-12'?{number:'367',sei:'98339864'}:record.startDate==='2026-11-17'?{number:'374',sei:'98399055'}:record.startDate==='2026-11-24'?{number:'389',sei:'98752623'}:{number:'',sei:''});
   }
   for(const date of dates){const members=data['2026-11'].days.find(day=>day.day===date).members.filter(member=>member.name==='2º SGT LUIZ ANTONIO');assert.equal(members.length,1);assert.equal(members[0].ord,16);assert.equal(members[0].events.length,1);assert.equal(members[0].badges.length,0);}
   assert.equal(records.reduce((total,record)=>total+record.costCents,0),237600);

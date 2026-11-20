@@ -13,11 +13,11 @@ const { AC4Finance: finance, ServiceSimulation: simulation, ServiceChief: chief,
 const entries = [
   [20, '2º SGT WANDERSON', 'wanderson', '385', '98726048', 99500],
   [20, 'CB RABELO', 'rabelo', '385', '98726048', 99500],
-  [21, 'ST DA SILVA', 'da-silva', 'XXX', '98726048', 99500],
-  [21, 'SD PICCINI', 'piccini', 'XXX', '98726048', 99500],
+  [21, 'ST DA SILVA', 'da-silva', '386', '98726048', 99500],
+  [21, 'SD PICCINI', 'piccini', '386', '98726048', 99500],
   [22, 'ST PASSOS', 'passos', '387', '98726469', 96500],
   [22, 'SD SANTOS', 'santos', '387', '98726469', 96500],
-  [25, '2º SGT DIEGO', 'diego', '388', '98727025', 74100],
+  [25, '2º SGT DIEGO', 'diego', '388', '98752637', 74100],
 ];
 const idFor = (day, key) => `ac4-operacional-${key}-2026-11-${day}-08h`;
 const ids = new Set(entries.map(([day, ,key]) => idFor(day, key)));
@@ -31,7 +31,7 @@ const previous = () => {
   return copy;
 };
 
-test('sete AC4 de 24h têm os documentos e períodos informados, com OS XXX pendente em 21/11', () => {
+test('sete AC4 de 24h têm os documentos e períodos informados, com OS 386 regularizada em 21/11', () => {
   const summary = finance.month(data, '2026-11', 4584000);
   const records = summary.records.filter(r => ids.has(r.event.serviceId));
   assert.equal(records.length, 7);
@@ -52,9 +52,9 @@ test('sete AC4 de 24h têm os documentos e períodos informados, com OS XXX pend
     assert.equal(r.event.executionConfirmed, undefined);
     assert.equal(r.event.document, `OS nº ${number} (SEI ${sei})`);
     const document = finance.documentInfo(r.event);
-    assert.equal(document.number, number === 'XXX' ? '' : number);
-    if (number !== 'XXX') assert.equal(document.sei, sei);
-    else assert(data['2026-11'].days.find(d => d.day === day).members.find(m => m.name === name).notes.some(note => note.includes('XXX') && note.includes(sei)));
+    assert.equal(document.number, number);
+    assert.equal(document.sei, sei);
+    assert(!data['2026-11'].days.find(d => d.day === day).members.find(m => m.name === name).notes.some(note => note.includes('XXX')));
     assert.equal(lookup.month(data, '2026-11').filter(s => s.member === name && s.type === 'ac4' && s.date === r.startDate).length, 1);
   }
 });
@@ -79,7 +79,7 @@ test('novos serviços somam R$ 6.651 sem alterar SAT, execuções ou tarifas', (
 
 test('confirmações, dados anteriores e chefia são preservados; cobertura atualiza sem novos reforços simulados', () => {
   const before = previous(), snapshot = JSON.stringify(data);
-  assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'), 'a33b2ac7f45db76282d322dac5f35fa1a71a0eef5b8daa618879dc37c7e1d614');
+  assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'), '885ef225d639ece532906f6510fd3e3a7cbf0987c384629181d1bfa6a6f58d20');
   for (const [number, resources] of [[20,6], [21,6], [22,7], [25,5]]) {
     const day = data['2026-11'].days.find(d => d.day === number);
     assert.equal(simulation.coverage(day, `2026-11-${number}`).resources, resources);
