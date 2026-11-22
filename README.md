@@ -2,6 +2,8 @@
 
 Calendário HTML responsivo e estático para exibição da previsão de militares por ala, dos serviços SAT e do controle financeiro de AC4. Há dados de novembro/2026 a janeiro/2027; meses sem dados mostram essa condição.
 
+Em **22/11/2026**, por solicitação e confirmação do usuário, foi incluído um **AC4 operacional previsto de SD SANTOS em 23/11/2026, 12h, das 08h às 20h**, referente à **OS nº 388 (SEI 98727025)**, no valor de **R$ 360,00**. O AC4 de 22/11, que termina às 08h de 23/11, foi preservado. Novembro passa a **101 AC4/R$ 41.683,00 comprometidos**, sendo R$ 32.553,00 operacionais e R$ 9.130,00 SAT, com **R$ 4.157,00 de saldo** sobre a cota de R$ 45.840,00. A execução confirmada permanece em R$ 10.966,00; o novo serviço continua previsto. A cobertura diurna de 23/11 aumenta em um militar, mantendo seis recursos contínuos de 24h, a chefia e as confirmações existentes. A simulação permanece em quatro serviços/R$ 3.091,00, com saldo simulado de R$ 1.066,00. Os totais abaixo registram o histórico das revisões anteriores.
+
 Em **20/11/2026**, foram atualizadas as referências dos AC4 **operacionais e PROEBOM**, conforme confirmação do usuário:
 
 | Data do AC4 | OS nº | SEI |
@@ -139,6 +141,8 @@ O botão do WhatsApp, imediatamente após Delta, abre uma janela com Início e F
 4. Se o artefato for aceito e a implantação terminar com **Deployment failed, try again later**, reexecute o job de publicação em **Re-run jobs → Re-run failed jobs**. Esse erro ocorre depois da construção e precisa ser acompanhado no Pages.
 
 ## Verificação local
+
+`node --test tests/santos-23nov.test.cjs` e `node tests/santos-23nov.browser.cjs` conferem o AC4 de SANTOS em 23/11, 12h/08h–20h/R$ 360, OS nº 388/SEI 98727025, cópia do documento, ES/OS, consulta, ranking, saldos e ausência de duplicação com o serviço de 22/11. O teste de integridade reconstrói o calendário anterior retirando somente essa inclusão; as expectativas dos totais mensais e das fotografias integrais dos testes anteriores foram atualizadas para incorporar o novo serviço. A cota, as confirmações e os valores executados permanecem preservados. O roteiro de navegador cobre computador e celular com toque em 320/390 px.
 
 ### Preparação no Windows (PowerShell)
 

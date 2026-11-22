@@ -123,8 +123,8 @@ test('novembro simula 4 recursos em 3 dias, cobra cada reforço uma vez e preser
   assert.equal(plan.addedResources,4);assert.equal(plan.addedServices,4);assert.equal(plan.daysAffected,3);assert.equal(plan.summary.committedCents,309100);
   assert.equal(new Set(plan.summary.records.map(record=>record.key)).size,4);assert.equal(plan.summary.executedCents,0);assert.equal(plan.summary.satCents,0);
   assert.equal(plan.summary.daily.get('2026-11-30').cumulativeCents,309100);
-  assert.equal(real.records.length,100);assert.equal(real.committedCents,4132300);assert.equal(real.executedCents,1096600);
-  assert.equal(real.committedCents+plan.summary.committedCents,4441400);assert.equal(real.remainingCents-plan.summary.committedCents,142600);
+  assert.equal(real.records.length,101);assert.equal(real.committedCents,4168300);assert.equal(real.executedCents,1096600);
+  assert.equal(real.committedCents+plan.summary.committedCents,4477400);assert.equal(real.remainingCents-plan.summary.committedCents,106600);
   assert.equal(plan.summary.records.filter(record=>record.minutes===720).length,1);assert.equal(plan.summary.records.reduce((total,record)=>total+record.minutes/60,0),84);
   assert.equal(plan.days.get(19).addedServices,0);assert.equal(plan.days.get(24).addedServices,0);for(const number of [26]){const complements=plan.days.get(number).members.filter(member=>member.events[0].hours===12);assert.equal(complements.length,1);assert.deepEqual([complements[0].events[0].start,complements[0].events[0].end],['08h00','20h00']);}
 });
@@ -142,7 +142,7 @@ test('meta de 4 a 8 altera somente os reforços necessários, sem remover recurs
   assert.equal(five.addedResources,1);assert.equal(five.summary.committedCents,99500);
   assert.equal(eight.addedResources,14);assert.equal(eight.daysAffected,5);assert.equal(eight.targetResources,8);
   for(const day of source['2026-11'].days){const planned=eight.days.get(day.day);assert.equal(planned.addedResources,day.confirmation?.status==='confirmed'?0:8-planned.coverage.resources);}
-  assert.equal(eight.summary.quotaCents,4584000);assert.equal(real.remainingCents-eight.summary.committedCents,-750800);assert.equal(JSON.stringify(source),before);
+  assert.equal(eight.summary.quotaCents,4584000);assert.equal(real.remainingCents-eight.summary.committedCents,-786800);assert.equal(JSON.stringify(source),before);
 });
 
 test('meta inválida é rejeitada e a meta padrão continua sendo 6',()=>{

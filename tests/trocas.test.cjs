@@ -95,7 +95,7 @@ test('TS 164 preserva os três militares e a cadeia de substituição em 29/11, 
 
 test('conferência das TS preserva a troca parcial 168, confirmações e totais reais/simulados',()=>{
  const {AC4Finance:finance,ServiceSimulation:simulation}=context.window,real=finance.month(data,'2026-11',4584000),plan=simulation.plan(data,'2026-11',4584000);
- assert.equal(real.records.length,100);assert.equal(real.committedCents,4132300);assert.equal(real.executedCents,1096600);assert.equal(plan.addedResources,4);assert.equal(plan.summary.committedCents,309100);
+ assert.equal(real.records.length,101);assert.equal(real.committedCents,4168300);assert.equal(real.executedCents,1096600);assert.equal(plan.addedResources,4);assert.equal(plan.summary.committedCents,309100);
  assert.equal(data['2026-11'].days.filter(day=>day.confirmation?.status==='confirmed').length,25);
  for(const date of ['2026-11-08','2026-11-29']){const d=day(date),partial=d.members.filter(member=>member.serviceHours===12);assert.equal(partial.length,2);assert.equal(simulation.coverage(d,date).resources,date==='2026-11-29'?6:5);}
  assert(!data['2026-10']);

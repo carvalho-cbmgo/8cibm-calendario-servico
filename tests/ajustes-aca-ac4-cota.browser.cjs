@@ -80,20 +80,20 @@ const root = path.join(__dirname, '..');
         assert((await scope.textContent()).includes(`OS nº ${orderNumber}`));
         if(await scope.isEnabled())await scope.selectOption(await scope.locator('option').filter({hasText:`OS nº ${orderNumber}`}).filter({hasText:mode}).getAttribute('value'));
         const copied=await copy('order');
-        assert.equal(copied.headers,0);assert.equal(copied.rows.length,[20,22].includes(number)?3:1);
+        assert.equal(copied.headers,0);assert.equal(copied.rows.length,[20,22].includes(number)?3:number===23?2:1);
         const copiedMember=copied.rows.filter(row=>row[4].includes(name));
         assert.equal(copiedMember.length,1);assert.equal(copiedMember[0][2],endDate);assert.equal(copiedMember[0][6],`${hours}h`);
         await page.locator('#sei-close').click();
       }
       assert((await page.locator('#ac4-month-summary').textContent()).includes('45.840,00'));
-      assert((await page.locator('#ac4-month-summary').textContent()).includes('41.323,00'));
-      assert((await page.locator('#ac4-month-summary').textContent()).includes('4.517,00'));
+      assert((await page.locator('#ac4-month-summary').textContent()).includes('41.683,00'));
+      assert((await page.locator('#ac4-month-summary').textContent()).includes('4.157,00'));
       assert((await page.locator('.current-finance-available .current-finance-amount').textContent()).includes('19.510,00'));
       await page.locator('[data-ac4-simulation]').click();await page.locator('#ac4-simulation-target').selectOption('6');await page.locator('#ac4-simulation-confirm').click();
       assert.equal(await page.locator('.simulation-entry').count(),4);
       assert.equal(await page.locator('.day[data-day="22"] .simulation-entry').count(),0);
-      assert((await page.locator('#ac4-month-summary').textContent()).includes('44.414,00'));
-      assert((await page.locator('#ac4-month-summary').textContent()).includes('1.426,00'));
+      assert((await page.locator('#ac4-month-summary').textContent()).includes('44.774,00'));
+      assert((await page.locator('#ac4-month-summary').textContent()).includes('1.066,00'));
       await page.locator('[data-ac4-simulation]').click();await page.locator('#ac4-simulation-disregard').click();
       assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
     }
