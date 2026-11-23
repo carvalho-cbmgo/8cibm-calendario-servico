@@ -63,7 +63,7 @@ const money=cents=>normalize(currency.format(cents/100));
   }
   await page.clock.setFixedTime(new Date('2026-11-12T15:00:00Z'));await page.evaluate(()=>window.dispatchEvent(new Event('pageshow')));expected=await verify('2026-11-12',true,8);assert.equal(expected.extra.total,0);
   await configure(6);expected=await verify('2026-11-12',true,6);assert.equal(expected.real.total+expected.extra.total,1438900);
-  await page.locator('#mes-seguinte').click();await verify('2026-11-12',true);assert.equal(await page.locator('.current-finance-available .current-finance-amount').textContent(),'Não informada');
+  await page.locator('#mes-seguinte').click();await verify('2026-11-12',true);assert.equal(normalize(await page.locator('.current-finance-available .current-finance-amount').textContent()),money(3800000));
   await page.locator('#mes-anterior').click();await configure(6,false);
   await page.clock.setFixedTime(new Date('2026-11-09T15:00:00Z'));await page.evaluate(()=>document.dispatchEvent(new Event('visibilitychange')));await verify('2026-11-09');
   await page.evaluate(()=>window.ServiceCalendar.updateAC4({period:'2026-11',day:9,member:'SD PICCINI'},{end:'20h00',endDate:'2026-11-09',nextDay:false,hours:12}));expected=await verify('2026-11-09');assert.equal(expected.real.total,1159600);

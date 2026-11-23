@@ -2,6 +2,8 @@
 
 Calendário HTML responsivo e estático para exibição da previsão de militares por ala, dos serviços SAT e do controle financeiro de AC4. Há dados de novembro/2026 a janeiro/2027; meses sem dados mostram essa condição.
 
+A **cota mensal de AC4 de dezembro/2026 é R$ 38.000,00**, conforme informado pelo usuário. Com o AC4 previsto de R$ 480,00 já cadastrado, o saldo mensal inicial é **R$ 37.520,00**. O valor é utilizado nos resumos, saldos diários, percentuais e simulação de dezembro. A cota de novembro permanece em R$ 45.840,00; serviços, horas, tarifas e execuções foram preservados.
+
 Em **24/11/2026**, HELLYSSON **08h–20h** e LUIZ ANTONIO **20h–08h do dia seguinte** compõem juntos **um recurso operacional contínuo de 24h**. Com os cinco ordinários, o dia apresenta **seis recursos de 24h**, mantendo dois serviços AC4 distintos. Por orientação expressa do usuário, esse PROEBOM de HELLYSSON está designado para integrar a cobertura operacional; os demais PROEBOM mantêm suas designações existentes.
 
 O indicador de recursos usa a **cobertura calculada pelos horários**, mesmo com a simulação desligada. Turnos complementares preenchem as 24h; sobreposições e lacunas são respeitadas, sem duplicar a mesma pessoa. Cancelamentos e exclusões operacionais permanecem aplicáveis. Valores, horas de AC4, documentos, chefia e confirmações foram preservados. Novembro mantém R$ 41.623,00 comprometidos e R$ 4.217,00 de saldo; a simulação dos dias confirmados continua sem acréscimos.

@@ -92,7 +92,7 @@ const contrast = (text, background) => {
     assert.equal(await page.locator('.day.is-today').getAttribute('data-day'), '20');
     await page.locator('#mes-seguinte').click();
     assert.equal(await page.locator('.day.is-scale-confirmed').count(), 0);
-    assert((await page.locator('.current-finance-available').textContent()).includes('Não informada'));
+    assert((await page.locator('.current-finance-available').textContent()).includes('38.000,00'));
     await page.locator('#mes-anterior').click();
     assert.equal(await page.locator('.day.is-scale-confirmed').count(), 25);
     assert.equal(await page.evaluate(() => JSON.stringify(window.ServiceCalendar.schedules)), source);

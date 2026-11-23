@@ -15,7 +15,8 @@ const { AC4Finance: finance, ServiceChief: chief, ServiceSimulation: simulation,
 const prefix = 'ac4-operacional-24h-luiz-antonio-';
 // Preserve service IDs when revising the original 24h services to 12h.
 const entries = [['2026-11-22', '2026-11-23', 7, 'ST DA SILVA', 24, 96500], ['2026-11-29', '2026-11-29', 6, 'ST DA SILVA', 12, 48000], ['2026-12-06', '2026-12-06', 5, 'ST OSVALDIR', 12, 48000]];
-const summary = period => finance.month(data, period, period === '2026-11' ? 4584000 : undefined);
+const quotas = JSON.parse(scripts.find(s => s[1].includes('id="ac4-financial-config"'))[2]).monthlyQuotaCents;
+const summary = period => finance.month(data, period, quotas[period]);
 
 test('LUIZ tem um AC4 previsto de 24h em 22/11 e mantém 12h em 29/11 e 06/12, sem duplicação', () => {
   for (const [date, end, resources, leader, hours, cost] of entries) {
@@ -54,7 +55,7 @@ test('LUIZ tem um AC4 previsto de 24h em 22/11 e mantém 12h em 29/11 e 06/12, s
   }
 });
 
-test('novembro e dezembro recebem apenas os novos custos, sem inventar cota de dezembro', () => {
+test('novembro e dezembro recebem apenas os novos custos, com a cota configurada de dezembro', () => {
   const november = summary('2026-11'), december = summary('2026-12');
   assert.equal(november.records.length, 102);
   assert.equal(november.committedCents, 4162300);
@@ -64,8 +65,8 @@ test('novembro e dezembro recebem apenas os novos custos, sem inventar cota de d
   assert.equal(november.executedCents, 1096600);
   assert.equal(december.records.length, 1);
   assert.equal(december.committedCents, 48000);
-  assert.equal(december.quotaCents, null);
-  assert.equal(december.remainingCents, null);
+  assert.equal(december.quotaCents, 3800000);
+  assert.equal(december.remainingCents, 3752000);
   assert.equal(december.executedCents, 0);
   const plan = simulation.plan(data, '2026-11', 4584000);
   assert.equal(plan.days.get(22).addedResources, 0);
