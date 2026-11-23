@@ -549,6 +549,12 @@ dialog.simulation-dialog{width:min(620px,calc(100% - 24px));max-height:calc(100d
 .ranking-person svg{width:18px;height:18px;flex:0 0 auto;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .ranking-person[aria-expanded="true"] svg{transform:rotate(180deg)}
 .ranking-member-meta{display:block;font-size:12px;font-weight:400;line-height:1.25;color:#728398;margin-top:0}
+.ranking-hours{margin-top:6px;padding:6px 8px;border:1px solid #d3e6de;border-radius:6px;background:#f1f8f4;color:#285e49;font-size:12px;font-weight:400;line-height:1.4;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.ranking-hours-top{display:flex;flex-wrap:wrap;justify-content:space-between;gap:2px 8px}
+.ranking-hours-top strong{font-weight:800}.ranking-hours-status{display:block;margin-top:2px}
+.ranking-hours-reached{border-color:#e8d39a;background:#fff8e7;color:#775318}
+.ranking-hours-exceeded{border-color:#efc1c7;background:#fff1f2;color:#9c2435}
+.ranking-hours-note{margin:0 0 10px;color:#526b82;font-size:13px;line-height:1.45}
 .ranking-amount{white-space:nowrap;font-variant-numeric:tabular-nums}
 .ranking-total-row{font-size:calc(1em + 1pt)}
 .ranking-total-row th,.ranking-total-row td{color:#c00000;font-weight:800;border-top:2px solid #cfdcea;background:#f8fafc;vertical-align:middle}
@@ -586,6 +592,7 @@ dialog.simulation-dialog{width:min(620px,calc(100% - 24px));max-height:calc(100d
  .ranking-table .ranking-row>td[data-label="AC4 TOTAL"]{grid-column:4}
  .ranking-table .ranking-row>td:is(.ranking-operational,.ranking-sat){padding:4px;border-radius:5px}
  .ranking-person{font-size:15px;min-height:40px}.ranking-member-meta{font-size:13px}
+ .ranking-hours,.ranking-hours-note{font-size:14px}
  .ranking-amount{font-size:15px;white-space:normal;overflow-wrap:normal}
  .ranking-table .ranking-total-row{background:#f4f8fd}
  .ranking-table .ranking-total-row>td[data-label]{display:flex;flex-direction:column;align-items:center;justify-content:center;align-self:stretch}
@@ -12694,7 +12701,7 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
 </script>
 <script>(() => {
   'use strict';
-  const MINUTE=60000,DAY=1440;
+  const MINUTE=60000,DAY=1440,MONTHLY_AC4_LIMIT=192*60;
   const normalize=value=>String(value??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[\s_]+/g,'-');
   function civilDate(value){
     const match=String(value??'').match(/^(\d{4})-(\d{2})-(\d{2})$/);if(!match)return null;
@@ -12801,10 +12808,18 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
     }
     const includeOfficers=options.includeOfficers!==false,sortBySeniority=options.sortBySeniority===true;
     const rows=[...people.values()].filter(person=>(person.includeZero||person.records.length)&&(includeOfficers||!person.officer));
-    for(const person of rows){person.records.sort(byDate);person.monthlyRecords.sort(byDate);}
+    const minutes=records=>records.reduce((sum,record)=>sum+(record.event.simulation?0:record.minutes),0);
+    for(const person of rows){
+      person.records.sort(byDate);person.monthlyRecords.sort(byDate);
+      person.minutes=minutes(person.records);person.monthlyMinutes=minutes(person.monthlyRecords);
+      person.monthlyExecutedMinutes=minutes(person.monthlyRecords.filter(record=>record.status==='executed'));
+      person.monthlyForecastMinutes=person.monthlyMinutes-person.monthlyExecutedMinutes;
+      person.monthlyLimitMinutes=MONTHLY_AC4_LIMIT;person.remainingMinutes=Math.max(0,MONTHLY_AC4_LIMIT-person.monthlyMinutes);person.excessMinutes=Math.max(0,person.monthlyMinutes-MONTHLY_AC4_LIMIT);
+      person.limitStatus=person.excessMinutes?'exceeded':person.monthlyMinutes===MONTHLY_AC4_LIMIT?'reached':'available';
+    }
     const bySeniority=(a,b)=>(a.ord??Infinity)-(b.ord??Infinity)||a.member.localeCompare(b.member,'pt-BR');
     rows.sort(sortBySeniority?bySeniority:(a,b)=>b.totalCents-a.totalCents||bySeniority(a,b));
-    const result={period:summary.period,startDate,cutoffDate,includeCurrentDay,includeOfficers,sortBySeniority,rows,recordCount:0,operationalCents:0,satCents:0,totalCents:0,forecastCents:0,executedCents:0};
+    const result={period:summary.period,startDate,cutoffDate,includeCurrentDay,includeOfficers,sortBySeniority,monthlyLimitMinutes:MONTHLY_AC4_LIMIT,rows,recordCount:0,operationalCents:0,satCents:0,totalCents:0,forecastCents:0,executedCents:0};
     for(const person of rows){result.recordCount+=person.records.length;for(const key of ['operationalCents','satCents','totalCents','forecastCents','executedCents'])result[key]+=person[key];}
     return result;
   }
@@ -13509,8 +13524,19 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
     if(window.ServiceDirectory?.has(name))window.ServiceDirectory.appendIdentification(target,{name});
     else target.append(document.createTextNode(name.toLocaleUpperCase('pt-BR')));
   }
+  const rankingDuration=minutes=>`${Math.floor(minutes/60)}h${minutes%60?String(minutes%60).padStart(2,'0'):''}`;
+  const rankingHoursStatus=person=>person.limitStatus==='exceeded'?`Excede em ${rankingDuration(person.excessMinutes)}`:person.limitStatus==='reached'?'Limite atingido':`Restam ${rankingDuration(person.remainingMinutes)}`;
+  function makeRankingHours(person){
+    const box=element('div',`ranking-hours ranking-hours-${person.limitStatus}`),top=element('div','ranking-hours-top');
+    box.dataset.monthlyMinutes=String(person.monthlyMinutes);box.dataset.periodMinutes=String(person.minutes);box.dataset.limitStatus=person.limitStatus;
+    box.setAttribute('role','group');box.setAttribute('aria-label',`Horas de AC4 de ${person.member} em ${periodLabel()}`);
+    top.append(element('span','','Horas do mês'),element('strong','ranking-hours-value',`${rankingDuration(person.monthlyMinutes)} / ${rankingDuration(person.monthlyLimitMinutes)}`));
+    box.append(top,element('span','ranking-hours-status',`${rankingHoursStatus(person)} · No intervalo: ${rankingDuration(person.minutes)}`));
+    return box;
+  }
   function makeRankingServices(person,data){
     const section=element('section','ranking-services');section.setAttribute('aria-label',`Serviços de AC4 de ${person.member}`);
+    section.append(element('p','ranking-service-note',`Horas de AC4 no mês: ${rankingDuration(person.monthlyMinutes)} / ${rankingDuration(person.monthlyLimitMinutes)}. ${rankingHoursStatus(person)}. Execução confirmada: ${rankingDuration(person.monthlyExecutedMinutes)} · Previstas: ${rankingDuration(person.monthlyForecastMinutes)}. No intervalo selecionado: ${rankingDuration(person.minutes)}.`));
     if(data.historyMonths){
       const history=element('section','ranking-history-details'),list=element('ul','ranking-history-list');history.append(element('h3','','Histórico dos meses anteriores'));
       for(const entry of person.history){const item=element('li'),source=entry.source==='consolidated'?'Consolidado informado, sem divisão Operacional/SAT.':entry.source==='calendar'?'AC4 cadastrados do mês inteiro, incluindo previstos.':'Valor não informado.';item.dataset.historyPeriod=entry.period;item.append(element('strong','',`${monthNames[Number(entry.period.slice(5))-1]}/${entry.period.slice(0,4)} · ${entry.amountCents===null?'Não informado':money(entry.amountCents)}`),element('small','',source));list.append(item);}
@@ -13556,8 +13582,9 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
     const directory=window.ServiceDirectory,missing=data.rows.filter(person=>!directory?.has(person.member)).length;
     document.getElementById('ac4-ranking-register-status').textContent=directory?.count()?`Cadastro local: ${directory.count()} militares.${missing?` ${missing} identificações do ranking a completar.`:' Identificações completas disponíveis.'}`:'Carregue o Plano de Chamada ou cadastro ES/OS para exibir nomes completos e RGs. A leitura é local, somente neste navegador.';
     const content=document.getElementById('ac4-ranking-content');content.replaceChildren();
+    const hoursNote=element('p','ranking-hours-note',`Horas do mês: AC4 previstos e com execução confirmada de todo o mês selecionado, com limite de ${rankingDuration(data.monthlyLimitMinutes)} por militar. O subtotal do intervalo segue Início/Fim. Histórico e simulações não somam horas.${financialSummary.invalidCount?' Há registros inválidos; confira as durações antes de avaliar o limite.':''}`);hoursNote.id='ac4-ranking-hours-note';content.append(hoursNote);
     if(!data.rows.length){content.append(element('p','ranking-empty',`Nenhum AC4 cadastrado de ${rankingDate(data.startDate)} a ${rankingDate(data.cutoffDate)}.`));return;}
-    const table=element('table',`ranking-table${data.historyMonths?' has-history':''}`);table.setAttribute('aria-label',`Ranking mensal de AC4 ${data.sortBySeniority?'por antiguidade':'em ordem decrescente de valor total'}`);table.setAttribute('role','table');
+    const table=element('table',`ranking-table${data.historyMonths?' has-history':''}`);table.setAttribute('aria-label',`Ranking mensal de AC4 ${data.sortBySeniority?'por antiguidade':'em ordem decrescente de valor total'}`);table.setAttribute('role','table');table.setAttribute('aria-describedby',hoursNote.id);
     const head=element('thead'),header=element('tr');head.setAttribute('role','rowgroup');header.setAttribute('role','row');
     for(const label of ['ORDEM','MILITAR','AC4 OPERACIONAL','AC4 SAT',...(data.historyMonths?['AC4 HISTÓRICO']:[]),'AC4 TOTAL']){const cell=element('th',label==='ORDEM'?'ranking-position':label==='MILITAR'?'ranking-member-cell':label==='AC4 OPERACIONAL'?'ranking-operational':label==='AC4 SAT'?'ranking-sat':label==='AC4 HISTÓRICO'?'ranking-history':'ranking-total',label);cell.scope='col';cell.setAttribute('role','columnheader');if(label==='ORDEM')cell.setAttribute('aria-label',data.sortBySeniority?'Antiguidade do militar':'Posição no ranking');header.append(cell);}head.append(header);table.append(head);
     const body=element('tbody');body.setAttribute('role','rowgroup');
@@ -13579,7 +13606,7 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
       if(confirmed)states.push(`${confirmed} confirmado${confirmed===1?'':'s'}`);if(forecast)states.push(`${forecast} previsto${forecast===1?'':'s'}`);
       if(!person.records.length)states.push('0 confirmados · 0 previstos');
       if(data.historyMonths)states.push(`Histórico: ${data.historyMonths-person.missingHistoryPeriods.length}/${data.historyMonths} meses informados`);
-      name.append(button,element('span','ranking-member-meta',states.join(' · ')));row.append(position,name,amountCell('AC4 OPERACIONAL',person.operationalCents),amountCell('AC4 SAT',person.satCents));if(data.historyMonths)row.append(amountCell('AC4 HISTÓRICO',person.historyCents,false,!!person.missingHistoryPeriods.length));row.append(amountCell('AC4 TOTAL',person.totalCents,true,!!person.missingHistoryPeriods.length));body.append(row,details);
+      name.append(button,element('span','ranking-member-meta',states.join(' · ')),makeRankingHours(person));row.append(position,name,amountCell('AC4 OPERACIONAL',person.operationalCents),amountCell('AC4 SAT',person.satCents));if(data.historyMonths)row.append(amountCell('AC4 HISTÓRICO',person.historyCents,false,!!person.missingHistoryPeriods.length));row.append(amountCell('AC4 TOTAL',person.totalCents,true,!!person.missingHistoryPeriods.length));body.append(row,details);
     });
     const foot=element('tfoot'),total=element('tr','ranking-row ranking-total-row'),label=element('th','ranking-total-label','TOTAL CONSIDERADO');foot.setAttribute('role','rowgroup');total.setAttribute('role','row');label.scope='row';label.colSpan=2;label.setAttribute('role','rowheader');total.append(label,amountCell('AC4 OPERACIONAL',data.operationalCents),amountCell('AC4 SAT',data.satCents));if(data.historyMonths)total.append(amountCell('AC4 HISTÓRICO',data.historyCents,false,!!data.missingHistoryPeople));total.append(amountCell('AC4 TOTAL',data.totalCents,true,!!data.missingHistoryPeople));foot.append(total);table.append(body,foot);content.append(table);
   }
