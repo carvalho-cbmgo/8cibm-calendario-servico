@@ -69,12 +69,12 @@ test('TS 166 é compensada em 30/11, com antiguidade correta e sem duplicar a TS
  }
 });
 
-test('TS 159 passa para 16/12; AISLAN retorna em 26/11 e PROEBOM não vira troca',()=>{
+test('TS 159 passa para 16/12; AISLAN retorna em 26/11 e reforço não vira troca',()=>{
  const seventeenth=day('2026-11-17'),november=day('2026-11-26'),december=day('2026-12-16');
  assert(!seventeenth.members.some(m=>m.badges.some(b=>b.troca?.numero==='159')));assert.equal(seventeenth.confirmation.status,'confirmed');
- assert(november.members.some(m=>m.name==='ST AISLAN'));assert(!november.members.some(m=>m.badges.some(b=>b.troca?.numero==='159')));assert(november.members.find(m=>m.name==='3º SGT HENRIQUE').events.every(e=>e.mode==='PROEBOM 2026'));
+ assert(november.members.some(m=>m.name==='ST AISLAN'));assert(!november.members.some(m=>m.badges.some(b=>b.troca?.numero==='159')));assert(november.members.find(m=>m.name==='3º SGT HENRIQUE').events.every(e=>e.mode==='OPERACIONAL/SOP'));
  assert(matches(december.members.find(m=>m.name==='3º SGT HENRIQUE').badges[0],'159','97553091'));assert(!december.members.some(m=>m.name==='ST AISLAN'));
- assert.equal(context.window.ServiceSimulation.coverage(seventeenth,'2026-11-17').resources,6);assert.equal(context.window.ServiceSimulation.coverage(november,'2026-11-26').resources,5);assert.equal(context.window.ServiceSimulation.coverage(december,'2026-12-16').resources,6);
+ assert.equal(context.window.ServiceSimulation.coverage(seventeenth,'2026-11-17').resources,6);assert.equal(context.window.ServiceSimulation.coverage(november,'2026-11-26').resources,6);assert.equal(context.window.ServiceSimulation.coverage(december,'2026-12-16').resources,6);
 });
 
 test('TS 167 em 05/01 e TS 169 em 09/01 substituem AISLAN, sem pendência ou duplicação',()=>{
@@ -95,7 +95,7 @@ test('TS 164 preserva os três militares e a cadeia de substituição em 29/11, 
 
 test('conferência das TS preserva a troca parcial 168, confirmações e totais reais/simulados',()=>{
  const {AC4Finance:finance,ServiceSimulation:simulation}=context.window,real=finance.month(data,'2026-11',4584000),plan=simulation.plan(data,'2026-11',4584000);
- assert.equal(real.records.length,102);assert.equal(real.committedCents,4162300);assert.equal(real.executedCents,1096600);assert.equal(plan.addedResources,4);assert.equal(plan.summary.committedCents,309100);
+ assert.equal(real.records.length,102);assert.equal(real.committedCents,4186300);assert.equal(real.executedCents,1096600);assert.equal(plan.addedResources,3);assert.equal(plan.summary.committedCents,273100);
  assert.equal(data['2026-11'].days.filter(day=>day.confirmation?.status==='confirmed').length,25);
  for(const date of ['2026-11-08','2026-11-29']){const d=day(date),partial=d.members.filter(member=>member.serviceHours===12);assert.equal(partial.length,2);assert.equal(simulation.coverage(d,date).resources,date==='2026-11-29'?6:5);}
  assert(!data['2026-10']);

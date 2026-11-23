@@ -102,13 +102,13 @@ test('HENRIQUE cumpre EAS de 24h em 18 e 23/11, com observação exata, sem gera
   const actual = finance.month(data, '2026-11', 4584000);
   const baseline = finance.month(before, '2026-11', 4584000);
   assert.equal(JSON.stringify(actual.records), JSON.stringify(baseline.records));
-  assert.equal(actual.committedCents, 4162300);
+  assert.equal(actual.committedCents, 4186300);
   assert.equal(actual.executedCents, 1096600);
-  assert.equal(actual.remainingCents, 421700);
+  assert.equal(actual.remainingCents, 397700);
   const plan = simulation.plan(data, '2026-11', 4584000);
   assert.equal(plan.days.get(18).addedServices, 0);
   assert.equal(plan.days.get(23).addedServices, 0);
-  assert.equal(plan.addedResources, 4);
-  assert.equal(plan.summary.committedCents, 309100);
+  assert.equal(plan.addedResources, 3);
+  assert.equal(plan.summary.committedCents, 273100);
   assert.equal(data['2026-11'].days.filter(d => d.confirmation?.status === 'confirmed').length, 25);
 });

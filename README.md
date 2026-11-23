@@ -2,6 +2,10 @@
 
 Calendário HTML responsivo e estático para exibição da previsão de militares por ala, dos serviços SAT e do controle financeiro de AC4. Há dados de novembro/2026 a janeiro/2027; meses sem dados mostram essa condição.
 
+Em **26/11/2026**, o AC4 de **HENRIQUE passou de 4h para 12h, 08h–20h**, e os serviços dele e de **HELLYSSON, mantido em 4h/08h–12h**, foram identificados como **REFORÇO OPERACIONAL**. Identificadores, datas, estado previsto e OS a definir foram preservados. HENRIQUE complementa o noturno de LUIZ ANTONIO, mantendo **seis recursos operacionais de 24h** no dia; HELLYSSON acrescenta cobertura entre 08h e 12h.
+
+O acréscimo é de **R$ 240,00**, sem mudança nas tarifas. Novembro mantém 102 serviços e passa a **R$ 41.863,00 comprometidos**, sendo R$ 32.793,00 operacionais e R$ 9.070,00 SAT, com **R$ 3.977,00 de saldo**. A execução confirmada permanece em R$ 10.966,00, com R$ 30.897,00 previstos. Na meta de seis, a simulação passa a **três serviços em dois dias/R$ 2.731,00**, deixando **R$ 1.246,00** após os reforços simulados. Os demais serviços, confirmações e a cota de dezembro foram preservados.
+
 A **cota mensal de AC4 de dezembro/2026 é R$ 38.000,00**, conforme informado pelo usuário. Com o AC4 previsto de R$ 480,00 já cadastrado, o saldo mensal inicial é **R$ 37.520,00**. O valor é utilizado nos resumos, saldos diários, percentuais e simulação de dezembro. A cota de novembro permanece em R$ 45.840,00; serviços, horas, tarifas e execuções foram preservados.
 
 Em **24/11/2026**, HELLYSSON **08h–20h** e LUIZ ANTONIO **20h–08h do dia seguinte** compõem juntos **um recurso operacional contínuo de 24h**. Com os cinco ordinários, o dia apresenta **seis recursos de 24h**, mantendo dois serviços AC4 distintos. Por orientação expressa do usuário, esse PROEBOM de HELLYSSON está designado para integrar a cobertura operacional; os demais PROEBOM mantêm suas designações existentes.

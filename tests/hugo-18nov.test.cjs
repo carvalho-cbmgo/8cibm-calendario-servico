@@ -58,48 +58,51 @@ test('consulta e simulação respeitam a dispensa e o pagamento sem gerar AC4 pa
   assert.equal(plan.days.get(29).addedResources, 0);
 });
 
-test('HENRIQUE e HELLYSSON têm dois PROEBOM previstos de 4h em 26/11, com OS a definir', () => {
+test('HENRIQUE 12h e HELLYSSON 4h são reforços operacionais em 26/11, com OS a definir', () => {
   const summary = finance.month(data, '2026-11', 4584000);
   const records = summary.records.filter(r => r.event.serviceId?.startsWith('ac4-2026-11-26-'));
   assert.deepEqual([...records.map(r => r.member)].sort(), ['1º SGT HELLYSSON', '3º SGT HENRIQUE']);
   assert.equal(records.length, 2);
   assert.equal(new Set(records.map(r => r.key)).size, 2);
   for (const record of records) {
-    assert.equal(record.event.mode, 'PROEBOM 2026');
+    const hours = record.member.includes('HENRIQUE') ? 12 : 4;
+    assert.equal(record.event.mode, 'OPERACIONAL/SOP');
+    assert.equal(record.event.observation, 'REFORÇO OPERACIONAL');
     assert.equal(record.startDate, '2026-11-26');
     assert.equal(record.endDate, '2026-11-26');
     assert.equal(record.start, '08h00');
-    assert.equal(record.end, '12h00');
-    assert.equal(record.minutes, 240);
-    assert.equal(record.event.hours, 4);
+    assert.equal(record.end, hours === 12 ? '20h00' : '12h00');
+    assert.equal(record.minutes, hours * 60);
+    assert.equal(record.event.hours, hours);
     assert.equal(record.event.nextDay, false);
     assert.equal(record.category, 'operational');
-    assert.equal(record.costCents, 12000);
+    assert.equal(record.costCents, hours * 3000);
     assert.equal(record.status, 'forecast');
     assert.equal(record.event.executionConfirmed, undefined);
     assert.equal(finance.documentInfo(record.event).number, '');
     assert.equal(finance.documentInfo(record.event).sei, '');
     const matches = lookup.month(data, '2026-11').filter(r => r.member === record.member && r.date === '2026-11-26' && r.type === 'ac4');
     assert.equal(matches.length, 1);
-    assert.equal(matches[0].commitmentCents, 12000);
+    assert.equal(matches[0].commitmentCents, hours * 3000);
   }
   const without = structuredClone(data);
   without['2026-11'].days.find(d => d.day === 26).members = day(26).members.filter(m => !m.events.some(e => e.serviceId?.startsWith('ac4-2026-11-26-')));
-  assert.equal(simulation.coverage(day(26), '2026-11-26').resources, 5);
+  assert.equal(simulation.coverage(day(26), '2026-11-26').resources, 6);
   assert.equal(chief.select(day(26)).assignments[0].name, 'ST DA SILVA');
   for (let target = 4; target <= 8; target++) {
     const actual = simulation.plan(data, '2026-11', 4584000, undefined, target);
     const original = simulation.plan(without, '2026-11', 4584000, undefined, target);
-    assert.equal(actual.addedServices, original.addedServices);
-    assert.equal(actual.summary.committedCents, original.summary.committedCents);
-    assert.equal(JSON.stringify(actual.days.get(26)), JSON.stringify(original.days.get(26)));
+    assert.equal(original.addedServices - actual.addedServices, target >= 6 ? 1 : 0);
+    assert.equal(original.summary.committedCents - actual.summary.committedCents, target === 6 ? 36000 : target >= 7 ? 48000 : 0);
+    assert.equal(actual.days.get(26).coverage.resources, 6);
+    assert.equal(original.days.get(26).coverage.resources, 5);
   }
   assert.equal(summary.records.length, 102);
-  assert.equal(summary.committedCents, 4162300);
-  assert.equal(summary.operationalCents, 3255300);
+  assert.equal(summary.committedCents, 4186300);
+  assert.equal(summary.operationalCents, 3279300);
   assert.equal(summary.satCents, 907000);
   assert.equal(summary.executedCents, 1096600);
-  assert.equal(summary.remainingCents, 421700);
+  assert.equal(summary.remainingCents, 397700);
 });
 
 test('inclusões de 18/11 preservam integralmente os demais dados do calendário', () => {
@@ -112,5 +115,6 @@ test('inclusões de 18/11 preservam integralmente os demais dados do calendário
   twentyNinth.coverage = ['5 recursos de 24h', 'Faltam 1 recurso'];
   const input = days.find(d => d.day === 26);
   input.members = input.members.filter(m => !m.events.some(e => e.serviceId?.startsWith('ac4-2026-11-26-')));
+  input.coverage = ['5 recursos de 24h', 'Faltam 1 recurso'];
   assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'), '9feb8f36f5bd8fff124a543b0ee0a5b4a798cd8e5539b01d6370a958ba28cbda');
 });

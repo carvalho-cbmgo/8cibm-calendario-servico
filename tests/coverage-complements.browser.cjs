@@ -55,7 +55,7 @@ const snapshot=()=>Object.keys(window.ServiceCalendar.schedules).map(period=>{
       Object.assign(e,{start:'08h00',end:'20h00',nextDay:false,endDate:'2026-11-24'});window.ServiceCalendar.refresh();
     });assert.equal(await total.textContent(),'5 recursos de 24h');
     await page.evaluate(source=>{Object.assign(window.ServiceCalendar.schedules,JSON.parse(source));window.ServiceCalendar.refresh();},source);
-    assert.equal(await total.textContent(),'6 recursos de 24h');assert.equal(await page.locator('.day[data-day="26"] .resource-total').textContent(),'5 recursos de 24h');
+    assert.equal(await total.textContent(),'6 recursos de 24h');assert.equal(await page.locator('.day[data-day="26"] .resource-total').textContent(),'6 recursos de 24h');
     assert.equal(await page.evaluate(()=>JSON.stringify(window.ServiceCalendar.schedules)),source);assert.deepEqual(await page.evaluate(snapshot),financial);assert.deepEqual(errors,[]);
     console.log('PASS: 24/11 five ordinary + two complementary AC4 = six resources; runtime coverage without simulation/stale labels, explicit PROEBOM designation, exclusions/cancellation/gaps/overlap, full-shift reinforcement only when needed, preserved data and finances; desktop/320/390px.');
   }finally{if(browser)await browser.close();await new Promise(resolve=>server.close(resolve));}

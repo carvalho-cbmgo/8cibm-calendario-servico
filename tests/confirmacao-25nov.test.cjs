@@ -26,7 +26,7 @@ test('escalas de 1 a 25/11 estão confirmadas, com sete novas confirmações em 
       assert.deepEqual(day.confirmation, { status: 'confirmed', date: '2026-11-19', source: 'user', scope: 'calendar', previousAlerts: [] });
     }
   }
-  assert.equal(createHash('sha256').update(JSON.stringify(previous())).digest('hex'), '109af0416681b824f1eb6da2af0541e63a23cfe869e875ac0ea951b820150e38');
+  assert.equal(createHash('sha256').update(JSON.stringify(previous())).digest('hex'), '23e63aa2c095ecb2e31244eb1f92bd6733a70eebfc650898168b7c7c84002c3e');
 });
 
 test('confirmar a escala preserva integralmente AC4, execuções, tarifas, cobertura e chefia', () => {
@@ -44,10 +44,10 @@ test('confirmar a escala preserva integralmente AC4, execuções, tarifas, cober
   }
   const summary = finance.month(data, '2026-11', 4584000);
   assert.equal(summary.records.length, 102);
-  assert.equal(summary.committedCents, 4162300);
-  assert.equal(summary.forecastCents, 3065700);
+  assert.equal(summary.committedCents, 4186300);
+  assert.equal(summary.forecastCents, 3089700);
   assert.equal(summary.executedCents, 1096600);
-  assert.equal(summary.remainingCents, 421700);
+  assert.equal(summary.remainingCents, 397700);
 });
 
 test('somente os dias a partir de 26/11 recebem reforços simulados, em todas as metas', () => {
@@ -59,9 +59,9 @@ test('somente os dias a partir de 26/11 recebem reforços simulados, em todas as
     for (let day = 26; day <= 30; day++) assert.equal(JSON.stringify(actual.days.get(day)), JSON.stringify(old.days.get(day)));
   }
   const plan = simulation.plan(data, '2026-11', 4584000);
-  assert.equal(plan.addedServices, 4);
-  assert.equal(plan.daysAffected, 3);
-  assert.equal(plan.summary.committedCents, 309100);
-  assert.deepEqual([...plan.days].filter(([,d]) => d.addedServices).map(([day,d]) => [day,d.addedServices]), [[26,1],[28,2],[30,1]]);
+  assert.equal(plan.addedServices, 3);
+  assert.equal(plan.daysAffected, 2);
+  assert.equal(plan.summary.committedCents, 273100);
+  assert.deepEqual([...plan.days].filter(([,d]) => d.addedServices).map(([day,d]) => [day,d.addedServices]), [[28,2],[30,1]]);
   assert.equal(JSON.stringify(data), source);
 });

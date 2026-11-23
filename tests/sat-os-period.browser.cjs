@@ -194,7 +194,7 @@ function financeSnapshot() {
     let rows = await tableRows(page);
     assert(rows.length > 0);
     assert(rows.every(row => row[0] === '26/11/2026'));
-    assert(rows.some(row => row[4].includes('HENRIQUE') && row[6] === '4h'));
+    assert(rows.some(row => row[4].includes('HENRIQUE') && row[6] === '12h'));
     assert.deepEqual((await copyRows(page)).rows, rows);
     await page.locator('#sei-close').click();
     assert.equal(await page.evaluate(() => JSON.stringify(window.ServiceCalendar.schedules)), source);

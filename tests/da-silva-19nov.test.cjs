@@ -44,12 +44,12 @@ test('ST DA SILVA tem um AC4 operacional previsto de 12h em 19/11, OS 383/SEI 98
   assert.equal(services[0].commitmentCents, 36000);
   const before = finance.month(previous(), '2026-11', 4584000);
   assert.equal(summary.records.length, 102);
-  assert.equal(summary.committedCents, 4162300);
-  assert.equal(summary.operationalCents, 3255300);
+  assert.equal(summary.committedCents, 4186300);
+  assert.equal(summary.operationalCents, 3279300);
   assert.equal(summary.satCents, 907000);
-  assert.equal(summary.forecastCents, 3065700);
+  assert.equal(summary.forecastCents, 3089700);
   assert.equal(summary.executedCents, 1096600);
-  assert.equal(summary.remainingCents, 421700);
+  assert.equal(summary.remainingCents, 397700);
   for (const [date, daily] of summary.daily) {
     assert.equal(daily.committedCents - before.daily.get(date).committedCents, date === record.startDate ? 36000 : 0);
     assert.equal(daily.cumulativeCents - before.daily.get(date).cumulativeCents, date >= record.startDate ? 36000 : 0);
@@ -60,7 +60,7 @@ test('ST DA SILVA tem um AC4 operacional previsto de 12h em 19/11, OS 383/SEI 98
 
 test('o diurno complementa o noturno de LUIZ, elimina a vaga simulada e preserva os demais dados e tarifas', () => {
   const before = previous(), source = JSON.stringify(data);
-  assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'), 'fc13ccd673e5bde6ccf930f21d635f10b02731d26522e36acf504dd6dfdb5b91');
+  assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'), '84de0eff63ed35edb2934930731155e3ba6b433f5f849b684bf49a6875b0dbf3');
   const coverage = simulation.coverage(day(data), '2026-11-19');
   assert.equal(coverage.resources, 6);
   assert(coverage.segments.every(s => s.resources === 6));
@@ -80,8 +80,8 @@ test('o diurno complementa o noturno de LUIZ, elimina a vaga simulada e preserva
   }
   const plan = simulation.plan(data, '2026-11', 4584000);
   assert.equal(plan.days.get(19).addedServices, 0);
-  assert.equal(plan.addedServices, 4);
-  assert.equal(plan.daysAffected, 3);
-  assert.equal(plan.summary.committedCents, 309100);
+  assert.equal(plan.addedServices, 3);
+  assert.equal(plan.daysAffected, 2);
+  assert.equal(plan.summary.committedCents, 273100);
   assert.equal(JSON.stringify(data), source);
 });

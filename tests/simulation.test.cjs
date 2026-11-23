@@ -93,7 +93,7 @@ test('24/11 une HELLYSSON 08h–20h e LUIZ 20h–08h em seis recursos, inclusive
   assert.equal(result.resources,6);assert(result.segments.every(s=>s.resources===6));
   const hellysson=day.members.find(m=>m.name==='1º SGT HELLYSSON').events[0];
   assert.equal(hellysson.integrante_operacional,true);assert.equal(hellysson.hours,12);
-  assert.equal(base.committedCents,4162300);assert.equal(base.remainingCents,421700);
+  assert.equal(base.committedCents,4186300);assert.equal(base.remainingCents,397700);
   const unconfirmed=structuredClone(source);delete unconfirmed['2026-11'].days.find(d=>d.day===24).confirmation;
   assert.equal(simulation.plan(unconfirmed,'2026-11',4584000).days.get(24).addedServices,0);
   unconfirmed['2026-11'].days.find(d=>d.day===24).members.find(m=>m.name==='1º SGT HELLYSSON').events[0].integrante_operacional=false;
@@ -156,18 +156,18 @@ test('todas as metas completam somente o déficit por horário nos três meses c
   assert.equal(JSON.stringify(source),before);
 });
 
-test('novembro simula 4 recursos em 3 dias, cobra cada reforço uma vez e preserva execuções',()=>{
+test('novembro simula 3 recursos em 2 dias, cobra cada reforço uma vez e preserva execuções',()=>{
   const source=data(),plan=simulation.plan(source,'2026-11',4584000),real=finance.month(source,'2026-11',4584000);
   assert.equal(source['2026-11'].days.filter(day=>day.confirmation?.status==='confirmed').length,25);
   for(let day=1;day<=25;day++)assert.equal(plan.days.get(day).addedResources,0);
   assert.equal(plan.days.get(27).addedResources,0);assert.equal(plan.days.get(13).addedResources,0);assert.equal(plan.days.get(20).addedResources,0);assert.equal(plan.days.get(29).addedResources,0);
-  assert.equal(plan.addedResources,4);assert.equal(plan.addedServices,4);assert.equal(plan.daysAffected,3);assert.equal(plan.summary.committedCents,309100);
-  assert.equal(new Set(plan.summary.records.map(record=>record.key)).size,4);assert.equal(plan.summary.executedCents,0);assert.equal(plan.summary.satCents,0);
-  assert.equal(plan.summary.daily.get('2026-11-30').cumulativeCents,309100);
-  assert.equal(real.records.length,102);assert.equal(real.committedCents,4162300);assert.equal(real.executedCents,1096600);
-  assert.equal(real.committedCents+plan.summary.committedCents,4471400);assert.equal(real.remainingCents-plan.summary.committedCents,112600);
-  assert.equal(plan.summary.records.filter(record=>record.minutes===720).length,1);assert.equal(plan.summary.records.reduce((total,record)=>total+record.minutes/60,0),84);
-  assert.equal(plan.days.get(19).addedServices,0);assert.equal(plan.days.get(24).addedServices,0);for(const number of [26]){const complements=plan.days.get(number).members.filter(member=>member.events[0].hours===12);assert.equal(complements.length,1);assert.deepEqual([complements[0].events[0].start,complements[0].events[0].end],['08h00','20h00']);}
+  assert.equal(plan.addedResources,3);assert.equal(plan.addedServices,3);assert.equal(plan.daysAffected,2);assert.equal(plan.summary.committedCents,273100);
+  assert.equal(new Set(plan.summary.records.map(record=>record.key)).size,3);assert.equal(plan.summary.executedCents,0);assert.equal(plan.summary.satCents,0);
+  assert.equal(plan.summary.daily.get('2026-11-30').cumulativeCents,273100);
+  assert.equal(real.records.length,102);assert.equal(real.committedCents,4186300);assert.equal(real.executedCents,1096600);
+  assert.equal(real.committedCents+plan.summary.committedCents,4459400);assert.equal(real.remainingCents-plan.summary.committedCents,124600);
+  assert.equal(plan.summary.records.filter(record=>record.minutes===720).length,0);assert.equal(plan.summary.records.reduce((total,record)=>total+record.minutes/60,0),72);
+  assert.equal(plan.days.get(19).addedServices,0);assert.equal(plan.days.get(24).addedServices,0);assert.equal(plan.days.get(26).addedServices,0);
 });
 
 test('tarifa acompanha cada data e o mês financeiro usa o início do reforço',()=>{
@@ -181,9 +181,9 @@ test('meta de 4 a 8 altera somente os reforços necessários, sem remover recurs
   const four=simulation.plan(source,'2026-11',4584000,real,4),five=simulation.plan(source,'2026-11',4584000,real,5),eight=simulation.plan(source,'2026-11',4584000,real,8);
   assert.equal(four.addedResources,0);assert.equal(four.summary.committedCents,0);assert.equal(four.days.get(12).coverage.resources,6);
   assert.equal(five.addedResources,1);assert.equal(five.summary.committedCents,99500);
-  assert.equal(eight.addedResources,14);assert.equal(eight.daysAffected,5);assert.equal(eight.targetResources,8);
+  assert.equal(eight.addedResources,13);assert.equal(eight.daysAffected,5);assert.equal(eight.targetResources,8);
   for(const day of source['2026-11'].days){const planned=eight.days.get(day.day);assert.equal(planned.addedResources,day.confirmation?.status==='confirmed'?0:8-planned.coverage.resources);}
-  assert.equal(eight.summary.quotaCents,4584000);assert.equal(real.remainingCents-eight.summary.committedCents,-780800);assert.equal(JSON.stringify(source),before);
+  assert.equal(eight.summary.quotaCents,4584000);assert.equal(real.remainingCents-eight.summary.committedCents,-756800);assert.equal(JSON.stringify(source),before);
 });
 
 test('meta inválida é rejeitada e a meta padrão continua sendo 6',()=>{

@@ -31,7 +31,7 @@ test('TAVARES é o ACA expressamente designado para as 24h de 19/11, sem atribui
   assert.equal(JSON.stringify(result.assignments), JSON.stringify([{name:'ST TAVARES', start:0, end:1440}]));
   assert.equal(day(data, 19).chief, 'ST TAVARES');
   assert.equal(simulation.coverage(day(data, 19), '2026-11-19').resources, 6);
-  assert.equal(createHash('sha256').update(JSON.stringify(previous())).digest('hex'), '897a2d83b413e49cbf30f63ec3dff9948adca2076c981051621cece3a5f545f3');
+  assert.equal(createHash('sha256').update(JSON.stringify(previous())).digest('hex'), 'e029f75a54c7b4bb99764e42b569940b52a0d954d8e5996d48e8cf3f46883c2c');
 });
 
 test('HELLYSSON, LUIZ e NIKHOLAS têm os períodos retificados, com identidades e exclusões preservadas', () => {
@@ -72,10 +72,10 @@ test('cota R$ 45.840 e AC4 atualizados mantêm tarifas, execuções e simulaçã
   const quota = config.monthlyQuotaCents['2026-11'];
   assert.equal(quota, 4584000);
   const summary = finance.month(data,'2026-11',quota), before = finance.month(previous(),'2026-11',quota);
-  assert.equal(summary.records.length,102); assert.equal(summary.committedCents,4162300);
-  assert.equal(summary.operationalCents,3255300); assert.equal(summary.satCents,907000);
-  assert.equal(summary.forecastCents,3065700); assert.equal(summary.executedCents,1096600);
-  assert.equal(summary.remainingCents,421700); assert.equal(summary.committedCents-before.committedCents,208000);
+  assert.equal(summary.records.length,102); assert.equal(summary.committedCents,4186300);
+  assert.equal(summary.operationalCents,3279300); assert.equal(summary.satCents,907000);
+  assert.equal(summary.forecastCents,3089700); assert.equal(summary.executedCents,1096600);
+  assert.equal(summary.remainingCents,397700); assert.equal(summary.committedCents-before.committedCents,208000);
   assert.equal(finance.asOf(summary,'2026-11-19').remainingCents,1951000);
   assert.equal(simulation.coverage(day(data,20),'2026-11-20').resources,6);
   assert.equal(simulation.coverage(day(data,21),'2026-11-21').resources,6);
@@ -84,7 +84,7 @@ test('cota R$ 45.840 e AC4 atualizados mantêm tarifas, execuções e simulaçã
   assert.equal(simulation.coverage(day(data,23),'2026-11-23').resources,6);
   assert.equal(simulation.coverage(day(data,24),'2026-11-24').resources,6);
   const plan = simulation.plan(data,'2026-11',quota);
-  assert.equal(plan.addedServices,4); assert.equal(plan.summary.committedCents,309100);
-  assert.equal(summary.remainingCents-plan.summary.committedCents,112600);
+  assert.equal(plan.addedServices,3); assert.equal(plan.summary.committedCents,273100);
+  assert.equal(summary.remainingCents-plan.summary.committedCents,124600);
   for (let n=1;n<=25;n++) assert.equal(day(data,n).confirmation.status,'confirmed');
 });
