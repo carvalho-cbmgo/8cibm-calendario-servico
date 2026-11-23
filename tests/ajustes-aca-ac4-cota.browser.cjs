@@ -63,7 +63,7 @@ const root = path.join(__dirname, '..');
         [20,'HELLYSSON',24,'21/11/2026','995,00',6,'OPERACIONAL/SOP'],
         [22,'LUIZ ANTONIO',24,'23/11/2026','965,00',7,'OPERACIONAL/SOP'],
         [23,'NIKHOLAS',12,'23/11/2026','360,00',6,'OPERACIONAL/SOP'],
-        [24,'HELLYSSON',12,'24/11/2026','360,00',5,'PROEBOM 2026'],
+        [24,'HELLYSSON',12,'24/11/2026','360,00',6,'PROEBOM 2026'],
       ]) {
         card=await openDay(number);
         assert.equal(await card.locator('.resource-total').textContent(),`${resources} recursos de 24h`);

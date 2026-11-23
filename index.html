@@ -5662,6 +5662,7 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
               {
                 "serviceId": "ac4-proebom-hellysson-2026-11-24-08h",
                 "mode": "PROEBOM 2026",
+                "integrante_operacional": true,
                 "start": "08h00",
                 "end": "20h00",
                 "nextDay": false,
@@ -5739,8 +5740,8 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
           }
         ],
         "coverage": [
-          "5 recursos de 24h",
-          "Faltam 1 recurso"
+          "6 recursos de 24h",
+          "Meta de 6 recursos"
         ],
         "confirmation": {
           "status": "confirmed",
@@ -13049,7 +13050,7 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
   const clock=value=>{const m=String(value??'').match(/^(\d{1,2})(?:h|:)(\d{2})?$/);return m&&Number(m[1])<24&&Number(m[2]||0)<60?Number(m[1])*60+Number(m[2]||0):null;};
   const clockText=minute=>`${String(Math.floor(minute/60)).padStart(2,'0')}h${String(minute%60).padStart(2,'0')}`;
   const dayStamp=date=>Date.parse(`${date}T00:00:00Z`)/60000;
-  const operational=event=>event.integrante_operacional!==false&&!/SAT|INSPEC|ANALIS|PROJETO|PROEBOM|EXTERN/.test(normalize(event.mode))&&(event.integrante_operacional===true||/^(?:OPERACIONAL(?:\/SOP)?|SOP)$/.test(normalize(event.mode)));
+  const operational=event=>event.integrante_operacional!==false&&!/SAT|INSPEC|ANALIS|PROJETO|EXTERN/.test(normalize(event.mode))&&(event.integrante_operacional===true||/^(?:OPERACIONAL(?:\/SOP)?|SOP)$/.test(normalize(event.mode)));
   function coverage(day,date,summary,{forSimulation=false}={}){
     const anchor=clock(day.shiftStart)??480,people=new Map(),warnings=[];
     const add=(member,start,end)=>{
@@ -13818,7 +13819,8 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
     if(confirmed){const label=element('span','scale-confirmed-label','Escala confirmada');label.title='Escala confirmada pelo usuário';dayState.append(label);}
     const resources=element('div','day-resources');resources.setAttribute('aria-label','Recursos do serviço operacional');
     const simulatedCoverage=simulationActive&&!confirmed&&simulated.coverage.valid;
-    const total=element('span','resource-total',simulatedCoverage?`${simulated.coverage.resources+added} recursos de 24h`:day.coverage[0]);total.title=simulatedCoverage?`Diurno: ${simulated.dayResources} militares (meta ${simulated.targets.day}). Noturno: ${simulated.nightResources} militares (meta ${simulated.targets.night}). Dois períodos complementares de 12h equivalem a um recurso de 24h.`:'Recursos de 24h, conforme a cobertura operacional registrada.';
+    const actualCoverage=window.ServiceSimulation.coverage(day,`${period}-${String(day.day).padStart(2,'0')}`,financialSummary);
+    const total=element('span','resource-total',`${simulatedCoverage?simulated.coverage.resources+added:actualCoverage.resources} recursos de 24h`);total.title=simulatedCoverage?`Diurno: ${simulated.dayResources} militares (meta ${simulated.targets.day}). Noturno: ${simulated.nightResources} militares (meta ${simulated.targets.night}). Dois períodos complementares de 12h equivalem a um recurso de 24h.`:`Cobertura operacional contínua durante as 24h do serviço. Turnos complementares contam como um recurso de 24h; horários sobrepostos não cobrem lacunas.${actualCoverage.valid?'':` Conferir: ${actualCoverage.warnings.join(' ')}`}`;
     const ordinary=element('span','chip ord resource-ordinary',`${counts.ordinary} ORD`);ordinary.title='Militares em serviço ordinário operacional, incluindo TS e TS CIA de pagamento. Dispensas e trocas pendentes não entram nesta contagem.';ordinary.setAttribute('aria-label',`${counts.ordinary} recursos de serviço ordinário`);
     const ac4=element('span','chip ac4 resource-ac4',`${counts.ac4+addedServices} AC4`);ac4.title=`Serviços AC4 ativos do Operacional, incluindo PROEBOM e jornadas parciais. SAT contabilizada separadamente.${addedServices?` Inclui ${addedServices} reforços simulados.`:''}`;
     const primary=element('div','day-primary');resources.append(ordinary,ac4);primary.append(date,resources);
@@ -14058,7 +14060,7 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
       const members=orderedDayMembers(day);for(const [index,member] of members.entries())appendMember(dialogBody,member,index,members.length);
       for(const member of simulationDay(day)?.members||[]){const section=element('section','member-details simulation-entry'),heading=element('div','member-heading');heading.append(element('h3','name','PREVISTO AC4'),badgeNodes(member,{assignments:[]},day));section.append(heading,element('p','detail-note',`Simulação de reforço de ${member.events[0].hours}h, sem militar designado; não integra os documentos ES/OS.`),eventFinanceDetails(member.events[0],day));dialogBody.append(section);}
     }
-    dialogBody.append(element('p', 'coverage-note', sat?'Serviços da SAT apresentados separadamente do efetivo operacional. A OS contém somente os períodos de AC4 informados.':'Exibição do serviço operacional e das previsões PROEBOM informadas. PROEBOM e jornadas parciais não completam automaticamente recursos operacionais de 24h. Este calendário não comprova execução ou pagamento.'));
+    dialogBody.append(element('p', 'coverage-note', sat?'Serviços da SAT apresentados separadamente do efetivo operacional. A OS contém somente os períodos de AC4 informados.':'A cobertura de 24h considera os horários do efetivo operacional. Turnos complementares de AC4, como 08h–20h e 20h–08h, formam um recurso de 24h. PROEBOM integra essa cobertura quando expressamente designado como operacional. Este calendário não comprova execução ou pagamento.'));
     dialog.showModal();
     dialog.scrollTop = 0;
   }

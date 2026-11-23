@@ -37,7 +37,7 @@ const files = { '/': 'index.html', '/assets/cbmgo-emblema.png': 'assets/cbmgo-em
       if (width <= 760) await page.locator('#selecionar-dia').selectOption(String(day));
       const card = page.locator(`.day[data-day="${day}"]`), toggle = card.locator('[data-area-toggle="operational"]');
       if (await toggle.getAttribute('aria-expanded') === 'false') await toggle.click();
-      assert.equal(await card.locator('.resource-total').textContent(), '5 recursos de 24h');
+      assert.equal(await card.locator('.resource-total').textContent(), `${day === 24 ? 6 : 5} recursos de 24h`);
       assert.equal(await card.locator('.resource-ac4').textContent(), `${serviceCount} AC4`);
       for (const name of names) {
         const row = card.locator('.operational-roster .entry').filter({ has: page.locator('.name', { hasText: name }) });

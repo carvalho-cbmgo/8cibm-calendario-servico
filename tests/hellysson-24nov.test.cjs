@@ -27,6 +27,7 @@ test('HELLYSSON tem um único PROEBOM previsto de 12h em 24/11, 08h–20h, R$ 36
   const record = records[0];
   assert.equal(record.member, '1º SGT HELLYSSON');
   assert.equal(record.event.mode, 'PROEBOM 2026');
+  assert.equal(record.event.integrante_operacional, true);
   assert.equal(record.startDate, '2026-11-24');
   assert.equal(record.endDate, '2026-11-24');
   assert.equal(record.start, '08h00');
@@ -62,18 +63,20 @@ test('HELLYSSON tem um único PROEBOM previsto de 12h em 24/11, 08h–20h, R$ 36
   assert.equal(rank.rows.find(r => r.member === record.member).operationalCents, 36000);
 });
 
-test('a inclusão preserva todos os dados anteriores, chefia, cobertura e reforços de 4 a 8 recursos', () => {
+test('HELLYSSON designado para cobertura complementa o noturno, preservando chefia e reforços de 4 a 8 recursos', () => {
   const before = previous(), source = JSON.stringify(data);
-  assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'), '9e40d7b3f222191bf7c949d0241a0525bafe88698d3da6530b41c07ca9982248');
-  assert.equal(simulation.coverage(day(data), '2026-11-24').resources, 5);
-  assert.equal(JSON.stringify(simulation.coverage(day(data), '2026-11-24')), JSON.stringify(simulation.coverage(day(before), '2026-11-24')));
+  assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'), 'cc010d15e11c6dba2c14724959fdd0d3d5677fa0071fefae8a374e421b044e16');
+  assert.equal(simulation.coverage(day(data), '2026-11-24').resources, 6);
+  assert.equal(simulation.coverage(day(before), '2026-11-24').resources, 5);
   assert.equal(JSON.stringify(chief.select(day(data))), JSON.stringify(chief.select(day(before))));
   for (let target = 4; target <= 8; target++) {
     const actual = simulation.plan(data, '2026-11', 4584000, undefined, target);
     const original = simulation.plan(before, '2026-11', 4584000, undefined, target);
     assert.equal(actual.addedServices, original.addedServices);
     assert.equal(actual.summary.committedCents, original.summary.committedCents);
-    assert.equal(JSON.stringify(actual.days.get(24)), JSON.stringify(original.days.get(24)));
+    assert.equal(JSON.stringify(actual.days.get(24).members), JSON.stringify(original.days.get(24).members));
+    assert.equal(actual.days.get(24).coverage.resources, 6);
+    assert.equal(original.days.get(24).coverage.resources, 5);
   }
   assert.equal(JSON.stringify(data), source);
 });

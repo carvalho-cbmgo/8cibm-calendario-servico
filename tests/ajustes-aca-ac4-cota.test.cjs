@@ -31,7 +31,7 @@ test('TAVARES é o ACA expressamente designado para as 24h de 19/11, sem atribui
   assert.equal(JSON.stringify(result.assignments), JSON.stringify([{name:'ST TAVARES', start:0, end:1440}]));
   assert.equal(day(data, 19).chief, 'ST TAVARES');
   assert.equal(simulation.coverage(day(data, 19), '2026-11-19').resources, 6);
-  assert.equal(createHash('sha256').update(JSON.stringify(previous())).digest('hex'), '76858e3ef152775a606490f2cc10668b82a977cb389a4d9f7a0d692f85666198');
+  assert.equal(createHash('sha256').update(JSON.stringify(previous())).digest('hex'), '897a2d83b413e49cbf30f63ec3dff9948adca2076c981051621cece3a5f545f3');
 });
 
 test('HELLYSSON, LUIZ e NIKHOLAS têm os períodos retificados, com identidades e exclusões preservadas', () => {
@@ -82,7 +82,7 @@ test('cota R$ 45.840 e AC4 atualizados mantêm tarifas, execuções e simulaçã
   assert.equal(simulation.coverage(day(data,22),'2026-11-22').resources,7);
   assert.equal(simulation.coverage(day(data,22),'2026-11-22',undefined,{forSimulation:true}).resources,6);
   assert.equal(simulation.coverage(day(data,23),'2026-11-23').resources,6);
-  assert.equal(simulation.coverage(day(data,24),'2026-11-24').resources,5);
+  assert.equal(simulation.coverage(day(data,24),'2026-11-24').resources,6);
   const plan = simulation.plan(data,'2026-11',quota);
   assert.equal(plan.addedServices,4); assert.equal(plan.summary.committedCents,309100);
   assert.equal(summary.remainingCents-plan.summary.committedCents,112600);

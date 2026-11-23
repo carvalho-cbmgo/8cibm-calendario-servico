@@ -61,6 +61,47 @@ test('dois turnos complementares de 12h formam um recurso, horários iguais não
   day.members.push(member('ST INTEGRAL'));assert.equal(simulation.coverage(day,'2026-11-12').resources,1);
 });
 
+test('AC4 complementares integram cobertura por horário, com designação explícita de PROEBOM e sem cobrir lacunas por soma de horas',()=>{
+  const dayShift={start:'08h00',end:'20h00',nextDay:false},nightShift={start:'20h00',end:'08h00',nextDay:true};
+  const make=extra=>input([...ordinary(5),{...partial({...dayShift,mode:'PROEBOM 2026',integrante_operacional:true,...extra}),name:'SGT DIA'}, {...partial(nightShift),name:'SGT NOITE'}]);
+  const source=make({}),date='2026-11-12',base=finance.month(source,'2026-11'),result=simulation.coverage(source['2026-11'].days[0],date,base);
+  assert.equal(result.resources,6);assert(result.segments.every(s=>s.resources===6));
+  assert.equal(simulation.plan(source,'2026-11').addedServices,0);
+  for(const extra of [{integrante_operacional:false},{integrante_operacional:undefined},{cancelled:true},{mode:'SAT'},{mode:'ANÁLISE DE PROJETOS'}]){
+    const s=make(extra);assert.equal(simulation.coverage(s['2026-11'].days[0],date,finance.month(s,'2026-11')).resources,5);
+  }
+  const overlapping=make({});Object.assign(overlapping['2026-11'].days[0].members.at(-1).events[0],dayShift);
+  assert.equal(simulation.coverage(overlapping['2026-11'].days[0],date).resources,5);
+  const gap=make({end:'19h59',hours:719/60});assert.equal(simulation.coverage(gap['2026-11'].days[0],date).resources,5);
+  const revised=make({serviceId:'explicit-coverage',revision:1});
+  const daytime=revised['2026-11'].days[0].members.at(-2);daytime.events.push({...daytime.events[0],revision:2,integrante_operacional:false});
+  assert.equal(simulation.plan(revised,'2026-11').days.get(12).coverage.resources,5);
+});
+
+test('complementos respeitam início do plantão e virada de mês sem duplicar pessoas ou serviços',()=>{
+  const source={'2026-11':{days:[{day:30,shiftStart:'06h00',members:[...ordinary(5),
+    {...partial({start:'06h00',end:'18h00',nextDay:false}),name:'SGT DIA'},
+    {...partial({start:'18h00',end:'06h00',nextDay:true}),name:'SGT NOITE'},
+  ]}]}},before=JSON.stringify(source),result=simulation.coverage(source['2026-11'].days[0],'2026-11-30',finance.month(source,'2026-11'));
+  assert.equal(result.anchor,360);assert.equal(result.resources,6);assert(result.segments.every(s=>s.resources===6));
+  const plan=simulation.plan(source,'2026-11');assert.equal(plan.addedServices,0);assert.equal(plan.summary.committedCents,0);assert.equal(JSON.stringify(source),before);
+});
+
+test('24/11 une HELLYSSON 08h–20h e LUIZ 20h–08h em seis recursos, inclusive sem confirmação da escala',()=>{
+  const source=data(),day=source['2026-11'].days.find(d=>d.day===24),base=finance.month(source,'2026-11',4584000),before=JSON.stringify(source);
+  const result=simulation.coverage(day,'2026-11-24',base);
+  assert.equal(result.resources,6);assert(result.segments.every(s=>s.resources===6));
+  const hellysson=day.members.find(m=>m.name==='1º SGT HELLYSSON').events[0];
+  assert.equal(hellysson.integrante_operacional,true);assert.equal(hellysson.hours,12);
+  assert.equal(base.committedCents,4162300);assert.equal(base.remainingCents,421700);
+  const unconfirmed=structuredClone(source);delete unconfirmed['2026-11'].days.find(d=>d.day===24).confirmation;
+  assert.equal(simulation.plan(unconfirmed,'2026-11',4584000).days.get(24).addedServices,0);
+  unconfirmed['2026-11'].days.find(d=>d.day===24).members.find(m=>m.name==='1º SGT HELLYSSON').events[0].integrante_operacional=false;
+  const old=simulation.plan(unconfirmed,'2026-11',4584000).days.get(24);
+  assert.equal(old.addedServices,1);assert.deepEqual([old.members[0].events[0].start,old.members[0].events[0].end,old.members[0].events[0].hours],['08h00','20h00',12]);
+  assert.equal(JSON.stringify(source),before);
+});
+
 test('uma pessoa com horas sobrepostas e a anotação de TS não duplicam recursos',()=>{
   const person=member('ST TESTE',[{kind:'ord'},{kind:'ts',annotationOnly:true}], [ac4()]);
   person.notes=['AC4 adicional de 08h às 20h.'];

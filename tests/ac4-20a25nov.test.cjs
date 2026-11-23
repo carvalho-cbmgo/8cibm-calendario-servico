@@ -79,7 +79,7 @@ test('novos serviços somam R$ 6.651 sem alterar SAT, execuções ou tarifas', (
 
 test('confirmações, dados anteriores e chefia são preservados; cobertura atualiza sem novos reforços simulados', () => {
   const before = previous(), snapshot = JSON.stringify(data);
-  assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'), '8fe539febf67bc1b6226862646dc9fc45c2a7177edfcb6f553f9ef7af1bd6bfa');
+  assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'), '19c520f77a0e148c60aa69abb51527e4c928350d52ef071dca952f99c1a3a66e');
   for (const [number, resources] of [[20,6], [21,6], [22,7], [25,5]]) {
     const day = data['2026-11'].days.find(d => d.day === number);
     assert.equal(simulation.coverage(day, `2026-11-${number}`).resources, resources);
