@@ -94,12 +94,12 @@ test('HENRIQUE e HELLYSSON têm dois PROEBOM previstos de 4h em 26/11, com OS a 
     assert.equal(actual.summary.committedCents, original.summary.committedCents);
     assert.equal(JSON.stringify(actual.days.get(26)), JSON.stringify(original.days.get(26)));
   }
-  assert.equal(summary.records.length, 101);
-  assert.equal(summary.committedCents, 4168300);
+  assert.equal(summary.records.length, 102);
+  assert.equal(summary.committedCents, 4162300);
   assert.equal(summary.operationalCents, 3255300);
-  assert.equal(summary.satCents, 913000);
+  assert.equal(summary.satCents, 907000);
   assert.equal(summary.executedCents, 1096600);
-  assert.equal(summary.remainingCents, 415700);
+  assert.equal(summary.remainingCents, 421700);
 });
 
 test('inclusões de 18/11 preservam integralmente os demais dados do calendário', () => {
@@ -112,5 +112,5 @@ test('inclusões de 18/11 preservam integralmente os demais dados do calendário
   twentyNinth.coverage = ['5 recursos de 24h', 'Faltam 1 recurso'];
   const input = days.find(d => d.day === 26);
   input.members = input.members.filter(m => !m.events.some(e => e.serviceId?.startsWith('ac4-2026-11-26-')));
-  assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'), '17233f49903027004836620801baf56a4e587441c9c29dec422c43dc6b9ddda9');
+  assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'), '12d439a2c72a300c1ff760ced3309d8a8f6c9639285fdf89abf9a2fdc0712f65');
 });

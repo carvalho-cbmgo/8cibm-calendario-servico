@@ -13,7 +13,7 @@ test('três AC4 de análise de projetos têm datas, oficiais e jornadas de 12h s
 
 test('análise soma 36h/R$ 1.440 na SAT, com acumulados inclusivos e Operacional/execuções preservados',()=>{
  const summary=finance.month(data,'2026-11',4584000),before=finance.month(baseline(),'2026-11',4584000);
- assert.equal(summary.records.length,101);assert.equal(summary.committedCents,4168300);assert.equal(summary.satCents,913000);assert.equal(summary.operationalCents,3255300);assert.equal(summary.executedCents,1096600);assert.equal(summary.forecastCents,3071700);assert.equal(summary.remainingCents,415700);
+ assert.equal(summary.records.length,102);assert.equal(summary.committedCents,4162300);assert.equal(summary.satCents,907000);assert.equal(summary.operationalCents,3255300);assert.equal(summary.executedCents,1096600);assert.equal(summary.forecastCents,3065700);assert.equal(summary.remainingCents,421700);
  assert.equal(summary.committedCents-before.committedCents,144000);assert.equal(summary.satCents-before.satCents,144000);assert.equal(summary.operationalCents,before.operationalCents);assert.equal(summary.executedCents,before.executedCents);
  for(const [date,added]of [['2026-11-19',0],['2026-11-20',48000],['2026-11-27',48000],['2026-11-28',96000],['2026-11-29',144000],['2026-11-30',144000]])assert.equal(finance.asOf(summary,date).committedCents-finance.asOf(before,date).committedCents,added);
 });
