@@ -23,19 +23,19 @@ const baseline = () => {
   return copy;
 };
 
-test('SAT de 23–30/11 tem 15 AC4/82h na OS 379, com WANDERSON e VALÉRIA em Protocolo', () => {
+test('SAT de 23–30/11 tem 15 AC4/76h na OS 379, com ROBERTO na Vistoria e VALÉRIA no Protocolo em 27/11', () => {
   assert.equal(added.length, 15);
   assert.equal(new Set(added.map(r => r.key)).size, 15);
-  assert.equal(added.reduce((total, r) => total + r.minutes, 0), 82 * 60);
-  assert.equal(added.reduce((total, r) => total + r.costCents, 0), 265000);
-  for (const [number, count, cost] of [[23, 3, 39000], [24, 3, 54000], [25, 2, 27000], [26, 1, 12000], [27, 3, 76000], [30, 3, 57000]]) {
+  assert.equal(added.reduce((total, r) => total + r.minutes, 0), 76 * 60);
+  assert.equal(added.reduce((total, r) => total + r.costCents, 0), 241000);
+  for (const [number, count, cost] of [[23, 3, 39000], [24, 3, 54000], [25, 2, 27000], [26, 1, 12000], [27, 3, 52000], [30, 3, 57000]]) {
     const date = `2026-11-${number}`;
     const records = added.filter(r => r.startDate === date);
     assert.equal(records.length, count);
     assert.equal(summary.daily.get(date).satCents, cost);
-    const expected = [['3º SGT ROBERTO', 'Protocolo', '08h00', '12h00', 4]];
-    if ([23, 24, 27, 30].includes(number)) expected.push(['2º SGT WANDERSON', number === 23 ? 'Protocolo' : 'Vistoria', '08h00', number === 23 ? '12h00' : '18h00', number === 23 ? 4 : 10]);
-    if (number === 24) expected.push(['3º SGT VALÉRIA', 'Protocolo', '08h00', '12h00', 4]);
+    const expected = [['3º SGT ROBERTO', number === 27 ? 'Vistoria' : 'Protocolo', '08h00', '12h00', 4]];
+    if ([23, 24, 30].includes(number)) expected.push(['2º SGT WANDERSON', number === 23 ? 'Protocolo' : 'Vistoria', '08h00', number === 23 ? '12h00' : '18h00', number === 23 ? 4 : 10]);
+    if ([24, 27].includes(number)) expected.push(['3º SGT VALÉRIA', 'Protocolo', '08h00', '12h00', 4]);
     if ([23, 25, 27, 30].includes(number)) expected.push(['3º SGT BERTONCELLO', 'Vistoria', '13h00', '18h00', 5]);
     for (const [name, activity, start, end, hours] of expected) {
       const matches = records.filter(r => r.member === name);
@@ -66,7 +66,7 @@ test('nomes sem PSE geram 12 ordinários vespertinos, separados por atividade', 
       const member = sat.members.find(m => m.name === name);
       assert.equal(member.badges.length, 1);
       assert.deepEqual(member.badges[0], { kind: 'ord', text: 'ORDINÁRIO', hours: 5, start: '13h00', end: '18h00', activity });
-      if (name.includes('VALÉRIA')) assert.equal(member.events.length, number === 24 ? 1 : 0);
+      if (name.includes('VALÉRIA')) assert.equal(member.events.length, [24, 27].includes(number) ? 1 : 0);
     }
   }
 });
@@ -92,10 +92,10 @@ test('todo o calendário anterior à inclusão da SAT permanece preservado', () 
 test('finanças, acumulados, consulta e ranking incluem os novos AC4 sem duplicar jornadas', () => {
   const before = finance.month(baseline(), '2026-11', 4584000);
   assert.equal(summary.records.length, 102);
-  assert.equal(summary.committedCents, 4186300);
-  assert.equal(summary.satCents, 907000);
+  assert.equal(summary.committedCents, 4162300);
+  assert.equal(summary.satCents, 883000);
   assert.equal(summary.operationalCents, before.operationalCents);
-  assert.equal(summary.remainingCents, 397700);
+  assert.equal(summary.remainingCents, 421700);
   assert.equal(summary.executedCents, before.executedCents);
   let cumulative = 0;
   for (let n = 1; n <= 30; n++) {
@@ -105,7 +105,7 @@ test('finanças, acumulados, consulta e ranking incluem os novos AC4 sem duplica
   }
   const rows = lookup.month(data, '2026-11');
   const range = finance.ranking(summary, '2026-11-16', true, { startDate: '2026-11-23', endDate: '2026-11-30' });
-  for (const [member, cost] of [['2º SGT WANDERSON', 112000], ['3º SGT ROBERTO', 76000], ['3º SGT BERTONCELLO', 65000], ['3º SGT VALÉRIA', 12000]]) {
+  for (const [member, cost] of [['2º SGT WANDERSON', 72000], ['3º SGT ROBERTO', 76000], ['3º SGT BERTONCELLO', 65000], ['3º SGT VALÉRIA', 28000]]) {
     assert.equal(range.rows.find(r => r.member === member).satCents, cost);
   }
   for (const record of added) {
@@ -116,17 +116,18 @@ test('finanças, acumulados, consulta e ranking incluem os novos AC4 sem duplica
   }
 });
 
-test('SAT restaurada em 27/11 tem três AC4 e dois ordinários, preservando a TS CIA de DIEGO', () => {
+test('SAT em 27/11 exclui WANDERSON e tem ROBERTO na Vistoria e VALÉRIA no Protocolo, preservando os dois ordinários e a TS CIA', () => {
   const input = day(27);
   assert.notEqual(input.sat.expedientStatus, 'holiday');
   assert.equal(input.sat.ordinaryStatus, 'informed');
-  assert.equal(input.sat.members.length, 4);
-  assert.equal(summary.daily.get('2026-11-27').satCents, 76000);
+  assert.equal(input.sat.members.length, 3);
+  assert(!input.sat.members.some(m => m.name.includes('WANDERSON')));
+  assert.equal(summary.daily.get('2026-11-27').satCents, 52000);
   assert.equal(summary.records.filter(r => r.category === 'sat' && r.startDate === '2026-11-27').length, 3);
   const services = lookup.month(data, '2026-11').filter(r => r.area === 'sat' && r.date === '2026-11-27');
   assert.equal(services.filter(r => r.type === 'ac4').length, 3);
   assert.equal(services.filter(r => r.type === 'ordinary').length, 2);
-  assert.equal(finance.ranking(summary, '2026-11-16', true, { startDate: '2026-11-27', endDate: '2026-11-27' }).totalCents, 76000);
+  assert.equal(finance.ranking(summary, '2026-11-16', true, { startDate: '2026-11-27', endDate: '2026-11-27' }).totalCents, 52000);
   assert.equal(simulation.coverage(input, '2026-11-27').resources, 6);
   const diego = input.members.find(m => m.name === '2º SGT DIEGO');
   assert.equal(diego.badges[0].kind, 'pay');

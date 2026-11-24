@@ -98,11 +98,11 @@ test('HENRIQUE 12h e HELLYSSON 4h são reforços operacionais em 26/11, com OS a
     assert.equal(original.days.get(26).coverage.resources, 5);
   }
   assert.equal(summary.records.length, 102);
-  assert.equal(summary.committedCents, 4186300);
+  assert.equal(summary.committedCents, 4162300);
   assert.equal(summary.operationalCents, 3279300);
-  assert.equal(summary.satCents, 907000);
+  assert.equal(summary.satCents, 883000);
   assert.equal(summary.executedCents, 1096600);
-  assert.equal(summary.remainingCents, 397700);
+  assert.equal(summary.remainingCents, 421700);
 });
 
 test('inclusões de 18/11 preservam integralmente os demais dados do calendário', () => {
@@ -116,5 +116,5 @@ test('inclusões de 18/11 preservam integralmente os demais dados do calendário
   const input = days.find(d => d.day === 26);
   input.members = input.members.filter(m => !m.events.some(e => e.serviceId?.startsWith('ac4-2026-11-26-')));
   input.coverage = ['5 recursos de 24h', 'Faltam 1 recurso'];
-  assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'), '9feb8f36f5bd8fff124a543b0ee0a5b4a798cd8e5539b01d6370a958ba28cbda');
+  assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'), 'b8e57e19cd60611ade56515c8c19f147711574b2a77f3eb1a5dad9018c066939');
 });

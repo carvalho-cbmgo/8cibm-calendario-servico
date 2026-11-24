@@ -58,10 +58,10 @@ test('LUIZ tem um AC4 previsto de 24h em 22/11 e mantém 12h em 29/11 e 06/12, s
 test('novembro e dezembro recebem apenas os novos custos, com a cota configurada de dezembro', () => {
   const november = summary('2026-11'), december = summary('2026-12');
   assert.equal(november.records.length, 102);
-  assert.equal(november.committedCents, 4186300);
+  assert.equal(november.committedCents, 4162300);
   assert.equal(november.operationalCents, 3279300);
-  assert.equal(november.satCents, 907000);
-  assert.equal(november.remainingCents, 397700);
+  assert.equal(november.satCents, 883000);
+  assert.equal(november.remainingCents, 421700);
   assert.equal(november.executedCents, 1096600);
   assert.equal(december.records.length, 1);
   assert.equal(december.committedCents, 48000);
@@ -91,7 +91,7 @@ test('a inclusão preserva todos os dados e AC4 anteriores nas três competênci
     const originalResources = resources - (date === '2026-11-22' ? 1 : 0), missing = 6 - originalResources;
     day.coverage = [`${originalResources} recursos de 24h`, missing > 0 ? `Faltam ${missing} recurso${missing === 1 ? '' : 's'}` : 'Meta de 6 recursos'];
   }
-  assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'), 'e971edaaec2a8d9dc9f7a6ddc9814a03eff3302cb8e1095180de45f8cadc255f');
+  assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'), 'f341398d1d824650e6d3920719c3e4a625604ac7937d78de6438a1afe4b29dbf');
   const original = finance.month(before, '2026-11', 4584000);
   assert.equal(summary('2026-11').committedCents - original.committedCents, 144500);
   assert.equal(summary('2026-11').satCents, original.satCents);
@@ -108,7 +108,7 @@ test('a retificação altera só duração, término e cobertura dos três servi
     const full = resources + (date === '2026-11-22' ? 0 : 1), missing = 6 - full;
     day.coverage = [`${full} recursos de 24h`, missing > 0 ? `Faltam ${missing} recurso` : 'Meta de 6 recursos'];
   }
-  assert.equal(createHash('sha256').update(JSON.stringify(previous)).digest('hex'), 'a44c0f1bda6551911d8a616d7d6ea9c1f6ce964d5f3957c98ff3edeb4e76456a');
+  assert.equal(createHash('sha256').update(JSON.stringify(previous)).digest('hex'), 'd570fad03507ee01e6d29a93cbc38271282588e97061add20993bdab192f7cb5');
   assert.equal(finance.month(previous, '2026-11', 4584000).committedCents - summary('2026-11').committedCents, 48500);
   assert.equal(finance.month(previous, '2026-12').committedCents - summary('2026-12').committedCents, 48500);
 });
@@ -141,7 +141,7 @@ test('exclusão da simulação limita-se aos três AC4 e preserva a cobertura re
     }
   }
   assert.equal(JSON.stringify(data), source);
-  assert.equal(summary('2026-11').committedCents, 4186300);
+  assert.equal(summary('2026-11').committedCents, 4162300);
   assert.equal(summary('2026-12').committedCents, 48000);
 });
 

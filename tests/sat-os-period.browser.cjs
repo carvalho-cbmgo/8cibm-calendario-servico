@@ -114,14 +114,14 @@ function financeSnapshot() {
       await setRange(page, '2026-11-23', '2026-11-30');
       let rows = await tableRows(page);
       assert.equal(rows.length, 17);
-      assert.equal(rows.reduce((sum, row) => sum + Number.parseInt(row[6], 10), 0), 106);
+      assert.equal(rows.reduce((sum, row) => sum + Number.parseInt(row[6], 10), 0), 100);
       assert.deepEqual(rows.map(row => row[0]), [
         '23/11/2026', '23/11/2026', '23/11/2026', '24/11/2026', '24/11/2026', '24/11/2026',
         '25/11/2026', '25/11/2026', '26/11/2026', '27/11/2026', '27/11/2026',
         '27/11/2026', '28/11/2026', '29/11/2026', '30/11/2026', '30/11/2026', '30/11/2026',
       ]);
-      assert.equal(rows.filter(row => row[4].includes('VALÉRIA')).length, 1);
-      assert.equal(rows.filter(row => row[4].includes('WANDERSON')).length, 4);
+      assert.equal(rows.filter(row => row[4].includes('VALÉRIA')).length, 2);
+      assert.equal(rows.filter(row => row[4].includes('WANDERSON')).length, 3);
       assert(rows.filter(row => row[4].includes('WANDERSON')).every(row => row[6] === (row[0] === '23/11/2026' ? '4h' : '10h')));
       let copied = await copyRows(page);
       assert.deepEqual(copied.rows, rows);
@@ -131,7 +131,7 @@ function financeSnapshot() {
       await page.locator('#sei-order-scope').selectOption(group);
       rows = await tableRows(page);
       assert.equal(rows.length, 15);
-      assert.equal(rows.reduce((sum, row) => sum + Number.parseInt(row[6], 10), 0), 82);
+      assert.equal(rows.reduce((sum, row) => sum + Number.parseInt(row[6], 10), 0), 76);
       copied = await copyRows(page);
       assert.deepEqual(copied.rows, rows);
       await page.locator('#sei-order-end').fill('2026-11-26');

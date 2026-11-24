@@ -89,15 +89,15 @@ test('histórico monetário de 0 a 4 meses e ordenação não alteram horas do m
   }
 });
 
-test('dados publicados mantêm valores e totais financeiros, com 144h de LUIZ, 123h de WANDERSON e 4h de VALÉRIA em novembro', () => {
+test('dados publicados mantêm valores e totais financeiros, com 144h de LUIZ, 113h de WANDERSON e 8h de VALÉRIA em novembro', () => {
   const source = read('calendar-data'), before = JSON.stringify(source), summary = finance.month(source,'2026-11',4584000);
   const result = rank(source,'2026-11-01','2026-11-30');
-  for (const [name,hours] of [['2º SGT LUIZ ANTONIO',144],['2º SGT WANDERSON',123],['3º SGT VALÉRIA',4]]) {
+  for (const [name,hours] of [['2º SGT LUIZ ANTONIO',144],['2º SGT WANDERSON',113],['3º SGT VALÉRIA',8]]) {
     const p = result.rows.find(p => p.member===name);
     assert.equal(p.monthlyMinutes,hours*60); assert.equal(p.minutes,hours*60); assert.equal(p.remainingMinutes,(192-hours)*60);
   }
   assert.equal(result.totalCents,summary.committedCents);
-  assert.equal(summary.committedCents,4186300); assert.equal(summary.satCents,907000);
-  assert.equal(summary.operationalCents,3279300); assert.equal(summary.executedCents,1096600); assert.equal(summary.remainingCents,397700);
+  assert.equal(summary.committedCents,4162300); assert.equal(summary.satCents,883000);
+  assert.equal(summary.operationalCents,3279300); assert.equal(summary.executedCents,1096600); assert.equal(summary.remainingCents,421700);
   assert.equal(JSON.stringify(source),before);
 });

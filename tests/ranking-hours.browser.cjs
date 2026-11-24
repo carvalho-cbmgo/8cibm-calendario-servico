@@ -56,7 +56,7 @@ const snapshot = () => Object.keys(window.ServiceCalendar.schedules).map(period 
       assert(await page.locator('.ranking-table .ranking-row').evaluateAll(rows=>rows.every(row=>row.scrollWidth<=row.clientWidth+1)));
       await page.locator('#ac4-ranking-officers').uncheck();await page.locator('#ac4-ranking-seniority').uncheck();
       await page.locator('#ac4-ranking-history').selectOption('0');await page.locator('#ac4-ranking-end').selectOption('2026-11-30');await page.locator('#ac4-ranking-start').selectOption('2026-11-01');
-      await verify('WANDERSON',7380,7380,'available','Restam 69h');await verify('VALÉRIA',240,240,'available','Restam 188h');
+      await verify('WANDERSON',6780,6780,'available','Restam 79h');await verify('VALÉRIA',480,480,'available','Restam 184h');
       if(width!==390){
         await page.locator('#ac4-ranking-dialog').screenshot({path:path.join(os.tmpdir(),`ranking-hours-${width}.png`),animations:'disabled'});
         await row('LUIZ ANTONIO').screenshot({path:path.join(os.tmpdir(),`ranking-hours-row-${width}.png`),animations:'disabled'});

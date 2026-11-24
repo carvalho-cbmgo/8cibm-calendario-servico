@@ -26,7 +26,7 @@ test('escalas de 1 a 25/11 estão confirmadas, com sete novas confirmações em 
       assert.deepEqual(day.confirmation, { status: 'confirmed', date: '2026-11-19', source: 'user', scope: 'calendar', previousAlerts: [] });
     }
   }
-  assert.equal(createHash('sha256').update(JSON.stringify(previous())).digest('hex'), '23e63aa2c095ecb2e31244eb1f92bd6733a70eebfc650898168b7c7c84002c3e');
+  assert.equal(createHash('sha256').update(JSON.stringify(previous())).digest('hex'), '2b53ce0632be8180f60fbc0dc78c89c7af4b51858da6f8ccb0f1de918ef55bde');
 });
 
 test('confirmar a escala preserva integralmente AC4, execuções, tarifas, cobertura e chefia', () => {
@@ -44,10 +44,10 @@ test('confirmar a escala preserva integralmente AC4, execuções, tarifas, cober
   }
   const summary = finance.month(data, '2026-11', 4584000);
   assert.equal(summary.records.length, 102);
-  assert.equal(summary.committedCents, 4186300);
-  assert.equal(summary.forecastCents, 3089700);
+  assert.equal(summary.committedCents, 4162300);
+  assert.equal(summary.forecastCents, 3065700);
   assert.equal(summary.executedCents, 1096600);
-  assert.equal(summary.remainingCents, 397700);
+  assert.equal(summary.remainingCents, 421700);
 });
 
 test('somente os dias a partir de 26/11 recebem reforços simulados, em todas as metas', () => {
