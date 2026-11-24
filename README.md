@@ -2,6 +2,10 @@
 
 Calendário HTML responsivo e estático para exibição da previsão de militares por ala, dos serviços SAT e do controle financeiro de AC4. Há dados de novembro/2026 a janeiro/2027; meses sem dados mostram essa condição.
 
+Foi incluído um **AC4 operacional previsto de 12h para SD HUGO em 25/11/2026, das 08h às 20h**, no valor de **R$ 360,00**, com OS a definir. O serviço é distinto das trocas da companhia de HUGO em 20 e 29/11. A escala de 25/11 mantém sua confirmação e cinco recursos contínuos de 24h, com seis militares no diurno e cinco no noturno; a chefia permanece com ST PASSOS.
+
+Novembro passa a **103 AC4/R$ 41.983,00 comprometidos**, sendo R$ 33.153,00 operacionais e R$ 8.830,00 SAT, com **R$ 3.857,00 de saldo** sobre a cota de R$ 45.840,00. A execução confirmada permanece em R$ 10.966,00; o novo AC4 segue previsto. A simulação mantém três serviços/R$ 2.731,00, com saldo de R$ 1.126,00 após o reforço simulado. Os demais serviços, tarifas, cotas e horas individuais foram preservados; HUGO soma agora 36h de AC4 no mês.
+
 No Ranking AC4, o checkbox **Desconsiderar militares que não tiveram serviços de AC4** aparece logo abaixo de **Ordenar por antiguidade**, inicialmente desmarcado. Quando marcado, mostra somente militares cujo valor de AC4 entre **Início e Fim**, incluindo as duas datas, é diferente de zero. A seleção é atualizada imediatamente e permanece durante a sessão ao fechar o ranking ou navegar entre meses. Valores históricos e serviços fora do intervalo não mantêm um militar no resultado filtrado. Totais, detalhes, contagem, numeração e imagem compartilhada acompanham os militares exibidos; horas mensais e demais filtros conservam suas regras. A escala, as cotas e os cálculos financeiros permanecem preservados.
 
 A SAT de **27/11/2026** foi retificada: o AC4 de 10h de WANDERSON foi removido; **ROBERTO passa para Vistoria, 4h/08h–12h**; e **VALÉRIA entra no Protocolo, 4h/08h–12h**. O AC4 vespertino de BERTONCELLO e os ordinários vespertinos de ROBERTO e VALÉRIA foram preservados. Os três AC4 do dia permanecem vinculados à **OS nº 379 (SEI 98570810)** e totalizam **R$ 520,00**.

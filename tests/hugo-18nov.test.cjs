@@ -41,7 +41,7 @@ test('SEI 98630755 dispensa HUGO em 20/11 e registra um pagamento de 24h em 29/1
   }
 });
 
-test('consulta e simulação respeitam a dispensa e o pagamento sem gerar AC4 para HUGO', () => {
+test('consulta e simulação distinguem o AC4 de 25/11 das trocas da companhia de HUGO', () => {
   const services = lookup.month(data, '2026-11').filter(r => r.member === 'SD HUGO');
   assert(!services.some(r => r.date === '2026-11-20' && r.type === 'ordinary'));
   const payment = services.filter(r => r.date === '2026-11-29' && r.type === 'ordinary');
@@ -51,11 +51,17 @@ test('consulta e simulação respeitam a dispensa e o pagamento sem gerar AC4 pa
   assert.equal(payment[0].end, '08h00');
   assert.equal(payment[0].endDate, '2026-11-30');
   assert(payment[0].labels.includes('TS CIA · Pagamento'));
+  const ac4 = services.filter(r => r.date === '2026-11-25' && r.type === 'ac4');
+  assert.equal(ac4.length, 1);
+  assert.equal(ac4[0].start, '08h00'); assert.equal(ac4[0].end, '20h00');
+  assert.equal(ac4[0].endDate, '2026-11-25'); assert.equal(ac4[0].minutes, 720);
+  assert.equal(ac4[0].commitmentCents, 36000); assert.equal(ac4[0].status, 'forecast');
   const summary = finance.month(data, '2026-11', 4584000);
   assert(!summary.records.some(r => r.member === 'SD HUGO' && ['2026-11-20', '2026-11-29'].includes(r.startDate)));
   const plan = simulation.plan(data, '2026-11', 4584000);
   assert.equal(plan.days.get(20).addedResources, 0);
   assert.equal(plan.days.get(29).addedResources, 0);
+  assert.equal(plan.days.get(25).addedServices, 0);
 });
 
 test('HENRIQUE 12h e HELLYSSON 4h são reforços operacionais em 26/11, com OS a definir', () => {
@@ -97,12 +103,12 @@ test('HENRIQUE 12h e HELLYSSON 4h são reforços operacionais em 26/11, com OS a
     assert.equal(actual.days.get(26).coverage.resources, 6);
     assert.equal(original.days.get(26).coverage.resources, 5);
   }
-  assert.equal(summary.records.length, 102);
-  assert.equal(summary.committedCents, 4162300);
-  assert.equal(summary.operationalCents, 3279300);
+  assert.equal(summary.records.length, 103);
+  assert.equal(summary.committedCents, 4198300);
+  assert.equal(summary.operationalCents, 3315300);
   assert.equal(summary.satCents, 883000);
   assert.equal(summary.executedCents, 1096600);
-  assert.equal(summary.remainingCents, 421700);
+  assert.equal(summary.remainingCents, 385700);
 });
 
 test('inclusões de 18/11 preservam integralmente os demais dados do calendário', () => {
@@ -116,5 +122,5 @@ test('inclusões de 18/11 preservam integralmente os demais dados do calendário
   const input = days.find(d => d.day === 26);
   input.members = input.members.filter(m => !m.events.some(e => e.serviceId?.startsWith('ac4-2026-11-26-')));
   input.coverage = ['5 recursos de 24h', 'Faltam 1 recurso'];
-  assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'), 'b8e57e19cd60611ade56515c8c19f147711574b2a77f3eb1a5dad9018c066939');
+  assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'), 'a37abc6e23f0551bfbfbecb34dc3a3064eb8d7fc04cc5b703b2553f813220931');
 });

@@ -26,7 +26,7 @@ test('escalas de 1 a 25/11 estão confirmadas, com sete novas confirmações em 
       assert.deepEqual(day.confirmation, { status: 'confirmed', date: '2026-11-19', source: 'user', scope: 'calendar', previousAlerts: [] });
     }
   }
-  assert.equal(createHash('sha256').update(JSON.stringify(previous())).digest('hex'), '2b53ce0632be8180f60fbc0dc78c89c7af4b51858da6f8ccb0f1de918ef55bde');
+  assert.equal(createHash('sha256').update(JSON.stringify(previous())).digest('hex'), 'f0440c4dc6082cccc7521309b1607475a1a6c819f60bc66c971c821f622c52c8');
 });
 
 test('confirmar a escala preserva integralmente AC4, execuções, tarifas, cobertura e chefia', () => {
@@ -43,11 +43,11 @@ test('confirmar a escala preserva integralmente AC4, execuções, tarifas, cober
     assert.equal(JSON.stringify(simulation.coverage(day, `2026-11-${String(day.day).padStart(2, '0')}`)), JSON.stringify(simulation.coverage(old, `2026-11-${String(day.day).padStart(2, '0')}`)));
   }
   const summary = finance.month(data, '2026-11', 4584000);
-  assert.equal(summary.records.length, 102);
-  assert.equal(summary.committedCents, 4162300);
-  assert.equal(summary.forecastCents, 3065700);
+  assert.equal(summary.records.length, 103);
+  assert.equal(summary.committedCents, 4198300);
+  assert.equal(summary.forecastCents, 3101700);
   assert.equal(summary.executedCents, 1096600);
-  assert.equal(summary.remainingCents, 421700);
+  assert.equal(summary.remainingCents, 385700);
 });
 
 test('somente os dias a partir de 26/11 recebem reforços simulados, em todas as metas', () => {

@@ -21,6 +21,7 @@ const recentIds = new Set([
   'ac4-operacional-da-silva-2026-11-21-08h', 'ac4-operacional-piccini-2026-11-21-08h',
   'ac4-operacional-passos-2026-11-22-08h', 'ac4-operacional-santos-2026-11-22-08h',
   'ac4-operacional-diego-2026-11-25-08h',
+  'ac4-operacional-hugo-2026-11-25-08h',
 ]);
 
 test('PROEBOM de HENRIQUE em 17/11 custa R$ 120, sem confirmar execução ou ampliar cobertura', () => {
@@ -102,9 +103,9 @@ test('HENRIQUE cumpre EAS de 24h em 18 e 23/11, com observação exata, sem gera
   const actual = finance.month(data, '2026-11', 4584000);
   const baseline = finance.month(before, '2026-11', 4584000);
   assert.equal(JSON.stringify(actual.records), JSON.stringify(baseline.records));
-  assert.equal(actual.committedCents, 4162300);
+  assert.equal(actual.committedCents, 4198300);
   assert.equal(actual.executedCents, 1096600);
-  assert.equal(actual.remainingCents, 421700);
+  assert.equal(actual.remainingCents, 385700);
   const plan = simulation.plan(data, '2026-11', 4584000);
   assert.equal(plan.days.get(18).addedServices, 0);
   assert.equal(plan.days.get(23).addedServices, 0);

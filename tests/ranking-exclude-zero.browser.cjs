@@ -62,6 +62,8 @@ const financialSnapshot=()=>Object.keys(window.ServiceCalendar.schedules).map(pe
     await checkMembers(['ST DA SILVA','SD PICCINI','ST PASSOS','SD SANTOS','2º SGT LUIZ ANTONIO']);await checkTotals();
     await setRange('2026-11-27','2026-11-27');
     await checkMembers(['3º SGT BERTONCELLO','3º SGT ROBERTO','3º SGT VALÉRIA']);await checkTotals();
+    await setRange('2026-11-25','2026-11-25');
+    await checkMembers(['2º SGT DIEGO','3º SGT BERTONCELLO','3º SGT ROBERTO','SD HUGO']);await checkTotals();
     await setRange('2026-11-20','2026-11-20');
     await checkMembers(['1º SGT HELLYSSON','2º SGT WANDERSON','CB RABELO']);
     await page.locator('#ac4-ranking-officers').check();

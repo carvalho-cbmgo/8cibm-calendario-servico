@@ -6,7 +6,7 @@ const entries = [
   { day: 20, number: '385', sei: '98726048', resources: 6, services: 3, cost: '995,00', names: ['HELLYSSON', 'WANDERSON', 'RABELO'] },
   { day: 21, number: '386', sei: '98726048', resources: 6, services: 2, cost: '995,00', names: ['DA SILVA', 'PICCINI'] },
   { day: 22, number: '387', sei: '98726469', resources: 7, services: 3, cost: '965,00', names: ['PASSOS', 'LUIZ ANTONIO', 'SANTOS'] },
-  { day: 25, number: '388', sei: '98752637', resources: 5, services: 1, cost: '741,00', names: ['DIEGO'] },
+  { day: 25, number: '388', sei: '98752637', resources: 5, services: 2, cost: '741,00', names: ['DIEGO'] },
 ];
 
 (async () => {
