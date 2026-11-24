@@ -873,6 +873,8 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
    <p id="ac4-ranking-history-status" class="ranking-history-status" role="status" aria-live="polite"></p>
    <label class="ranking-day-toggle"><input type="checkbox" id="ac4-ranking-officers"/><span>Incluir os 3 oficiais (CAP e ASP OF)</span></label>
    <label class="ranking-day-toggle"><input type="checkbox" id="ac4-ranking-seniority"/><span>Ordenar por antiguidade (mais antigo ao mais moderno)</span></label>
+   <label class="ranking-day-toggle"><input type="checkbox" id="ac4-ranking-exclude-zero" aria-describedby="ac4-ranking-exclude-zero-help"/><span>Desconsiderar militares que não tiveram serviços de AC4</span></label>
+   <p id="ac4-ranking-exclude-zero-help" class="ranking-range-help">Considera os valores de AC4 entre Início e Fim, independentemente do histórico selecionado.</p>
    <details class="ranking-register-panel"><summary>Carregar identificações completas</summary>
     <label class="ranking-register" for="ac4-ranking-file">Plano de Chamada ou cadastro ES/OS (.xlsx ou .json)<input type="file" id="ac4-ranking-file" accept=".xlsx,.json,application/json,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"/></label>
     <p id="ac4-ranking-register-status" class="ranking-register-status"></p>
@@ -12801,8 +12803,8 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
       person.records.push(record);person[record.category==='sat'?'satCents':'operationalCents']+=record.commitmentCents;person.totalCents+=record.commitmentCents;
       person[record.status==='executed'?'executedCents':'forecastCents']+=record.commitmentCents;
     }
-    const includeOfficers=options.includeOfficers!==false,sortBySeniority=options.sortBySeniority===true;
-    const rows=[...people.values()].filter(person=>(person.includeZero||person.records.length)&&(includeOfficers||!person.officer));
+    const includeOfficers=options.includeOfficers!==false,sortBySeniority=options.sortBySeniority===true,excludeZeroAC4=options.excludeZeroAC4===true;
+    const rows=[...people.values()].filter(person=>(person.includeZero||person.records.length)&&(includeOfficers||!person.officer)&&(!excludeZeroAC4||person.totalCents!==0));
     const minutes=records=>records.reduce((sum,record)=>sum+(record.event.simulation?0:record.minutes),0);
     for(const person of rows){
       person.records.sort(byDate);person.monthlyRecords.sort(byDate);
@@ -12814,7 +12816,7 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
     }
     const bySeniority=(a,b)=>(a.ord??Infinity)-(b.ord??Infinity)||a.member.localeCompare(b.member,'pt-BR');
     rows.sort(sortBySeniority?bySeniority:(a,b)=>b.totalCents-a.totalCents||bySeniority(a,b));
-    const result={period:summary.period,startDate,cutoffDate,includeCurrentDay,includeOfficers,sortBySeniority,monthlyLimitMinutes:MONTHLY_AC4_LIMIT,rows,recordCount:0,operationalCents:0,satCents:0,totalCents:0,forecastCents:0,executedCents:0};
+    const result={period:summary.period,startDate,cutoffDate,includeCurrentDay,includeOfficers,sortBySeniority,excludeZeroAC4,monthlyLimitMinutes:MONTHLY_AC4_LIMIT,rows,recordCount:0,operationalCents:0,satCents:0,totalCents:0,forecastCents:0,executedCents:0};
     for(const person of rows){result.recordCount+=person.records.length;for(const key of ['operationalCents','satCents','totalCents','forecastCents','executedCents'])result[key]+=person[key];}
     return result;
   }
@@ -13259,7 +13261,7 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
   const empty = document.getElementById('sem-previsao');
   const dialog = document.getElementById('detalhes-servico');
   const dialogBody = document.getElementById('detalhes-conteudo');
-  const rankingDialog=document.getElementById('ac4-ranking-dialog'),rankingStart=document.getElementById('ac4-ranking-start'),rankingEnd=document.getElementById('ac4-ranking-end'),rankingOfficers=document.getElementById('ac4-ranking-officers'),rankingSeniority=document.getElementById('ac4-ranking-seniority');
+  const rankingDialog=document.getElementById('ac4-ranking-dialog'),rankingStart=document.getElementById('ac4-ranking-start'),rankingEnd=document.getElementById('ac4-ranking-end'),rankingOfficers=document.getElementById('ac4-ranking-officers'),rankingSeniority=document.getElementById('ac4-ranking-seniority'),rankingExcludeZero=document.getElementById('ac4-ranking-exclude-zero');
   const rankingRanges=new Map();
   const rankingHistory=document.getElementById('ac4-ranking-history');
   const rankingShare=document.getElementById('ac4-ranking-share'),rankingShareDialog=document.getElementById('ranking-share-dialog'),rankingShareNative=document.getElementById('ranking-share-native'),rankingShareImage=document.getElementById('ranking-share-image');
@@ -13565,7 +13567,7 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
     const personnel=rankingPersonnel.map(person=>({...person,...window.ServiceDirectory?.rankingInfo(person.name),rg:identities.get(person.name),includeZero:true}));
     const known=new Set(personnel.map(person=>person.name.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase()));
     for(const record of financialSummary.records){const key=record.member.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase();if(!known.has(key)){personnel.push({name:record.member,...window.ServiceDirectory?.rankingInfo(record.member),includeZero:false});known.add(key);}}
-    const data=window.AC4RankingHistory.rank(schedules,financialSummary,todayISO,{...range,personnel,history:rankingHistoryData,historyMonths:Number(rankingHistory.value),includeOfficers:rankingOfficers.checked,sortBySeniority:rankingSeniority.checked});
+    const data=window.AC4RankingHistory.rank(schedules,financialSummary,todayISO,{...range,personnel,history:rankingHistoryData,historyMonths:Number(rankingHistory.value),includeOfficers:rankingOfficers.checked,sortBySeniority:rankingSeniority.checked,excludeZeroAC4:rankingExcludeZero.checked});
     rankingView={data,title:periodLabel(),references:exportIdentities};rankingShare.disabled=rankingImageBusy||!data.rows.length;
     if(!data.rows.some(person=>person.key===selectedRankingKey))selectedRankingKey=null;
     document.getElementById('ac4-ranking-title').textContent=`Ranking AC4 · ${periodLabel()}`;
@@ -13578,7 +13580,7 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
     document.getElementById('ac4-ranking-register-status').textContent=directory?.count()?`Cadastro local: ${directory.count()} militares.${missing?` ${missing} identificações do ranking a completar.`:' Identificações completas disponíveis.'}`:'Carregue o Plano de Chamada ou cadastro ES/OS para exibir nomes completos e RGs. A leitura é local, somente neste navegador.';
     const content=document.getElementById('ac4-ranking-content');content.replaceChildren();
     const hoursNote=element('p','ranking-hours-note',`Horas do mês: AC4 previstos e com execução confirmada de todo o mês selecionado, com limite de ${rankingDuration(data.monthlyLimitMinutes)} por militar. O subtotal do intervalo segue Início/Fim. Histórico e simulações não somam horas.${financialSummary.invalidCount?' Há registros inválidos; confira as durações antes de avaliar o limite.':''}`);hoursNote.id='ac4-ranking-hours-note';content.append(hoursNote);
-    if(!data.rows.length){content.append(element('p','ranking-empty',`Nenhum AC4 cadastrado de ${rankingDate(data.startDate)} a ${rankingDate(data.cutoffDate)}.`));return;}
+    if(!data.rows.length){content.append(element('p','ranking-empty',data.excludeZeroAC4?'Nenhum militar com valor de AC4 diferente de zero no período selecionado.':`Nenhum AC4 cadastrado de ${rankingDate(data.startDate)} a ${rankingDate(data.cutoffDate)}.`));return;}
     const table=element('table',`ranking-table${data.historyMonths?' has-history':''}`);table.setAttribute('aria-label',`Ranking mensal de AC4 ${data.sortBySeniority?'por antiguidade':'em ordem decrescente de valor total'}`);table.setAttribute('role','table');table.setAttribute('aria-describedby',hoursNote.id);
     const head=element('thead'),header=element('tr');head.setAttribute('role','rowgroup');header.setAttribute('role','row');
     for(const label of ['ORDEM','MILITAR','AC4 OPERACIONAL','AC4 SAT',...(data.historyMonths?['AC4 HISTÓRICO']:[]),'AC4 TOTAL']){const cell=element('th',label==='ORDEM'?'ranking-position':label==='MILITAR'?'ranking-member-cell':label==='AC4 OPERACIONAL'?'ranking-operational':label==='AC4 SAT'?'ranking-sat':label==='AC4 HISTÓRICO'?'ranking-history':'ranking-total',label);cell.scope='col';cell.setAttribute('role','columnheader');if(label==='ORDEM')cell.setAttribute('aria-label',data.sortBySeniority?'Antiguidade do militar':'Posição no ranking');header.append(cell);}head.append(header);table.append(head);
@@ -14178,6 +14180,7 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
   rankingStart.addEventListener('change',updateRankingRange);rankingEnd.addEventListener('change',updateRankingRange);
   rankingOfficers.addEventListener('change',renderRankingDialog);
   rankingSeniority.addEventListener('change',renderRankingDialog);
+  rankingExcludeZero.addEventListener('change',renderRankingDialog);
   rankingHistory.addEventListener('change',renderRankingDialog);
   function canShareRanking(file){try{return window.isSecureContext&&typeof navigator.share==='function'&&typeof navigator.canShare==='function'&&navigator.canShare({files:[file]});}catch{return false;}}
   rankingShare.addEventListener('click',async()=>{
