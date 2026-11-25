@@ -56,6 +56,8 @@ const snapshot = () => Object.keys(window.ServiceCalendar.schedules).map(period 
       assert(await page.locator('.ranking-table .ranking-row').evaluateAll(rows=>rows.every(row=>row.scrollWidth<=row.clientWidth+1)));
       await page.locator('#ac4-ranking-officers').uncheck();await page.locator('#ac4-ranking-seniority').uncheck();
       await page.locator('#ac4-ranking-history').selectOption('0');await page.locator('#ac4-ranking-end').selectOption('2026-11-30');await page.locator('#ac4-ranking-start').selectOption('2026-11-01');
+      // Full-period hour subtotals are queried after the November services end.
+      await page.clock.setFixedTime(new Date('2026-12-01T15:00:00Z'));await page.locator('#ac4-ranking-history').selectOption('0');
       await verify('WANDERSON',6780,6780,'available','Restam 79h');await verify('VALÉRIA',480,480,'available','Restam 184h');
       if(width!==390){
         await page.locator('#ac4-ranking-dialog').screenshot({path:path.join(os.tmpdir(),`ranking-hours-${width}.png`),animations:'disabled'});
