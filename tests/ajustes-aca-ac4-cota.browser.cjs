@@ -86,14 +86,14 @@ const root = path.join(__dirname, '..');
         await page.locator('#sei-close').click();
       }
       assert((await page.locator('#ac4-month-summary').textContent()).includes('45.840,00'));
-      assert((await page.locator('#ac4-month-summary').textContent()).includes('41.983,00'));
-      assert((await page.locator('#ac4-month-summary').textContent()).includes('3.857,00'));
+      assert((await page.locator('#ac4-month-summary').textContent()).includes('45.829,00'));
+      assert((await page.locator('#ac4-month-summary').textContent()).includes('11,00'));
       assert((await page.locator('.current-finance-available .current-finance-amount').textContent()).includes('19.510,00'));
       await page.locator('[data-ac4-simulation]').click();await page.locator('#ac4-simulation-target').selectOption('6');await page.locator('#ac4-simulation-confirm').click();
-      assert.equal(await page.locator('.simulation-entry').count(),3);
+      assert.equal(await page.locator('.simulation-entry').count(),0);
       assert.equal(await page.locator('.day[data-day="22"] .simulation-entry').count(),0);
-      assert((await page.locator('#ac4-month-summary').textContent()).includes('44.714,00'));
-      assert((await page.locator('#ac4-month-summary').textContent()).includes('1.126,00'));
+      assert((await page.locator('#ac4-month-summary').textContent()).includes('45.829,00'));
+      assert((await page.locator('#ac4-month-summary').textContent()).includes('11,00'));
       await page.locator('[data-ac4-simulation]').click();await page.locator('#ac4-simulation-disregard').click();
       assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
     }

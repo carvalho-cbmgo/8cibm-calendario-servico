@@ -55,7 +55,7 @@ const files = { '/': 'index.html', '/assets/cbmgo-emblema.png': 'assets/cbmgo-em
         const order = page.locator('#sei-order-table tbody tr').filter({ hasText: 'LUIZ ANTONIO' });
         assert.equal(await scale.count(), 1);
         assert.equal(await scale.locator('td').nth(5).textContent(), `${hours}h`);
-        const expectedReference = period === '2026-11' && number === 22 ? 'OS nº 387 (SEI 98726469)' : 'PREVISTO';
+        const expectedReference = period === '2026-11' && number === 22 ? 'OS nº 387 (SEI 98726469)' : period === '2026-11' && number === 29 ? 'OS nº 396 (SEI 98894420)' : 'PREVISTO';
         assert((await scale.locator('td').nth(4).textContent()).includes(expectedReference));
         assert.equal(await order.count(), 1);
         const cells = await order.locator('td').allTextContents();

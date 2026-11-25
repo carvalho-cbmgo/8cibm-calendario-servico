@@ -64,7 +64,7 @@ const money=cents=>normalize(currency.format(cents/100));
   };
   await verify(false);
   await configure(6);const six=await verify(true);
-  assert.deepEqual(six.days.filter(d=>[12,13,14,30].includes(Number(d.date.slice(8)))).map(d=>six.quota-d.actualCumulative-d.extraCumulative),[3145100,2886100,2687100,112600]);
+  assert.deepEqual(six.days.filter(d=>[12,13,14,30].includes(Number(d.date.slice(8)))).map(d=>six.quota-d.actualCumulative-d.extraCumulative),[3145100,2886100,2687100,1100]);
   assert.equal(six.days[26].extra,0);assert.equal(six.days[26].extraCumulative,six.days[25].extraCumulative);
   await configure(4);await verify(true,4);
   await configure(8);const ten=await verify(true,8);assert.equal(ten.quota-ten.days.at(-1).actualCumulative-ten.days.at(-1).extraCumulative,-768800);

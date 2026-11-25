@@ -42,8 +42,8 @@ test('LUIZ tem um AC4 previsto de 24h em 22/11 e mantém 12h em 29/11 e 06/12, s
     assert.equal(record.financialMonth, period);
     assert.equal(record.status, 'forecast');
     assert.equal(record.event.executionConfirmed, undefined);
-    assert.equal(finance.documentInfo(record.event).number, date === '2026-11-22' ? '387' : '');
-    assert.equal(finance.documentInfo(record.event).sei, date === '2026-11-22' ? '98726469' : '');
+    assert.equal(finance.documentInfo(record.event).number, date === '2026-11-22' ? '387' : date === '2026-11-29' ? '396' : '');
+    assert.equal(finance.documentInfo(record.event).sei, date === '2026-11-22' ? '98726469' : date === '2026-11-29' ? '98894420' : '');
     assert.equal(day.confirmation?.status, date === '2026-11-22' ? 'confirmed' : undefined);
     assert.equal(simulation.coverage(day, date).resources, resources);
     assert.equal(chief.select(day).assignments[0].name, leader);
@@ -57,22 +57,22 @@ test('LUIZ tem um AC4 previsto de 24h em 22/11 e mantém 12h em 29/11 e 06/12, s
 
 test('novembro e dezembro recebem apenas os novos custos, com a cota configurada de dezembro', () => {
   const november = summary('2026-11'), december = summary('2026-12');
-  assert.equal(november.records.length, 103);
-  assert.equal(november.committedCents, 4198300);
-  assert.equal(november.operationalCents, 3315300);
+  assert.equal(november.records.length, 107);
+  assert.equal(november.committedCents, 4582900);
+  assert.equal(november.operationalCents, 3699900);
   assert.equal(november.satCents, 883000);
-  assert.equal(november.remainingCents, 385700);
+  assert.equal(november.remainingCents, 1100);
   assert.equal(november.executedCents, 1096600);
-  assert.equal(december.records.length, 1);
-  assert.equal(december.committedCents, 48000);
+  assert.equal(december.records.length, 3);
+  assert.equal(december.committedCents, 120000);
   assert.equal(december.quotaCents, 3800000);
-  assert.equal(december.remainingCents, 3752000);
+  assert.equal(december.remainingCents, 3680000);
   assert.equal(december.executedCents, 0);
   const plan = simulation.plan(data, '2026-11', 4584000);
   assert.equal(plan.days.get(22).addedResources, 0);
   assert.equal(plan.days.get(29).addedResources, 0);
-  assert.equal(plan.addedResources, 3);
-  assert.equal(plan.summary.committedCents, 273100);
+  assert.equal(plan.addedResources, 0);
+  assert.equal(plan.summary.committedCents, 0);
   assert.equal(simulation.plan(data, '2026-12').days.get(6).addedResources, 1);
   for (const [date] of entries) {
     const planned = simulation.plan(data, date.slice(0, 7)).days.get(Number(date.slice(8)));
@@ -91,7 +91,7 @@ test('a inclusão preserva todos os dados e AC4 anteriores nas três competênci
     const originalResources = resources - (date === '2026-11-22' ? 1 : 0), missing = 6 - originalResources;
     day.coverage = [`${originalResources} recursos de 24h`, missing > 0 ? `Faltam ${missing} recurso${missing === 1 ? '' : 's'}` : 'Meta de 6 recursos'];
   }
-  assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'), 'f3252758d5dc9f4234b03b46cf5ff61bcf228dc03c46a1551ae63ce294156419');
+  assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'), 'e25e0d601a376d1a77e7447c3468cc13cf4f929836872260eb9b665f0322b2f0');
   const original = finance.month(before, '2026-11', 4584000);
   assert.equal(summary('2026-11').committedCents - original.committedCents, 144500);
   assert.equal(summary('2026-11').satCents, original.satCents);
@@ -108,7 +108,7 @@ test('a retificação altera só duração, término e cobertura dos três servi
     const full = resources + (date === '2026-11-22' ? 0 : 1), missing = 6 - full;
     day.coverage = [`${full} recursos de 24h`, missing > 0 ? `Faltam ${missing} recurso` : 'Meta de 6 recursos'];
   }
-  assert.equal(createHash('sha256').update(JSON.stringify(previous)).digest('hex'), '32b4b6ff3c3d8b3d324ff34033a094c043c3e4ae7c6fd89a4e97fe2551d67a30');
+  assert.equal(createHash('sha256').update(JSON.stringify(previous)).digest('hex'), 'f9270a8be844f2a1568f67022bad3d7acd5409be8dcc79a67594c299713c8df7');
   assert.equal(finance.month(previous, '2026-11', 4584000).committedCents - summary('2026-11').committedCents, 48500);
   assert.equal(finance.month(previous, '2026-12').committedCents - summary('2026-12').committedCents, 48500);
 });
@@ -141,8 +141,8 @@ test('exclusão da simulação limita-se aos três AC4 e preserva a cobertura re
     }
   }
   assert.equal(JSON.stringify(data), source);
-  assert.equal(summary('2026-11').committedCents, 4198300);
-  assert.equal(summary('2026-12').committedCents, 48000);
+  assert.equal(summary('2026-11').committedCents, 4582900);
+  assert.equal(summary('2026-12').committedCents, 120000);
 });
 
 test('a exclusão por evento não remove ordinários ou outros AC4 do mesmo militar', () => {

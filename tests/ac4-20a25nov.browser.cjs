@@ -88,7 +88,7 @@ const entries = [
       await page.locator('#ac4-simulation-target').selectOption('6');
       await page.locator('#ac4-simulation-confirm').click();
       assert.equal(await page.locator('.is-scale-confirmed .simulation-entry').count(), 0);
-      assert.equal(await page.locator('.simulation-entry').count(), 3);
+      assert.equal(await page.locator('.simulation-entry').count(), 0);
       await page.locator('[data-ac4-simulation]').click();
       await page.locator('#ac4-simulation-disregard').click();
       assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));

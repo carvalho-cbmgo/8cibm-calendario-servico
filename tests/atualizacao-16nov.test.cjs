@@ -16,6 +16,7 @@ const { AC4Finance: finance, ServiceSimulation: simulation, ServiceLookup: looku
 const day = date => data[date.slice(0, 7)].days.find(d => d.day === Number(date.slice(8)));
 const newId = 'ac4-proebom-henrique-2026-11-17-08h';
 const recentIds = new Set([
+  'ac4-operacional-da-silva-2026-11-27-08h', 'ac4-operacional-passos-2026-11-28-08h', 'ac4-operacional-rabelo-2026-11-28-08h', 'ac4-operacional-cavalcante-2026-11-30-08h', 'ac4-operacional-aislan-2026-12-01-08h', 'ac4-operacional-martins-2026-12-02-08h',
   'ac4-operacional-hellysson-2026-11-20-08h', 'ac4-operacional-nikholas-2026-11-23-08h',
   'ac4-operacional-wanderson-2026-11-20-08h', 'ac4-operacional-rabelo-2026-11-20-08h',
   'ac4-operacional-da-silva-2026-11-21-08h', 'ac4-operacional-piccini-2026-11-21-08h',
@@ -57,7 +58,7 @@ test('os 70 eventos AC4 anteriores permanecem integralmente preservados', () => 
     ['members', 'sat'].flatMap(area => (area === 'members' ? d.members : d.sat?.members || []).flatMap(m =>
       m.events.filter(e => !recentIds.has(e.serviceId) && e.serviceId !== newId && e.serviceId !== 'ac4-operacional-santos-2026-11-23-08h' && e.serviceId !== 'ac4-operacional-da-silva-2026-11-19-08h' && e.serviceId !== 'ac4-proebom-hellysson-2026-11-24-08h' && !e.serviceId?.startsWith('ac4-sat-23a30nov-') && !e.serviceId?.startsWith('ac4-operacional-24h-luiz-antonio-') && !e.serviceId?.startsWith('ac4-2026-11-26-')).map(e => JSON.stringify([period, d.day, area, m.name, e])))))).sort();
   assert.equal(rows.length, 70);
-  assert.equal(createHash('sha256').update(JSON.stringify(rows)).digest('hex'), '9c81cbd4683f4b4b2337a20392cc5216840884c6d59843a386d258836f9c0365');
+  assert.equal(createHash('sha256').update(JSON.stringify(rows)).digest('hex'), '30cf9b2444b9745defc777f64bc45bc6b50affe333e17a27ee89e30a31023ce6');
 });
 
 test('férias inclusivas de SCHUSSLER excluem oito plantões, com TS 167 após o afastamento e ordinário em 06/01', () => {
@@ -103,13 +104,13 @@ test('HENRIQUE cumpre EAS de 24h em 18 e 23/11, com observação exata, sem gera
   const actual = finance.month(data, '2026-11', 4584000);
   const baseline = finance.month(before, '2026-11', 4584000);
   assert.equal(JSON.stringify(actual.records), JSON.stringify(baseline.records));
-  assert.equal(actual.committedCents, 4198300);
+  assert.equal(actual.committedCents, 4582900);
   assert.equal(actual.executedCents, 1096600);
-  assert.equal(actual.remainingCents, 385700);
+  assert.equal(actual.remainingCents, 1100);
   const plan = simulation.plan(data, '2026-11', 4584000);
   assert.equal(plan.days.get(18).addedServices, 0);
   assert.equal(plan.days.get(23).addedServices, 0);
-  assert.equal(plan.addedResources, 3);
-  assert.equal(plan.summary.committedCents, 273100);
+  assert.equal(plan.addedResources, 0);
+  assert.equal(plan.summary.committedCents, 0);
   assert.equal(data['2026-11'].days.filter(d => d.confirmation?.status === 'confirmed').length, 25);
 });

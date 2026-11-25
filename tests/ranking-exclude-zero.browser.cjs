@@ -61,7 +61,7 @@ const financialSnapshot=()=>Object.keys(window.ServiceCalendar.schedules).map(pe
     await setRange('2026-11-21','2026-11-22');
     await checkMembers(['ST DA SILVA','SD PICCINI','ST PASSOS','SD SANTOS','2º SGT LUIZ ANTONIO']);await checkTotals();
     await setRange('2026-11-27','2026-11-27');
-    await checkMembers(['3º SGT BERTONCELLO','3º SGT ROBERTO','3º SGT VALÉRIA']);await checkTotals();
+    await checkMembers(['3º SGT BERTONCELLO','3º SGT ROBERTO','3º SGT VALÉRIA','ST DA SILVA']);await checkTotals();
     await setRange('2026-11-25','2026-11-25');
     await checkMembers(['2º SGT DIEGO','3º SGT BERTONCELLO','3º SGT ROBERTO','SD HUGO']);await checkTotals();
     await setRange('2026-11-20','2026-11-20');
@@ -83,12 +83,12 @@ const financialSnapshot=()=>Object.keys(window.ServiceCalendar.schedules).map(pe
     await page.locator('#ac4-ranking-officers').uncheck();await close();await open();assert(await filter.isChecked());
     await checkMembers(['1º SGT HELLYSSON','2º SGT WANDERSON','CB RABELO']);
     await close();await page.locator('#mes-seguinte').click();await open();assert(await filter.isChecked());
-    assert.equal((await members()).length,0);assert(await page.locator('.ranking-empty').isVisible());assert(await page.locator('#ac4-ranking-share').isDisabled());
-    await setRange('2026-12-01','2026-12-31');await checkMembers(['2º SGT LUIZ ANTONIO']);await checkTotals();
+    await checkMembers(['ST AISLAN']);await checkTotals();await setRange('2026-12-03','2026-12-03');assert.equal((await members()).length,0);assert(await page.locator('.ranking-empty').isVisible());assert(await page.locator('#ac4-ranking-share').isDisabled());
+    await setRange('2026-12-01','2026-12-31');await checkMembers(['ST AISLAN','SD MARTINS','2º SGT LUIZ ANTONIO']);await checkTotals();
     await close();await page.locator('#mes-seguinte').click();await open();assert(await filter.isChecked());
     assert.equal((await members()).length,0);assert((await page.locator('.ranking-empty').textContent()).includes('diferente de zero'));assert(await page.locator('#ac4-ranking-share').isDisabled());
     await filter.uncheck();assert((await members()).length>=27);await filter.check();assert.equal((await members()).length,0);
-    await close();await page.locator('#mes-anterior').click();await open();await checkMembers(['2º SGT LUIZ ANTONIO']);assert(await filter.isChecked());
+    await close();await page.locator('#mes-anterior').click();await open();await checkMembers(['ST AISLAN','SD MARTINS','2º SGT LUIZ ANTONIO']);assert(await filter.isChecked());
     assert.equal(await page.evaluate(()=>JSON.stringify(window.ServiceCalendar.schedules)),source);assert.deepEqual(await page.evaluate(financialSnapshot),financial);
     await page.reload();await open();assert.equal(await filter.isChecked(),false);assert((await members()).length>=27);
     assert.equal(await page.evaluate(()=>JSON.stringify(window.ServiceCalendar.schedules)),source);assert.deepEqual(await page.evaluate(financialSnapshot),financial);assert.deepEqual(errors,[]);

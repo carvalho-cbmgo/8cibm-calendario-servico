@@ -64,20 +64,20 @@ test('consulta e simulação distinguem o AC4 de 25/11 das trocas da companhia d
   assert.equal(plan.days.get(25).addedServices, 0);
 });
 
-test('HENRIQUE 12h e HELLYSSON 4h são reforços operacionais em 26/11, com OS a definir', () => {
+test('HENRIQUE 12h e HELLYSSON 8h são reforços operacionais em 26/11, com OS 393', () => {
   const summary = finance.month(data, '2026-11', 4584000);
   const records = summary.records.filter(r => r.event.serviceId?.startsWith('ac4-2026-11-26-'));
   assert.deepEqual([...records.map(r => r.member)].sort(), ['1º SGT HELLYSSON', '3º SGT HENRIQUE']);
   assert.equal(records.length, 2);
   assert.equal(new Set(records.map(r => r.key)).size, 2);
   for (const record of records) {
-    const hours = record.member.includes('HENRIQUE') ? 12 : 4;
+    const hours = record.member.includes('HENRIQUE') ? 12 : 8;
     assert.equal(record.event.mode, 'OPERACIONAL/SOP');
     assert.equal(record.event.observation, 'REFORÇO OPERACIONAL');
     assert.equal(record.startDate, '2026-11-26');
     assert.equal(record.endDate, '2026-11-26');
     assert.equal(record.start, '08h00');
-    assert.equal(record.end, hours === 12 ? '20h00' : '12h00');
+    assert.equal(record.end, hours === 12 ? '20h00' : '16h00');
     assert.equal(record.minutes, hours * 60);
     assert.equal(record.event.hours, hours);
     assert.equal(record.event.nextDay, false);
@@ -85,8 +85,8 @@ test('HENRIQUE 12h e HELLYSSON 4h são reforços operacionais em 26/11, com OS a
     assert.equal(record.costCents, hours * 3000);
     assert.equal(record.status, 'forecast');
     assert.equal(record.event.executionConfirmed, undefined);
-    assert.equal(finance.documentInfo(record.event).number, '');
-    assert.equal(finance.documentInfo(record.event).sei, '');
+    assert.equal(finance.documentInfo(record.event).number, '393');
+    assert.equal(finance.documentInfo(record.event).sei, '98894389');
     const matches = lookup.month(data, '2026-11').filter(r => r.member === record.member && r.date === '2026-11-26' && r.type === 'ac4');
     assert.equal(matches.length, 1);
     assert.equal(matches[0].commitmentCents, hours * 3000);
@@ -99,16 +99,16 @@ test('HENRIQUE 12h e HELLYSSON 4h são reforços operacionais em 26/11, com OS a
     const actual = simulation.plan(data, '2026-11', 4584000, undefined, target);
     const original = simulation.plan(without, '2026-11', 4584000, undefined, target);
     assert.equal(original.addedServices - actual.addedServices, target >= 6 ? 1 : 0);
-    assert.equal(original.summary.committedCents - actual.summary.committedCents, target === 6 ? 36000 : target >= 7 ? 48000 : 0);
+    assert.equal(original.summary.committedCents - actual.summary.committedCents, target === 6 ? 36000 : target >= 7 ? 60000 : 0);
     assert.equal(actual.days.get(26).coverage.resources, 6);
     assert.equal(original.days.get(26).coverage.resources, 5);
   }
-  assert.equal(summary.records.length, 103);
-  assert.equal(summary.committedCents, 4198300);
-  assert.equal(summary.operationalCents, 3315300);
+  assert.equal(summary.records.length, 107);
+  assert.equal(summary.committedCents, 4582900);
+  assert.equal(summary.operationalCents, 3699900);
   assert.equal(summary.satCents, 883000);
   assert.equal(summary.executedCents, 1096600);
-  assert.equal(summary.remainingCents, 385700);
+  assert.equal(summary.remainingCents, 1100);
 });
 
 test('inclusões de 18/11 preservam integralmente os demais dados do calendário', () => {
@@ -122,5 +122,5 @@ test('inclusões de 18/11 preservam integralmente os demais dados do calendário
   const input = days.find(d => d.day === 26);
   input.members = input.members.filter(m => !m.events.some(e => e.serviceId?.startsWith('ac4-2026-11-26-')));
   input.coverage = ['5 recursos de 24h', 'Faltam 1 recurso'];
-  assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'), 'a37abc6e23f0551bfbfbecb34dc3a3064eb8d7fc04cc5b703b2553f813220931');
+  assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'), '398e191ffbeb080342f1d55b844e5e0badf4c5b1626b2e08c35fb4e1c1fc25fa');
 });

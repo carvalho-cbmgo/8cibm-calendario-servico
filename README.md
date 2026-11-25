@@ -2,6 +2,20 @@
 
 Calendário HTML responsivo e estático para exibição da previsão de militares por ala, dos serviços SAT e do controle financeiro de AC4. Há dados de novembro/2026 a janeiro/2027; meses sem dados mostram essa condição.
 
+Em **24/11/2026**, os AC4 operacionais de **26/11** foram vinculados à **OS nº 393 (SEI 98894389)**, e o de **29/11** à **OS nº 396 (SEI 98894420)**. Por confirmação do usuário, a SAT de ROBERTO em 26/11 permanece na OS 379, e a Análise de Projetos de BESSA em 29/11 mantém seu documento próprio a informar. HELLYSSON passa de 4h para **8h, 08h–16h de 26/11**, preservando o identificador, a modalidade operacional e o estado previsto; seu valor passa de R$ 120,00 para **R$ 240,00**.
+
+Foram incluídos os seguintes AC4 operacionais **previstos**, sem confirmação de execução ou pagamento:
+
+| Data inicial | Militar | Período | OS nº / SEI | Valor |
+|---|---|---|---|---:|
+| 27/11/2026 | ST DA SILVA | 24h, 08h de 27/11 às 08h de 28/11 | 394 / 98894413 | R$ 995,00 |
+| 28/11/2026 | ST PASSOS e CB RABELO | 24h cada, 08h de 28/11 às 08h de 29/11 | 395 / 98894398 | R$ 995,00 cada |
+| 30/11/2026 | SD CAVALCANTE | 24h, 08h de 30/11 às 08h de 01/12 | 397 / 98894435 | R$ 741,00 |
+| 01/12/2026 | ST AISLAN | 12h, 08h–20h do mesmo dia | 398 / 98894440 | R$ 360,00 |
+| 02/12/2026 | SD MARTINS | 12h, 08h–20h do mesmo dia | 399 / 98894445 | R$ 360,00 |
+
+Novembro passa a **107 AC4/R$ 45.829,00 comprometidos**, com **R$ 11,00 de saldo** sobre a cota preservada de R$ 45.840,00; a execução confirmada permanece em R$ 10.966,00. Os novos serviços completam as vagas de 28 e 30/11, deixando **zero reforços simulados na meta de seis**; 27/11 passa a sete recursos e 28/11 a ter ST PASSOS como chefe por antiguidade. Dezembro passa a **3 AC4/R$ 1.200,00 previstos**, com **R$ 36.800,00 de saldo** sobre a cota preservada de R$ 38.000,00. AISLAN e MARTINS cobrem o diurno em 01 e 02/12; a simulação complementa essas datas somente das 20h às 08h e passa a 31 serviços/R$ 25.105,00. O serviço de CAVALCANTE é contabilizado uma vez em novembro, pela data inicial, sem duplicação em dezembro. Os registros abaixo preservam o histórico das revisões anteriores.
+
 Foi incluído um **AC4 operacional previsto de 12h para SD HUGO em 25/11/2026, das 08h às 20h**, no valor de **R$ 360,00**, com OS a definir. O serviço é distinto das trocas da companhia de HUGO em 20 e 29/11. A escala de 25/11 mantém sua confirmação e cinco recursos contínuos de 24h, com seis militares no diurno e cinco no noturno; a chefia permanece com ST PASSOS.
 
 Novembro passa a **103 AC4/R$ 41.983,00 comprometidos**, sendo R$ 33.153,00 operacionais e R$ 8.830,00 SAT, com **R$ 3.857,00 de saldo** sobre a cota de R$ 45.840,00. A execução confirmada permanece em R$ 10.966,00; o novo AC4 segue previsto. A simulação mantém três serviços/R$ 2.731,00, com saldo de R$ 1.126,00 após o reforço simulado. Os demais serviços, tarifas, cotas e horas individuais foram preservados; HUGO soma agora 36h de AC4 no mês.
@@ -169,6 +183,8 @@ O botão do WhatsApp, imediatamente após Delta, abre uma janela com Início e F
 4. Se o artefato for aceito e a implantação terminar com **Deployment failed, try again later**, reexecute o job de publicação em **Re-run jobs → Re-run failed jobs**. Esse erro ocorre depois da construção e precisa ser acompanhado no Pages.
 
 ## Verificação local
+
+`node --test tests/ac4-26nov-a02dez.test.cjs` e `node tests/ac4-26nov-a02dez.browser.cjs` conferem as OS 393–399, a retificação de HELLYSSON para 8h, os seis novos AC4 e suas viradas de dia/mês, consulta, períodos/valores e cópia ES/OS. O teste de integridade reconstrói o calendário anterior, preservando o escopo documental da SAT e de Análise de Projetos. As expectativas de totais, cobertura, chefia e simulação dos testes existentes acompanham os novos registros; cotas, tarifas e confirmações permanecem preservadas. O roteiro de navegador cobre computador e celular com toque em 320/390 px.
 
 `node --test tests/santos-23nov.test.cjs` e `node tests/santos-23nov.browser.cjs` conferem o AC4 de SANTOS em 23/11, 12h/08h–20h/R$ 360, OS nº 388/SEI 98727025, cópia do documento, ES/OS, consulta, ranking, saldos e ausência de duplicação com o serviço de 22/11. O teste de integridade reconstrói o calendário anterior retirando somente essa inclusão; as expectativas dos totais mensais e das fotografias integrais dos testes anteriores foram atualizadas para incorporar o novo serviço. A cota, as confirmações e os valores executados permanecem preservados. O roteiro de navegador cobre computador e celular com toque em 320/390 px.
 
