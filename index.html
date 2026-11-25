@@ -456,6 +456,12 @@ dialog.simulation-dialog{width:min(620px,calc(100% - 24px));max-height:calc(100d
 .finance-metric{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:8px;padding:3px 0;min-width:0;font-variant-numeric:tabular-nums}
 .finance-metric-label{font-size:12px;font-weight:500;color:#c9dfeb;line-height:1.4}
 .finance-metric-amount{font-size:16px;font-weight:650;line-height:1.4;letter-spacing:-.01em;white-space:nowrap}
+.finance-committed-trigger{padding:0;border:0;background:none;font-family:inherit;text-align:left;cursor:help}
+.finance-committed-trigger:focus-visible{outline:2px solid #f4d184;outline-offset:3px;border-radius:3px}
+.exchange-tooltip.finance-committed-tooltip{max-width:calc(100vw - 20px);font-size:13px;font-variant-numeric:tabular-nums}
+.exchange-tooltip.finance-committed-tooltip p{display:grid;grid-template-columns:minmax(max-content,1fr) max-content max-content;gap:8px;white-space:nowrap;font-weight:400;color:#243c54}
+.finance-committed-tooltip .finance-tooltip-label{font-weight:750}.finance-committed-tooltip .finance-tooltip-operational{color:#1f4f7c}.finance-committed-tooltip .finance-tooltip-sat{color:#71318f}
+@media screen and (max-width:350px){.exchange-tooltip.finance-committed-tooltip{padding:9px;font-size:12px}}
 .finance-metric-share{min-width:48px;padding:0;border:0;background:none;font-size:11px;color:#c1d0dd;line-height:1.4;text-align:right}
 .finance-metric-quota .finance-metric-amount{color:#d7f1ff}
 .finance-metric-committed .finance-metric-amount{color:#ffd49c}
@@ -13628,10 +13634,12 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
     toolbar.append(element('h2','','Controle AC4'),actions);target.append(toolbar);
     const metrics=element('div','finance-metrics');
     if(simulationActive){metrics.tabIndex=0;metrics.setAttribute('role','group');metrics.setAttribute('aria-label','Resumo da cota com simulação. Use a rolagem horizontal se necessário.');}
-    const metric=(label,amount,share,className='')=>{const item=element('div',`finance-metric ${className}`.trim()),amountNode=element('strong','finance-metric-amount'),shareNode=element('span','finance-metric-share');amountNode.append(amount);shareNode.append(share);item.append(element('span','finance-metric-label',label),amountNode,shareNode);metrics.append(item);};
+    const metric=(label,amount,share,className='')=>{const item=element('div',`finance-metric ${className}`.trim()),amountNode=element(className==='finance-metric-committed'?'button':'strong','finance-metric-amount'),shareNode=element('span','finance-metric-share');amountNode.append(amount);shareNode.append(share);item.append(element('span','finance-metric-label',label),amountNode,shareNode);metrics.append(item);return amountNode;};
     const extra=simulationActive?simulationPlan.summary.committedCents:0,headerPercent=simulationActive?dailyPercent:percent;
     metric('Cota mensal AC4',financialSummary.quotaCents===null?'Não informada':simulatedValue(financialSummary.quotaCents,0,false,true),financialSummary.quotaCents>0?simulatedRatio(financialSummary.quotaCents,0,true,headerPercent):'—','finance-metric-quota');
-    metric('Comprometido',simulatedValue(financialSummary.committedCents,extra,false,true),simulatedRatio(financialSummary.committedCents,extra,true,headerPercent),'finance-metric-committed');
+    const committed=metric('Comprometido',simulatedValue(financialSummary.committedCents,extra,false,true),simulatedRatio(financialSummary.committedCents,extra,true,headerPercent),'finance-metric-committed');
+    const breakdown=[{label:'AC4 OPERACIONAL',amount:money(financialSummary.operationalCents+extra),percentage:ratio(financialSummary.operationalCents+extra,dailyPercent),kind:'operational'},{label:'AC4 SAT',amount:money(financialSummary.satCents),percentage:ratio(financialSummary.satCents,dailyPercent),kind:'sat'}];
+    committed.type='button';committed.classList.add('finance-committed-trigger');committed.setAttribute('aria-label',`Detalhar AC4 comprometido: ${money(financialSummary.committedCents+extra)}`);committed.dataset.committedBreakdown=JSON.stringify(breakdown);committed.dataset.exchangeTooltip=breakdown.map(row=>`${row.label} ${row.amount} ${row.percentage}`).join('\n');
     metric('Disponível',financialSummary.remainingCents===null?'Não informada':simulatedValue(financialSummary.remainingCents,-extra,false,true),financialSummary.remainingCents===null?'—':simulatedRatio(financialSummary.remainingCents,-extra,true,headerPercent),'finance-metric-available');
     target.append(metrics);if(simulationActive){const hint=element('p','simulation-scroll-hint','↔ Deslize para ver todos os valores');hint.id='simulation-summary-scroll-hint';hint.hidden=true;metrics.dataset.simulationScroll=hint.id;metrics.setAttribute('aria-describedby',hint.id);target.append(hint);}target.classList.toggle('over-quota',financialSummary.remainingCents!==null&&financialSummary.remainingCents<0);
     const days=element('p','finance-days-remaining');days.id='ac4-month-days';days.append(element('span','','Dias restantes no mês'),element('strong'));metrics.append(days);updateMonthCountdown();updateCurrentFinance();
@@ -14342,7 +14350,9 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
     if(!badge?.isConnected)return hideExchangeTooltip();
     clearTimeout(hintTimer);hintedBadge?.removeAttribute('aria-describedby');hintedBadge=badge;
     const host=badge.closest('dialog[open]')||document.body;if(exchangeTooltip.parentElement!==host)host.append(exchangeTooltip);
-    exchangeTooltip.replaceChildren(...badge.dataset.exchangeTooltip.split('\n').map(line=>element('p','',line)));
+    const breakdown=badge.dataset.committedBreakdown?JSON.parse(badge.dataset.committedBreakdown):null;
+    exchangeTooltip.classList.toggle('finance-committed-tooltip',!!breakdown);
+    exchangeTooltip.replaceChildren(...(breakdown?breakdown.map(row=>{const line=element('p','');line.append(element('span',`finance-tooltip-label finance-tooltip-${row.kind}`,row.label),element('span','finance-tooltip-amount',row.amount),element('span','finance-tooltip-percentage',row.percentage));return line;}):badge.dataset.exchangeTooltip.split('\n').map(line=>element('p','',line))));
     badge.setAttribute('aria-describedby',exchangeTooltip.id);exchangeTooltip.hidden=false;
     if(tooltipPopover&&!exchangeTooltip.matches(':popover-open'))exchangeTooltip.showPopover();
     positionExchangeTooltip();
@@ -14368,6 +14378,7 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
   });
   document.addEventListener('focusin',event=>{const badge=event.target.closest('[data-exchange-tooltip]');if(badge){focusedBadge=badge;showExchangeTooltip(badge);}});
   document.addEventListener('focusout',event=>{if(focusedBadge===event.target){focusedBadge=null;settleExchangeTooltip();}});
+  document.addEventListener('click',event=>{const trigger=event.target.closest('[data-committed-breakdown]');if(trigger)showExchangeTooltip(trigger);else if(hintedBadge?.hasAttribute('data-committed-breakdown')&&!exchangeTooltip.contains(event.target))hideExchangeTooltip();});
   exchangeTooltip.addEventListener('pointerenter',()=>{tooltipHovered=true;clearTimeout(hintTimer);});
   exchangeTooltip.addEventListener('pointerleave',()=>{tooltipHovered=false;settleExchangeTooltip();});
   document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!exchangeTooltip.hidden){event.preventDefault();event.stopPropagation();hideExchangeTooltip();}},true);
