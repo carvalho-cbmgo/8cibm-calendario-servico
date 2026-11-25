@@ -55,7 +55,7 @@ test('TS 170 usa 21 e 22/11/2026, jornadas únicas de 24h e antiguidade própria
 });
 
 test('TS 157 permanece removida; a nova TS 171 rege 20 e 25/11 sem duplicar serviços ou cobertura',()=>{
- for(const [date,name,absent,ord,resources]of [['2026-11-20','SD SANTOS','SD PICCINI',28,6],['2026-11-25','SD PICCINI','SD SANTOS',27,5]]){
+ for(const [date,name,absent,ord,resources]of [['2026-11-20','SD SANTOS','SD PICCINI',28,6],['2026-11-25','SD PICCINI','SD SANTOS',27,6]]){
   const input=day(date),members=input.members.filter(m=>m.name===name);assert.equal(members.length,1);assert(!input.members.some(m=>m.name===absent));assert.equal(members[0].ord,ord);assert.equal(members[0].badges.length,1);assert(matches(members[0].badges[0],'171','98562686'));assert.deepEqual(members[0].notes,[`TS nº 171 (SEI 98562686). Substitui ${absent}.`]);assert.equal(members[0].events.length,0);assert.equal(context.window.ServiceSimulation.coverage(input,date).resources,resources);
  }
  for(const month of Object.values(data))for(const input of month.days)for(const member of [...input.members,...(input.sat?.members||[])]){assert(!member.badges.some(b=>String(b.troca?.numero)==='157'||String(b.troca?.sei)==='97544001'));assert(!member.notes.some(note=>/TS\s*n[º°o.]?\s*157\b|97544001/.test(note)));}
@@ -95,7 +95,7 @@ test('TS 164 preserva os três militares e a cadeia de substituição em 29/11, 
 
 test('conferência das TS preserva a troca parcial 168, confirmações e totais reais/simulados',()=>{
  const {AC4Finance:finance,ServiceSimulation:simulation}=context.window,real=finance.month(data,'2026-11',4584000),plan=simulation.plan(data,'2026-11',4584000);
- assert.equal(real.records.length,107);assert.equal(real.committedCents,4557400);assert.equal(real.executedCents,1096600);assert.equal(plan.addedResources,0);assert.equal(plan.summary.committedCents,0);
+ assert.equal(real.records.length,107);assert.equal(real.committedCents,4591000);assert.equal(real.executedCents,1096600);assert.equal(plan.addedResources,0);assert.equal(plan.summary.committedCents,0);
  assert.equal(data['2026-11'].days.filter(day=>day.confirmation?.status==='confirmed').length,25);
  for(const date of ['2026-11-08','2026-11-29']){const d=day(date),partial=d.members.filter(member=>member.serviceHours===12);assert.equal(partial.length,2);assert.equal(simulation.coverage(d,date).resources,date==='2026-11-29'?6:5);}
  assert(!data['2026-10']);

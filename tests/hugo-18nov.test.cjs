@@ -53,9 +53,9 @@ test('consulta e simulação distinguem o AC4 de 25/11 das trocas da companhia d
   assert(payment[0].labels.includes('TS CIA · Pagamento'));
   const ac4 = services.filter(r => r.date === '2026-11-25' && r.type === 'ac4');
   assert.equal(ac4.length, 1);
-  assert.equal(ac4[0].start, '08h00'); assert.equal(ac4[0].end, '20h00');
-  assert.equal(ac4[0].endDate, '2026-11-25'); assert.equal(ac4[0].minutes, 720);
-  assert.equal(ac4[0].commitmentCents, 36000); assert.equal(ac4[0].status, 'forecast');
+  assert.equal(ac4[0].start, '08h00'); assert.equal(ac4[0].end, '08h00');
+  assert.equal(ac4[0].endDate, '2026-11-26'); assert.equal(ac4[0].minutes, 1440);
+  assert.equal(ac4[0].commitmentCents, 74100); assert.equal(ac4[0].status, 'forecast');
   const summary = finance.month(data, '2026-11', 4584000);
   assert(!summary.records.some(r => r.member === 'SD HUGO' && ['2026-11-20', '2026-11-29'].includes(r.startDate)));
   const plan = simulation.plan(data, '2026-11', 4584000);
@@ -64,14 +64,14 @@ test('consulta e simulação distinguem o AC4 de 25/11 das trocas da companhia d
   assert.equal(plan.days.get(25).addedServices, 0);
 });
 
-test('HENRIQUE 12h e HELLYSSON 8h são reforços operacionais em 26/11, com OS 393', () => {
+test('HENRIQUE e HELLYSSON têm reforços operacionais de 12h em 26/11, com OS 393', () => {
   const summary = finance.month(data, '2026-11', 4584000);
   const records = summary.records.filter(r => r.event.serviceId?.startsWith('ac4-2026-11-26-'));
   assert.deepEqual([...records.map(r => r.member)].sort(), ['1º SGT HELLYSSON', '3º SGT HENRIQUE']);
   assert.equal(records.length, 2);
   assert.equal(new Set(records.map(r => r.key)).size, 2);
   for (const record of records) {
-    const hours = record.member.includes('HENRIQUE') ? 12 : 8;
+    const hours = 12;
     assert.equal(record.event.mode, 'OPERACIONAL/SOP');
     assert.equal(record.event.observation, 'REFORÇO OPERACIONAL');
     assert.equal(record.startDate, '2026-11-26');
@@ -99,16 +99,16 @@ test('HENRIQUE 12h e HELLYSSON 8h são reforços operacionais em 26/11, com OS 3
     const actual = simulation.plan(data, '2026-11', 4584000, undefined, target);
     const original = simulation.plan(without, '2026-11', 4584000, undefined, target);
     assert.equal(original.addedServices - actual.addedServices, target >= 6 ? 1 : 0);
-    assert.equal(original.summary.committedCents - actual.summary.committedCents, target === 6 ? 36000 : target >= 7 ? 60000 : 0);
+    assert.equal(original.summary.committedCents - actual.summary.committedCents, target === 6 ? 36000 : target >= 7 ? 72000 : 0);
     assert.equal(actual.days.get(26).coverage.resources, 6);
     assert.equal(original.days.get(26).coverage.resources, 5);
   }
   assert.equal(summary.records.length, 107);
-  assert.equal(summary.committedCents, 4557400);
-  assert.equal(summary.operationalCents, 3674400);
+  assert.equal(summary.committedCents, 4591000);
+  assert.equal(summary.operationalCents, 3708000);
   assert.equal(summary.satCents, 883000);
   assert.equal(summary.executedCents, 1096600);
-  assert.equal(summary.remainingCents, 26600);
+  assert.equal(summary.remainingCents, -7000);
 });
 
 test('inclusões de 18/11 preservam integralmente os demais dados do calendário', () => {
@@ -122,5 +122,5 @@ test('inclusões de 18/11 preservam integralmente os demais dados do calendário
   const input = days.find(d => d.day === 26);
   input.members = input.members.filter(m => !m.events.some(e => e.serviceId?.startsWith('ac4-2026-11-26-')));
   input.coverage = ['5 recursos de 24h', 'Faltam 1 recurso'];
-  assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'), '398e191ffbeb080342f1d55b844e5e0badf4c5b1626b2e08c35fb4e1c1fc25fa');
+  assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'), 'aa64395c751b49f04ea197c66b5a2c56c9bea91587410fcdce13f45ee8370dfb');
 });

@@ -375,7 +375,7 @@ dialog.sei-generator{width:min(1380px,calc(100% - 24px));max-height:94vh;max-hei
   .day{display:grid;grid-template-rows:subgrid;grid-row:span 6;row-gap:0}
   .operational-section{display:grid;grid-template-rows:subgrid;grid-row:span 3;row-gap:0}
   .sat-section{display:flex;flex-direction:column}
-  .day:not(.is-hidden):has(.operational-section.is-collapsed){display:flex;align-self:start}
+  .day:not(.is-hidden):has(.operational-section.is-collapsed),.day:not(.is-hidden).is-today{display:flex;align-self:start}
  }
 }
 
@@ -645,6 +645,15 @@ dialog.simulation-dialog{width:min(620px,calc(100% - 24px));max-height:calc(100d
 .daily-finance .daily-finance-breakdown .daily-finance-label{grid-column:1}
 .daily-finance .daily-finance-breakdown .simulation-money{grid-column:2;justify-self:start;text-align:left}
 .daily-finance .daily-finance-breakdown .simulation-share{grid-column:3;justify-self:start;text-align:left}
+.month-turn{min-width:0;padding:12px;border-top:2px solid #b49ad8;background:#f7f3fc;color:#49365f;font-size:13px;line-height:1.5;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
+.month-turn h3{margin:0 0 5px;font-size:15px;color:#663c91}.month-turn p{margin:5px 0}.month-turn-list{list-style:none;padding:0;margin:8px 0}
+.month-turn-service{min-width:0;padding:10px 0;border-top:1px solid #ded2ee}.month-turn-service-name{display:block;font-weight:800}.month-turn-period,.month-turn-document{font-size:12px;color:#655576}
+.month-turn-parts{display:grid;gap:6px;margin:8px 0}.month-turn-part{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 8px;padding:7px;border:1px solid #e0d6ed;border-radius:6px;background:#fff}
+.month-turn-part.is-current{border-color:#9a73c3;background:#eee4fa}.month-turn-amount{white-space:nowrap;font-weight:800}.month-turn-part small{grid-column:1/-1;color:#655576}
+.month-turn-total{padding-top:8px;border-top:1px solid #b49ad8;font-weight:800}
+.day-finances{min-width:0}
+@media screen and (max-width:760px){.month-turn{font-size:14px}.month-turn-period,.month-turn-document{font-size:13px}}
+@media print{.month-turn{font-size:8px;background:#fff;break-inside:avoid}.month-turn h3{font-size:10px}.month-turn-period,.month-turn-document{font-size:8px}}
 @media screen and (max-width:760px){.daily-finance-toggle{min-height:44px}}
 .day-notes-caption{display:block}
 .day-notes-arrow{font-size:1.15em;font-weight:750;line-height:1}
@@ -5956,21 +5965,21 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
                 "serviceId": "ac4-operacional-hugo-2026-11-25-08h",
                 "mode": "OPERACIONAL/SOP",
                 "start": "08h00",
-                "end": "20h00",
-                "nextDay": false,
-                "hours": 12,
+                "end": "08h00",
+                "nextDay": true,
+                "hours": 24,
                 "observation": "REFORÇO OPERACIONAL",
-                "document": "OS a definir (não informada)",
+                "document": "OS nº 388 (SEI 98752637)",
                 "status": "planned",
                 "startDate": "2026-11-25",
-                "endDate": "2026-11-25"
+                "endDate": "2026-11-26"
               }
             ]
           }
         ],
         "coverage": [
-          "5 recursos de 24h",
-          "Faltam 1 recurso"
+          "6 recursos de 24h",
+          "Meta de 6 recursos"
         ],
         "confirmation": {
           "status": "confirmed",
@@ -5997,7 +6006,7 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
                   "nextDay": false,
                   "hours": 5,
                   "observation": "ATIVIDADES TÉCNICAS — SAT",
-                  "document": "OS nº 379 (SEI 98570810)",
+                  "document": "OS nº 388 (SEI 98752637)",
                   "status": "planned",
                   "activity": "Vistoria",
                   "startDate": "2026-11-25",
@@ -6028,7 +6037,7 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
                   "nextDay": false,
                   "hours": 4,
                   "observation": "ATIVIDADES TÉCNICAS — SAT",
-                  "document": "OS nº 379 (SEI 98570810)",
+                  "document": "OS nº 388 (SEI 98752637)",
                   "status": "planned",
                   "activity": "Protocolo",
                   "startDate": "2026-11-25",
@@ -6112,9 +6121,9 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
                 "serviceId": "ac4-2026-11-26-hellysson-08h",
                 "mode": "OPERACIONAL/SOP",
                 "start": "08h00",
-                "end": "16h00",
+                "end": "20h00",
                 "nextDay": false,
-                "hours": 8,
+                "hours": 12,
                 "observation": "REFORÇO OPERACIONAL",
                 "document": "OS nº 393 (SEI 98894389)",
                 "status": "planned",
@@ -6386,9 +6395,9 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
                 "serviceId": "ac4-operacional-da-silva-2026-11-27-08h",
                 "mode": "OPERACIONAL/SOP",
                 "start": "08h00",
-                "end": "08h00",
+                "end": "04h00",
                 "nextDay": true,
-                "hours": 24,
+                "hours": 20,
                 "observation": "REFORÇO OPERACIONAL",
                 "document": "OS nº 394 (SEI 98894413)",
                 "status": "planned",
@@ -6399,7 +6408,7 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
           }
         ],
         "coverage": [
-          "7 recursos de 24h",
+          "6 recursos de 24h",
           "Meta de 6 recursos"
         ],
         "alerts": [],
@@ -12911,6 +12920,22 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
     }
     return [...parts.values()];
   }
+  function monthTurn(summary,date){
+    if(civilDate(date)===null||date.slice(0,7)!==summary.period)return [];
+    const [year,month]=summary.period.split('-').map(Number),last=isoDate(Date.UTC(year,month,0)/MINUTE);
+    if(date!==`${summary.period}-01`&&date!==last)return [];
+    const result=[],seen=new Set();
+    for(const record of summary.records){
+      if(!record.valid||record.status==='cancelled'||record.event.simulation||!record.originalService)continue;
+      const whole=summary.byEvent.get(record.event),parts=allocations(whole);
+      for(let i=1;i<parts.length;i++){
+        const boundary=parts[i].startDate,key=`${record.key}|${boundary}`;
+        if((date!==boundary&&date!==isoDate(civilDate(boundary)-DAY))||seen.has(key))continue;
+        seen.add(key);result.push({key,member:whole.member,category:whole.category,event:whole.event,startDate:whole.startDate,start:whole.start,endDate:whole.endDate,end:whole.end,minutes:whole.minutes,costCents:whole.costCents,parts:[parts[i-1],parts[i]]});
+      }
+    }
+    return result.sort((a,b)=>a.startDate.localeCompare(b.startDate)||a.start.localeCompare(b.start)||a.member.localeCompare(b.member,'pt-BR'));
+  }
   function month(schedules,period,quotaCents=null){
     if(!/^\d{4}-(?:0[1-9]|1[0-2])$/.test(period))throw new Error('Competência financeira inválida.');
     const quota=Number.isSafeInteger(quotaCents)&&quotaCents>=0?quotaCents:null,map=new Map(),aliases=new WeakMap(),warnings=[];let ordinal=0;
@@ -13009,7 +13034,7 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
     for(const person of rows){result.recordCount+=person.records.length;for(const key of ['operationalCents','satCents','totalCents','forecastCents','executedCents'])result[key]+=person[key];}
     return result;
   }
-  window.AC4Finance={price,allocations,month,asOf,status,active,documentInfo,ranking,rankingRecords};
+  window.AC4Finance={price,allocations,monthTurn,month,asOf,status,active,documentInfo,ranking,rankingRecords};
   if(typeof document!=='undefined'){
     const schedules=JSON.parse(document.getElementById('calendar-data').textContent),quotas=JSON.parse(document.getElementById('ac4-financial-config').textContent).monthlyQuotaCents,rosters=JSON.parse(document.getElementById('ala-rosters').textContent),officerRotation=JSON.parse(document.getElementById('odd-alcancavel-config').textContent);
     window.ReachableOfficer.apply(schedules,officerRotation,rosters.absences);
@@ -13800,6 +13825,24 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
     });
     const foot=element('tfoot'),total=element('tr','ranking-row ranking-total-row'),label=element('th','ranking-total-label','TOTAL CONSIDERADO');foot.setAttribute('role','rowgroup');total.setAttribute('role','row');label.scope='row';label.colSpan=2;label.setAttribute('role','rowheader');total.append(label,amountCell('AC4 OPERACIONAL',data.operationalCents),amountCell('AC4 SAT',data.satCents));if(data.historyMonths)total.append(amountCell('AC4 HISTÓRICO',data.historyCents,false,!!data.missingHistoryPeople));total.append(amountCell('AC4 TOTAL',data.totalCents,true,!!data.missingHistoryPeople));foot.append(total);table.append(body,foot);content.append(table);
   }
+  function makeMonthTurn(day){
+    const date=`${period}-${String(day.day).padStart(2,'0')}`,services=finance.monthTurn(financialSummary,date);if(!services.length)return null;
+    const section=element('section','month-turn'),heading=element('h3','','Virada de mês'),list=element('ol','month-turn-list');let minutes=0,cents=0;
+    section.dataset.monthTurn=date;heading.id=`month-turn-${date}`;section.setAttribute('aria-labelledby',heading.id);
+    section.append(heading,element('p','','Horas e valores contabilizados em cada cota mensal, por serviço de AC4.'));
+    for(const service of services){
+      const item=element('li','month-turn-service'),parts=element('div','month-turn-parts'),mode=service.category==='sat'?`SAT${service.event.activity?` · ${service.event.activity}`:''}`:'OPERACIONAL';item.dataset.serviceId=service.event.serviceId||service.key;
+      item.append(element('strong','month-turn-service-name',`${service.member} · ${mode}`),element('p','month-turn-period',`${rankingDate(service.startDate)} ${service.start} a ${rankingDate(service.endDate)} ${service.end}`));
+      const document=finance.documentInfo(service.event);if(document.number)item.append(element('p','month-turn-document',`OS nº ${document.number}${document.sei?` (SEI ${document.sei})`:''}`));
+      for(const part of service.parts){
+        const row=element('div',`month-turn-part${part.period===period?' is-current':''}`),title=`${monthNames[Number(part.period.slice(5))-1]}/${part.period.slice(0,4)}`;row.dataset.period=part.period;
+        row.append(element('span','',title),element('strong','month-turn-amount',`${rankingDuration(part.minutes)} · ${money(part.costCents)}`),element('small','',`${rankingDate(part.startDate)} ${part.start} a ${rankingDate(part.endDate)} ${part.end}${part.period===period?' · Cota deste mês':''}`));parts.append(row);
+        if(part.period===period){minutes+=part.minutes;cents+=part.costCents;}
+      }
+      item.append(parts,element('p','month-turn-service-total',`Total do serviço: ${rankingDuration(service.minutes)} · ${money(service.costCents)}`));list.append(item);
+    }
+    section.append(list,element('p','month-turn-total',`Total da virada nesta cota: ${rankingDuration(minutes)} · ${money(cents)}`),element('p','month-turn-period','Valores dos serviços cadastrados; execução e pagamento não presumidos.'));return section;
+  }
   function makeDailyFinance(day){
     const data=financialSummary.daily.get(`${period}-${String(day.day).padStart(2,'0')}`),section=element('section','daily-finance');section.setAttribute('aria-label',`Controle da cota AC4 do dia ${day.day}`);
     const extra=simulationActive?simulationPlan.summary.daily.get(data.date):null;section.classList.toggle('is-simulation',simulationActive);
@@ -14053,7 +14096,9 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
     operational.append(operationalHeading,roster);
     operational.append(actions);
     if (day.alerts.length) operational.append(element('div', 'print-notes day-print-alerts', day.alerts.join(' ')));
-    card.append(head,operational,makeSatSection(day),makeDailyFinance(day));
+    const footer=element('div','day-finances');footer.append(makeDailyFinance(day));
+    const monthTurn=makeMonthTurn(day);if(monthTurn)footer.append(monthTurn);
+    card.append(head,operational,makeSatSection(day),footer);
     return card;
   }
   function makeSatSection(day){

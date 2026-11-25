@@ -127,17 +127,23 @@ function financeSnapshot() {
       assert.deepEqual(copied.rows, rows);
       assert.equal(copied.headers, 0);
       assert.equal(copied.plain.split('\n').length, 17);
+      const group388 = await page.locator('#sei-order-scope option').filter({ hasText: '388' }).getAttribute('value');
+      await page.locator('#sei-order-scope').selectOption(group388);
+      rows = await tableRows(page);
+      assert.equal(rows.length, 2);
+      assert.equal(rows.reduce((sum, row) => sum + Number.parseInt(row[6], 10), 0), 9);
+      assert.deepEqual((await copyRows(page)).rows, rows);
       const group = await page.locator('#sei-order-scope option').filter({ hasText: '379' }).getAttribute('value');
       await page.locator('#sei-order-scope').selectOption(group);
       rows = await tableRows(page);
-      assert.equal(rows.length, 15);
-      assert.equal(rows.reduce((sum, row) => sum + Number.parseInt(row[6], 10), 0), 76);
+      assert.equal(rows.length, 13);
+      assert.equal(rows.reduce((sum, row) => sum + Number.parseInt(row[6], 10), 0), 67);
       copied = await copyRows(page);
       assert.deepEqual(copied.rows, rows);
       await page.locator('#sei-order-end').fill('2026-11-26');
       assert.equal(await page.locator('#sei-order-scope').inputValue(), group);
-      assert.equal((await tableRows(page)).length, 9);
-      assert.equal((await copyRows(page)).rows.length, 9);
+      assert.equal((await tableRows(page)).length, 7);
+      assert.equal((await copyRows(page)).rows.length, 7);
       assert((await page.locator('#sei-date-title').textContent()).includes('23/11/2026 a 26/11/2026'));
       assert(await page.evaluate(() => {
         const dialog = document.getElementById('sei-generator');

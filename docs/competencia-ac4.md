@@ -4,6 +4,8 @@ Regra confirmada pelo usuário em 24/11/2026: cota, saldo, ranking, histórico e
 
 ## Valores do cadastro atual
 
+Valores atualizados em 25/11/2026 após as retificações de HUGO, HELLYSSON e DA SILVA. A área **Virada de mês** dos dias envolvidos apresenta as parcelas abaixo, por militar, com o período e valor completos, a competência atual destacada e o total da virada nessa cota.
+
 O AC4 de SD CAVALCANTE, OS nº 397/SEI 98894435, inicia em 30/11/2026 às 08h00 e termina em 01/12/2026 às 08h00. Seu preço integral continua sendo R$ 741,00 e a jornada continua com 24h.
 
 | Competência | Parcela | Horas | Valor |
@@ -16,10 +18,10 @@ A noite mantém a tarifa correspondente ao dia em que começou, inclusive após 
 
 | Competência | Cota | Comprometido no planejamento | Saldo planejado |
 |---|---:|---:|---:|
-| Novembro/2026 | R$ 45.840,00 | R$ 45.574,00 | R$ 266,00 |
+| Novembro/2026 | R$ 45.840,00 | R$ 45.910,00 | −R$ 70,00 |
 | Dezembro/2026 | R$ 38.000,00 | R$ 1.455,00 | R$ 36.545,00 |
 
-Esses saldos incluem todos os AC4 cadastrados atribuídos às competências, previstos ou com execução confirmada. Não representam pagamento nem apenas serviços já encerrados. O valor conjunto de novembro e dezembro permanece R$ 47.029,00. A execução confirmada permanece em R$ 10.966,00 em novembro e zero em dezembro. A divergência de ST DA SILVA em 19/11 não foi alterada: o usuário confirmou manter o cadastro de 12h/08h–20h/R$ 360,00.
+Esses saldos incluem todos os AC4 cadastrados atribuídos às competências, previstos ou com execução confirmada. Não representam pagamento nem apenas serviços já encerrados. O valor conjunto de novembro e dezembro é R$ 47.365,00. A execução confirmada permanece em R$ 10.966,00 em novembro e zero em dezembro. A divergência de ST DA SILVA em 19/11 não foi alterada: o usuário confirmou manter o cadastro de 12h/08h–20h/R$ 360,00.
 
 ## Implementação e apresentação
 
