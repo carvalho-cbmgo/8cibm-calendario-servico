@@ -5,15 +5,15 @@ Solicitação do usuário em 25/11/2026: exibir o rateio de AC4 nos dias que par
 | Militar | Início | Término | Horas | Valor | OS nº / SEI |
 |---|---|---|---:|---:|---|
 | SD HUGO | 25/11/2026 08h00 | 26/11/2026 08h00 | 24h | R$ 741,00 | 388 / 98752637 |
-| 1º SGT HELLYSSON | 26/11/2026 08h00 | 26/11/2026 14h00 | 6h | R$ 180,00 | 393 / 98894389 |
+| 1º SGT HELLYSSON | 26/11/2026 08h00 | 26/11/2026 17h00 | 9h | R$ 270,00 | 393 / 98894389 |
 | SD CAVALCANTE | 26/11/2026 08h00 | 26/11/2026 20h00 | 12h | R$ 360,00 | 393 / 98894389 |
 | ST DA SILVA | 27/11/2026 08h00 | 27/11/2026 20h00 | 12h | R$ 480,00 | 394 / 98894413 |
 
 Os quatro AC4 de 25/11 — DIEGO, HUGO, BERTONCELLO e ROBERTO — usam a OS nº 388/SEI 98752637, totalizando 57h/R$ 1.752,00. A OS nº 388/SEI 98727025 de SANTOS em 23/11 permanece preservada. Na SAT de 23–30/11, os dois registros de 25/11 passam para a OS 388; os outros treze continuam na OS 379. Períodos e valores da SAT não foram alterados.
 
-As alterações acrescentam R$ 381,00 para HUGO e R$ 360,00 para CAVALCANTE e retiram R$ 60,00 de HELLYSSON e R$ 515,00 de DA SILVA: aumento líquido de R$ 166,00. Novembro tem 108 serviços, com R$ 45.740,00 comprometidos, R$ 36.910,00 operacionais, R$ 8.830,00 SAT e saldo planejado de **R$ 100,00** sobre a cota de R$ 45.840,00. A execução confirmada permanece em R$ 10.966,00; os serviços retificados seguem previstos. Dezembro conserva R$ 1.455,00 comprometidos e R$ 36.545,00 de saldo sobre a cota de R$ 38.000,00.
+As alterações acrescentam R$ 381,00 para HUGO, R$ 360,00 para CAVALCANTE e R$ 30,00 para HELLYSSON e retiram R$ 515,00 de DA SILVA: aumento líquido de R$ 256,00. Novembro tem 108 serviços, com R$ 45.830,00 comprometidos, R$ 37.000,00 operacionais, R$ 8.830,00 SAT e saldo planejado de **R$ 10,00** sobre a cota de R$ 45.840,00. A execução confirmada permanece em R$ 10.966,00; os serviços retificados seguem previstos. Dezembro conserva R$ 1.455,00 comprometidos e R$ 36.545,00 de saldo sobre a cota de R$ 38.000,00.
 
-Os dias 25, 26 e 27 mantêm seis recursos contínuos de 24h. A simulação de meta seis continua sem reforços adicionais em novembro. ST TAVARES está expressamente designado como ACA das 24h de 27/11, das 08h às 08h do dia seguinte; DA SILVA permanece somente no AC4 diurno de 12h. A confirmação da escala de 25/11 e os demais afastamentos, trocas, cotas e tarifas permanecem preservados.
+Os dias 25, 26 e 27 mantêm seis recursos contínuos de 24h. A simulação de meta seis continua sem reforços adicionais em novembro. ST TAVARES está expressamente designado como ACA das 24h de 27/11, das 08h às 08h do dia seguinte; DA SILVA permanece somente no AC4 diurno de 12h. Todas as escalas de 01–30/11 estão confirmadas. As cinco novas confirmações de 26–30 foram registradas em 25/11/2026, com escopo de calendário; o histórico de 01–25, os estados de execução dos AC4, os afastamentos, trocas, cotas e tarifas foram preservados.
 
 ## Apresentação da virada
 

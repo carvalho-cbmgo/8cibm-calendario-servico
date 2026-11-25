@@ -42,9 +42,9 @@ test('intervalo inclusivo rejeita inversão, outro mês, dia inválido e previs�
 });
 
 test('meta configurada altera a mensagem sem modificar os serviços cadastrados',()=>{
- const before=JSON.stringify(schedules),higher=simulation.plan(schedules,'2026-11',4584000,undefined,8),result=vacancies.build(schedules,'2026-11',higher,'2026-11-28','2026-11-28');
+ const source=structuredClone(schedules);delete source['2026-11'].days.find(d=>d.day===28).confirmation;const before=JSON.stringify(schedules),higher=simulation.plan(source,'2026-11',4584000,undefined,8),result=vacancies.build(source,'2026-11',higher,'2026-11-28','2026-11-28');
  assert.equal(result.vacancies,2);assert(result.message.includes('Voluntários (02 vagas)'));assert.equal(JSON.stringify(schedules),before);
- assert.equal(finance.month(schedules,'2026-11',4584000).committedCents,4574000);
+ assert.equal(finance.month(schedules,'2026-11',4584000).committedCents,4583000);
 });
 
 test('cancelamento das férias restaura os oito plantões da Alpha, a chefia e a cobertura',()=>{

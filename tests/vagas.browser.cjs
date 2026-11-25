@@ -48,12 +48,15 @@ const root=path.join(__dirname,'..');
    });assert.deepEqual(values.exported,values.actual,'Vagas e horários da mensagem correspondem às linhas PREVISTO AC4 do calendário');
   };
   await range('2026-11-19','2026-11-25');assert.equal((await page.locator('#vacancy-message').inputValue()).match(/Sem vagas/g).length,7);
+  // Explicit unconfirmed fixture to exercise vacancy grouping and clipboard formatting.
+  await page.evaluate(()=>{delete window.ServiceCalendar.schedules['2026-11'].days.find(d=>d.day===28).confirmation;window.ServiceCalendar.refresh();});
   await page.locator('#vacancy-configure').click();await page.locator('#ac4-simulation-target').selectOption('8');await page.locator('#ac4-simulation-confirm').click();await range('2026-11-25','2026-11-28');
   const expected=await page.evaluate(()=>{const {schedules,period,quotas}=window.ServiceCalendar,plan=window.ServiceSimulation.plan(schedules,period,quotas[period],undefined,8);return window.ServiceVacancies.build(schedules,period,plan,'2026-11-25','2026-11-28').message;});
   assert.equal(await page.locator('#vacancy-message').inputValue(),expected);assert(expected.includes('Sem vagas de AC4 na simulação.'));assert(!expected.includes('AC4 12h (08h às 20h)'));assert(expected.includes('AC4 24h (08h às 08h)'));assert(expected.includes('Voluntários (02 vagas)\n- \n- '));assert(!/Voluntários[^\n]+\n\n|^\d+\./m.test(expected));
   await matchesCalendar();
   await page.locator('#vacancy-copy').click();assert.equal(await page.evaluate(()=>window.copiedText),expected);assert((await page.locator('#vacancy-copy-status').textContent()).includes('Mensagem copiada'));
   await page.evaluate(()=>window.failTextCopy=true);await page.locator('#vacancy-copy').click();assert.equal(await page.evaluate(()=>window.fallbackCopies),1);assert.equal(await page.evaluate(()=>window.copiedText),expected);await page.evaluate(()=>window.failTextCopy=false);
+  await page.evaluate(source=>{Object.assign(window.ServiceCalendar.schedules,JSON.parse(source));window.ServiceCalendar.refresh();},source);
   await range('2026-11-10','2026-11-11');assert((await page.locator('#vacancy-message').inputValue()).includes('Sem vagas de AC4 na simulação.'));assert.equal((await page.locator('#vacancy-message').inputValue()).match(/Sem vagas/g).length,2);
   await page.locator('#vacancy-start').selectOption('2026-11-17');assert.equal(await page.locator('#vacancy-end').inputValue(),'2026-11-17');assert.equal((await page.locator('#vacancy-message').inputValue()).match(/\*17\/11/g).length,1);assert((await page.locator('#vacancy-message').inputValue()).includes('Sem vagas de AC4 na simulação.'));
   await page.locator('#vacancy-end').selectOption('2026-11-12');assert.equal(await page.locator('#vacancy-start').inputValue(),'2026-11-12');
@@ -63,7 +66,7 @@ const root=path.join(__dirname,'..');
   await matchesCalendar();
   for(const target of [4,5,7,8,6]){await page.locator('#vacancy-configure').click();await page.locator('#ac4-simulation-target').selectOption(String(target));await page.locator('#ac4-simulation-confirm').click();await range('2026-11-01','2026-11-30');await matchesCalendar();assert((await page.locator('#vacancy-summary').textContent()).includes(`${target} recursos`));}
   await range('2026-11-26','2026-11-26');assert((await page.locator('#vacancy-message').inputValue()).includes('Sem vagas de AC4 na simulação.'));
-  await page.evaluate(()=>window.ServiceCalendar.updateAC4({period:'2026-11',day:26,member:'2º SGT LUIZ ANTONIO'},{cancelled:true}));assert((await page.locator('#vacancy-message').inputValue()).includes('AC4 12h (20h às 08h)'));await matchesCalendar();
+  await page.evaluate(()=>{delete window.ServiceCalendar.schedules['2026-11'].days.find(d=>d.day===26).confirmation;window.ServiceCalendar.updateAC4({period:'2026-11',day:26,member:'2º SGT LUIZ ANTONIO'},{cancelled:true});});assert((await page.locator('#vacancy-message').inputValue()).includes('AC4 12h (20h às 08h)'));await matchesCalendar();
   await page.evaluate(source=>{Object.assign(window.ServiceCalendar.schedules,JSON.parse(source));window.ServiceCalendar.refresh();},source);await matchesCalendar();assert((await page.locator('#vacancy-message').inputValue()).includes('Sem vagas de AC4 na simulação.'));
   await page.locator('#vacancy-configure').click();await page.locator('#ac4-simulation-disregard').click();await inactive();
   const calls=await page.evaluate(()=>window.vacancyBuildCalls);await page.locator('#vacancy-copy').dispatchEvent('click');assert.equal(await page.evaluate(()=>window.vacancyBuildCalls),calls);

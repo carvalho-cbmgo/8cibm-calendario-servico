@@ -62,12 +62,12 @@ test('sete AC4 de 24h têm os documentos e períodos informados, com OS 386 regu
 test('novos serviços somam R$ 6.651 sem alterar SAT, execuções ou tarifas', () => {
   const before = finance.month(previous(), '2026-11', 4584000), actual = finance.month(data, '2026-11', 4584000);
   assert.equal(actual.records.length, 108);
-  assert.equal(actual.committedCents, 4574000);
-  assert.equal(actual.operationalCents, 3691000);
+  assert.equal(actual.committedCents, 4583000);
+  assert.equal(actual.operationalCents, 3700000);
   assert.equal(actual.satCents, 883000);
-  assert.equal(actual.forecastCents, 3477400);
+  assert.equal(actual.forecastCents, 3486400);
   assert.equal(actual.executedCents, 1096600);
-  assert.equal(actual.remainingCents, 10000);
+  assert.equal(actual.remainingCents, 1000);
   const additions = new Map([['2026-11-20',199000], ['2026-11-21',199000], ['2026-11-22',193000], ['2026-11-25',74100]]);
   let cumulative = 0;
   for (const [date, day] of [...actual.daily].sort(([a],[b]) => a.localeCompare(b))) {
@@ -79,7 +79,7 @@ test('novos serviços somam R$ 6.651 sem alterar SAT, execuções ou tarifas', (
 
 test('confirmações, dados anteriores e chefia são preservados; cobertura atualiza sem novos reforços simulados', () => {
   const before = previous(), snapshot = JSON.stringify(data);
-  assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'), '5f3ffe92599ee279c4c48944c92f9bc33cef1213c45ad7f33f4886dce3becb13');
+  assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'), '3567a727e756439c80e744d0b72f82db4aabb7eced017c40b980e8fe7b3fed6e');
   for (const [number, resources] of [[20,6], [21,6], [22,7], [25,6]]) {
     const day = data['2026-11'].days.find(d => d.day === number);
     assert.equal(simulation.coverage(day, `2026-11-${number}`).resources, resources);

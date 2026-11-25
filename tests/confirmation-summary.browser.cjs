@@ -54,31 +54,30 @@ const contrast = (text, background) => {
       assert((await page.locator('.current-finance-total .current-finance-amount').textContent()).includes('26.330,00'));
       assert((await page.locator('.current-finance-available .current-finance-amount').textContent()).includes('19.510,00'));
     };
-    assert.deepEqual(await page.locator('.day.is-scale-confirmed').evaluateAll(cards => cards.map(c => Number(c.dataset.day))), Array.from({ length: 25 }, (_, i) => i + 1));
+    assert.deepEqual(await page.locator('.day.is-scale-confirmed').evaluateAll(cards => cards.map(c => Number(c.dataset.day))), Array.from({ length: 30 }, (_, i) => i + 1));
     for (const width of [1280, 390, 320]) {
       await page.setViewportSize({ width, height: 1100 });
       await checkSummary();
       assert.equal(await page.locator('.current-finance time').getAttribute('datetime'), '2026-11-19');
-      assert((await page.locator('#ac4-month-summary').textContent()).includes('45.740,00'));
-      for (const day of [1, 25, 26]) {
+      assert((await page.locator('#ac4-month-summary').textContent()).includes('45.830,00'));
+      for (const day of [1, 25, 26, 30]) {
         if (width < 761) await page.locator('#selecionar-dia').selectOption(String(day));
         const card = page.locator(`.day[data-day="${day}"]`);
-        assert.equal(await card.locator('.scale-confirmed-label').count(), day <= 25 ? 1 : 0);
+        assert.equal(await card.locator('.scale-confirmed-label').count(), 1);
         const toggle = card.locator('[data-area-toggle="operational"]');
         if (await toggle.getAttribute('aria-expanded') === 'false') await toggle.click();
         await card.locator('.operational-section [data-details]').click();
         const note = page.locator('.scale-confirmation-note');
-        if (day <= 25) assert((await note.textContent()).includes(day === 1 ? '05/11/2026' : '19/11/2026'));
-        else assert.equal(await note.count(), 0);
+        assert((await note.textContent()).includes(day === 1 ? '05/11/2026' : day <=25 ? '19/11/2026' : '25/11/2026'));
         await page.locator('#fechar-detalhes').click();
       }
       await page.locator('[data-ac4-simulation]').click();
-      await page.locator('#ac4-simulation-target').selectOption('6');
+      await page.locator('#ac4-simulation-target').selectOption('8');
       await page.locator('#ac4-simulation-confirm').click();
       assert.equal(await page.locator('.is-scale-confirmed .simulation-entry').count(), 0);
       assert.deepEqual(await page.locator('.simulation-entry').evaluateAll(rows => rows.map(row => Number(row.closest('.day').dataset.day))), []);
-      assert((await page.locator('#ac4-month-summary').textContent()).includes('45.740,00'));
-      assert((await page.locator('#ac4-month-summary').textContent()).includes('100,00'));
+      assert((await page.locator('#ac4-month-summary').textContent()).includes('45.830,00'));
+      assert((await page.locator('#ac4-month-summary').textContent()).includes('10,00'));
       await checkSummary();
       await page.locator('[data-ac4-simulation]').click();
       await page.locator('#ac4-simulation-disregard').click();
@@ -94,10 +93,10 @@ const contrast = (text, background) => {
     assert.equal(await page.locator('.day.is-scale-confirmed').count(), 0);
     assert((await page.locator('.current-finance-available').textContent()).includes('38.000,00'));
     await page.locator('#mes-anterior').click();
-    assert.equal(await page.locator('.day.is-scale-confirmed').count(), 25);
+    assert.equal(await page.locator('.day.is-scale-confirmed').count(), 30);
     assert.equal(await page.evaluate(() => JSON.stringify(window.ServiceCalendar.schedules)), source);
     assert.deepEqual(errors, []);
-    console.log('PASS: AC4 HOJE dynamic title, soft background, four distinct category colors with readable contrast and matching label/value/percentage, real/simulated totals, 1-25 November confirmations and preserved data; desktop/320/390px.');
+    console.log('PASS: AC4 HOJE dynamic title, soft background, four distinct category colors with readable contrast and matching label/value/percentage, real/simulated totals, 1-30 November confirmations and preserved data; desktop/320/390px.');
   } finally {
     if (browser) await browser.close();
     await new Promise(resolve => server.close(resolve));

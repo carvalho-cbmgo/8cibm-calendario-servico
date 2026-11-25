@@ -12,21 +12,21 @@ for (const name of ['AC4Finance', 'ServiceChief', 'ServiceSimulation']) {
 const { AC4Finance: finance, ServiceSimulation: simulation, ServiceChief: chief } = context.window;
 const previous = () => {
   const copy = structuredClone(data);
-  for (const day of copy['2026-11'].days) if (day.day >= 19 && day.day <= 25) delete day.confirmation;
+  for (const day of copy['2026-11'].days) if (day.day >= 26) delete day.confirmation;
   return copy;
 };
 
-test('escalas de 1 a 25/11 estão confirmadas, com sete novas confirmações em 19/11 e histórico anterior preservado', () => {
+test('escalas de 1 a 30/11 estão confirmadas, com cinco novas confirmações em 25/11 e histórico anterior preservado', () => {
   const days = data['2026-11'].days;
-  assert.equal(days.filter(d => d.confirmation?.status === 'confirmed').length, 25);
+  assert.equal(days.filter(d => d.confirmation?.status === 'confirmed').length, 30);
   for (const day of days) {
-    if (day.day <= 25) assert.equal(day.confirmation.status, 'confirmed');
-    else assert.equal(day.confirmation, undefined);
+    assert.equal(day.confirmation.status, 'confirmed');
+    if(day.day>=26)assert.deepEqual(day.confirmation,{status:'confirmed',date:'2026-11-25',source:'user',scope:'calendar',previousAlerts:[]});
     if (day.day >= 19 && day.day <= 25) {
       assert.deepEqual(day.confirmation, { status: 'confirmed', date: '2026-11-19', source: 'user', scope: 'calendar', previousAlerts: [] });
     }
   }
-  assert.equal(createHash('sha256').update(JSON.stringify(previous())).digest('hex'), 'db0cc7374ec7cf647fd2878dc8da622d5c1567f4ee0cc760e609e93366029274');
+  assert.equal(createHash('sha256').update(JSON.stringify(previous())).digest('hex'), 'a603e4a01fc64e9457e8c76bf9f14236a9337b827eeebfc6917c43a42c21f399');
 });
 
 test('confirmar a escala preserva integralmente AC4, execuções, tarifas, cobertura e chefia', () => {
@@ -44,24 +44,20 @@ test('confirmar a escala preserva integralmente AC4, execuções, tarifas, cober
   }
   const summary = finance.month(data, '2026-11', 4584000);
   assert.equal(summary.records.length, 108);
-  assert.equal(summary.committedCents, 4574000);
-  assert.equal(summary.forecastCents, 3477400);
+  assert.equal(summary.committedCents, 4583000);
+  assert.equal(summary.forecastCents, 3486400);
   assert.equal(summary.executedCents, 1096600);
-  assert.equal(summary.remainingCents, 10000);
+  assert.equal(summary.remainingCents, 1000);
 });
 
-test('somente os dias a partir de 26/11 recebem reforços simulados, em todas as metas', () => {
-  const before = previous(), source = JSON.stringify(data);
-  for (let target = 4; target <= 8; target++) {
-    const actual = simulation.plan(data, '2026-11', 4584000, undefined, target);
-    const old = simulation.plan(before, '2026-11', 4584000, undefined, target);
-    for (let day = 1; day <= 25; day++) assert.equal(actual.days.get(day).addedServices, 0);
-    for (let day = 26; day <= 30; day++) assert.equal(JSON.stringify(actual.days.get(day)), JSON.stringify(old.days.get(day)));
+test('todos os dias confirmados ficam fora da simulacao em todas as metas', () => {
+  const before=previous(),source=JSON.stringify(data);
+  for(let target=4;target<=8;target++){
+    const actual=simulation.plan(data,'2026-11',4584000,undefined,target);
+    const old=simulation.plan(before,'2026-11',4584000,undefined,target);
+    assert.equal(actual.addedServices,0);assert.equal(actual.summary.committedCents,0);
+    for(let day=1;day<=30;day++)assert.equal(actual.days.get(day).addedServices,0);
+    if(target>=7)assert(old.addedServices>0);
   }
-  const plan = simulation.plan(data, '2026-11', 4584000);
-  assert.equal(plan.addedServices, 0);
-  assert.equal(plan.daysAffected, 0);
-  assert.equal(plan.summary.committedCents, 0);
-  assert.deepEqual([...plan.days].filter(([,d]) => d.addedServices).map(([day,d]) => [day,d.addedServices]), []);
-  assert.equal(JSON.stringify(data), source);
+  assert.equal(JSON.stringify(data),source);
 });
