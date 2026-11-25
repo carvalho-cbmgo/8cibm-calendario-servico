@@ -44,10 +44,10 @@ test('confirmar a escala preserva integralmente AC4, execuções, tarifas, cober
   }
   const summary = finance.month(data, '2026-11', 4584000);
   assert.equal(summary.records.length, 107);
-  assert.equal(summary.committedCents, 4582900);
-  assert.equal(summary.forecastCents, 3486300);
+  assert.equal(summary.committedCents, 4557400);
+  assert.equal(summary.forecastCents, 3460800);
   assert.equal(summary.executedCents, 1096600);
-  assert.equal(summary.remainingCents, 1100);
+  assert.equal(summary.remainingCents, 26600);
 });
 
 test('somente os dias a partir de 26/11 recebem reforços simulados, em todas as metas', () => {

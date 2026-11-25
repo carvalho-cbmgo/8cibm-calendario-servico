@@ -62,12 +62,12 @@ test('sete AC4 de 24h têm os documentos e períodos informados, com OS 386 regu
 test('novos serviços somam R$ 6.651 sem alterar SAT, execuções ou tarifas', () => {
   const before = finance.month(previous(), '2026-11', 4584000), actual = finance.month(data, '2026-11', 4584000);
   assert.equal(actual.records.length, 107);
-  assert.equal(actual.committedCents, 4582900);
-  assert.equal(actual.operationalCents, 3699900);
+  assert.equal(actual.committedCents, 4557400);
+  assert.equal(actual.operationalCents, 3674400);
   assert.equal(actual.satCents, 883000);
-  assert.equal(actual.forecastCents, 3486300);
+  assert.equal(actual.forecastCents, 3460800);
   assert.equal(actual.executedCents, 1096600);
-  assert.equal(actual.remainingCents, 1100);
+  assert.equal(actual.remainingCents, 26600);
   const additions = new Map([['2026-11-20',199000], ['2026-11-21',199000], ['2026-11-22',193000], ['2026-11-25',74100]]);
   let cumulative = 0;
   for (const [date, day] of [...actual.daily].sort(([a],[b]) => a.localeCompare(b))) {

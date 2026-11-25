@@ -58,15 +58,15 @@ test('LUIZ tem um AC4 previsto de 24h em 22/11 e mantém 12h em 29/11 e 06/12, s
 test('novembro e dezembro recebem apenas os novos custos, com a cota configurada de dezembro', () => {
   const november = summary('2026-11'), december = summary('2026-12');
   assert.equal(november.records.length, 107);
-  assert.equal(november.committedCents, 4582900);
-  assert.equal(november.operationalCents, 3699900);
+  assert.equal(november.committedCents, 4557400);
+  assert.equal(november.operationalCents, 3674400);
   assert.equal(november.satCents, 883000);
-  assert.equal(november.remainingCents, 1100);
+  assert.equal(november.remainingCents, 26600);
   assert.equal(november.executedCents, 1096600);
-  assert.equal(december.records.length, 3);
-  assert.equal(december.committedCents, 120000);
+  assert.equal(december.records.length, 4);
+  assert.equal(december.committedCents, 145500);
   assert.equal(december.quotaCents, 3800000);
-  assert.equal(december.remainingCents, 3680000);
+  assert.equal(december.remainingCents, 3654500);
   assert.equal(december.executedCents, 0);
   const plan = simulation.plan(data, '2026-11', 4584000);
   assert.equal(plan.days.get(22).addedResources, 0);
@@ -141,8 +141,8 @@ test('exclusão da simulação limita-se aos três AC4 e preserva a cobertura re
     }
   }
   assert.equal(JSON.stringify(data), source);
-  assert.equal(summary('2026-11').committedCents, 4582900);
-  assert.equal(summary('2026-12').committedCents, 120000);
+  assert.equal(summary('2026-11').committedCents, 4557400);
+  assert.equal(summary('2026-12').committedCents, 145500);
 });
 
 test('a exclusão por evento não remove ordinários ou outros AC4 do mesmo militar', () => {

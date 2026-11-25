@@ -92,10 +92,10 @@ test('todo o calendário anterior à inclusão da SAT permanece preservado', () 
 test('finanças, acumulados, consulta e ranking incluem os novos AC4 sem duplicar jornadas', () => {
   const before = finance.month(baseline(), '2026-11', 4584000);
   assert.equal(summary.records.length, 107);
-  assert.equal(summary.committedCents, 4582900);
+  assert.equal(summary.committedCents, 4557400);
   assert.equal(summary.satCents, 883000);
   assert.equal(summary.operationalCents, before.operationalCents);
-  assert.equal(summary.remainingCents, 1100);
+  assert.equal(summary.remainingCents, 26600);
   assert.equal(summary.executedCents, before.executedCents);
   let cumulative = 0;
   for (let n = 1; n <= 30; n++) {

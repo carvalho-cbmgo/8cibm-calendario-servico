@@ -65,10 +65,10 @@ test('revisões e cancelamentos têm um registro canônico para finanças e tabe
   assert.equal(after.committedCents,0);assert.equal(after.cancelledCount,1);assert.equal(after.byEvent.get(original).event,cancelled);
 });
 
-test('competência usa início do serviço e mantém aliases consultáveis em outro mês',()=>{
+test('competência divide horas entre meses e mantém aliases do serviço completo',()=>{
   const source=event({startDate:'2026-11-30',endDate:'2026-12-01',end:'08h00',hours:24});
   const data=schedule([source],30),november=finance.month(data,'2026-11',4584000),december=finance.month(data,'2026-12');
-  assert.equal(november.committedCents,74100);assert.equal(december.committedCents,0);assert.equal(december.quotaCents,null);
+  assert.equal(november.committedCents,48600);assert.equal(december.committedCents,25500);assert.equal(december.quotaCents,null);
   assert.equal(december.byEvent.get(source).event,source);
 });
 
@@ -132,7 +132,7 @@ test('seis AC4 noturnos de LUIZ ANTONIO são previstos de 12h, sem duplicação 
   }
   for(const date of dates){const members=data['2026-11'].days.find(day=>day.day===date).members.filter(member=>member.name==='2º SGT LUIZ ANTONIO');assert.equal(members.length,1);assert.equal(members[0].ord,16);assert.equal(members[0].events.length,1);assert.equal(members[0].badges.length,0);}
   assert.equal(records.reduce((total,record)=>total+record.costCents,0),237600);
-  assert.equal(summary.operationalCents,3699900);assert.equal(summary.satCents,883000);assert.equal(summary.committedCents,4582900);assert.equal(summary.forecastCents,3486300);assert.equal(summary.executedCents,1096600);assert.equal(summary.remainingCents,1100);
+  assert.equal(summary.operationalCents,3674400);assert.equal(summary.satCents,883000);assert.equal(summary.committedCents,4557400);assert.equal(summary.forecastCents,3460800);assert.equal(summary.executedCents,1096600);assert.equal(summary.remainingCents,26600);
 });
 
 test('errata da OS 356 vincula os três AC4 de 10/11 sem duplicar serviços ou confirmar execução',()=>{
@@ -143,7 +143,7 @@ test('errata da OS 356 vincula os três AC4 de 10/11 sem duplicar serviços ou c
     ['3º SGT HENRIQUE','2026-11-10','08h00','2026-11-10','12h00',12000]
   ]);
   for(const record of records){assert.deepEqual(plain(finance.documentInfo(record.event)),{number:'356/2026',sei:'98274343'});assert(record.event.document.includes('OS original SEI 98070695'));assert(record.event.document.includes('202500011045608'));assert.equal(record.status,'forecast');assert.equal(record.event.executionConfirmed,undefined);}
-  assert.equal(summary.records.length,107);assert.equal(summary.committedCents,4582900);assert.equal(summary.executedCents,1096600);assert.equal(summary.daily.get('2026-11-10').operationalCents,62100);assert.equal(summary.daily.get('2026-11-10').committedCents,104100);
+  assert.equal(summary.records.length,107);assert.equal(summary.committedCents,4557400);assert.equal(summary.executedCents,1096600);assert.equal(summary.daily.get('2026-11-10').operationalCents,62100);assert.equal(summary.daily.get('2026-11-10').committedCents,104100);
   assert(records.filter(record=>record.member!=='2º SGT LUIZ ANTONIO').every(record=>record.event.mode==='PROEBOM 2026'));assert.equal(data['2026-11'].days[9].confirmation.status,'confirmed');
 });
 
@@ -156,7 +156,7 @@ test('retificação SAT de WANDERSON em 10 e 12/11 ajusta períodos e custos sem
     assert.equal(summary.daily.get(date).satCents,sat);assert.equal(summary.daily.get(date).committedCents,total);
   }
   assert.equal(summary.daily.get('2026-11-10').cumulativeCents,1301800);assert.equal(summary.daily.get('2026-11-11').cumulativeCents,1316800);assert.equal(summary.daily.get('2026-11-12').cumulativeCents,1438900);
-  assert.equal(summary.records.length,107);assert.equal(summary.satCents,883000);assert.equal(summary.committedCents,4582900);assert.equal(summary.remainingCents,1100);assert.equal(summary.executedCents,1096600);
+  assert.equal(summary.records.length,107);assert.equal(summary.satCents,883000);assert.equal(summary.committedCents,4557400);assert.equal(summary.remainingCents,26600);assert.equal(summary.executedCents,1096600);
 });
 
 test('chefia respeita antiguidade, ausência, ODD e pendências de períodos parciais',()=>{
@@ -203,13 +203,13 @@ test('ranking exclui cancelados, inválidos e versões duplicadas',()=>{
   assert.equal(result.rows.length,1);assert.equal(result.recordCount,1);assert.equal(result.totalCents,12000);assert.equal(result.rows[0].monthlyRecords.length,1);
 });
 
-test('ranking considera a data de início inclusive nas viradas de mês',()=>{
+test('ranking considera o início de cada parcela mensal nas viradas de mês',()=>{
   const data=schedule([event({startDate:'2026-11-30',endDate:'2026-12-01',end:'08h00',hours:24})],30),summary=finance.month(data,'2026-11');
-  assert.equal(finance.ranking(summary,'2026-11-30').totalCents,74100);
+  assert.equal(finance.ranking(summary,'2026-11-30').totalCents,48600);
   assert.equal(finance.ranking(summary,'2026-11-30',false).totalCents,0);
-  assert.equal(finance.ranking(summary,'2026-12-01',false).totalCents,74100);
+  assert.equal(finance.ranking(summary,'2026-12-01',false).totalCents,48600);
   assert.equal(finance.ranking(summary,'2026-10-31').rows.length,0);
-  assert.equal(finance.ranking(finance.month(data,'2026-12'),'2026-12-01').totalCents,0);
+  assert.equal(finance.ranking(finance.month(data,'2026-12'),'2026-12-01').totalCents,25500);
   assert.throws(()=>finance.ranking(summary,'2026-11-31'));
 });
 
@@ -276,7 +276,7 @@ test('reforço adicional entra somente com AC4 até o corte e fica sem antiguida
   const officers=finance.ranking(summary,'2026-11-07',true,{...options,includeOfficers:true});
   assert.equal(officers.rows.length,31);assert.equal(officers.totalCents,1096600);
   const full=finance.ranking(summary,'2026-12-01',true,{...options,includeOfficers:true});
-  assert.equal(full.totalCents,summary.committedCents);assert.equal(full.totalCents,4582900);
+  assert.equal(full.totalCents,summary.committedCents);assert.equal(full.totalCents,4557400);
 });
 
 test('ranking filtra início e fim inclusivos, somando Operacional e SAT pela data inicial do AC4',()=>{

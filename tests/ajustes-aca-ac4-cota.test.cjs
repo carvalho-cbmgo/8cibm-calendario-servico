@@ -72,10 +72,10 @@ test('cota R$ 45.840 e AC4 atualizados mantêm tarifas, execuções e simulaçã
   const quota = config.monthlyQuotaCents['2026-11'];
   assert.equal(quota, 4584000);
   const summary = finance.month(data,'2026-11',quota), before = finance.month(previous(),'2026-11',quota);
-  assert.equal(summary.records.length,107); assert.equal(summary.committedCents,4582900);
-  assert.equal(summary.operationalCents,3699900); assert.equal(summary.satCents,883000);
-  assert.equal(summary.forecastCents,3486300); assert.equal(summary.executedCents,1096600);
-  assert.equal(summary.remainingCents,1100); assert.equal(summary.committedCents-before.committedCents,208000);
+  assert.equal(summary.records.length,107); assert.equal(summary.committedCents,4557400);
+  assert.equal(summary.operationalCents,3674400); assert.equal(summary.satCents,883000);
+  assert.equal(summary.forecastCents,3460800); assert.equal(summary.executedCents,1096600);
+  assert.equal(summary.remainingCents,26600); assert.equal(summary.committedCents-before.committedCents,208000);
   assert.equal(finance.asOf(summary,'2026-11-19').remainingCents,1951000);
   assert.equal(simulation.coverage(day(data,20),'2026-11-20').resources,6);
   assert.equal(simulation.coverage(day(data,21),'2026-11-21').resources,6);
@@ -85,6 +85,6 @@ test('cota R$ 45.840 e AC4 atualizados mantêm tarifas, execuções e simulaçã
   assert.equal(simulation.coverage(day(data,24),'2026-11-24').resources,6);
   const plan = simulation.plan(data,'2026-11',quota);
   assert.equal(plan.addedServices,0); assert.equal(plan.summary.committedCents,0);
-  assert.equal(summary.remainingCents-plan.summary.committedCents,1100);
+  assert.equal(summary.remainingCents-plan.summary.committedCents,26600);
   for (let n=1;n<=25;n++) assert.equal(day(data,n).confirmation.status,'confirmed');
 });

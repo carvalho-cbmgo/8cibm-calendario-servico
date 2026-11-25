@@ -44,12 +44,12 @@ test('ST DA SILVA tem um AC4 operacional previsto de 12h em 19/11, OS 383/SEI 98
   assert.equal(services[0].commitmentCents, 36000);
   const before = finance.month(previous(), '2026-11', 4584000);
   assert.equal(summary.records.length, 107);
-  assert.equal(summary.committedCents, 4582900);
-  assert.equal(summary.operationalCents, 3699900);
+  assert.equal(summary.committedCents, 4557400);
+  assert.equal(summary.operationalCents, 3674400);
   assert.equal(summary.satCents, 883000);
-  assert.equal(summary.forecastCents, 3486300);
+  assert.equal(summary.forecastCents, 3460800);
   assert.equal(summary.executedCents, 1096600);
-  assert.equal(summary.remainingCents, 1100);
+  assert.equal(summary.remainingCents, 26600);
   for (const [date, daily] of summary.daily) {
     assert.equal(daily.committedCents - before.daily.get(date).committedCents, date === record.startDate ? 36000 : 0);
     assert.equal(daily.cumulativeCents - before.daily.get(date).cumulativeCents, date >= record.startDate ? 36000 : 0);

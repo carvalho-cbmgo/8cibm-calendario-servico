@@ -104,11 +104,11 @@ test('HENRIQUE 12h e HELLYSSON 8h são reforços operacionais em 26/11, com OS 3
     assert.equal(original.days.get(26).coverage.resources, 5);
   }
   assert.equal(summary.records.length, 107);
-  assert.equal(summary.committedCents, 4582900);
-  assert.equal(summary.operationalCents, 3699900);
+  assert.equal(summary.committedCents, 4557400);
+  assert.equal(summary.operationalCents, 3674400);
   assert.equal(summary.satCents, 883000);
   assert.equal(summary.executedCents, 1096600);
-  assert.equal(summary.remainingCents, 1100);
+  assert.equal(summary.remainingCents, 26600);
 });
 
 test('inclusões de 18/11 preservam integralmente os demais dados do calendário', () => {

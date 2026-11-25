@@ -65,12 +65,12 @@ test('limite mensal de 192h distingue 191h59, 192h e 192h01 mesmo com intervalo 
   }
 });
 
-test('horas pertencem à competência inicial, não duplicam aliases na virada e reiniciam em dezembro e janeiro', () => {
+test('horas são rateadas por competência, sem duplicar aliases na virada', () => {
   const overnight = event('month-boundary',{startDate:'2026-11-30',endDate:'2026-12-01',end:'08h00',hours:24,nextDay:true});
   const source = {'2026-11':{days:[{day:30,members:[member([overnight])]}]},'2026-12':{days:[
     {day:1,members:[member([{...overnight},event('december')])]},
   ]},'2027-01':{days:[]}};
-  for (const [period,today,minutes] of [['2026-11','2026-11-30',1440],['2026-12','2026-12-31',240],['2027-01','2027-01-31',0]]) {
+  for (const [period,today,minutes] of [['2026-11','2026-11-30',960],['2026-12','2026-12-31',720],['2027-01','2027-01-31',0]]) {
     const p = finance.ranking(finance.month(source,period),today,true,{personnel}).rows.find(p => p.member==='ST TESTE');
     assert.equal(p.monthlyMinutes,minutes); assert.equal(p.minutes,minutes); assert.equal(p.remainingMinutes,11520-minutes);
   }
@@ -97,7 +97,7 @@ test('dados publicados mantêm valores e totais financeiros, com 144h de LUIZ, 1
     assert.equal(p.monthlyMinutes,hours*60); assert.equal(p.minutes,hours*60); assert.equal(p.remainingMinutes,(192-hours)*60);
   }
   assert.equal(result.totalCents,summary.committedCents);
-  assert.equal(summary.committedCents,4582900); assert.equal(summary.satCents,883000);
-  assert.equal(summary.operationalCents,3699900); assert.equal(summary.executedCents,1096600); assert.equal(summary.remainingCents,1100);
+  assert.equal(summary.committedCents,4557400); assert.equal(summary.satCents,883000);
+  assert.equal(summary.operationalCents,3674400); assert.equal(summary.executedCents,1096600); assert.equal(summary.remainingCents,26600);
   assert.equal(JSON.stringify(source),before);
 });

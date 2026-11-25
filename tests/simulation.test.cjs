@@ -49,9 +49,9 @@ test('lacunas separadas distinguem quantidade de serviços da cobertura de 24h',
   const combined=simulation.coverage({...source['2026-11'].days[0],members:[...source['2026-11'].days[0].members,...day.members]},'2026-11-12');assert(combined.segments.every(segment=>segment.resources===6));
 });
 
-test('complemento noturno no último dia fica no mês de início e respeita a referência de horário',()=>{
+test('complemento noturno no último dia rateia o custo e respeita a referência de horário',()=>{
   const source={'2026-11':{days:[{day:30,shiftStart:'06h00',members:[...ordinary(5),partial({start:'06h00',end:'18h00',nextDay:false})]}]}},plan=simulation.plan(source,'2026-11'),event=plan.days.get(30).members[0].events[0];
-  assert.deepEqual([event.start,event.end,event.hours,event.startDate,event.endDate],['18h00','06h00',12,'2026-11-30','2026-12-01']);assert.equal(plan.summary.records[0].financialMonth,'2026-11');assert.equal(plan.summary.committedCents,38100);
+  assert.deepEqual([event.start,event.end,event.hours,event.startDate,event.endDate],['18h00','06h00',12,'2026-11-30','2026-12-01']);assert.equal(plan.summary.records[0].financialMonth,'2026-11');assert.equal(plan.summary.committedCents,18600);
 });
 
 test('dois turnos complementares de 12h formam um recurso, horários iguais não formam',()=>{
@@ -93,7 +93,7 @@ test('24/11 une HELLYSSON 08h–20h e LUIZ 20h–08h em seis recursos, inclusive
   assert.equal(result.resources,6);assert(result.segments.every(s=>s.resources===6));
   const hellysson=day.members.find(m=>m.name==='1º SGT HELLYSSON').events[0];
   assert.equal(hellysson.integrante_operacional,true);assert.equal(hellysson.hours,12);
-  assert.equal(base.committedCents,4582900);assert.equal(base.remainingCents,1100);
+  assert.equal(base.committedCents,4557400);assert.equal(base.remainingCents,26600);
   const unconfirmed=structuredClone(source);delete unconfirmed['2026-11'].days.find(d=>d.day===24).confirmation;
   assert.equal(simulation.plan(unconfirmed,'2026-11',4584000).days.get(24).addedServices,0);
   unconfirmed['2026-11'].days.find(d=>d.day===24).members.find(m=>m.name==='1º SGT HELLYSSON').events[0].integrante_operacional=false;
@@ -164,15 +164,15 @@ test('novembro atinge a meta de seis sem reforços simulados e preserva execuç�
   assert.equal(plan.addedResources,0);assert.equal(plan.addedServices,0);assert.equal(plan.daysAffected,0);assert.equal(plan.summary.committedCents,0);
   assert.equal(new Set(plan.summary.records.map(record=>record.key)).size,0);assert.equal(plan.summary.executedCents,0);assert.equal(plan.summary.satCents,0);
   assert.equal(plan.summary.daily.get('2026-11-30').cumulativeCents,0);
-  assert.equal(real.records.length,107);assert.equal(real.committedCents,4582900);assert.equal(real.executedCents,1096600);
-  assert.equal(real.committedCents+plan.summary.committedCents,4582900);assert.equal(real.remainingCents-plan.summary.committedCents,1100);
+  assert.equal(real.records.length,107);assert.equal(real.committedCents,4557400);assert.equal(real.executedCents,1096600);
+  assert.equal(real.committedCents+plan.summary.committedCents,4557400);assert.equal(real.remainingCents-plan.summary.committedCents,26600);
   assert.equal(plan.summary.records.filter(record=>record.minutes===720).length,0);assert.equal(plan.summary.records.reduce((total,record)=>total+record.minutes/60,0),0);
   assert.equal(plan.days.get(19).addedServices,0);assert.equal(plan.days.get(24).addedServices,0);assert.equal(plan.days.get(26).addedServices,0);
 });
 
-test('tarifa acompanha cada data e o mês financeiro usa o início do reforço',()=>{
+test('tarifa acompanha cada data e o custo do reforço é rateado por mês',()=>{
   const source={'2026-11':{days:[{day:13,members:Array.from({length:5},(_,i)=>member(`ST ${i}`))},{day:30,members:Array.from({length:5},(_,i)=>member(`ST ${i}`))}]}},plan=simulation.plan(source,'2026-11');
-  assert.equal(plan.summary.daily.get('2026-11-13').committedCents,99500);assert.equal(plan.summary.daily.get('2026-11-30').committedCents,74100);
+  assert.equal(plan.summary.daily.get('2026-11-13').committedCents,99500);assert.equal(plan.summary.daily.get('2026-11-30').committedCents,48600);
   const last=plan.summary.records.find(record=>record.startDate==='2026-11-30');assert.equal(last.endDate,'2026-12-01');assert.equal(last.financialMonth,'2026-11');assert.equal(plan.summary.quotaCents,null);
 });
 
@@ -183,7 +183,7 @@ test('meta de 4 a 8 altera somente os reforços necessários, sem remover recurs
   assert.equal(five.addedResources,0);assert.equal(five.summary.committedCents,0);
   assert.equal(eight.addedResources,9);assert.equal(eight.daysAffected,5);assert.equal(eight.targetResources,8);
   for(const day of source['2026-11'].days){const planned=eight.days.get(day.day);assert.equal(planned.addedResources,day.confirmation?.status==='confirmed'?0:8-planned.coverage.resources);}
-  assert.equal(eight.summary.quotaCents,4584000);assert.equal(real.remainingCents-eight.summary.committedCents,-768800);assert.equal(JSON.stringify(source),before);
+  assert.equal(eight.summary.quotaCents,4584000);assert.equal(real.remainingCents-eight.summary.committedCents,-692300);assert.equal(JSON.stringify(source),before);
 });
 
 test('meta inválida é rejeitada e a meta padrão continua sendo 6',()=>{

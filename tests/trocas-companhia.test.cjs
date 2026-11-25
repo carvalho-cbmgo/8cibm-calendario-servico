@@ -49,10 +49,10 @@ test('OSVALDIR fica dispensado em 28/11 e paga em 05/12, com cobertura e chefia 
 
 test('trocas e férias canceladas preservam os AC4 reais e atualizam a necessidade simulada',()=>{
  const {AC4Finance:finance,ServiceSimulation:simulation}=context.window,real=finance.month(data,'2026-11',4584000),november=simulation.plan(data,'2026-11',4584000),december=simulation.plan(data,'2026-12'),january=simulation.plan(data,'2027-01');
- assert.equal(real.records.length,107);assert.equal(real.committedCents,4582900);assert.equal(real.executedCents,1096600);assert.equal(real.remainingCents,1100);
- assert.equal(november.addedResources,0);assert.equal(november.summary.committedCents,0);assert.equal(november.days.get(28).addedResources,0);assert.equal(real.committedCents+november.summary.committedCents,4582900);
- assert.equal(december.addedResources,31);assert.equal(december.summary.committedCents,2510500);assert.equal(december.days.get(5).addedResources,1);assert.equal(december.summary.quotaCents,null);
- assert.equal(january.addedResources,24);assert.equal(january.summary.committedCents,2080200);assert.equal(data['2026-11'].days.filter(day=>day.confirmation?.status==='confirmed').length,25);
+ assert.equal(real.records.length,107);assert.equal(real.committedCents,4557400);assert.equal(real.executedCents,1096600);assert.equal(real.remainingCents,26600);
+ assert.equal(november.addedResources,0);assert.equal(november.summary.committedCents,0);assert.equal(november.days.get(28).addedResources,0);assert.equal(real.committedCents+november.summary.committedCents,4557400);
+ assert.equal(december.addedResources,31);assert.equal(december.summary.committedCents,2482000);assert.equal(december.days.get(5).addedResources,1);assert.equal(december.summary.quotaCents,null);
+ assert.equal(january.addedResources,24);assert.equal(january.summary.committedCents,2048700);assert.equal(data['2026-11'].days.filter(day=>day.confirmation?.status==='confirmed').length,25);
 });
 
 test('as datas históricas não migram para outro ano e o pagamento de DIEGO não aparece em 19/11',()=>{

@@ -40,10 +40,11 @@ const financialSnapshot=()=>Object.keys(window.ServiceCalendar.schedules).map(pe
    await expand('HELLYSSON');assert.equal(await page.locator('.ranking-services-row:visible .ranking-service-item').count(),1);
    assert.equal(await page.locator('.ranking-services-row:visible [data-ranking-date="2026-11-24"]').count(),1);
    assert.equal(await page.locator('.ranking-services-row:visible [data-included=false]').count(),0);
-   await range('2026-11-25','2026-11-30');assert.equal(cents(await page.locator('.ranking-total-row .ranking-total .ranking-amount').textContent()),0);
-   await expand('LUIZ ANTONIO');assert.equal(await page.locator('.ranking-services-row:visible .ranking-service-item').count(),0);
+   await range('2026-11-25','2026-11-30');assert.equal(await amount('LUIZ ANTONIO'),89100);
+   await expand('LUIZ ANTONIO');assert.equal(await page.locator('.ranking-services-row:visible .ranking-service-item').count(),2);
    await range('2026-11-24','2026-11-24');
-   await page.clock.setFixedTime(new Date('2026-11-25T07:59:59.999-03:00'));await history.selectOption('0');assert.equal(await amount('LUIZ ANTONIO'),0);
+   await page.clock.setFixedTime(new Date('2026-11-25T07:59:59.999-03:00'));await history.selectOption('0');assert.equal(await amount('LUIZ ANTONIO'),38100);
+   await end.selectOption('2026-11-25');assert.equal(await amount('LUIZ ANTONIO'),0);
    // Expanding a row must take a fresh snapshot, even before the minute refresh.
    await page.clock.setFixedTime(new Date('2026-11-25T08:00:00-03:00'));await row('LUIZ ANTONIO').locator('.ranking-person').click();
    assert.equal(await amount('LUIZ ANTONIO'),38100);await expand('LUIZ ANTONIO');
@@ -53,12 +54,12 @@ const financialSnapshot=()=>Object.keys(window.ServiceCalendar.schedules).map(pe
    assert.equal(await page.locator('.ranking-services-row:visible .ranking-state').textContent(),'Previsto');
    assert.equal(await row('LUIZ ANTONIO').locator('.ranking-hours').getAttribute('data-period-minutes'),'720');
    // Sharing also refreshes the ranking before taking the PNG snapshot.
-   await page.clock.setFixedTime(new Date('2026-11-25T07:59:00-03:00'));await history.selectOption('0');assert.equal(await amount('LUIZ ANTONIO'),0);
+   await page.clock.setFixedTime(new Date('2026-11-24T19:59:00-03:00'));await range('2026-11-24','2026-11-24');assert.equal(await amount('HELLYSSON'),0);
    await page.evaluate(()=>{const original=window.RankingImage.project;window.RankingImage.project=(data,...args)=>{window.completedSharedRanking=data.rows.map(p=>({member:p.member,current:p.currentCents,records:p.records.length}));return original(data,...args);};});
-   await page.clock.setFixedTime(new Date('2026-11-25T08:00:00-03:00'));await page.locator('#ac4-ranking-share').click();
+   await page.clock.setFixedTime(new Date('2026-11-24T20:00:00-03:00'));await page.locator('#ac4-ranking-share').click();
    await page.waitForFunction(()=>document.getElementById('ranking-share-dialog').open&&document.getElementById('ranking-share-image').naturalWidth===1280);
-   assert.deepEqual(await page.evaluate(()=>window.completedSharedRanking.find(p=>p.member.includes('LUIZ ANTONIO'))),{member:'2º SGT LUIZ ANTONIO',current:38100,records:1});
-   await page.locator('#ranking-share-close').click();await expand('LUIZ ANTONIO');
+   assert.deepEqual(await page.evaluate(()=>window.completedSharedRanking.find(p=>p.member.includes('HELLYSSON'))),{member:'1º SGT HELLYSSON',current:36000,records:1});
+   await page.locator('#ranking-share-close').click();await expand('HELLYSSON');
    assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
    assert(await page.locator('#ac4-ranking-dialog').evaluate(el=>el.scrollWidth<=el.clientWidth));
    await page.locator('#ac4-ranking-dialog').screenshot({path:path.join(os.tmpdir(),`ranking-completed-${width}.png`),animations:'disabled'});
@@ -71,15 +72,15 @@ const financialSnapshot=()=>Object.keys(window.ServiceCalendar.schedules).map(pe
   }
   // A ranking left open must refresh at the next minute, keeping the chosen row.
   const page=await browser.newPage({viewport:{width:1280,height:1000},timezoneId:'America/Sao_Paulo'});
-  await page.clock.install({time:new Date('2026-11-25T07:58:00-03:00')});await page.goto(`http://127.0.0.1:${server.address().port}/`);
-  await page.clock.pauseAt(new Date('2026-11-25T07:59:00-03:00'));
+  await page.clock.install({time:new Date('2026-11-24T19:58:00-03:00')});await page.goto(`http://127.0.0.1:${server.address().port}/`);
+  await page.clock.pauseAt(new Date('2026-11-24T19:59:00-03:00'));
   await page.locator('[data-ac4-ranking]').click();await page.locator('#ac4-ranking-history').selectOption('0');
   await page.locator('#ac4-ranking-start').selectOption('2026-11-24');await page.locator('#ac4-ranking-end').selectOption('2026-11-24');
-  const luiz=page.locator('.ranking-table tbody>.ranking-row').filter({has:page.locator('.ranking-person',{hasText:'LUIZ ANTONIO'})});await luiz.locator('.ranking-person').click();
+  const luiz=page.locator('.ranking-table tbody>.ranking-row').filter({has:page.locator('.ranking-person',{hasText:'HELLYSSON'})});await luiz.locator('.ranking-person').click();
   assert.equal(cents(await luiz.locator('.ranking-total .ranking-amount').textContent()),0);
   await page.clock.fastForward(60000);
-  assert.equal(cents(await luiz.locator('.ranking-total .ranking-amount').textContent()),38100);
+  assert.equal(cents(await luiz.locator('.ranking-total .ranking-amount').textContent()),36000);
   assert.equal(await luiz.locator('.ranking-person').getAttribute('aria-expanded'),'true');assert.equal(await page.locator('.ranking-services-row:visible .ranking-service-item').count(),1);
-  await page.close();console.log('PASS: Ranking usa início no intervalo e término até a consulta em Brasília; noturno excluído às 22h/07h59 e incluído às 08h, histórico mantido, filtro de zerados, detalhes, PNG e atualização por minuto; finanças/consulta/fontes preservadas; computador e toque 320/390px com navegador em outro fuso.');
+  await page.close();console.log('PASS: Fim hoje exige término até a consulta; outros períodos incluem previstos e serviços que terminam no dia seguinte; histórico, filtro, detalhes, PNG e atualização por minuto; fontes preservadas; computador/toque 320/390px com navegador em outro fuso.');
  }finally{if(browser)await browser.close();await new Promise(resolve=>server.close(resolve));}
 })().catch(error=>{console.error(error);process.exitCode=1;});

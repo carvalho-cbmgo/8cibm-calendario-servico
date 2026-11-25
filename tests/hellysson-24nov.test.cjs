@@ -46,12 +46,12 @@ test('HELLYSSON tem um único PROEBOM previsto de 12h em 24/11, 08h–20h, R$ 36
   assert.equal(services[0].type, 'ac4');
   assert.equal(services[0].commitmentCents, 36000);
   assert.equal(summary.records.length, 107);
-  assert.equal(summary.committedCents, 4582900);
-  assert.equal(summary.operationalCents, 3699900);
+  assert.equal(summary.committedCents, 4557400);
+  assert.equal(summary.operationalCents, 3674400);
   assert.equal(summary.satCents, 883000);
-  assert.equal(summary.forecastCents, 3486300);
+  assert.equal(summary.forecastCents, 3460800);
   assert.equal(summary.executedCents, 1096600);
-  assert.equal(summary.remainingCents, 1100);
+  assert.equal(summary.remainingCents, 26600);
   const before = finance.month(previous(), '2026-11', 4584000);
   assert.equal(summary.committedCents - before.committedCents, 36000);
   for (const [date, daily] of summary.daily) {

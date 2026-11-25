@@ -874,7 +874,7 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
    <label class="ranking-day-toggle"><input type="checkbox" id="ac4-ranking-officers"/><span>Incluir os 3 oficiais (CAP e ASP OF)</span></label>
    <label class="ranking-day-toggle"><input type="checkbox" id="ac4-ranking-seniority"/><span>Ordenar por antiguidade (mais antigo ao mais moderno)</span></label>
    <label class="ranking-day-toggle"><input type="checkbox" id="ac4-ranking-exclude-zero" aria-describedby="ac4-ranking-exclude-zero-help"/><span>Desconsiderar militares que não tiveram serviços de AC4</span></label>
-   <p id="ac4-ranking-exclude-zero-help" class="ranking-range-help">Considera os AC4 finalizados até a consulta, entre Início e Fim, independentemente do histórico selecionado.</p>
+   <p id="ac4-ranking-exclude-zero-help" class="ranking-range-help">Considera o AC4 entre Início e Fim, independentemente do histórico. Se Fim for hoje, inclui somente serviços finalizados até a consulta.</p>
    <details class="ranking-register-panel"><summary>Carregar identificações completas</summary>
     <label class="ranking-register" for="ac4-ranking-file">Plano de Chamada ou cadastro ES/OS (.xlsx ou .json)<input type="file" id="ac4-ranking-file" accept=".xlsx,.json,application/json,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"/></label>
     <p id="ac4-ranking-register-status" class="ranking-register-status"></p>
@@ -12889,6 +12889,28 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
     return {valid:true,status:state,startDate:isoDate(start),endDate:isoDate(end),start:clockText(start),end:clockText(end),financialMonth:isoDate(start).slice(0,7),minutes,costCents,commitmentCents:state==='cancelled'?0:costCents,segments};
   }
   const category=(event,area)=>/proebom/i.test(event.mode||'')?'operational':area==='sat'||/^(sat|inspec|an[aá]lise)/i.test(event.mode||'')?'sat':'operational';
+  function allocations(record){
+    if(!record.valid)return [];
+    const parts=new Map();
+    for(const segment of record.segments){
+      let cursor=civilDate(segment.startDate)+clock(segment.start);
+      const end=civilDate(segment.endDate)+clock(segment.end),pieces=[];
+      while(cursor<end){
+        const date=isoDate(cursor),[year,month]=date.slice(0,7).split('-').map(Number),finish=Math.min(end,Date.UTC(year,month,1)/MINUTE),minutes=finish-cursor;
+        const numerator=segment.amountCents*minutes;
+        pieces.push({...segment,startDate:date,start:clockText(cursor),endDate:isoDate(finish),end:clockText(finish),minutes,amountCents:Math.floor(numerator/segment.minutes),remainder:numerator%segment.minutes});cursor=finish;
+      }
+      // Distribui os centavos já calculados, conservando o valor integral do serviço.
+      const pending=segment.amountCents-pieces.reduce((sum,piece)=>sum+piece.amountCents,0),priority=pieces.map((piece,index)=>({index,remainder:piece.remainder})).sort((a,b)=>b.remainder-a.remainder||a.index-b.index);
+      for(let i=0;i<pending;i++)pieces[priority[i].index].amountCents++;
+      for(const piece of pieces){
+        delete piece.remainder;const period=piece.startDate.slice(0,7);
+        if(!parts.has(period))parts.set(period,{period,startDate:piece.startDate,start:piece.start,endDate:piece.endDate,end:piece.end,minutes:0,costCents:0,segments:[]});
+        const part=parts.get(period);part.endDate=piece.endDate;part.end=piece.end;part.minutes+=piece.minutes;part.costCents+=piece.amountCents;part.segments.push(piece);
+      }
+    }
+    return [...parts.values()];
+  }
   function month(schedules,period,quotaCents=null){
     if(!/^\d{4}-(?:0[1-9]|1[0-2])$/.test(period))throw new Error('Competência financeira inválida.');
     const quota=Number.isSafeInteger(quotaCents)&&quotaCents>=0?quotaCents:null,map=new Map(),aliases=new WeakMap(),warnings=[];let ordinal=0;
@@ -12904,7 +12926,12 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
       if(compare>=0){candidate.aliases.push(...prior.aliases);map.set(key,candidate);}else prior.aliases.push(event);
     }
     for(const record of map.values())for(const event of record.aliases)aliases.set(event,record);
-    const records=[...map.values()].filter(r=>r.financialMonth===period),daily=new Map();
+    const serviceRecords=[...map.values()].filter(r=>r.financialMonth===period),records=[],daily=new Map();
+    for(const record of map.values()){
+      if(!record.valid){if(record.financialMonth===period)records.push(record);continue;}
+      const parts=allocations(record),part=parts.find(value=>value.period===period);if(!part)continue;
+      records.push(parts.length===1?record:{...record,...part,financialMonth:period,commitmentCents:record.status==='cancelled'?0:part.costCents,originalService:{startDate:record.startDate,start:record.start,endDate:record.endDate,end:record.end,minutes:record.minutes,costCents:record.costCents}});
+    }
     let operationalCents=0,satCents=0,forecastCents=0,executedCents=0,cancelledCount=0,invalidCount=0,duplicateCount=0;
     for(const record of records){
       duplicateCount+=record.aliases.length-1;
@@ -12921,7 +12948,7 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
       cumulativeCents+=d.committedCents;cumulativeOperationalCents+=d.operationalCents;cumulativeSatCents+=d.satCents;Object.assign(d,{date,cumulativeCents,cumulativeOperationalCents,cumulativeSatCents,remainingCents:quota===null?null:quota-cumulativeCents,daysRemaining:length-day});daily.set(date,d);
     }
     const committedCents=operationalCents+satCents;
-    return {period,quotaCents:quota,committedCents,operationalCents,satCents,forecastCents,executedCents,remainingCents:quota===null?null:quota-committedCents,cancelledCount,invalidCount,duplicateCount,records,daily,byEvent:aliases,warnings};
+    return {period,quotaCents:quota,committedCents,operationalCents,satCents,forecastCents,executedCents,remainingCents:quota===null?null:quota-committedCents,cancelledCount,invalidCount,duplicateCount,records,serviceRecords,daily,byEvent:aliases,warnings};
   }
   function asOf(summary,date){
     if(civilDate(date)===null)throw new RangeError('Data do acumulado AC4 inválida.');
@@ -12930,14 +12957,13 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
     return {period:summary.period,date,cutoffDate,quotaCents:summary.quotaCents,operationalCents:day?.cumulativeOperationalCents||0,satCents:day?.cumulativeSatCents||0,committedCents,remainingCents:summary.quotaCents===null?null:summary.quotaCents-committedCents};
   }
   const rankingClock=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Sao_Paulo',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'});
+  function rankingInstant(asOf){
+    const instant=new Date(asOf);if(asOf===null||!Number.isFinite(instant.getTime()))throw new RangeError('Instante da consulta do ranking inválido.');
+    const p=Object.fromEntries(rankingClock.formatToParts(instant).map(part=>[part.type,part.value])),date=`${p.year}-${p.month}-${p.day}`;
+    return {date,minute:civilDate(date)+Number(p.hour)*60+Number(p.minute)+Number(p.second)/60};
+  }
   function rankingRecords(summary,asOf){
-    // A tela fornece um instante único; sem asOf, a API conserva a projeção financeira.
-    let cutoff=Infinity;
-    if(asOf!==undefined){
-      const instant=new Date(asOf);if(asOf===null||!Number.isFinite(instant.getTime()))throw new RangeError('Instante da consulta do ranking inválido.');
-      const p=Object.fromEntries(rankingClock.formatToParts(instant).map(part=>[part.type,part.value]));
-      cutoff=civilDate(`${p.year}-${p.month}-${p.day}`)+Number(p.hour)*60+Number(p.minute)+Number(p.second)/60;
-    }
+    const cutoff=asOf===undefined?Infinity:rankingInstant(asOf).minute;
     return summary.records.filter(record=>{
       if(!record.valid||record.status==='cancelled'||record.event.simulation)return false;
       if(asOf===undefined)return true;
@@ -12956,7 +12982,7 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
       return {key:normalize(source.name),member:source.name,ord:Number.isInteger(ord)&&ord>0?ord:null,officer:typeof source.officer==='boolean'?source.officer:/^(?:CAP|ASP)\b/i.test(source.name),includeZero:source.includeZero===true,operationalCents:0,satCents:0,totalCents:0,forecastCents:0,executedCents:0,records:[],monthlyRecords:[]};
     };
     for(const source of options.personnel||[])if(typeof source.name==='string'&&source.name.trim())people.set(normalize(source.name),makePerson({...source,includeZero:source.includeZero!==false}));
-    const completed=new Set(rankingRecords(summary,options.asOf));
+    const completedOnly=options.asOf!==undefined&&cutoffDate===rankingInstant(options.asOf).date,completed=new Set(rankingRecords(summary,completedOnly?options.asOf:undefined));
     for(const record of summary.records){
       if(!record.valid||record.status==='cancelled'||record.event.simulation)continue;
       const key=normalize(record.member);
@@ -12979,11 +13005,11 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
     }
     const bySeniority=(a,b)=>(a.ord??Infinity)-(b.ord??Infinity)||a.member.localeCompare(b.member,'pt-BR');
     rows.sort(sortBySeniority?bySeniority:(a,b)=>b.totalCents-a.totalCents||bySeniority(a,b));
-    const result={period:summary.period,startDate,cutoffDate,includeCurrentDay,includeOfficers,sortBySeniority,excludeZeroAC4,monthlyLimitMinutes:MONTHLY_AC4_LIMIT,rows,recordCount:0,operationalCents:0,satCents:0,totalCents:0,forecastCents:0,executedCents:0};
+    const result={period:summary.period,startDate,cutoffDate,completedOnly,includeCurrentDay,includeOfficers,sortBySeniority,excludeZeroAC4,monthlyLimitMinutes:MONTHLY_AC4_LIMIT,rows,recordCount:0,operationalCents:0,satCents:0,totalCents:0,forecastCents:0,executedCents:0};
     for(const person of rows){result.recordCount+=person.records.length;for(const key of ['operationalCents','satCents','totalCents','forecastCents','executedCents'])result[key]+=person[key];}
     return result;
   }
-  window.AC4Finance={price,month,asOf,status,active,documentInfo,ranking,rankingRecords};
+  window.AC4Finance={price,allocations,month,asOf,status,active,documentInfo,ranking,rankingRecords};
   if(typeof document!=='undefined'){
     const schedules=JSON.parse(document.getElementById('calendar-data').textContent),quotas=JSON.parse(document.getElementById('ac4-financial-config').textContent).monthlyQuotaCents,rosters=JSON.parse(document.getElementById('ala-rosters').textContent),officerRotation=JSON.parse(document.getElementById('odd-alcancavel-config').textContent);
     window.ReachableOfficer.apply(schedules,officerRotation,rosters.absences);
@@ -13023,7 +13049,7 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
         // A supplied monthly consolidation replaces daily records for that RG/month.
         if(rg&&values&&Object.hasOwn(values,rg))return {period,amountCents:values[rg],source:'consolidated',operationalCents:null,satCents:null};
         if(monthly.has(period)){
-          const records=finance.rankingRecords(monthly.get(period),options.asOf).filter(record=>key(record.member)===key(person.name));
+          const records=finance.rankingRecords(monthly.get(period)).filter(record=>key(record.member)===key(person.name));
           return {period,amountCents:records.reduce((sum,r)=>sum+r.commitmentCents,0),source:'calendar',operationalCents:records.filter(r=>r.category==='operational').reduce((sum,r)=>sum+r.commitmentCents,0),satCents:records.filter(r=>r.category==='sat').reduce((sum,r)=>sum+r.commitmentCents,0)};
         }
         return {period,amountCents:null,source:'missing',operationalCents:null,satCents:null};
@@ -13357,7 +13383,7 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
     }
     records.push(...ordinary.values());
     // Finance supplies canonical revisions and one record for a continuous SAT AC4.
-    for(const record of summary.records){
+    for(const record of summary.serviceRecords||summary.records){
       const source=schedules[record.sourcePeriod]?.days.find(day=>day.day===record.sourceDay);
       const members=record.category==='sat'?source?.sat?.members:source?.members;
       if(record.status==='cancelled'||record.event.simulation===true||key(record.member)==='PREVISTO AC4'||members?.some(m=>m.name===record.member&&virtual(m)))continue;
@@ -13593,7 +13619,13 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
     const extra=simulationActive?simulationPlan.summary.committedCents:0;
     const entries=[['Cota mensal',financialSummary.quotaCents===null?'Não informada':simulatedValue(financialSummary.quotaCents,0,false,true)],['Comprometido',simulatedValue(financialSummary.committedCents,extra,false)],['Disponível',financialSummary.remainingCents===null?'Não informada':simulatedValue(financialSummary.remainingCents,-extra,false)],['AC4 Operacional (inclui PROEBOM)',simulatedValue(financialSummary.operationalCents,extra,false)],['AC4 SAT',money(financialSummary.satCents)],['Previstos, sem execução confirmada',simulatedValue(financialSummary.forecastCents,extra,false)],['Execução confirmada',money(financialSummary.executedCents)]];
     for(const [index,[label,amount]] of entries.entries()){const divider=index===3?'finance-breakdown-divider':'',output=element('dd',divider);output.append(amount);breakdown.append(element('dt',divider,label),output);}
-    body.append(breakdown,element('p','finance-note','Comprometido no planejamento; não indica pagamento.'),element('p','finance-rule','Saldos diários acumulados até cada data. Competência financeira definida pela data de início do serviço.'),element('p','finance-counts',`${financialSummary.records.filter(r=>r.valid&&r.status!=='cancelled').length} serviços considerados · ${financialSummary.cancelledCount} cancelados · ${financialSummary.duplicateCount} duplicações desconsideradas.`));
+    body.append(breakdown,element('p','finance-note','Comprometido no planejamento; não indica pagamento.'),element('p','finance-rule','A cota considera somente as horas ocorridas neste mês, de 00h00 do primeiro dia até 00h00 do mês seguinte. Serviços que atravessam a virada têm seus valores divididos entre as competências, inclusive no ranking e no histórico. Saldos diários acumulados até cada data.'),element('p','finance-counts',`${financialSummary.records.filter(r=>r.valid&&r.status!=='cancelled').length} serviços considerados · ${financialSummary.cancelledCount} cancelados · ${financialSummary.duplicateCount} duplicações desconsideradas.`));
+    const divided=financialSummary.records.filter(record=>record.originalService&&record.status!=='cancelled');
+    if(divided.length){
+      const section=element('section','finance-allocation'),list=element('ul','finance-slices');section.append(element('h3','','Serviços divididos entre meses'));
+      for(const record of divided){const original=record.originalService,item=element('li','');item.dataset.allocationMember=record.member;item.append(`${record.member}: ${rankingDate(record.startDate)} ${record.start} a ${rankingDate(record.endDate)} ${record.end} · ${rankingDuration(record.minutes)} · ${money(record.commitmentCents)} nesta cota. Serviço completo: ${rankingDate(original.startDate)} ${original.start} a ${rankingDate(original.endDate)} ${original.end} · ${rankingDuration(original.minutes)} · ${money(original.costCents)}.`);list.append(item);}
+      section.append(list);body.append(section);
+    }
     for(const warning of financialSummary.warnings)body.append(element('p','finance-warning',warning));
     body.append(makeWeeklyFinance());
   }
@@ -13696,14 +13728,14 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
   }
   function makeRankingServices(person,data){
     const section=element('section','ranking-services');section.setAttribute('aria-label',`Serviços de AC4 de ${person.member}`);
-    section.append(element('p','ranking-service-note',`Planejamento mensal de AC4: ${rankingDuration(person.monthlyMinutes)} / ${rankingDuration(person.monthlyLimitMinutes)}. ${rankingHoursStatus(person)}. Execução confirmada: ${rankingDuration(person.monthlyExecutedMinutes)} · Previstas: ${rankingDuration(person.monthlyForecastMinutes)}. Finalizados no intervalo selecionado: ${rankingDuration(person.minutes)}.`));
+    section.append(element('p','ranking-service-note',`Planejamento mensal de AC4: ${rankingDuration(person.monthlyMinutes)} / ${rankingDuration(person.monthlyLimitMinutes)}. ${rankingHoursStatus(person)}. Execução confirmada: ${rankingDuration(person.monthlyExecutedMinutes)} · Previstas: ${rankingDuration(person.monthlyForecastMinutes)}. Considerados no intervalo selecionado: ${rankingDuration(person.minutes)}.`));
     if(data.historyMonths){
       const history=element('section','ranking-history-details'),list=element('ul','ranking-history-list');history.append(element('h3','','Histórico dos meses anteriores'));
-      for(const entry of person.history){const item=element('li'),source=entry.source==='consolidated'?'Consolidado informado, sem divisão Operacional/SAT.':entry.source==='calendar'?'AC4 cadastrados do mês inteiro, com término até a consulta.':'Valor não informado.';item.dataset.historyPeriod=entry.period;item.append(element('strong','',`${monthNames[Number(entry.period.slice(5))-1]}/${entry.period.slice(0,4)} · ${entry.amountCents===null?'Não informado':money(entry.amountCents)}`),element('small','',source));list.append(item);}
+      for(const entry of person.history){const item=element('li'),source=entry.source==='consolidated'?'Consolidado informado, sem divisão Operacional/SAT.':entry.source==='calendar'?'AC4 cadastrados do mês inteiro, com valores rateados por competência.':'Valor não informado.';item.dataset.historyPeriod=entry.period;item.append(element('strong','',`${monthNames[Number(entry.period.slice(5))-1]}/${entry.period.slice(0,4)} · ${entry.amountCents===null?'Não informado':money(entry.amountCents)}`),element('small','',source));list.append(item);}
       history.append(list,element('p','ranking-service-note',`Mês selecionado: ${money(person.currentCents)} · Histórico informado: ${money(person.historyCents)} · Total: ${money(person.totalCents)}${person.missingHistoryPeriods.length?' (parcial)':''}. Os serviços individuais abaixo pertencem ao mês selecionado.`));section.append(history);
     }
-    if(!person.records.length){section.append(element('p','ranking-empty','Nenhum AC4 finalizado até esta consulta no intervalo selecionado.'));return section;}
-    section.append(element('h3','ranking-service-heading',`Serviços considerados · ${periodLabel()}`),element('p','ranking-service-note',`${person.records.length} serviço${person.records.length===1?'':'s'} finalizado${person.records.length===1?'':'s'} no intervalo de ${rankingDate(data.startDate)} a ${rankingDate(data.cutoffDate)}: ${money(person.currentCents)}.`));
+    if(!person.records.length){section.append(element('p','ranking-empty',data.completedOnly?'Nenhum AC4 finalizado até esta consulta no intervalo selecionado.':'Nenhum AC4 cadastrado no intervalo selecionado.'));return section;}
+    section.append(element('h3','ranking-service-heading',`Serviços considerados · ${periodLabel()}`),element('p','ranking-service-note',`${person.records.length} serviço${person.records.length===1?'':'s'} considerado${person.records.length===1?'':'s'}${data.completedOnly?', com término até a consulta,':''} no intervalo de ${rankingDate(data.startDate)} a ${rankingDate(data.cutoffDate)}: ${money(person.currentCents)}.`));
     const list=element('ol','ranking-service-list');
     for(const record of person.records){
       const item=element('li','ranking-service-item'),top=element('div','ranking-service-top'),date=element('time','',rankingDate(record.startDate));date.dateTime=record.startDate;
@@ -13711,6 +13743,7 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
       top.append(date,element('span','ranking-service-cost',money(record.commitmentCents)));item.append(top);
       const hours=record.minutes%60?`${Math.floor(record.minutes/60)}h${String(record.minutes%60).padStart(2,'0')}`:`${record.minutes/60}h`,mode=record.category==='sat'?`SAT${record.event.activity?` · ${record.event.activity}`:''}`:/PROEBOM/i.test(record.event.mode)?'OPERACIONAL · PROEBOM':'OPERACIONAL';
       item.append(element('p','ranking-service-data',`${hours} · ${mode}`),element('p','ranking-service-time',`${record.start} às ${record.end}${record.endDate!==record.startDate?` · término ${rankingDate(record.endDate)}`:''}`));
+      if(record.originalService){const original=record.originalService;item.dataset.allocated='true';item.append(element('p','ranking-service-note',`Parcela de ${periodLabel()}. Serviço completo: ${rankingDate(original.startDate)} ${original.start} a ${rankingDate(original.endDate)} ${original.end} · ${rankingDuration(original.minutes)} · ${money(original.costCents)}.`));}
       const statuses=element('div','ranking-service-statuses'),confirmed=record.status==='executed';statuses.append(element('span',`ranking-state${confirmed?' ranking-state-confirmed':''}`,confirmed?'Execução confirmada':'Previsto'));
       item.append(statuses);list.append(item);
     }
@@ -13737,11 +13770,11 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
     document.getElementById('ac4-ranking-summary').textContent=`${rankingDate(data.startDate)} a ${rankingDate(data.cutoffDate)} · ${data.rows.length} militar${data.rows.length===1?'':'es'} · ${data.recordCount} serviço${data.recordCount===1?'':'s'} do mês · ${data.historyMonths?`Histórico: ${money(data.historyCents)} · `:''}Total${data.missingHistoryPeople?' parcial':''}: ${money(data.totalCents)}`;
     document.getElementById('ac4-ranking-history-status').textContent=data.historyMonths?`Meses completos: ${data.historyPeriods.map(value=>`${monthNames[Number(value.slice(5))-1]}/${value.slice(0,4)}`).join(', ')}. Operacional/SAT: intervalo atual. ${data.missingHistoryPeople?`* Histórico incompleto para ${data.missingHistoryPeople} militar(es); consulte os detalhes. `:''}`:'0: somente o AC4 do mês selecionado entre Início e Fim.';
     const pending=data.sortBySeniority?data.rows.filter(person=>person.ord===null):[];
-    document.getElementById('ac4-ranking-status-note').textContent=`${data.includeOfficers?'Praças e oficiais.':'Somente praças.'} Serviços com início entre Início/Fim e término até ${new Intl.DateTimeFormat('pt-BR',{timeZone:'America/Sao_Paulo',dateStyle:'short',timeStyle:'short'}).format(now)} (Brasília). Execução confirmada: ${money(data.executedCents)} · Previstos: ${money(data.forecastCents)}. O término previsto já transcorrido não confirma execução ou pagamento. PROEBOM integra o Operacional.${pending.length?` Antiguidade pendente (—): ${pending.map(person=>person.member).join(', ')}.`:''}`;
+    document.getElementById('ac4-ranking-status-note').textContent=`${data.includeOfficers?'Praças e oficiais.':'Somente praças.'} ${data.completedOnly?`Fim coincide com hoje: somente serviços com término até ${new Intl.DateTimeFormat('pt-BR',{timeZone:'America/Sao_Paulo',dateStyle:'short',timeStyle:'short'}).format(now)} (Brasília).`:'Todos os serviços cadastrados no intervalo, incluindo os previstos e os que terminam no dia seguinte a Fim. O corte pelo horário da consulta aplica-se somente quando Fim é hoje.'} Na virada do mês, valores e horas são rateados entre as competências. Execução confirmada: ${money(data.executedCents)} · Previstos: ${money(data.forecastCents)}. O término previsto já transcorrido não confirma execução ou pagamento. PROEBOM integra o Operacional.${pending.length?` Antiguidade pendente (—): ${pending.map(person=>person.member).join(', ')}.`:''}`;
     const directory=window.ServiceDirectory,missing=data.rows.filter(person=>!directory?.has(person.member)).length;
     document.getElementById('ac4-ranking-register-status').textContent=directory?.count()?`Cadastro local: ${directory.count()} militares.${missing?` ${missing} identificações do ranking a completar.`:' Identificações completas disponíveis.'}`:'Carregue o Plano de Chamada ou cadastro ES/OS para exibir nomes completos e RGs. A leitura é local, somente neste navegador.';
     const content=document.getElementById('ac4-ranking-content');content.replaceChildren();
-    const hoursNote=element('p','ranking-hours-note',`Planejamento mensal: AC4 previstos e com execução confirmada de todo o mês selecionado, com limite de ${rankingDuration(data.monthlyLimitMinutes)} por militar. O subtotal do ranking inclui somente os finalizados entre Início/Fim até a consulta. Histórico e simulações não somam horas.${financialSummary.invalidCount?' Há registros inválidos; confira as durações antes de avaliar o limite.':''}`);hoursNote.id='ac4-ranking-hours-note';content.append(hoursNote);
+    const hoursNote=element('p','ranking-hours-note',`Planejamento mensal: horas de AC4 rateadas para o mês selecionado, com limite de ${rankingDuration(data.monthlyLimitMinutes)} por militar. O subtotal segue Início/Fim${data.completedOnly?' e inclui somente os finalizados até a consulta':''}. Histórico e simulações não somam horas.${financialSummary.invalidCount?' Há registros inválidos; confira as durações antes de avaliar o limite.':''}`);hoursNote.id='ac4-ranking-hours-note';content.append(hoursNote);
     if(!data.rows.length){content.append(element('p','ranking-empty',data.excludeZeroAC4?'Nenhum militar com valor de AC4 diferente de zero no período selecionado.':`Nenhum AC4 cadastrado de ${rankingDate(data.startDate)} a ${rankingDate(data.cutoffDate)}.`));return;}
     const table=element('table',`ranking-table${data.historyMonths?' has-history':''}`);table.setAttribute('aria-label',`Ranking mensal de AC4 ${data.sortBySeniority?'por antiguidade':'em ordem decrescente de valor total'}`);table.setAttribute('role','table');table.setAttribute('aria-describedby',hoursNote.id);
     const head=element('thead'),header=element('tr');head.setAttribute('role','rowgroup');header.setAttribute('role','row');
@@ -13800,7 +13833,8 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
     box.append(element('p','event-finance-total',`${label}: ${money(record.commitmentCents)}`));
     const list=element('ul','finance-slices');
     for(const segment of record.segments){const duration=segment.minutes%60?`${Math.floor(segment.minutes/60)}h${String(segment.minutes%60).padStart(2,'0')}`:`${segment.minutes/60}h`;const start=segment.startDate.split('-').reverse().join('/'),end=segment.endDate===segment.startDate?'':` de ${segment.endDate.split('-').reverse().join('/')}`;list.append(element('li','',`${start} ${segment.start} às ${segment.end}${end}: ${duration} × ${money(segment.rateCents)}/h = ${money(segment.amountCents)} · Escala ${segment.scale}, ${segment.night?'noturna':'diurna'}`));}
-    box.append(list,element('p','detail-note',`Competência financeira: ${record.financialMonth.split('-').reverse().join('/')}. ${record.status==='executed'?'Pagamento não presumido.':'Execução e pagamento não confirmados.'}`));return box;
+    const parts=finance.allocations(record),competence=parts.length>1?`Rateio por competência: ${parts.map(part=>`${part.period.split('-').reverse().join('/')} · ${rankingDuration(part.minutes)} · ${money(part.costCents)}`).join('; ')}.`:`Competência financeira: ${record.financialMonth.split('-').reverse().join('/')}.`;
+    box.append(list,element('p','detail-note',`${competence} ${record.status==='executed'?'Pagamento não presumido.':'Execução e pagamento não confirmados.'}`));return box;
   }
   function shortHour(value) {
     value=String(value??'').replace(':','h');
