@@ -97,7 +97,7 @@ test('dados publicados mantêm valores e totais financeiros, com 144h de LUIZ, 1
     assert.equal(p.monthlyMinutes,hours*60); assert.equal(p.minutes,hours*60); assert.equal(p.remainingMinutes,(192-hours)*60);
   }
   assert.equal(result.totalCents,summary.committedCents);
-  assert.equal(summary.committedCents,4582000); assert.equal(summary.satCents,883000);
-  assert.equal(summary.operationalCents,3699000); assert.equal(summary.executedCents,1096600); assert.equal(summary.remainingCents,2000);
+  assert.equal(summary.committedCents,4574000); assert.equal(summary.satCents,883000);
+  assert.equal(summary.operationalCents,3691000); assert.equal(summary.executedCents,1096600); assert.equal(summary.remainingCents,10000);
   assert.equal(JSON.stringify(source),before);
 });

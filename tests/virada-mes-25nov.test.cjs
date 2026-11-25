@@ -2,9 +2,9 @@ const {test}=require('node:test'),assert=require('node:assert/strict'),fs=requir
 const html=fs.readFileSync(path.join(__dirname,'..','index.html'),'utf8'),scripts=[...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/g)],read=id=>JSON.parse(scripts.find(([,a])=>a.includes(`id="${id}"`))[2]),data=read('calendar-data'),context=vm.createContext({window:{}});
 for(const n of ['AC4Finance','ServiceSimulation','ServiceLookup'])vm.runInContext(scripts.find(([,a,s])=>!a.includes('application/json')&&s.includes(`window.${n}=`))[2],context);
 const {AC4Finance:f,ServiceSimulation:sim,ServiceLookup:lookup}=context.window,plain=v=>JSON.parse(JSON.stringify(v)),day=(s,n)=>s['2026-11'].days.find(d=>d.day===n),events=d=>[...d.members,...(d.sat?.members||[])].flatMap(m=>m.events),find=(s,n,id)=>events(day(s,n)).find(e=>e.serviceId===id),nov=()=>f.month(data,'2026-11',4584000);
-const changes=[['ac4-operacional-hugo-2026-11-25-08h','SD HUGO','2026-11-25',24,'08h00','2026-11-26',74100,'388','98752637'],['ac4-2026-11-26-hellysson-08h','1º SGT HELLYSSON','2026-11-26',12,'20h00','2026-11-26',36000,'393','98894389'],['ac4-operacional-da-silva-2026-11-27-08h','ST DA SILVA','2026-11-27',18,'02h00','2026-11-28',74000,'394','98894413']];
+const changes=[['ac4-operacional-hugo-2026-11-25-08h','SD HUGO','2026-11-25',24,'08h00','2026-11-26',74100,'388','98752637'],['ac4-2026-11-26-hellysson-08h','1º SGT HELLYSSON','2026-11-26',6,'14h00','2026-11-26',18000,'393','98894389'],['ac4-operacional-da-silva-2026-11-27-08h','ST DA SILVA','2026-11-27',12,'20h00','2026-11-27',48000,'394','98894413']];
 
-test('retificações preservam identidades e previsão: HUGO 24h, HELLYSSON 12h, DA SILVA 18h',()=>{
+test('retificações preservam identidades e previsão: HUGO 24h, HELLYSSON 6h, DA SILVA 12h',()=>{
  const summary=nov();for(const[id,name,date,hours,end,endDate,cost,os,sei]of changes){const matches=summary.serviceRecords.filter(r=>r.event.serviceId===id);assert.equal(matches.length,1);const r=matches[0];assert.equal(r.member,name);assert.equal(r.startDate,date);assert.equal(r.start,'08h00');assert.equal(r.end,end);assert.equal(r.endDate,endDate);assert.equal(r.minutes,hours*60);assert.equal(r.costCents,cost);assert.equal(r.status,'forecast');assert.equal(r.event.executionConfirmed,undefined);assert.equal(f.documentInfo(r.event).number,os);assert.equal(f.documentInfo(r.event).sei,sei);const rows=lookup.month(data,'2026-11').filter(r=>r.type==='ac4'&&r.event.serviceId===id);assert.equal(rows.length,1);assert.equal(rows[0].minutes,hours*60);}
 });
 
@@ -14,16 +14,16 @@ test('todos os quatro AC4 de 25/11, operacionais e SAT, usam OS 388/SEI 98752637
 });
 
 test('apenas períodos/documentos solicitados e coberturas derivadas mudam; todas as confirmações são preservadas',()=>{
- const before=structuredClone(data);
+ const before=structuredClone(data);day(before,26).members=day(before,26).members.filter(m=>m.name!=='SD CAVALCANTE');delete day(before,27).chief;delete day(before,27).shiftStart;day(before,27).members.find(m=>m.name==='ST TAVARES').notes=['Ordinário'];
  Object.assign(find(before,25,changes[0][0]),{end:'20h00',nextDay:false,hours:12,endDate:'2026-11-25',document:'OS a definir (não informada)'});
  for(const e of day(before,25).sat.members.flatMap(m=>m.events))e.document='OS nº 379 (SEI 98570810)';
- Object.assign(find(before,26,changes[1][0]),{end:'16h00',hours:8});Object.assign(find(before,27,changes[2][0]),{end:'08h00',hours:24});day(before,25).coverage=['5 recursos de 24h','Faltam 1 recurso'];day(before,27).coverage=['7 recursos de 24h','Meta de 6 recursos'];
+ Object.assign(find(before,26,changes[1][0]),{end:'16h00',hours:8});Object.assign(find(before,27,changes[2][0]),{end:'08h00',hours:24,nextDay:true,endDate:'2026-11-28'});day(before,25).coverage=['5 recursos de 24h','Faltam 1 recurso'];day(before,27).coverage=['7 recursos de 24h','Meta de 6 recursos'];
  assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'),'e999de8cb3db818659497ad899c2d1a8a59edda64a38edcb173bbd00fefaf46f');
- const after=nov(),old=f.month(before,'2026-11',4584000);assert.equal(after.committedCents-old.committedCents,24600);assert.equal(after.executedCents,old.executedCents);assert.equal(after.satCents,old.satCents);for(const n of [25,26,27]){assert.deepEqual(day(data,n).confirmation,day(before,n).confirmation);assert.equal(sim.coverage(day(data,n),`2026-11-${n}`).resources,6);}assert.equal(sim.plan(data,'2026-11',4584000).addedServices,0);
+ const after=nov(),old=f.month(before,'2026-11',4584000);assert.equal(after.committedCents-old.committedCents,16600);assert.equal(after.executedCents,old.executedCents);assert.equal(after.satCents,old.satCents);for(const n of [25,26,27]){assert.deepEqual(day(data,n).confirmation,day(before,n).confirmation);assert.equal(sim.coverage(day(data,n),`2026-11-${n}`).resources,6);}assert.equal(sim.plan(data,'2026-11',4584000).addedServices,0);
 });
 
-test('saldos são recalculados: novembro R$45.820 e saldo R$20; dezembro conserva R$1.455 e R$36.545',()=>{
- const n=nov(),d=f.month(data,'2026-12',3800000);assert.equal(n.records.length,107);assert.equal(n.invalidCount,0);assert.equal(n.duplicateCount,0);assert.equal(n.committedCents,4582000);assert.equal(n.operationalCents,3699000);assert.equal(n.satCents,883000);assert.equal(n.forecastCents,3485400);assert.equal(n.executedCents,1096600);assert.equal(n.remainingCents,2000);assert.equal(d.committedCents,145500);assert.equal(d.remainingCents,3654500);
+test('saldos são recalculados: novembro R$45.740 e saldo R$100; dezembro conserva R$1.455 e R$36.545',()=>{
+ const n=nov(),d=f.month(data,'2026-12',3800000);assert.equal(n.records.length,108);assert.equal(n.invalidCount,0);assert.equal(n.duplicateCount,0);assert.equal(n.committedCents,4574000);assert.equal(n.operationalCents,3691000);assert.equal(n.satCents,883000);assert.equal(n.forecastCents,3477400);assert.equal(n.executedCents,1096600);assert.equal(n.remainingCents,10000);assert.equal(d.committedCents,145500);assert.equal(d.remainingCents,3654500);
  const rank=asOf=>f.ranking(n,'2026-11-25',true,{startDate:'2026-11-25',endDate:'2026-11-26',asOf}).rows.find(r=>r.member==='SD HUGO');assert.equal(rank('2026-11-26T07:59:59-03:00'),undefined);assert.equal(rank('2026-11-26T08:00:00-03:00').totalCents,74100);
 });
 

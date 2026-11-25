@@ -73,7 +73,7 @@ test('nomes sem PSE geram 12 ordinários vespertinos, separados por atividade', 
 
 test('todo o calendário anterior à inclusão da SAT permanece preservado', () => {
   // Baseline includes corrected January exchanges, revised 12h AC4, TS 170-175 (TS 170 corrected to 22/11/2026) and cancellation of the operation, without the new SAT.
-  assert.equal(createHash('sha256').update(JSON.stringify(baseline())).digest('hex'), '19ad038c067b19e590c5dc57a587b2387b8c6792fe5d8ed306d3825f6a60236f');
+  assert.equal(createHash('sha256').update(JSON.stringify(baseline())).digest('hex'), '75b7cdeb76130c2ea5a87d4450a30fc5b6c9bc09ae7779468dc24cefb2a035f7');
   const before = baseline();
   for (const number of days) {
     const date = `2026-11-${number}`;
@@ -91,11 +91,11 @@ test('todo o calendário anterior à inclusão da SAT permanece preservado', () 
 
 test('finanças, acumulados, consulta e ranking incluem os novos AC4 sem duplicar jornadas', () => {
   const before = finance.month(baseline(), '2026-11', 4584000);
-  assert.equal(summary.records.length, 107);
-  assert.equal(summary.committedCents, 4582000);
+  assert.equal(summary.records.length, 108);
+  assert.equal(summary.committedCents, 4574000);
   assert.equal(summary.satCents, 883000);
   assert.equal(summary.operationalCents, before.operationalCents);
-  assert.equal(summary.remainingCents, 2000);
+  assert.equal(summary.remainingCents, 10000);
   assert.equal(summary.executedCents, before.executedCents);
   let cumulative = 0;
   for (let n = 1; n <= 30; n++) {
@@ -127,7 +127,7 @@ test('SAT em 27/11 exclui WANDERSON e tem ROBERTO na Vistoria e VALÉRIA no Prot
   const services = lookup.month(data, '2026-11').filter(r => r.area === 'sat' && r.date === '2026-11-27');
   assert.equal(services.filter(r => r.type === 'ac4').length, 3);
   assert.equal(services.filter(r => r.type === 'ordinary').length, 2);
-  assert.equal(finance.ranking(summary, '2026-11-16', true, { startDate: '2026-11-27', endDate: '2026-11-27' }).totalCents, 126000);
+  assert.equal(finance.ranking(summary, '2026-11-16', true, { startDate: '2026-11-27', endDate: '2026-11-27' }).totalCents, 100000);
   assert.equal(simulation.coverage(input, '2026-11-27').resources, 6);
   const diego = input.members.find(m => m.name === '2º SGT DIEGO');
   assert.equal(diego.badges[0].kind, 'pay');

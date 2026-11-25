@@ -43,13 +43,13 @@ test('ST DA SILVA tem um AC4 operacional previsto de 12h em 19/11, OS 383/SEI 98
   assert.equal(services[0].type, 'ac4');
   assert.equal(services[0].commitmentCents, 36000);
   const before = finance.month(previous(), '2026-11', 4584000);
-  assert.equal(summary.records.length, 107);
-  assert.equal(summary.committedCents, 4582000);
-  assert.equal(summary.operationalCents, 3699000);
+  assert.equal(summary.records.length, 108);
+  assert.equal(summary.committedCents, 4574000);
+  assert.equal(summary.operationalCents, 3691000);
   assert.equal(summary.satCents, 883000);
-  assert.equal(summary.forecastCents, 3485400);
+  assert.equal(summary.forecastCents, 3477400);
   assert.equal(summary.executedCents, 1096600);
-  assert.equal(summary.remainingCents, 2000);
+  assert.equal(summary.remainingCents, 10000);
   for (const [date, daily] of summary.daily) {
     assert.equal(daily.committedCents - before.daily.get(date).committedCents, date === record.startDate ? 36000 : 0);
     assert.equal(daily.cumulativeCents - before.daily.get(date).cumulativeCents, date >= record.startDate ? 36000 : 0);
@@ -60,7 +60,7 @@ test('ST DA SILVA tem um AC4 operacional previsto de 12h em 19/11, OS 383/SEI 98
 
 test('o diurno complementa o noturno de LUIZ, elimina a vaga simulada e preserva os demais dados e tarifas', () => {
   const before = previous(), source = JSON.stringify(data);
-  assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'), '6d19f0f7436684c6f370b1f7668e9134c02d56de5e839c72d073dbb8f612dc78');
+  assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'), '0408168191df00ef0eb6565c0139f3568523f8ad7fc83fc62ceb422d0b192c34');
   const coverage = simulation.coverage(day(data), '2026-11-19');
   assert.equal(coverage.resources, 6);
   assert(coverage.segments.every(s => s.resources === 6));

@@ -30,8 +30,8 @@ const files = { '/': 'index.html', '/assets/cbmgo-emblema.png': 'assets/cbmgo-em
     });
     const source = await page.evaluate(() => JSON.stringify(window.ServiceCalendar.schedules));
     for (const width of [1280, 390, 320]) for (const day of [24, 26]) {
-      const names = day === 24 ? ['HELLYSSON'] : ['HENRIQUE', 'HELLYSSON'];
-      const serviceCount = day === 24 ? 2 : 3;
+      const names = day === 24 ? ['HELLYSSON'] : ['HENRIQUE', 'HELLYSSON', 'CAVALCANTE'];
+      const serviceCount = day === 24 ? 2 : 4;
       await page.setViewportSize({ width, height: 1000 });
       if (width <= 760) await page.locator('#selecionar-dia').selectOption(String(day));
       const card = page.locator(`.day[data-day="${day}"]`), toggle = card.locator('[data-area-toggle="operational"]');
@@ -39,17 +39,17 @@ const files = { '/': 'index.html', '/assets/cbmgo-emblema.png': 'assets/cbmgo-em
       assert.equal(await card.locator('.resource-total').textContent(), '6 recursos de 24h');
       assert.equal(await card.locator('.resource-ac4').textContent(), `${serviceCount} AC4`);
       for (const name of names) {
-        const hours = 12, cost = hours === 12 ? '360,00' : '240,00';
+        const hours = day === 26 && name === 'HELLYSSON' ? 6 : 12, cost = hours === 12 ? '360,00' : '180,00';
         const row = card.locator('.operational-roster .entry').filter({ has: page.locator('.name', { hasText: name }) });
         assert.equal(await row.count(), 1);
         assert.equal(await row.locator('.chip.ac4').textContent(), `AC4 ${hours}h`);
-        assert.equal(await row.locator('.ac4-period').textContent(), hours === 12 ? '8h às 20h' : '8h às 16h');
+        assert.equal(await row.locator('.ac4-period').textContent(), hours === 12 ? '8h às 20h' : '8h às 14h');
         assert((await row.locator('.ac4-cost').textContent()).includes(cost));
       }
       await card.locator('.operational-section [data-sei-day]').click();
       assert.equal(await page.locator('#sei-order-table tbody tr').count(), serviceCount);
       for (const name of names) {
-        const hours = 12, end = hours === 12 ? '20h00' : '16h00';
+        const hours = day === 26 && name === 'HELLYSSON' ? 6 : 12, end = hours === 12 ? '20h00' : '14h00';
         const order = page.locator('#sei-order-table tbody tr').filter({ hasText: name });
         assert.equal(await order.count(), 1);
         const cells = await order.locator('td').allTextContents();
@@ -63,7 +63,7 @@ const files = { '/': 'index.html', '/assets/cbmgo-emblema.png': 'assets/cbmgo-em
       await page.locator('#sei-copy-order').click(); await page.waitForFunction(() => window.copiedProebom !== null);
       const copied = await page.evaluate(() => { const box = document.createElement('div'); box.innerHTML = window.copiedProebom; return [...box.querySelectorAll('tr')].map(r => [...r.cells].map(c => c.textContent)); });
       assert.equal(copied.length, serviceCount);
-      for (const name of names) assert.equal(copied.filter(cells => cells[4].includes(name) && cells[6] === `${12}h`).length, 1);
+      for (const name of names) assert.equal(copied.filter(cells => cells[4].includes(name) && cells[6] === `${day === 26 && name === 'HELLYSSON' ? 6 : 12}h`).length, 1);
       await page.locator('#sei-close').click();
       await page.locator('[data-ac4-simulation]').click(); await page.locator('#ac4-simulation-target').selectOption('6'); await page.locator('#ac4-simulation-confirm').click();
       assert.equal(await card.locator('.simulation-entry').count(), 0);
@@ -72,6 +72,6 @@ const files = { '/': 'index.html', '/assets/cbmgo-emblema.png': 'assets/cbmgo-em
     }
     assert.equal(await page.evaluate(() => JSON.stringify(window.ServiceCalendar.schedules)), source);
     assert.deepEqual(errors, []);
-    console.log('PASS: HELLYSSON PROEBOM 12h/OS 389 em 24/11 e reforços operacionais HENRIQUE 12h/HELLYSSON 12h em 26/11, OS 393, períodos/valores/ES/OS/cópia, seis recursos e nenhum reforço simulado adicional; 1280/390/320px.');
+    console.log('PASS: HELLYSSON PROEBOM 12h/OS 389 em 24/11 e reforços operacionais HENRIQUE 12h/HELLYSSON 6h/CAVALCANTE 12h em 26/11, OS 393, períodos/valores/ES/OS/cópia, seis recursos e nenhum reforço simulado adicional; 1280/390/320px.');
   } finally { if (browser) await browser.close(); await new Promise(resolve => server.close(resolve)); }
 })().catch(error => { console.error(error); process.exitCode = 1; });

@@ -34,7 +34,7 @@ const money=cents=>normalize(new Intl.NumberFormat('pt-BR',{style:'currency',cur
   await open();for(const select of [start,end]){assert.equal(await select.locator('option[value="2026-11-01"]').textContent(),'01/11/2026 (DOM) - DELTA');assert.equal(await select.locator('option[value="2026-11-19"]').textContent(),'19/11/2026 (QUI) - BRAVO');}assert.equal(await start.inputValue(),'2026-11-01');assert.equal(await end.inputValue(),'2026-11-09');assert.equal(await start.locator('option').count(),30);assert.equal(await page.locator('#ac4-ranking-today').count(),0);await verify();
   // Financial/range assertions below consult November after all of its services ended.
   await page.clock.setFixedTime(new Date('2026-12-01T15:00:00Z'));
-  let result=await setRange('2026-11-12','2026-11-26');assert.equal(result.total,2642600);assert.equal(result.count,57);assert.equal(result.rows,27);
+  let result=await setRange('2026-11-12','2026-11-26');assert.equal(result.total,2660600);assert.equal(result.count,58);assert.equal(result.rows,27);
   const luiz=page.locator('.ranking-table tbody>.ranking-row').filter({has:page.locator('.ranking-person',{hasText:'LUIZ ANTONIO'})});
   assert((await page.locator('.ranking-table tbody>.ranking-row').first().textContent()).includes('LUIZ ANTONIO'));assert.equal(normalize(await luiz.locator('.ranking-total').textContent()),money(296000));assert((await luiz.locator('.ranking-member-meta').textContent()).includes('6 previstos'));
   await luiz.locator('.ranking-person').click();assert.equal(await page.locator('.ranking-services-row:visible [data-included="true"]').count(),6);assert.equal(await page.locator('.ranking-services-row:visible [data-included="false"]').count(),0);
@@ -42,9 +42,9 @@ const money=cents=>normalize(new Intl.NumberFormat('pt-BR',{style:'currency',cur
   await start.selectOption('2026-11-17');await verify();assert.equal(normalize(await luiz.locator('.ranking-total').textContent()),money(79200));assert.equal(await page.locator('.ranking-services-row:visible [data-included="true"]').count(),2);
   result=await setRange('2026-11-12','2026-11-12');assert.equal(result.total,122100);result=await setRange('2026-11-13','2026-11-13');assert.equal(result.total,259000);assert.equal(normalize(await luiz.locator('.ranking-total').textContent()),money(0));
   result=await setRange('2026-11-21','2026-11-21');assert.equal(result.total,199000);assert.equal(result.rows,27);
-  await start.selectOption('2026-11-26');assert.equal(await end.inputValue(),'2026-11-26');result=await verify();assert.equal(result.total,125100);
+  await start.selectOption('2026-11-26');assert.equal(await end.inputValue(),'2026-11-26');result=await verify();assert.equal(result.total,143100);
   await end.selectOption('2026-11-17');assert.equal(await start.inputValue(),'2026-11-17');result=await verify();assert.equal(result.total,172200);
-  await setRange('2026-11-01','2026-11-30');await page.locator('#ac4-ranking-officers').check();result=await verify();assert.equal(result.total,4582000);assert.equal(result.rows,31);await page.locator('#ac4-ranking-seniority').check();await verify();
+  await setRange('2026-11-01','2026-11-30');await page.locator('#ac4-ranking-officers').check();result=await verify();assert.equal(result.total,4574000);assert.equal(result.rows,31);await page.locator('#ac4-ranking-seniority').check();await verify();
   const order=await page.locator('.ranking-table tbody>.ranking-row .ranking-position').allTextContents();assert.deepEqual(order,[...Array.from({length:30},(_,index)=>String(index+1)),'—']);
   for(const width of [320,390,760,761,1280]){
    await page.setViewportSize({width,height:1000});assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
@@ -58,7 +58,7 @@ const money=cents=>normalize(new Intl.NumberFormat('pt-BR',{style:'currency',cur
   await close();await page.locator('#mes-seguinte').click();await open();assert.equal(await start.inputValue(),'2027-01-01');assert.equal(await end.inputValue(),'2027-01-01');await verify();
   await close();await page.locator('#mes-anterior').click();await open();assert.equal(await start.inputValue(),'2026-12-12');assert.equal(await end.inputValue(),'2026-12-31');await verify();
   await close();await page.locator('#mes-anterior').click();await open();assert.equal(await end.inputValue(),'2026-11-30');await verify();await close();
-  await page.locator('[data-ac4-simulation]').click();await page.locator('#ac4-simulation-confirm').click();await open();result=await verify();assert.equal(result.total,4582000);assert.equal(await page.locator('.ranking-person').filter({hasText:'PREVISTO AC4'}).count(),0);await close();
+  await page.locator('[data-ac4-simulation]').click();await page.locator('#ac4-simulation-confirm').click();await open();result=await verify();assert.equal(result.total,4574000);assert.equal(await page.locator('.ranking-person').filter({hasText:'PREVISTO AC4'}).count(),0);await close();
   assert.equal(await page.evaluate(()=>JSON.stringify(window.ServiceCalendar.schedules)),source);
   await page.clock.setFixedTime(new Date('2026-11-10T01:30:00Z'));await page.reload();await open();assert.equal(await end.inputValue(),'2026-11-09');await close();
   await page.clock.setFixedTime(new Date('2026-11-10T03:30:00Z'));await open();assert.equal(await end.inputValue(),'2026-11-10');await close();

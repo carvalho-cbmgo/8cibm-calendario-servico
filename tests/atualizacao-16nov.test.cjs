@@ -16,6 +16,7 @@ const { AC4Finance: finance, ServiceSimulation: simulation, ServiceLookup: looku
 const day = date => data[date.slice(0, 7)].days.find(d => d.day === Number(date.slice(8)));
 const newId = 'ac4-proebom-henrique-2026-11-17-08h';
 const recentIds = new Set([
+  'ac4-operacional-cavalcante-2026-11-26-08h',
   'ac4-operacional-da-silva-2026-11-27-08h', 'ac4-operacional-passos-2026-11-28-08h', 'ac4-operacional-rabelo-2026-11-28-08h', 'ac4-operacional-cavalcante-2026-11-30-08h', 'ac4-operacional-aislan-2026-12-01-08h', 'ac4-operacional-martins-2026-12-02-08h',
   'ac4-operacional-hellysson-2026-11-20-08h', 'ac4-operacional-nikholas-2026-11-23-08h',
   'ac4-operacional-wanderson-2026-11-20-08h', 'ac4-operacional-rabelo-2026-11-20-08h',
@@ -104,9 +105,9 @@ test('HENRIQUE cumpre EAS de 24h em 18 e 23/11, com observação exata, sem gera
   const actual = finance.month(data, '2026-11', 4584000);
   const baseline = finance.month(before, '2026-11', 4584000);
   assert.equal(JSON.stringify(actual.records), JSON.stringify(baseline.records));
-  assert.equal(actual.committedCents, 4582000);
+  assert.equal(actual.committedCents, 4574000);
   assert.equal(actual.executedCents, 1096600);
-  assert.equal(actual.remainingCents, 2000);
+  assert.equal(actual.remainingCents, 10000);
   const plan = simulation.plan(data, '2026-11', 4584000);
   assert.equal(plan.days.get(18).addedServices, 0);
   assert.equal(plan.days.get(23).addedServices, 0);

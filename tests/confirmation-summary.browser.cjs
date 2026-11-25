@@ -59,7 +59,7 @@ const contrast = (text, background) => {
       await page.setViewportSize({ width, height: 1100 });
       await checkSummary();
       assert.equal(await page.locator('.current-finance time').getAttribute('datetime'), '2026-11-19');
-      assert((await page.locator('#ac4-month-summary').textContent()).includes('45.820,00'));
+      assert((await page.locator('#ac4-month-summary').textContent()).includes('45.740,00'));
       for (const day of [1, 25, 26]) {
         if (width < 761) await page.locator('#selecionar-dia').selectOption(String(day));
         const card = page.locator(`.day[data-day="${day}"]`);
@@ -77,8 +77,8 @@ const contrast = (text, background) => {
       await page.locator('#ac4-simulation-confirm').click();
       assert.equal(await page.locator('.is-scale-confirmed .simulation-entry').count(), 0);
       assert.deepEqual(await page.locator('.simulation-entry').evaluateAll(rows => rows.map(row => Number(row.closest('.day').dataset.day))), []);
-      assert((await page.locator('#ac4-month-summary').textContent()).includes('45.820,00'));
-      assert((await page.locator('#ac4-month-summary').textContent()).includes('20,00'));
+      assert((await page.locator('#ac4-month-summary').textContent()).includes('45.740,00'));
+      assert((await page.locator('#ac4-month-summary').textContent()).includes('100,00'));
       await checkSummary();
       await page.locator('[data-ac4-simulation]').click();
       await page.locator('#ac4-simulation-disregard').click();
