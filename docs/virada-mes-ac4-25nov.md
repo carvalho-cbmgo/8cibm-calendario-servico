@@ -6,11 +6,11 @@ Solicitação do usuário em 25/11/2026: exibir o rateio de AC4 nos dias que par
 |---|---|---|---:|---:|---|
 | SD HUGO | 25/11/2026 08h00 | 26/11/2026 08h00 | 24h | R$ 741,00 | 388 / 98752637 |
 | 1º SGT HELLYSSON | 26/11/2026 08h00 | 26/11/2026 20h00 | 12h | R$ 360,00 | 393 / 98894389 |
-| ST DA SILVA | 27/11/2026 08h00 | 28/11/2026 04h00 | 20h | R$ 830,00 | 394 / 98894413 |
+| ST DA SILVA | 27/11/2026 08h00 | 28/11/2026 02h00 | 18h | R$ 740,00 | 394 / 98894413 |
 
 Os quatro AC4 de 25/11 — DIEGO, HUGO, BERTONCELLO e ROBERTO — usam a OS nº 388/SEI 98752637, totalizando 57h/R$ 1.752,00. A OS nº 388/SEI 98727025 de SANTOS em 23/11 permanece preservada. Na SAT de 23–30/11, os dois registros de 25/11 passam para a OS 388; os outros treze continuam na OS 379. Períodos e valores da SAT não foram alterados.
 
-As alterações acrescentam R$ 381,00 para HUGO, R$ 120,00 para HELLYSSON e retiram R$ 165,00 de DA SILVA: aumento líquido de R$ 336,00. Novembro mantém 107 serviços, com R$ 45.910,00 comprometidos, R$ 37.080,00 operacionais, R$ 8.830,00 SAT e saldo planejado de **−R$ 70,00** sobre a cota de R$ 45.840,00. A execução confirmada permanece em R$ 10.966,00; os serviços retificados seguem previstos. Dezembro conserva R$ 1.455,00 comprometidos e R$ 36.545,00 de saldo sobre a cota de R$ 38.000,00.
+As alterações acrescentam R$ 381,00 para HUGO, R$ 120,00 para HELLYSSON e retiram R$ 255,00 de DA SILVA: aumento líquido de R$ 246,00. Novembro mantém 107 serviços, com R$ 45.820,00 comprometidos, R$ 36.990,00 operacionais, R$ 8.830,00 SAT e saldo planejado de **R$ 20,00** sobre a cota de R$ 45.840,00. A execução confirmada permanece em R$ 10.966,00; os serviços retificados seguem previstos. Dezembro conserva R$ 1.455,00 comprometidos e R$ 36.545,00 de saldo sobre a cota de R$ 38.000,00.
 
 Os dias 25, 26 e 27 mantêm seis recursos contínuos de 24h. A simulação de meta seis continua sem reforços adicionais em novembro. A chefia de 27/11 fica pendente de conferência pela regra existente para jornadas parciais; não foi presumida designação para substituir o período descoberto. A confirmação da escala de 25/11 e os demais afastamentos, trocas, cotas e tarifas permanecem preservados.
 

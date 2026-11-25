@@ -13,7 +13,7 @@ test('operação de PICCINI desconsiderada: sem afastamento, dispensa ou observa
 
 test('consulta volta a contar 24/11 e a TS 171 de 25/11; AC4, finanças e chefia preservados',()=>{
  const services=lookup.month(data,'2026-11');for(const date of ['2026-11-24','2026-11-25'])assert.equal(services.filter(r=>r.member==='SD PICCINI'&&r.date===date&&r.type==='ordinary').length,1);assert(!services.some(r=>r.member==='SD PICCINI'&&r.date==='2026-11-20'));
- const summary=finance.month(data,'2026-11',4584000);assert.equal(summary.records.length,107);assert.equal(summary.committedCents,4591000);assert.equal(summary.executedCents,1096600);assert.equal(summary.remainingCents,-7000);assert.equal(chief.select(day(24)).assignments[0].name,'ST PASSOS');assert.equal(simulation.coverage(day(24),'2026-11-24').resources,6);assert.deepEqual(day(24).coverage,['6 recursos de 24h','Meta de 6 recursos']);
+ const summary=finance.month(data,'2026-11',4584000);assert.equal(summary.records.length,107);assert.equal(summary.committedCents,4582000);assert.equal(summary.executedCents,1096600);assert.equal(summary.remainingCents,2000);assert.equal(chief.select(day(24)).assignments[0].name,'ST PASSOS');assert.equal(simulation.coverage(day(24),'2026-11-24').resources,6);assert.deepEqual(day(24).coverage,['6 recursos de 24h','Meta de 6 recursos']);
 });
 
 test('retorno de PICCINI preserva cobertura e regressão de reforço; confirmação exclui 24/11 da simulação',()=>{
