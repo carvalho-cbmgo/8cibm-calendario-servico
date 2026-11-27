@@ -36,7 +36,7 @@ test('meses anteriores cadastrados usam AC4 canônicos, sem cancelados, revisõe
 
 test('dezembro e janeiro usam o calendário de novembro/dezembro sem somar duas vezes o consolidado',()=>{
  const december=rank(4,{},data,'2026-12'),november=rank(0);assert.equal(december.historyCents,november.currentCents+17728600);assert.deepEqual(plain(december.historyPeriods),['2026-11','2026-10','2026-09','2026-08']);assert.equal(december.rows.find(p=>p.member==='2º SGT LUIZ ANTONIO').history[0].amountCents,november.rows.find(p=>p.member==='2º SGT LUIZ ANTONIO').currentCents);
- const january=rank(1,{endDate:'2027-01-31'},data,'2027-01');assert.equal(january.historyCents,145500);assert.deepEqual(plain(ranking.periods('2027-01',4)),['2026-12','2026-11','2026-10','2026-09']);
+ const january=rank(1,{endDate:'2027-01-31'},data,'2027-01');assert.equal(january.historyCents,224700);assert.deepEqual(plain(ranking.periods('2027-01',4)),['2026-12','2026-11','2026-10','2026-09']);
 });
 
 test('inclui militares somente históricos, respeita oficiais/antiguidade e não inventa execução ou serviços',()=>{

@@ -83,7 +83,7 @@ const financialSnapshot=()=>Object.keys(window.ServiceCalendar.schedules).map(pe
     await page.locator('#ac4-ranking-officers').uncheck();await close();await open();assert(await filter.isChecked());
     await checkMembers(['1º SGT HELLYSSON','2º SGT WANDERSON','CB RABELO']);
     await close();await page.clock.setFixedTime(new Date('2026-12-01T23:00:00Z'));await page.locator('#mes-seguinte').click();await open();assert(await filter.isChecked());
-    await checkMembers(['ST AISLAN','SD CAVALCANTE']);await checkTotals();await setRange('2026-12-03','2026-12-03');assert.equal((await members()).length,0);assert(await page.locator('.ranking-empty').isVisible());assert(await page.locator('#ac4-ranking-share').isDisabled());
+    await checkMembers(['ST AISLAN','SD CAVALCANTE']);await checkTotals();await setRange('2026-12-05','2026-12-05');assert.equal((await members()).length,0);assert(await page.locator('.ranking-empty').isVisible());assert(await page.locator('#ac4-ranking-share').isDisabled());
     await page.clock.setFixedTime(new Date('2026-12-07T15:00:00Z'));await setRange('2026-12-01','2026-12-31');await checkMembers(['SD CAVALCANTE','ST AISLAN','SD MARTINS','2º SGT LUIZ ANTONIO']);await checkTotals();
     await close();await page.locator('#mes-seguinte').click();await open();assert(await filter.isChecked());
     assert.equal((await members()).length,0);assert((await page.locator('.ranking-empty').textContent()).includes('diferente de zero'));assert(await page.locator('#ac4-ranking-share').isDisabled());

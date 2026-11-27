@@ -29,18 +29,20 @@ const documents=[
  ['172','98563020',24,[['2026-12-06','SD SANTOS','SD PICCINI','2026-12-11'],['2026-12-11','SD PICCINI','SD SANTOS','2026-12-06']]],
  ['173','98563378',24,[['2026-12-14','SD SANTOS','SD PICCINI','2026-12-19'],['2026-12-19','SD PICCINI','SD SANTOS','2026-12-14']]],
  ['174','98563989',24,[['2026-12-22','SD SANTOS','SD PICCINI','2026-12-27'],['2026-12-27','SD PICCINI','SD SANTOS','2026-12-22']]],
- ['175','98565849',24,[['2026-12-30','SD SANTOS','SD PICCINI','2027-01-04'],['2027-01-04','SD PICCINI','SD SANTOS','2026-12-30']]]
+ ['175','98565849',24,[['2026-12-30','SD SANTOS','SD PICCINI','2027-01-04'],['2027-01-04','SD PICCINI','SD SANTOS','2026-12-30']]],
+ ['176','98654384',24,[['2026-12-13','ST DA SILVA','3º SGT JORGE','2026-12-20'],['2026-12-20','3º SGT JORGE','ST DA SILVA','2026-12-13']]],
+ ['177','98760346',24,[['2026-12-28','ST PASSOS','ST DA SILVA','2027-01-24'],['2027-01-24','ST DA SILVA','ST PASSOS','2026-12-28']]]
 ];
 const matches=(badge,number,sei,kind='ts')=>badge.kind===kind&&String(badge.troca?.numero).split(/\s*\/\s*/).includes(number)&&String(badge.troca?.sei).includes(sei);
 
-test('22 autorizações ativas correspondem a 39 movimentos, com 153/154 unificadas e TS 157 removida',()=>{
+test('24 autorizações ativas correspondem a 43 movimentos, com 153/154 unificadas e TS 157 removida',()=>{
  let count=0;
  for(const [number,sei,hours,legs] of documents)for(const [date,name,replaced,related,kind='ts'] of legs){
   const members=day(date).members.filter(member=>member.name===name);assert.equal(members.length,1,`${number} ${date} ${name}`);
   const badges=members[0].badges.filter(badge=>matches(badge,number,sei,kind));assert.equal(badges.length,1,`${number} ${date}`);
   assert.equal(badges[0].troca.substituido,replaced);assert.equal(badges[0].troca.data_servico_substituido,related);assert.equal(badges[0].hours||members[0].serviceHours||24,hours);count++;
  }
- assert.equal(documents.length,21);assert.equal(count,39);const hugo=day('2026-11-06').members.filter(member=>member.name==='SD HUGO');assert.equal(hugo.length,1);assert(hugo[0].badges.some(badge=>matches(badge,'154','97518560')));
+ assert.equal(documents.length,23);assert.equal(count,43);const hugo=day('2026-11-06').members.filter(member=>member.name==='SD HUGO');assert.equal(hugo.length,1);assert(hugo[0].badges.some(badge=>matches(badge,'154','97518560')));
 });
 
 test('TS 170 usa 21 e 22/11/2026, jornadas únicas de 24h e antiguidade própria, preservando chefia, cobertura e AC4',()=>{

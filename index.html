@@ -653,6 +653,7 @@ dialog.simulation-dialog{width:min(620px,calc(100% - 24px));max-height:calc(100d
 .daily-finance .daily-finance-breakdown .simulation-share{grid-column:3;justify-self:start;text-align:left}
 .month-turn{min-width:0;padding:12px;border-top:2px solid #b49ad8;background:#f7f3fc;color:#49365f;font-size:13px;line-height:1.5;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
 .month-turn h3{margin:0 0 5px;font-size:15px;color:#663c91}.month-turn p{margin:5px 0}.month-turn-list{list-style:none;padding:0;margin:8px 0}
+.month-turn-heading{display:flex;align-items:center;gap:8px}.month-turn-heading h3{margin:0}.month-turn-body{padding-top:7px}.month-turn-body[hidden]{display:none}
 .month-turn-service{min-width:0;padding:10px 0;border-top:1px solid #ded2ee}.month-turn-service-name{display:block;font-weight:800}.month-turn-period,.month-turn-document{font-size:12px;color:#655576}
 .month-turn-parts{display:grid;gap:6px;margin:8px 0}.month-turn-part{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 8px;padding:7px;border:1px solid #e0d6ed;border-radius:6px;background:#fff}
 .month-turn-part.is-current{border-color:#9a73c3;background:#eee4fa}.month-turn-amount{white-space:nowrap;font-weight:800}.month-turn-part small{grid-column:1/-1;color:#655576}
@@ -660,6 +661,7 @@ dialog.simulation-dialog{width:min(620px,calc(100% - 24px));max-height:calc(100d
 .day-finances{min-width:0}
 @media screen and (max-width:760px){.month-turn{font-size:14px}.month-turn-period,.month-turn-document{font-size:13px}}
 @media print{.month-turn{font-size:8px;background:#fff;break-inside:avoid}.month-turn h3{font-size:10px}.month-turn-period,.month-turn-document{font-size:8px}}
+@media print{.month-turn-toggle{display:none}}
 @media screen and (max-width:760px){.daily-finance-toggle{min-height:44px}}
 .day-notes-caption{display:block}
 .day-notes-arrow{font-size:1.15em;font-weight:750;line-height:1}
@@ -805,15 +807,22 @@ html.vacancy-dialog-open,html.vacancy-dialog-open body{overflow:hidden;overscrol
 .service-lookup-person{margin-top:14px;padding-top:10px;border-top:1px solid #dce6f1;min-width:0}
 .service-lookup-person h3{margin:0;font-size:16px;overflow-wrap:anywhere}
 .service-lookup-person .ranking-service-list{margin-top:8px}
-.service-lookup-dialog .ranking-service-top{align-items:center;flex-wrap:nowrap;gap:8px;white-space:nowrap}
-.service-lookup-date{display:inline-flex;align-items:center;flex:0 0 auto;gap:5px;min-width:0;white-space:nowrap;font-variant-numeric:tabular-nums}
-.service-lookup-weekday{flex:0 0 auto;padding:2px 3px;border-radius:4px;background:#edf2f7;color:#62758a;font-size:.7em;font-weight:800;letter-spacing:.04em;line-height:1.2}
-.service-lookup-date>.day-date{flex:0 0 auto}
-.service-lookup-dialog .ranking-service-cost{flex:0 0 auto;margin-left:auto;font-size:13px}
+.service-lookup-counts{display:grid;gap:2px;margin:5px 0 10px;font-variant-numeric:tabular-nums}.service-lookup-counts p{margin:0}.service-lookup-ac4-total{color:#663399;font-weight:700}
+.service-lookup-dialog .ranking-service-top{display:grid;grid-template-columns:minmax(0,1fr) max-content;align-items:stretch;gap:8px;white-space:nowrap}
+.service-lookup-date{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:22px 20px;align-items:center;gap:0 8px;min-width:0;white-space:nowrap;font-variant-numeric:tabular-nums}
+.service-lookup-date time{grid-column:1;grid-row:1;font-size:14px;font-weight:750;justify-self:end}
+.service-lookup-weekday{grid-column:1;grid-row:2;justify-self:end;align-self:stretch;display:flex;align-items:center;justify-content:center;min-width:34px;padding:1px 5px;border-radius:4px;background:#edf2f7;color:#62758a;font-size:10px;font-weight:800;letter-spacing:.04em;line-height:1.2}
+.service-lookup-date>.day-date{grid-column:2;grid-row:1 / 3;align-self:stretch;display:flex;min-width:0}
+.service-lookup-date .ala-badge{display:grid;align-content:center;justify-items:center;box-sizing:border-box;height:100%;border-radius:7px}
+.service-lookup-kind{display:grid;grid-template-rows:1fr 1fr;min-width:80px;min-height:42px;font-variant-numeric:tabular-nums;text-align:center}
+.service-lookup-type{display:flex;align-items:center;justify-content:center;box-sizing:border-box;width:100%;padding:1px 6px;border:1px solid #d3b9eb;border-radius:6px 6px 0 0;background:#f1e5fc;color:#641caf;font-size:12px;font-weight:800;line-height:1.2}
+.service-lookup-dialog .ranking-service-cost{display:flex;align-items:center;justify-content:center;box-sizing:border-box;width:100%;margin:0;padding:1px 5px;border:1px solid #d3b9eb;border-top:0;border-radius:0 0 6px 6px;background:#fff;color:#641caf;font-size:12px;font-weight:750;line-height:1.2;white-space:nowrap}
+.service-lookup-kind.is-ordinary{grid-template-rows:1fr}.service-lookup-kind.is-ordinary .service-lookup-type{height:100%;border-color:#c5d7e7;border-radius:6px;background:#edf4fa;color:#365570;font-size:11px}
+.service-lookup-function{margin:7px 0 3px;font-weight:650;color:#52667c}.service-lookup-status{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
 .service-lookup-period{overflow-wrap:anywhere}
 html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscroll-behavior:none}
 @media screen and (max-width:760px){.filters{grid-template-columns:repeat(5,minmax(0,1fr)) 44px 44px}.filters #service-lookup-button{padding:4px}.service-lookup-body{padding:12px;font-size:15px}}
-@media screen and (max-width:400px){.service-lookup-dialog .ranking-service-top{gap:5px;font-size:13px}.service-lookup-date{gap:4px}.service-lookup-weekday{font-size:9px}.service-lookup-dialog .ranking-service-cost{font-size:12px}}
+@media screen and (max-width:400px){.service-lookup-dialog .ranking-service-top{gap:5px}.service-lookup-date{column-gap:5px}.service-lookup-date time{font-size:12px}.service-lookup-weekday{font-size:9px}.service-lookup-date .ala-badge{padding:4px 7px;font-size:10px}.service-lookup-kind{min-width:76px}.service-lookup-type{font-size:11px}.service-lookup-dialog .ranking-service-cost{font-size:11px}}
 @media screen and (max-width:350px){.filters [data-filter]{font-size:10px}}
 </style></head><body><main>
 <p class="page-copyright">© 2026 ASP OF CARVALHO. Todos os direitos reservados.</p>
@@ -7287,11 +7296,32 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
                 "endDate": "2026-12-01"
               }
             ]
+          },
+          {
+            "name": "2º SGT LUIZ ANTONIO",
+            "ord": 16,
+            "badges": [],
+            "notes": [],
+            "events": [
+              {
+                "serviceId": "ac4-operacional-luiz-antonio-2026-12-01-20h",
+                "mode": "OPERACIONAL/SOP",
+                "start": "20h00",
+                "end": "08h00",
+                "nextDay": true,
+                "hours": 12,
+                "observation": "REFORÇO OPERACIONAL",
+                "document": "OS a definir (não informada)",
+                "status": "planned",
+                "startDate": "2026-12-01",
+                "endDate": "2026-12-02"
+              }
+            ]
           }
         ],
         "coverage": [
-          "5 recursos de 24h",
-          "Faltam 1 recurso"
+          "6 recursos de 24h",
+          "Meta de 6 recursos"
         ],
         "alerts": []
       },
@@ -7485,6 +7515,27 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
             ],
             "events": [],
             "ord": 27
+          },
+          {
+            "name": "2º SGT LUIZ ANTONIO",
+            "ord": 16,
+            "badges": [],
+            "notes": [],
+            "events": [
+              {
+                "serviceId": "ac4-operacional-luiz-antonio-2026-12-03-20h",
+                "mode": "OPERACIONAL/SOP",
+                "start": "20h00",
+                "end": "08h00",
+                "nextDay": true,
+                "hours": 12,
+                "observation": "REFORÇO OPERACIONAL",
+                "document": "OS a definir (não informada)",
+                "status": "planned",
+                "startDate": "2026-12-03",
+                "endDate": "2026-12-04"
+              }
+            ]
           }
         ],
         "coverage": [
@@ -8382,18 +8433,26 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
             "ord": 14
           },
           {
-            "name": "3º SGT JORGE",
+            "name": "ST DA SILVA",
             "badges": [
               {
-                "kind": "ord",
-                "text": "ORDINÁRIO"
+                "kind": "ts",
+                "text": "TS · JORGE",
+                "hours": 24,
+                "troca": {
+                  "numero": "176",
+                  "sei": "98654384",
+                  "data": "2026-12-13",
+                  "substituido": "3º SGT JORGE",
+                  "data_servico_substituido": "2026-12-20"
+                }
               }
             ],
             "notes": [
-              "Ordinário"
+              "TS nº 176 (SEI 98654384). Substitui 3º SGT JORGE. 24h."
             ],
             "events": [],
-            "ord": 19
+            "ord": 5
           },
           {
             "name": "SD CAVALCANTE",
@@ -8944,18 +9003,26 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
         "ala": "ALPHA",
         "members": [
           {
-            "name": "ST DA SILVA",
+            "name": "3º SGT JORGE",
             "badges": [
               {
-                "kind": "ord",
-                "text": "ORDINÁRIO"
+                "kind": "ts",
+                "text": "TS · DA SILVA",
+                "hours": 24,
+                "troca": {
+                  "numero": "176",
+                  "sei": "98654384",
+                  "data": "2026-12-20",
+                  "substituido": "ST DA SILVA",
+                  "data_servico_substituido": "2026-12-13"
+                }
               }
             ],
             "notes": [
-              "Ordinário"
+              "TS nº 176 (SEI 98654384). Substitui ST DA SILVA. 24h."
             ],
             "events": [],
-            "ord": 5
+            "ord": 19
           },
           {
             "name": "ST AISLAN",
@@ -9634,18 +9701,26 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
         "ala": "ALPHA",
         "members": [
           {
-            "name": "ST DA SILVA",
+            "name": "ST PASSOS",
             "badges": [
               {
-                "kind": "ord",
-                "text": "ORDINÁRIO"
+                "kind": "ts",
+                "text": "TS · DA SILVA",
+                "hours": 24,
+                "troca": {
+                  "numero": "177",
+                  "sei": "98760346",
+                  "data": "2026-12-28",
+                  "substituido": "ST DA SILVA",
+                  "data_servico_substituido": "2027-01-24"
+                }
               }
             ],
             "notes": [
-              "Ordinário"
+              "TS nº 177 (SEI 98760346). Substitui ST DA SILVA. 24h."
             ],
             "events": [],
-            "ord": 5
+            "ord": 6
           },
           {
             "name": "ST AISLAN",
@@ -11955,18 +12030,26 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
         "ala": "DELTA",
         "members": [
           {
-            "name": "ST PASSOS",
+            "name": "ST DA SILVA",
             "badges": [
               {
-                "kind": "ord",
-                "text": "ORDINÁRIO"
+                "kind": "ts",
+                "text": "TS · PASSOS",
+                "hours": 24,
+                "troca": {
+                  "numero": "177",
+                  "sei": "98760346",
+                  "data": "2027-01-24",
+                  "substituido": "ST PASSOS",
+                  "data_servico_substituido": "2026-12-28"
+                }
               }
             ],
             "notes": [
-              "Ordinário"
+              "TS nº 177 (SEI 98760346). Substitui ST PASSOS. 24h."
             ],
             "events": [],
-            "ord": 6
+            "ord": 5
           },
           {
             "name": "1º SGT HAMILTON",
@@ -13782,7 +13865,8 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
       section.dataset.lookupMember=person.key;rankingIdentification(heading,person.name);if(person.rg&&!directory?.has(person.name))heading.append(` · RG ${person.rg}`);section.append(heading);
       const ac4=services.filter(record=>record.type==='ac4'),total=ac4.reduce((sum,record)=>sum+(record.commitmentCents||0),0);
       const ordinaryCount=services.filter(record=>record.type==='ordinary').length;
-      section.append(element('p','ranking-service-data',`${ordinaryCount} ${ordinaryCount===1?'serviço ORDINÁRIO':'serviços ORDINÁRIOS'} · ${ac4.length} AC4 · ${money(total)}${ac4.some(record=>!record.valid)?' · Há valor a conferir':''}`));
+      const counts=element('div','service-lookup-counts');
+      counts.append(element('p','service-lookup-ordinary-total',`${ordinaryCount} ${ordinaryCount===1?'serviço ORDINÁRIO':'serviços ORDINÁRIOS'}`),element('p','service-lookup-ac4-total',`${ac4.length} AC4 = ${money(total)}${ac4.some(record=>!record.valid)?' · Há valor a conferir':''}`));section.append(counts);
       if(!services.length)section.append(element('p','ranking-empty',`Nenhum serviço cadastrado para este militar em ${periodLabel()}.`));
       else{
         const list=element('ol','ranking-service-list');
@@ -13790,13 +13874,20 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
           const item=element('li','ranking-service-item'),top=element('div','ranking-service-top'),date=element('time','',rankingDate(record.date));date.dateTime=record.date;
           const stamp=element('span','service-lookup-date'),info=serviceDateInfo(record.date),ala=element('span','day-date');ala.append(alaBadge(info.ala));
           stamp.append(date,' ',element('span','service-lookup-weekday',info.weekday),' ',ala);
-          item.dataset.lookupType=record.type;item.dataset.lookupDate=record.date;top.append(stamp);
-          if(record.type==='ac4')top.append(element('span','ranking-service-cost',record.valid?money(record.commitmentCents):'Valor a conferir'));
+          const hours=record.minutes===null||record.minutes===undefined?'a conferir':rankingDuration(record.minutes),kind=element('span',`service-lookup-kind${record.type==='ordinary'?' is-ordinary':''}`),type=element('span','service-lookup-type',record.type==='ordinary'?'ORDINÁRIO':`AC4 ${hours}`);
+          item.dataset.lookupType=record.type;item.dataset.lookupDate=record.date;kind.append(type);top.append(stamp,kind);
+          if(record.type==='ac4'){
+            const state=record.status==='executed'?'Execução confirmada':'Previsto';
+            type.title=`${state} · ${record.event.mode||'AC4'}`;type.setAttribute('aria-label',`${type.textContent} · ${state}`);
+            kind.append(element('span','ranking-service-cost',record.valid?money(record.commitmentCents):'Valor a conferir'));
+          }
           item.append(top);
-          const hours=record.minutes===null||record.minutes===undefined?'Carga horária a conferir':`${record.minutes/60}h`,area=record.area==='sat'?`SAT${record.activity?` · ${record.activity}`:''}`:`Ala ${record.ala||'não informada'}`;
-          item.append(element('p','ranking-service-data',`${record.type==='ordinary'?'ORDINÁRIO':'AC4'} · ${hours} · ${area}${record.labels.length?` · ${record.labels.join(' · ')}`:''}`));
+          const source=schedules[record.sourcePeriod||record.date.slice(0,7)]?.days.find(day=>day.day===(record.sourceDay||Number(record.date.slice(8)))),members=record.area==='sat'?source?.sat?.members:source?.members,member=members?.find(member=>member.name===record.member);
+          const roles=[record.event?.funcao||record.event?.function||record.event?.role||member?.funcao||member?.function,...record.labels,record.area==='sat'?`SAT${record.activity?` · ${record.activity}`:''}`:''].filter(Boolean);
+          if(source&&record.type==='ordinary'&&chiefFor(source).assignments.some(assigned=>assigned.name===record.member))roles.unshift('ACA');
+          if(roles.length)item.append(element('p','service-lookup-function',[...new Set(roles)].join(' · ')));
           item.append(element('p','ranking-service-time service-lookup-period service-lookup-start',record.start&&record.startDate?`Início: ${rankingDate(record.startDate)} às ${record.start}`:'Início: a conferir.'),element('p','ranking-service-time service-lookup-period service-lookup-end',record.end&&record.endDate?`Término: ${rankingDate(record.endDate)} às ${record.end}`:'Término: a conferir.'));
-          if(record.type==='ac4')item.append(element('span',`ranking-state${record.status==='executed'?' ranking-state-confirmed':''}`,record.status==='executed'?'Execução confirmada':'Previsto'));
+          if(record.type==='ac4')item.append(element('span',`ranking-state service-lookup-status${record.status==='executed'?' ranking-state-confirmed':''}`,record.status==='executed'?'Execução confirmada':'Previsto'));
           list.append(item);
         }
         section.append(list);
@@ -13894,9 +13985,12 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
   }
   function makeMonthTurn(day){
     const date=`${period}-${String(day.day).padStart(2,'0')}`,services=finance.monthTurn(financialSummary,date);if(!services.length)return null;
-    const section=element('section','month-turn'),heading=element('h3','','Virada de mês'),list=element('ol','month-turn-list');let minutes=0,cents=0;
+    const section=element('section','month-turn'),heading=element('h3','','Virada de mês'),header=element('div','month-turn-heading'),toggle=element('button','area-toggle month-turn-toggle'),body=element('div','month-turn-body'),list=element('ol','month-turn-list');let minutes=0,cents=0;
     section.dataset.monthTurn=date;heading.id=`month-turn-${date}`;section.setAttribute('aria-labelledby',heading.id);
-    section.append(heading,element('p','','Horas e valores contabilizados em cada cota mensal, por serviço de AC4.'));
+    body.id=`month-turn-body-${date}`;body.hidden=true;toggle.type='button';toggle.setAttribute('aria-controls',body.id);toggle.setAttribute('aria-expanded','false');toggle.setAttribute('aria-label','Expandir Virada de mês');toggle.title=toggle.getAttribute('aria-label');
+    toggle.insertAdjacentHTML('beforeend','<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m9 6 6 6-6 6"/></svg>');
+    toggle.addEventListener('click',()=>{const expanded=toggle.getAttribute('aria-expanded')!=='true';toggle.setAttribute('aria-expanded',String(expanded));toggle.setAttribute('aria-label',`${expanded?'Recolher':'Expandir'} Virada de mês`);toggle.title=toggle.getAttribute('aria-label');body.hidden=!expanded;});
+    header.append(toggle,heading);section.append(header,body);body.append(element('p','','Horas e valores contabilizados em cada cota mensal, por serviço de AC4.'));
     for(const service of services){
       const item=element('li','month-turn-service'),parts=element('div','month-turn-parts'),mode=service.category==='sat'?`SAT${service.event.activity?` · ${service.event.activity}`:''}`:'OPERACIONAL';item.dataset.serviceId=service.event.serviceId||service.key;
       item.append(element('strong','month-turn-service-name',`${service.member} · ${mode}`),element('p','month-turn-period',`${rankingDate(service.startDate)} ${service.start} a ${rankingDate(service.endDate)} ${service.end}`));
@@ -13908,7 +14002,7 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
       }
       item.append(parts,element('p','month-turn-service-total',`Total do serviço: ${rankingDuration(service.minutes)} · ${money(service.costCents)}`));list.append(item);
     }
-    section.append(list,element('p','month-turn-total',`Total da virada nesta cota: ${rankingDuration(minutes)} · ${money(cents)}`),element('p','month-turn-period','Valores dos serviços cadastrados; execução e pagamento não presumidos.'));return section;
+    body.append(list,element('p','month-turn-total',`Total da virada nesta cota: ${rankingDuration(minutes)} · ${money(cents)}`),element('p','month-turn-period','Valores dos serviços cadastrados; execução e pagamento não presumidos.'));return section;
   }
   function makeDailyFinance(day){
     const data=financialSummary.daily.get(`${period}-${String(day.day).padStart(2,'0')}`),section=element('section','daily-finance');section.setAttribute('aria-label',`Controle da cota AC4 do dia ${day.day}`);

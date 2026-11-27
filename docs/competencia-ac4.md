@@ -19,9 +19,9 @@ A noite mantém a tarifa correspondente ao dia em que começou, inclusive após 
 | Competência | Cota | Comprometido no planejamento | Saldo planejado |
 |---|---:|---:|---:|
 | Novembro/2026 | R$ 45.840,00 | R$ 45.830,00 | R$ 10,00 |
-| Dezembro/2026 | R$ 38.000,00 | R$ 1.455,00 | R$ 36.545,00 |
+| Dezembro/2026 | R$ 38.000,00 | R$ 2.247,00 | R$ 35.753,00 |
 
-Esses saldos incluem todos os AC4 cadastrados atribuídos às competências, previstos ou com execução confirmada. Não representam pagamento nem apenas serviços já encerrados. O valor conjunto de novembro e dezembro é R$ 47.285,00. A execução confirmada permanece em R$ 10.966,00 em novembro e zero em dezembro. A divergência de ST DA SILVA em 19/11 não foi alterada: o usuário confirmou manter o cadastro de 12h/08h–20h/R$ 360,00.
+Esses saldos incluem todos os AC4 cadastrados atribuídos às competências, previstos ou com execução confirmada. Não representam pagamento nem apenas serviços já encerrados. O valor conjunto de novembro e dezembro é R$ 48.077,00. A execução confirmada permanece em R$ 10.966,00 em novembro e zero em dezembro. A divergência de ST DA SILVA em 19/11 não foi alterada: o usuário confirmou manter o cadastro de 12h/08h–20h/R$ 360,00.
 
 ## Implementação e apresentação
 

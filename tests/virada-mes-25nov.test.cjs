@@ -18,12 +18,12 @@ test('apenas períodos/documentos solicitados e coberturas derivadas mudam; toda
  Object.assign(find(before,25,changes[0][0]),{end:'20h00',nextDay:false,hours:12,endDate:'2026-11-25',document:'OS a definir (não informada)'});
  for(const e of day(before,25).sat.members.flatMap(m=>m.events))e.document='OS nº 379 (SEI 98570810)';
  Object.assign(find(before,26,changes[1][0]),{end:'16h00',hours:8});Object.assign(find(before,27,changes[2][0]),{end:'08h00',hours:24,nextDay:true,endDate:'2026-11-28'});day(before,25).coverage=['5 recursos de 24h','Faltam 1 recurso'];day(before,27).coverage=['7 recursos de 24h','Meta de 6 recursos'];
- assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'),'051654f4f24f9ef9491f43cbbcbdaaa0d10d0cacc4d7874a26a367a2e79224b4');
+ assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'),'a947fed00f54057f673ad6ce03f0c88dd66853b33b0e661d2f462c22ed75d49b');
  const after=nov(),old=f.month(before,'2026-11',4584000);assert.equal(after.committedCents-old.committedCents,25600);assert.equal(after.executedCents,old.executedCents);assert.equal(after.satCents,old.satCents);for(const n of [25,26,27]){assert.deepEqual(day(data,n).confirmation,day(before,n).confirmation);assert.equal(sim.coverage(day(data,n),`2026-11-${n}`).resources,6);}assert.equal(sim.plan(data,'2026-11',4584000).addedServices,0);
 });
 
 test('saldos são recalculados: novembro R$45.830 e saldo R$10; dezembro conserva R$1.455 e R$36.545',()=>{
- const n=nov(),d=f.month(data,'2026-12',3800000);assert.equal(n.records.length,108);assert.equal(n.invalidCount,0);assert.equal(n.duplicateCount,0);assert.equal(n.committedCents,4583000);assert.equal(n.operationalCents,3700000);assert.equal(n.satCents,883000);assert.equal(n.forecastCents,3486400);assert.equal(n.executedCents,1096600);assert.equal(n.remainingCents,1000);assert.equal(d.committedCents,145500);assert.equal(d.remainingCents,3654500);
+ const n=nov(),d=f.month(data,'2026-12',3800000);assert.equal(n.records.length,108);assert.equal(n.invalidCount,0);assert.equal(n.duplicateCount,0);assert.equal(n.committedCents,4583000);assert.equal(n.operationalCents,3700000);assert.equal(n.satCents,883000);assert.equal(n.forecastCents,3486400);assert.equal(n.executedCents,1096600);assert.equal(n.remainingCents,1000);assert.equal(d.committedCents,224700);assert.equal(d.remainingCents,3575300);
  const rank=asOf=>f.ranking(n,'2026-11-25',true,{startDate:'2026-11-25',endDate:'2026-11-26',asOf}).rows.find(r=>r.member==='SD HUGO');assert.equal(rank('2026-11-26T07:59:59-03:00'),undefined);assert.equal(rank('2026-11-26T08:00:00-03:00').totalCents,74100);
 });
 

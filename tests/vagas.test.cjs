@@ -50,9 +50,9 @@ test('meta configurada altera a mensagem sem modificar os serviços cadastrados'
 test('cancelamento das férias restaura os oito plantões da Alpha, a chefia e a cobertura',()=>{
  const dates=['2026-12-04','2026-12-08','2026-12-12','2026-12-16','2026-12-20','2026-12-24','2026-12-28','2027-01-01'];
  for(const date of dates){
-  const day=schedules[date.slice(0,7)].days.find(day=>day.day===Number(date.slice(8))),member=day.members.find(member=>member.name==='ST DA SILVA');
-  assert.equal(day.ala,'ALPHA');assert.equal(member.ord,5);assert(!member.afastamento);assert.equal(member.badges.length,1);assert.equal(member.badges[0].kind,'ord');assert.equal(member.events.length,0);
-  assert.equal(simulation.coverage(day,date).resources,6);assert.equal(chief.select(day).assignments[0].name,'ST DA SILVA');assert.equal(simulation.plan(schedules,date.slice(0,7)).days.get(day.day).addedServices,0);
+  const day=schedules[date.slice(0,7)].days.find(day=>day.day===Number(date.slice(8))),expected=date==='2026-12-20'?'3º SGT JORGE':date==='2026-12-28'?'ST PASSOS':'ST DA SILVA',member=day.members.find(member=>member.name===expected);
+  assert.equal(day.ala,'ALPHA');assert.equal(member.ord,expected==='ST DA SILVA'?5:expected==='ST PASSOS'?6:19);assert(!member.afastamento);assert.equal(member.badges.length,1);assert.equal(member.badges[0].kind,expected==='ST DA SILVA'?'ord':'ts');assert.equal(member.events.length,0);
+  assert.equal(simulation.coverage(day,date).resources,6);assert.equal(chief.select(day).assignments[0].name,date==='2026-12-20'?'ST AISLAN':date==='2026-12-28'?'ST PASSOS':'ST DA SILVA');assert.equal(simulation.plan(schedules,date.slice(0,7)).days.get(day.day).addedServices,0);
  }
  for(const month of Object.values(schedules))for(const day of month.days)assert(!day.members.some(member=>member.name==='ST DA SILVA'&&member.afastamento));
 });

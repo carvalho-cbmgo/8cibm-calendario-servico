@@ -65,7 +65,7 @@ test('HELLYSSON tem um único PROEBOM previsto de 12h em 24/11, 08h–20h, R$ 36
 
 test('HELLYSSON designado para cobertura complementa o noturno, preservando chefia e reforços de 4 a 8 recursos', () => {
   const before = previous(), source = JSON.stringify(data);
-  assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'), '1b72983a0bc262968f611a1b177696723037f389b2d5a9547a0a18a474b50567');
+  assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'), '10fa93ffbfc07c0a2f5d0541c87189833b53c32224b6c58dd14d172fd283ccfb');
   assert.equal(simulation.coverage(day(data), '2026-11-24').resources, 6);
   assert.equal(simulation.coverage(day(before), '2026-11-24').resources, 5);
   assert.equal(JSON.stringify(chief.select(day(data))), JSON.stringify(chief.select(day(before))));

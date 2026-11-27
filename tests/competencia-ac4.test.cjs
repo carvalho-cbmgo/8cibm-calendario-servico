@@ -49,7 +49,7 @@ test('consulta mantém jornada integral na data inicial, com uma única entrada,
 
 test('saldos publicados: novembro -R$70 e dezembro R$36.545; cadastro, cotas e execução confirmada preservados',()=>{
  const data=read('calendar-data'),before=JSON.stringify(data),quotas=read('ac4-financial-config').monthlyQuotaCents,nov=f.month(data,'2026-11',quotas['2026-11']),dec=f.month(data,'2026-12',quotas['2026-12']);
- assert.equal(nov.quotaCents,4584000);assert.equal(nov.committedCents,4583000);assert.equal(nov.remainingCents,1000);assert.equal(nov.executedCents,1096600);assert.equal(dec.quotaCents,3800000);assert.equal(dec.committedCents,145500);assert.equal(dec.remainingCents,3654500);assert.equal(dec.executedCents,0);assert.equal(nov.committedCents+dec.committedCents,4608500+120000);
+ assert.equal(nov.quotaCents,4584000);assert.equal(nov.committedCents,4583000);assert.equal(nov.remainingCents,1000);assert.equal(nov.executedCents,1096600);assert.equal(dec.quotaCents,3800000);assert.equal(dec.committedCents,224700);assert.equal(dec.remainingCents,3575300);assert.equal(dec.executedCents,0);assert.equal(nov.committedCents+dec.committedCents,4687700+120000);
  const id='ac4-operacional-cavalcante-2026-11-30-08h',a=nov.records.find(r=>r.event.serviceId===id),b=dec.records.find(r=>r.event.serviceId===id);assert.equal(a.costCents,48600);assert.equal(b.costCents,25500);assert.equal(f.documentInfo(b.event).number,'397');assert.equal(b.event.hours,24);
  const daSilva=nov.records.find(r=>r.member==='ST DA SILVA'&&r.startDate==='2026-11-19');assert.equal(daSilva.minutes,720);assert.equal(daSilva.costCents,36000);assert.equal(JSON.stringify(data),before);
 });
