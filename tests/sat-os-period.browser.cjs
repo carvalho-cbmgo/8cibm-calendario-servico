@@ -231,12 +231,15 @@ function financeSnapshot() {
     });
     await openSAT(page);
     await setRange(page, '2026-11-30', '2026-12-01');
-    assert.equal((await tableRows(page)).length, 4);
+    assert.equal((await tableRows(page)).length, 5);
     await setRange(page, '2026-12-01', '2026-12-01');
     rows = await tableRows(page);
-    assert.equal(rows.length, 1);
-    assert.deepEqual(rows[0].slice(0, 4), ['01/12/2026', '13h00', '01/12/2026', '18h00']);
-    assert.equal(rows[0][6], '5h');
+    assert.equal(rows.length, 2);
+    assert.deepEqual(rows.map(row => row.slice(0, 4)), [
+      ['01/12/2026', '13h00', '01/12/2026', '18h00'],
+      ['01/12/2026', '08h00', '01/12/2026', '12h00'],
+    ]);
+    assert.deepEqual(rows.map(row => row[6]), ['5h', '4h']);
     assert.deepEqual((await copyRows(page)).rows, rows);
     await setRange(page, '2026-12-31', '2027-01-01');
     rows = await tableRows(page);

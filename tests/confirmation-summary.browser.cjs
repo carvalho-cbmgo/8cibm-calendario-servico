@@ -90,7 +90,7 @@ const contrast = (text, background) => {
     assert.equal(await page.locator('.current-finance h2').textContent(), 'AC4 HOJE - 20/11/2026');
     assert.equal(await page.locator('.day.is-today').getAttribute('data-day'), '20');
     await page.locator('#mes-seguinte').click();
-    assert.equal(await page.locator('.day.is-scale-confirmed').count(), 0);
+    assert.equal(await page.locator('.day.is-scale-confirmed').count(), 2);
     assert((await page.locator('.current-finance-available').textContent()).includes('38.000,00'));
     await page.locator('#mes-anterior').click();
     assert.equal(await page.locator('.day.is-scale-confirmed').count(), 30);

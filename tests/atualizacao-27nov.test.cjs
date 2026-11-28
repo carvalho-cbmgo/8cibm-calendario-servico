@@ -16,13 +16,13 @@ test('LUIZ ANTONIO tem dois AC4 noturnos previstos de 12h, sem herdar exclusões
  for(const[date,end,cost]of [['2026-12-01','2026-12-02',38100],['2026-12-03','2026-12-04',41100]]){
   const rows=s.serviceRecords.filter(r=>r.event.serviceId===`ac4-operacional-luiz-antonio-${date}-20h`);assert.equal(rows.length,1);const r=rows[0];assert.equal(r.member,'2º SGT LUIZ ANTONIO');assert.equal(r.start,'20h00');assert.equal(r.end,'08h00');assert.equal(r.startDate,date);assert.equal(r.endDate,end);assert.equal(r.minutes,720);assert.equal(r.costCents,cost);assert.equal(r.status,'forecast');assert.equal(r.event.excludeFromSimulation,undefined);assert.equal(r.event.executionConfirmed,undefined);assert.deepEqual(plain(f.documentInfo(r.event)),{number:'',sei:''});
  }
- assert.equal(s.records.length,20);assert.equal(s.committedCents,764100);assert.equal(s.remainingCents,3035900);assert.equal(s.executedCents,0);
- const plan=sim.plan(data,'2026-12',3800000);assert.equal(plan.addedServices,30);assert.equal(plan.summary.committedCents,1977700);assert.equal(plan.days.get(1).addedServices,0);assert.equal(plan.days.get(3).coverage.resources,4);
+ assert.equal(s.records.length,28);assert.equal(s.committedCents,916100);assert.equal(s.remainingCents,2883900);assert.equal(s.executedCents,0);
+ const plan=sim.plan(data,'2026-12',3800000);assert.equal(plan.addedServices,29);assert.equal(plan.summary.committedCents,1939600);assert.equal(plan.days.get(1).addedServices,0);assert.equal(plan.days.get(3).coverage.resources,4);
 });
 
 test('somente os dois AC4, quatro trocas e cobertura derivada mudam; novembro e os demais registros são preservados',()=>{
  const before=structuredClone(data);for(const date of ['2026-12-01','2026-12-03'])day(before,date).members=day(before,date).members.filter(m=>m.name!=='2º SGT LUIZ ANTONIO');day(before,'2026-12-01').coverage=['5 recursos de 24h','Faltam 1 recurso'];
  for(const[date,replaced,name,ord]of legs){const d=day(before,date);d.members[d.members.findIndex(m=>m.name===name)]={name:replaced,badges:[{kind:'ord',text:'ORDINÁRIO'}],notes:['Ordinário'],events:[],ord};}
- assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'),'675d569ec157285e56c24afe28abe238284232cd587e1f003852bb19f510665f');
+ assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'),'54c1d86dfd170220016f352084ca506298f545cbe987997df2401289d813efce');
  for(const period of Object.keys(data)){const a=f.month(data,period),b=f.month(before,period);assert.equal(a.committedCents-b.committedCents,period==='2026-12'?79200:0);assert.equal(a.executedCents,b.executedCents);assert.equal(a.satCents,b.satCents);assert.equal(JSON.stringify(read('ac4-financial-config').monthlyQuotaCents),JSON.stringify({'2026-11':4584000,'2026-12':3800000}));}
 });

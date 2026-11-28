@@ -47,9 +47,9 @@ test('consulta mantém jornada integral na data inicial, com uma única entrada,
  const data=source('2026-11-30',event()),rows=lookup.month(data,'2026-11').filter(r=>r.type==='ac4');assert.equal(rows.length,1);assert.equal(rows[0].minutes,1440);assert.equal(rows[0].costCents,74100);assert.equal(rows[0].endDate,'2026-12-01');assert.equal(lookup.month(data,'2026-12').filter(r=>r.type==='ac4').length,0);
 });
 
-test('saldos publicados: novembro -R$70 e dezembro R$36.545; cadastro, cotas e execução confirmada preservados',()=>{
+test('saldos publicados: novembro R$10 e dezembro R$28.839; cadastro, cotas e execução confirmada preservados',()=>{
  const data=read('calendar-data'),before=JSON.stringify(data),quotas=read('ac4-financial-config').monthlyQuotaCents,nov=f.month(data,'2026-11',quotas['2026-11']),dec=f.month(data,'2026-12',quotas['2026-12']);
- assert.equal(nov.quotaCents,4584000);assert.equal(nov.committedCents,4583000);assert.equal(nov.remainingCents,1000);assert.equal(nov.executedCents,1096600);assert.equal(dec.quotaCents,3800000);assert.equal(dec.committedCents,764100);assert.equal(dec.remainingCents,3035900);assert.equal(dec.executedCents,0);assert.equal(nov.committedCents+dec.committedCents,5347100);
+ assert.equal(nov.quotaCents,4584000);assert.equal(nov.committedCents,4583000);assert.equal(nov.remainingCents,1000);assert.equal(nov.executedCents,1096600);assert.equal(dec.quotaCents,3800000);assert.equal(dec.committedCents,916100);assert.equal(dec.remainingCents,2883900);assert.equal(dec.executedCents,0);assert.equal(nov.committedCents+dec.committedCents,5499100);
  const id='ac4-operacional-cavalcante-2026-11-30-08h',a=nov.records.find(r=>r.event.serviceId===id),b=dec.records.find(r=>r.event.serviceId===id);assert.equal(a.costCents,48600);assert.equal(b.costCents,25500);assert.equal(f.documentInfo(b.event).number,'397');assert.equal(b.event.hours,24);
  const daSilva=nov.records.find(r=>r.member==='ST DA SILVA'&&r.startDate==='2026-11-19');assert.equal(daSilva.minutes,720);assert.equal(daSilva.costCents,36000);assert.equal(JSON.stringify(data),before);
 });

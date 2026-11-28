@@ -2,6 +2,8 @@
 
 Calendário HTML responsivo e estático para exibição da previsão de militares por ala, dos serviços SAT e do controle financeiro de AC4. Há dados de novembro/2026 a janeiro/2027; meses sem dados mostram essa condição.
 
+Em **28/11/2026**, as [duas imagens da SAT de 30/11 a 04/12](docs/sat-01a04dez-2026.md) foram conferidas: 30/11 já estava correto; foram incluídos **8 AC4/46h/R$ 1.520,00** de 01 a 04/12 e os oito ordinários vespertinos de ROBERTO na Vistoria e VALÉRIA no Protocolo. Os novos AC4 permanecem previstos, com OS a definir. As escalas de **01 e 02/12** foram confirmadas no calendário, sem presumir execução dos AC4. Dezembro passa a **R$ 9.161,00 comprometidos** e **R$ 28.839,00 disponíveis**, com cota, tarifas e serviços operacionais preservados.
+
 Em **28/11/2026**, os **Serviços considerados** do **Ranking AC4** passaram a usar os mesmos cartões de **Consultar serviços por militar**: data com dia da semana abaixo, ala ao lado e badge de horas de AC4 com valor logo abaixo, seguido da função quando informada e dos horários de início e término em linhas separadas. No ranking, os cartões exibem **somente AC4** do intervalo considerado, preservando os filtros, as horas mensais, os totais e o estado de execução acessível. Os serviços na virada do mês mantêm as horas e o valor da parcela mensal e a indicação do serviço completo. `tests/ranking-services-layout.browser.cjs` compara o conteúdo e os estilos das duas áreas e verifica filtros, rateio, exclusão de ordinários e simulados, preservação dos dados e telas de 320 a 1280px.
 
 Em **28/11/2026**, foram completados os AC4 operacionais noturnos de dezembro, todos previstos, de **12h/20h às 08h do dia seguinte**, com OS a definir:
@@ -207,6 +209,8 @@ O botão do WhatsApp, imediatamente após Delta, abre uma janela com Início e F
 4. Se o artefato for aceito e a implantação terminar com **Deployment failed, try again later**, reexecute o job de publicação em **Re-run jobs → Re-run failed jobs**. Esse erro ocorre depois da construção e precisa ser acompanhado no Pages.
 
 ## Verificação local
+
+`node --test tests/sat-01a04dez.test.cjs` e `node tests/sat-01a04dez.browser.cjs` conferem as duas imagens da SAT, os oito AC4/46h e os oito ordinários vespertinos de 01 a 04/12, as confirmações de 01–02/12, a OS por período e sua cópia, consulta/ranking, saldos e exclusão da cobertura operacional. A integridade reconstrói o calendário anterior por SHA-256, retirando somente essas inclusões e confirmações; as expectativas de totais e fotografias integrais dos testes anteriores incorporam agora os novos serviços. Cotas, tarifas, execução e jornadas operacionais permanecem preservadas. O roteiro cobre computador e celular com toque em 320/390px.
 
 `node --test tests/ac4-26nov-a02dez.test.cjs` e `node tests/ac4-26nov-a02dez.browser.cjs` conferem as OS 393–399, a retificação de HELLYSSON para 8h, os seis novos AC4 e suas viradas de dia/mês, consulta, períodos/valores e cópia ES/OS. O teste de integridade reconstrói o calendário anterior, preservando o escopo documental da SAT e de Análise de Projetos. As expectativas de totais, cobertura, chefia e simulação dos testes existentes acompanham os novos registros; cotas, tarifas e confirmações permanecem preservadas. O roteiro de navegador cobre computador e celular com toque em 320/390 px.
 

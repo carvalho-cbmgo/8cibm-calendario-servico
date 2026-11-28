@@ -59,7 +59,7 @@ test('PROEBOM de HENRIQUE em 17/11 custa R$ 120, sem confirmar execução ou amp
 test('os 70 eventos AC4 anteriores permanecem integralmente preservados', () => {
   const rows = Object.entries(data).flatMap(([period, schedule]) => schedule.days.flatMap(d =>
     ['members', 'sat'].flatMap(area => (area === 'members' ? d.members : d.sat?.members || []).flatMap(m =>
-      m.events.filter(e => !recentIds.has(e.serviceId) && e.serviceId !== newId && e.serviceId !== 'ac4-operacional-santos-2026-11-23-08h' && e.serviceId !== 'ac4-operacional-da-silva-2026-11-19-08h' && e.serviceId !== 'ac4-proebom-hellysson-2026-11-24-08h' && !e.serviceId?.startsWith('ac4-sat-23a30nov-') && !e.serviceId?.startsWith('ac4-operacional-24h-luiz-antonio-') && !e.serviceId?.startsWith('ac4-2026-11-26-')).map(e => JSON.stringify([period, d.day, area, m.name, e])))))).sort();
+      m.events.filter(e => !recentIds.has(e.serviceId) && e.serviceId !== newId && e.serviceId !== 'ac4-operacional-santos-2026-11-23-08h' && e.serviceId !== 'ac4-operacional-da-silva-2026-11-19-08h' && e.serviceId !== 'ac4-proebom-hellysson-2026-11-24-08h' && !e.serviceId?.startsWith('ac4-sat-23a30nov-') && !e.serviceId?.startsWith('ac4-sat-01a04dez-') && !e.serviceId?.startsWith('ac4-operacional-24h-luiz-antonio-') && !e.serviceId?.startsWith('ac4-2026-11-26-')).map(e => JSON.stringify([period, d.day, area, m.name, e])))))).sort();
   assert.equal(rows.length, 70);
   assert.equal(createHash('sha256').update(JSON.stringify(rows)).digest('hex'), '30cf9b2444b9745defc777f64bc45bc6b50affe333e17a27ee89e30a31023ce6');
 });

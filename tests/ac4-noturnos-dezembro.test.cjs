@@ -18,12 +18,12 @@ test('plantões noturnos seguem os dias da semana e exceções, sem duplicação
 test('horas individuais, cota, execução e reforços são recalculados pelas regras existentes',()=>{
  const s=f.month(data,'2026-12',3800000),rank=f.ranking(s,'2026-11-28',true,{startDate:'2026-12-01',endDate:'2026-12-31'});
  for(const[name,minutes,total,remaining]of [['2º SGT LUIZ ANTONIO',6480,361800,5040],['2º SGT MAURO',5760,304800,5760]]){const row=rank.rows.find(r=>r.member===name);assert.equal(row.monthlyMinutes,minutes);assert.equal(row.totalCents,total);assert.equal(row.remainingMinutes,remaining);assert.equal(row.monthlyLimitMinutes,11520);}
- assert.equal(s.records.length,20);assert.equal(s.committedCents,764100);assert.equal(s.forecastCents,764100);assert.equal(s.executedCents,0);assert.equal(s.remainingCents,3035900);assert.equal(s.satCents,0);const plan=sim.plan(data,'2026-12',3800000);assert.equal(plan.addedServices,30);assert.equal(plan.summary.committedCents,1977700);
+ assert.equal(s.records.length,28);assert.equal(s.committedCents,916100);assert.equal(s.forecastCents,916100);assert.equal(s.executedCents,0);assert.equal(s.remainingCents,2883900);assert.equal(s.satCents,152000);const plan=sim.plan(data,'2026-12',3800000);assert.equal(plan.addedServices,29);assert.equal(plan.summary.committedCents,1939600);
 });
 
 test('somente 14 inclusões alteram o calendário, preservando todas as jornadas anteriores e os outros meses',()=>{
  const before=structuredClone(data);assert.equal(newIds.size,14);for(const day of before['2026-12'].days){for(const m of day.members)m.events=m.events.filter(e=>!newIds.has(e.serviceId));day.members=day.members.filter(m=>m.events.length||m.badges.length);}
- assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'),'9f1db40707f45f926360fea3e2c1b1c58e82e36a636a73f6b3b1fcacca7f9a6b');
+ assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'),'388d78a02a18741e62fb4783cb7fb427d6120c059a542c27494c8a521e7a9f62');
  for(const period of ['2026-11','2027-01'])assert.equal(JSON.stringify(f.month(data,period)),JSON.stringify(f.month(before,period)));
  for(const day of data['2026-12'].days){const old=before['2026-12'].days.find(d=>d.day===day.day),date='2026-12-'+String(day.day).padStart(2,'0');assert.deepEqual(plain(chief.select(day)),plain(chief.select(old)));assert.equal(sim.coverage(day,date).resources,sim.coverage(old,date).resources);}
 });
