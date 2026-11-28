@@ -50,7 +50,7 @@ const financialSnapshot=()=>Object.keys(window.ServiceCalendar.schedules).map(pe
    assert.equal(await amount('LUIZ ANTONIO'),38100);await expand('LUIZ ANTONIO');
    assert.equal(await page.locator('.ranking-services-row:visible .ranking-service-item').count(),1);
    assert.equal(await page.locator('.ranking-services-row:visible [data-ranking-date="2026-11-24"]').count(),1);
-   assert((await page.locator('.ranking-services-row:visible .ranking-service-time').textContent()).includes('25/11/2026'));
+   assert((await page.locator('.ranking-services-row:visible .service-lookup-end').textContent()).includes('25/11/2026'));
    assert.equal(await page.locator('.ranking-services-row:visible .ranking-state').textContent(),'Previsto');
    assert.equal(await row('LUIZ ANTONIO').locator('.ranking-hours').getAttribute('data-period-minutes'),'720');
    // Sharing also refreshes the ranking before taking the PNG snapshot.
