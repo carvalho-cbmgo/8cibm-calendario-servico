@@ -31,7 +31,7 @@ test('TAVARES é o ACA expressamente designado para as 24h de 19/11, sem atribui
   assert.equal(JSON.stringify(result.assignments), JSON.stringify([{name:'ST TAVARES', start:0, end:1440}]));
   assert.equal(day(data, 19).chief, 'ST TAVARES');
   assert.equal(simulation.coverage(day(data, 19), '2026-11-19').resources, 6);
-  assert.equal(createHash('sha256').update(JSON.stringify(previous())).digest('hex'), 'e4a23d606cdff40897f481df299ef853dac7f2ac63ad7485fd87e408cf21b1e6');
+  assert.equal(createHash('sha256').update(JSON.stringify(previous())).digest('hex'), 'f69301afe0b58b52365ce7f8a8dd9f4474cffa4ae00ccdf0bc2b47fd6abd124d');
 });
 
 test('HELLYSSON, LUIZ e NIKHOLAS têm os períodos retificados, com identidades e exclusões preservadas', () => {

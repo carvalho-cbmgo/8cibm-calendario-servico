@@ -73,7 +73,7 @@ test('nomes sem PSE geram 12 ordinários vespertinos, separados por atividade', 
 
 test('todo o calendário anterior à inclusão da SAT permanece preservado', () => {
   // Baseline includes corrected January exchanges, revised 12h AC4, TS 170-175 (TS 170 corrected to 22/11/2026) and cancellation of the operation, without the new SAT.
-  assert.equal(createHash('sha256').update(JSON.stringify(baseline())).digest('hex'), 'b6c8388affecf3b4ff24ec87d2308ff841d34218f81ba1eb74b61a9e25f2d311');
+  assert.equal(createHash('sha256').update(JSON.stringify(baseline())).digest('hex'), 'aca655cd5e2724ad52095b8122d7b74e428f674144d2883c79f75e58a92722b7');
   const before = baseline();
   for (const number of days) {
     const date = `2026-11-${number}`;

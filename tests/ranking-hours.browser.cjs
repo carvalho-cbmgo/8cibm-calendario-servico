@@ -70,7 +70,7 @@ const snapshot = () => Object.keys(window.ServiceCalendar.schedules).map(period 
     await open();await verify('LUIZ ANTONIO',8640,8640,'available','Restam 48h');
     assert.equal(await page.locator('.ranking-person').filter({hasText:'PREVISTO AC4'}).count(),0);await close();
     await page.locator('[data-ac4-simulation]').click();await page.locator('#ac4-simulation-disregard').click();
-    await page.locator('#mes-seguinte').click();await open();await verify('LUIZ ANTONIO',2160,0,'available','Restam 156h');await close();
+    await page.locator('#mes-seguinte').click();await open();await verify('LUIZ ANTONIO',6480,0,'available','Restam 84h');await close();
     await page.locator('#mes-seguinte').click();await open();await verify('LUIZ ANTONIO',0,0,'available','Restam 192h');await close();
     await page.locator('#mes-anterior').click();await page.locator('#mes-anterior').click();
     assert.equal(await page.evaluate(()=>JSON.stringify(window.ServiceCalendar.schedules)),source);

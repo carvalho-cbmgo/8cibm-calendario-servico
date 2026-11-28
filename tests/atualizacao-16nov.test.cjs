@@ -16,6 +16,7 @@ const { AC4Finance: finance, ServiceSimulation: simulation, ServiceLookup: looku
 const day = date => data[date.slice(0, 7)].days.find(d => d.day === Number(date.slice(8)));
 const newId = 'ac4-proebom-henrique-2026-11-17-08h';
 const recentIds = new Set([
+  'ac4-operacional-luiz-antonio-2026-12-08-20h', 'ac4-operacional-luiz-antonio-2026-12-10-20h', 'ac4-operacional-luiz-antonio-2026-12-15-20h', 'ac4-operacional-luiz-antonio-2026-12-17-20h', 'ac4-operacional-luiz-antonio-2026-12-22-20h', 'ac4-operacional-luiz-antonio-2026-12-29-20h', 'ac4-operacional-mauro-2026-12-07-20h', 'ac4-operacional-mauro-2026-12-09-20h', 'ac4-operacional-mauro-2026-12-14-20h', 'ac4-operacional-mauro-2026-12-16-20h', 'ac4-operacional-mauro-2026-12-21-20h', 'ac4-operacional-mauro-2026-12-23-20h', 'ac4-operacional-mauro-2026-12-28-20h', 'ac4-operacional-mauro-2026-12-30-20h',
   'ac4-operacional-luiz-antonio-2026-12-01-20h', 'ac4-operacional-luiz-antonio-2026-12-03-20h',
   'ac4-operacional-cavalcante-2026-11-26-08h',
   'ac4-operacional-da-silva-2026-11-27-08h', 'ac4-operacional-passos-2026-11-28-08h', 'ac4-operacional-rabelo-2026-11-28-08h', 'ac4-operacional-cavalcante-2026-11-30-08h', 'ac4-operacional-aislan-2026-12-01-08h', 'ac4-operacional-martins-2026-12-02-08h',
