@@ -570,6 +570,7 @@ dialog.simulation-dialog{width:min(620px,calc(100% - 24px));max-height:calc(100d
 .ranking-service-heading{font-size:15px;color:#294d6b;margin:0 0 5px}
 .ranking-service-note{font-size:13px;color:#62758a;margin:0 0 8px;font-weight:400}
 .ranking-service-list{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:6px}
+.ranking-services>.ranking-service-list{grid-auto-rows:1fr;align-items:stretch;width:100%}
 .ranking-service-item{padding:8px 10px;background:#fff;border:1px solid #dce6f1;border-radius:8px;min-width:0;font-weight:400}
 .ranking-service-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px;color:#294d6b}
 .ranking-service-top time{font-weight:700}.ranking-service-cost{color:#c00000;font-weight:800;white-space:nowrap;font-variant-numeric:tabular-nums}
@@ -809,7 +810,7 @@ html.vacancy-dialog-open,html.vacancy-dialog-open body{overflow:hidden;overscrol
 .service-lookup-person .ranking-service-list{margin-top:8px}
 .service-card{font-size:14px;line-height:1.45}
 .service-lookup-counts{display:grid;gap:2px;margin:5px 0 10px;font-variant-numeric:tabular-nums}.service-lookup-counts p{margin:0}.service-lookup-ac4-total{color:#663399;font-weight:700}
-.service-card .ranking-service-top{display:grid;grid-template-columns:minmax(0,1fr) max-content;align-items:stretch;gap:8px;white-space:nowrap}
+.service-card .ranking-service-top{display:grid;grid-template-columns:minmax(0,max-content) max-content;justify-content:space-between;align-items:stretch;gap:8px;white-space:nowrap}
 .service-lookup-date{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:22px 20px;align-items:center;gap:0 8px;min-width:0;white-space:nowrap;font-variant-numeric:tabular-nums}
 .service-lookup-date time{grid-column:1;grid-row:1;font-size:14px;font-weight:750;justify-self:end}
 .service-lookup-weekday{grid-column:1;grid-row:2;justify-self:end;align-self:stretch;display:flex;align-items:center;justify-content:center;min-width:34px;padding:1px 5px;border-radius:4px;background:#edf2f7;color:#62758a;font-size:10px;font-weight:800;letter-spacing:.04em;line-height:1.2}
@@ -819,8 +820,11 @@ html.vacancy-dialog-open,html.vacancy-dialog-open body{overflow:hidden;overscrol
 .service-lookup-type{display:flex;align-items:center;justify-content:center;box-sizing:border-box;width:100%;padding:1px 6px;border:1px solid #d3b9eb;border-radius:6px 6px 0 0;background:#f1e5fc;color:#641caf;font-size:12px;font-weight:800;line-height:1.2}
 .service-card .ranking-service-cost{display:flex;align-items:center;justify-content:center;box-sizing:border-box;width:100%;margin:0;padding:1px 5px;border:1px solid #d3b9eb;border-top:0;border-radius:0 0 6px 6px;background:#fff;color:#641caf;font-size:12px;font-weight:750;line-height:1.2;white-space:nowrap}
 .service-lookup-kind.is-ordinary{grid-template-rows:1fr}.service-lookup-kind.is-ordinary .service-lookup-type{height:100%;border-color:#c5d7e7;border-radius:6px;background:#edf4fa;color:#365570;font-size:11px}
-.service-lookup-function{margin:7px 0 3px;font-weight:650;color:#52667c}.service-lookup-status{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
-.service-lookup-period{overflow-wrap:anywhere}
+.service-lookup-function{margin:7px 0 3px;font-weight:650;color:#52667c;overflow-wrap:anywhere}.service-lookup-status{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
+.service-lookup-periods{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:3px 4px;width:max-content;max-width:100%;margin:3px 0 0 auto;min-width:0}
+.service-lookup-periods .service-lookup-period{display:grid;grid-template-columns:subgrid;grid-column:1/-1;margin:0;min-width:0;overflow-wrap:anywhere}
+.service-period-label{text-align:left;white-space:nowrap}.service-period-value{text-align:right;min-width:0;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.service-card>.ranking-service-note{margin:8px 0 0;overflow-wrap:anywhere}
 html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscroll-behavior:none}
 @media screen and (max-width:760px){.service-card{font-size:15px}.filters{grid-template-columns:repeat(5,minmax(0,1fr)) 44px 44px}.filters #service-lookup-button{padding:4px}.service-lookup-body{padding:12px;font-size:15px}}
 @media screen and (max-width:400px){.service-card .ranking-service-top{gap:5px}.service-lookup-date{column-gap:5px}.service-lookup-date time{font-size:12px}.service-lookup-weekday{font-size:9px}.service-lookup-date .ala-badge{padding:4px 7px;font-size:10px}.service-lookup-kind{min-width:76px}.service-lookup-type{font-size:11px}.service-card .ranking-service-cost{font-size:11px}}
@@ -14462,6 +14466,7 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
   function alaBadge(name){const badge=element('span',`ala-badge ${name.toLowerCase()}`);badge.append(element('span','ala-label',name));return badge;}
   function makeServiceCard(record,sourceAla){
     const item=element('li','ranking-service-item service-card'),top=element('div','ranking-service-top'),date=element('time','',rankingDate(record.date));date.dateTime=record.date;
+    item.dataset.serviceArea=record.area;
     const stamp=element('span','service-lookup-date'),info=serviceDateInfo(record.date),ala=element('span','day-date');ala.append(alaBadge(sourceAla||info.ala));
     stamp.append(date,' ',element('span','service-lookup-weekday',info.weekday),' ',ala);
     const hours=record.minutes===null||record.minutes===undefined?'a conferir':rankingDuration(record.minutes),kind=element('span',`service-lookup-kind${record.type==='ordinary'?' is-ordinary':''}`),type=element('span','service-lookup-type',record.type==='ordinary'?'ORDINÁRIO':`AC4 ${hours}`);
@@ -14476,7 +14481,11 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
     const roles=[record.event?.funcao||record.event?.function||record.event?.role||member?.funcao||member?.function,...(record.labels||[]),record.area==='sat'?`SAT${record.activity?` · ${record.activity}`:''}`:''].filter(Boolean);
     if(source&&record.type==='ordinary'&&chiefFor(source).assignments.some(assigned=>assigned.name===record.member))roles.unshift('ACA');
     if(roles.length)item.append(element('p','service-lookup-function',[...new Set(roles)].join(' · ')));
-    item.append(element('p','ranking-service-time service-lookup-period service-lookup-start',record.start&&record.startDate?`Início: ${rankingDate(record.startDate)} às ${record.start}`:'Início: a conferir.'),element('p','ranking-service-time service-lookup-period service-lookup-end',record.end&&record.endDate?`Término: ${rankingDate(record.endDate)} às ${record.end}`:'Término: a conferir.'));
+    const periods=element('div','service-lookup-periods');
+    for(const [key,label,date,time]of [['start','Início:',record.startDate,record.start],['end','Término:',record.endDate,record.end]]){
+      const line=element('p',`ranking-service-time service-lookup-period service-lookup-${key}`);line.append(element('span','service-period-label',label),' ',element('span','service-period-value',date&&time?`${rankingDate(date)} às ${time}`:'a conferir.'));periods.append(line);
+    }
+    item.append(periods);
     if(record.type==='ac4')item.append(element('span',`ranking-state service-lookup-status${record.status==='executed'?' ranking-state-confirmed':''}`,record.status==='executed'?'Execução confirmada':'Previsto'));
     return item;
   }
@@ -14534,7 +14543,7 @@ html.service-lookup-open,html.service-lookup-open body{overflow:hidden;overscrol
     const list=element('ol','ranking-service-list');
     for(const record of person.records){
       const source=schedules[record.sourcePeriod]?.days.find(day=>day.day===record.sourceDay);
-      const item=makeServiceCard({...record,type:'ac4',date:record.startDate,area:record.category,activity:record.event.activity||'',labels:/PROEBOM/i.test(record.event.mode)?['PROEBOM']:[]},source?.ala);
+      const item=makeServiceCard({...record,type:'ac4',date:record.startDate,area:record.category,activity:record.event.activity||'',labels:/PROEBOM/i.test(record.event.mode)?['PROEBOM']:record.category==='operational'?['OPERACIONAL']:[]},source?.ala);
       item.dataset.rankingDate=record.startDate;item.dataset.included='true';
       if(record.originalService){const original=record.originalService;item.dataset.allocated='true';item.append(element('p','ranking-service-note',`Parcela de ${periodLabel()}. Serviço completo: ${rankingDate(original.startDate)} ${original.start} a ${rankingDate(original.endDate)} ${original.end} · ${rankingDuration(original.minutes)} · ${money(original.costCents)}.`));}
       list.append(item);
