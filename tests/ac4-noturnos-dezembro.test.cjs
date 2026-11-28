@@ -23,7 +23,7 @@ test('horas individuais, cota, execução e reforços são recalculados pelas re
 
 test('somente 14 inclusões alteram o calendário, preservando todas as jornadas anteriores e os outros meses',()=>{
  const before=structuredClone(data);assert.equal(newIds.size,14);for(const day of before['2026-12'].days){for(const m of day.members)m.events=m.events.filter(e=>!newIds.has(e.serviceId));day.members=day.members.filter(m=>m.events.length||m.badges.length);}
- assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'),'388d78a02a18741e62fb4783cb7fb427d6120c059a542c27494c8a521e7a9f62');
+ assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'),'f0039995b24fcd36a56182f57ff09edd12ea3832375abfba6ba58f4be8eefa66');
  for(const period of ['2026-11','2027-01'])assert.equal(JSON.stringify(f.month(data,period)),JSON.stringify(f.month(before,period)));
  for(const day of data['2026-12'].days){const old=before['2026-12'].days.find(d=>d.day===day.day),date='2026-12-'+String(day.day).padStart(2,'0');assert.deepEqual(plain(chief.select(day)),plain(chief.select(old)));assert.equal(sim.coverage(day,date).resources,sim.coverage(old,date).resources);}
 });

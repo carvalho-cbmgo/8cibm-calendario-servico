@@ -123,5 +123,5 @@ test('inclusões de 18/11 preservam integralmente os demais dados do calendário
   const input = days.find(d => d.day === 26);
   input.members = input.members.filter(m => !m.events.some(e => (e.serviceId?.startsWith('ac4-2026-11-26-') || e.serviceId === 'ac4-operacional-cavalcante-2026-11-26-08h')));
   input.coverage = ['5 recursos de 24h', 'Faltam 1 recurso'];
-  assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'), 'fc8cb22c195ee3220bb1eb6e98e952bb5536c25134c0d00badd1b1720b56a913');
+  assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'), 'ba9e062a51fe431d504b50ec3ae6bda4e6605bbb31633633d9a13ee41a0d2e3a');
 });

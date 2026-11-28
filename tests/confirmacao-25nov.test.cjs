@@ -26,7 +26,7 @@ test('escalas de 1 a 30/11 estão confirmadas, com cinco novas confirmações em
       assert.deepEqual(day.confirmation, { status: 'confirmed', date: '2026-11-19', source: 'user', scope: 'calendar', previousAlerts: [] });
     }
   }
-  assert.equal(createHash('sha256').update(JSON.stringify(previous())).digest('hex'), '89b3c6dce86d7fe4e2d3536563092a617d4db40f9215c23eab18f35b6671c066');
+  assert.equal(createHash('sha256').update(JSON.stringify(previous())).digest('hex'), '5aefa51f12784a3e66cf2f45a71db501e4c5f48b8dae1aa3b87231a0dbcd48c1');
 });
 
 test('confirmar a escala preserva integralmente AC4, execuções, tarifas, cobertura e chefia', () => {

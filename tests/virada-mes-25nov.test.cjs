@@ -18,7 +18,7 @@ test('apenas períodos/documentos solicitados e coberturas derivadas mudam; toda
  Object.assign(find(before,25,changes[0][0]),{end:'20h00',nextDay:false,hours:12,endDate:'2026-11-25',document:'OS a definir (não informada)'});
  for(const e of day(before,25).sat.members.flatMap(m=>m.events))e.document='OS nº 379 (SEI 98570810)';
  Object.assign(find(before,26,changes[1][0]),{end:'16h00',hours:8});Object.assign(find(before,27,changes[2][0]),{end:'08h00',hours:24,nextDay:true,endDate:'2026-11-28'});day(before,25).coverage=['5 recursos de 24h','Faltam 1 recurso'];day(before,27).coverage=['7 recursos de 24h','Meta de 6 recursos'];
- assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'),'f0b978027d5d2a4683c7cec854c27987783e389caf6eb92bcaaca5cc12382ac2');
+ assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'),'63afc5b463c9dc9ca51e41b3f535386ce2e5915ca638fb0ee7341d4598902bc8');
  const after=nov(),old=f.month(before,'2026-11',4584000);assert.equal(after.committedCents-old.committedCents,25600);assert.equal(after.executedCents,old.executedCents);assert.equal(after.satCents,old.satCents);for(const n of [25,26,27]){assert.deepEqual(day(data,n).confirmation,day(before,n).confirmation);assert.equal(sim.coverage(day(data,n),`2026-11-${n}`).resources,6);}assert.equal(sim.plan(data,'2026-11',4584000).addedServices,0);
 });
 

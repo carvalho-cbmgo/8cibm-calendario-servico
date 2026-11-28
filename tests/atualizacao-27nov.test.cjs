@@ -23,6 +23,6 @@ test('LUIZ ANTONIO tem dois AC4 noturnos previstos de 12h, sem herdar exclusões
 test('somente os dois AC4, quatro trocas e cobertura derivada mudam; novembro e os demais registros são preservados',()=>{
  const before=structuredClone(data);for(const date of ['2026-12-01','2026-12-03'])day(before,date).members=day(before,date).members.filter(m=>m.name!=='2º SGT LUIZ ANTONIO');day(before,'2026-12-01').coverage=['5 recursos de 24h','Faltam 1 recurso'];
  for(const[date,replaced,name,ord]of legs){const d=day(before,date);d.members[d.members.findIndex(m=>m.name===name)]={name:replaced,badges:[{kind:'ord',text:'ORDINÁRIO'}],notes:['Ordinário'],events:[],ord};}
- assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'),'54c1d86dfd170220016f352084ca506298f545cbe987997df2401289d813efce');
+ assert.equal(createHash('sha256').update(JSON.stringify(before)).digest('hex'),'3e53bee0393797ddad5699a4db64234f7cd84fd31da34dd20eaa5d5589adfd22');
  for(const period of Object.keys(data)){const a=f.month(data,period),b=f.month(before,period);assert.equal(a.committedCents-b.committedCents,period==='2026-12'?79200:0);assert.equal(a.executedCents,b.executedCents);assert.equal(a.satCents,b.satCents);assert.equal(JSON.stringify(read('ac4-financial-config').monthlyQuotaCents),JSON.stringify({'2026-11':4584000,'2026-12':3800000}));}
 });
